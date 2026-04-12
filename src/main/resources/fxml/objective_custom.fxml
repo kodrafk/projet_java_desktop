@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ObjectiveCustomController"
+      style="-fx-background-color: #F6FBF7;"
+      spacing="0">
+
+    <!-- ═══ HEADER ═══ -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label text="Custom Plan"
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label text="Build Your Own Objective"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Back" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px; -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <VBox spacing="20" maxWidth="800" style="-fx-background-color: #F6FBF7;">
+            <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
+
+            <!-- ═══ BASIC INFO ═══ -->
+            <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 28; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="16">
+                <Label text="Basic Information"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 12 0;"/>
+
+                <!-- Title -->
+                <VBox spacing="4">
+                    <Label text="Objective Title *"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                    <TextField fx:id="titleField" promptText="e.g., Weight Loss, Muscle Gain, Keto Diet..."
+                               prefHeight="42"
+                               style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                    <Label fx:id="errTitle" text="" visible="false" managed="false"
+                           style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                    <Label text="3 – 100 characters" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                </VBox>
+
+                <!-- Description -->
+                <VBox spacing="4">
+                    <Label text="Description"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                    <TextArea fx:id="descriptionField" promptText="Describe your nutrition goal..."
+                              prefHeight="80" wrapText="true"
+                              style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 8 12; -fx-font-size: 13px;"/>
+                </VBox>
+            </VBox>
+
+            <!-- ═══ NUTRITION TARGETS ═══ -->
+            <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 28; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="16">
+                <Label text="Daily Nutrition Targets"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 12 0;"/>
+
+                <GridPane hgap="16" vgap="16">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <!-- Calories -->
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="🔥 Daily Calorie Target (kcal) *"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                        <TextField fx:id="caloriesField" promptText="2000" prefHeight="42"
+                                   style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                        <Label fx:id="errCalories" text="" visible="false" managed="false"
+                               style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        <Label text="500 – 5000 kcal" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+
+                    <!-- Protein -->
+                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="💪 Protein Target (g) *"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                        <TextField fx:id="proteinField" promptText="150" prefHeight="42"
+                                   style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                        <Label fx:id="errProtein" text="" visible="false" managed="false"
+                               style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        <Label text="10 – 300 g" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+
+                    <!-- Carbs -->
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="🌾 Carbs Target (g) *"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                        <TextField fx:id="carbsField" promptText="200" prefHeight="42"
+                                   style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                        <Label fx:id="errCarbs" text="" visible="false" managed="false"
+                               style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        <Label text="20 – 500 g" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+
+                    <!-- Fats -->
+                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="🥑 Fats Target (g) *"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                        <TextField fx:id="fatsField" promptText="65" prefHeight="42"
+                                   style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                        <Label fx:id="errFats" text="" visible="false" managed="false"
+                               style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        <Label text="10 – 200 g" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+
+                    <!-- Water -->
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="💧 Water Target (L)"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                        <TextField fx:id="waterField" promptText="2.5" prefHeight="42"
+                                   style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                        <Label fx:id="errWater" text="" visible="false" managed="false"
+                               style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        <Label text="0 – 10 L (optional)" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+
+                </GridPane>
+            </VBox>
+
+            <!-- ═══ SCHEDULE ═══ -->
+            <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 28; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="16">
+                <Label text="Schedule"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 12 0;"/>
+
+                <HBox spacing="24" alignment="CENTER_LEFT">
+                    <VBox spacing="4">
+                        <Label text="📅 Planned Start Date"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                        <DatePicker fx:id="startDatePicker" prefWidth="240" style="-fx-font-size: 13px;"/>
+                        <Label fx:id="errDate" text="" visible="false" managed="false"
+                               style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        <Label text="Today or a future date"
+                               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <CheckBox fx:id="autoActivateCheck"/>
+                        <Label text="⚡ Auto-activate when the start date arrives"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    </HBox>
+                </HBox>
+            </VBox>
+
+            <!-- ═══ ACTIONS ═══ -->
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <Button text="Cancel" onAction="#handleBack"
+                        style="-fx-background-color: white; -fx-text-fill: #374151; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px; -fx-padding: 12 24; -fx-cursor: hand;"/>
+                <Button text="✓ Create Custom Objective" onAction="#handleCreate"
+                        style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 12 24; -fx-cursor: hand;"/>
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

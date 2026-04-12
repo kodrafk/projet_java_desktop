@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.DailyLogOverviewController"
+      style="-fx-background-color: #F6FBF7;" spacing="0">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label fx:id="lblDayBadge" text="Day 1"
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label fx:id="lblHeaderTitle" text=""
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label fx:id="lblHeaderSub" text=""
+                   style="-fx-font-size: 12px; -fx-text-fill: #A7C4B8;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Back to Logs" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px; -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <VBox spacing="20" style="-fx-background-color: #F6FBF7;">
+            <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
+
+            <!-- Daily Tracker -->
+            <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 24; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="14">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="TODAY'S NUTRITION"
+                           style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #94A3B8;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblMealsCount" text="0/4 meals"
+                           style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-background-color: #F1F5F9; -fx-background-radius: 8; -fx-padding: 4 12;"/>
+                </HBox>
+
+                <HBox spacing="16">
+                    <VBox alignment="CENTER" spacing="4" prefWidth="130"
+                          style="-fx-background-color: #FFF7ED; -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="🔥" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblTotalCal" text="0"
+                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #eb7147;"/>
+                        <Label fx:id="lblTargetCal" text="/ 0 kcal"
+                               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        <Label text="Calories" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" prefWidth="130"
+                          style="-fx-background-color: #F0FDF4; -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="💪" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblTotalProtein" text="0g"
+                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2E7D5A;"/>
+                        <Label fx:id="lblTargetProtein" text="/ 0g"
+                               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        <Label text="Protein" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" prefWidth="130"
+                          style="-fx-background-color: #FFFBEB; -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="🌾" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblTotalCarbs" text="0g"
+                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+                        <Label fx:id="lblTargetCarbs" text="/ 0g"
+                               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        <Label text="Carbs" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" prefWidth="130"
+                          style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="🥑" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblTotalFats" text="0g"
+                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        <Label fx:id="lblTargetFats" text="/ 0g"
+                               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        <Label text="Fats" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+                </HBox>
+
+                <ProgressBar fx:id="calorieProgress" progress="0" prefWidth="9999"
+                             style="-fx-accent: #eb7147;"/>
+            </VBox>
+
+            <!-- Meal Cards Grid -->
+            <Label text="Meals"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+            <GridPane fx:id="mealsGrid" hgap="16" vgap="16">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+            </GridPane>
+
+            <!-- Mood & Notes -->
+            <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 24; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="14">
+                <Label text="How are you feeling today?"
+                       style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <HBox spacing="12">
+                    <Button fx:id="btnMoodGreat" text="😄 Great" onAction="#setMoodGreat"
+                            style="-fx-background-color: #F0FDF4; -fx-text-fill: #2E7D5A; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 10 16;"/>
+                    <Button fx:id="btnMoodGood" text="🙂 Good" onAction="#setMoodGood"
+                            style="-fx-background-color: #F0FDF4; -fx-text-fill: #2E7D5A; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 10 16;"/>
+                    <Button fx:id="btnMoodOkay" text="😐 Okay" onAction="#setMoodOkay"
+                            style="-fx-background-color: #FFFBEB; -fx-text-fill: #D97706; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 10 16;"/>
+                    <Button fx:id="btnMoodLow" text="😔 Low" onAction="#setMoodLow"
+                            style="-fx-background-color: #FFF7ED; -fx-text-fill: #eb7147; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 10 16;"/>
+                </HBox>
+                <VBox spacing="6">
+                    <Label text="Notes (optional)"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                    <TextArea fx:id="notesField" promptText="How did today go? Any observations..."
+                              prefHeight="80" wrapText="true"
+                              style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 8 12; -fx-font-size: 13px;"/>
+                </VBox>
+                <Button text="💾 Save Notes" onAction="#handleSaveNotes"
+                        style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand;"/>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

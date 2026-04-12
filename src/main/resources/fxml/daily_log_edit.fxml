@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.DailyLogEditController"
+      style="-fx-background-color: #F6FBF7;" spacing="0"
+      prefHeight="700" prefWidth="1200">
+
+    <!-- Header (fixed) -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label fx:id="lblMealType" text=""
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label fx:id="lblHeaderTitle" text="Pick Your Meals"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label fx:id="lblHeaderSub" text=""
+                   style="-fx-font-size: 12px; -fx-text-fill: #A7C4B8;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Back" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px;
+                       -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8;
+                       -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <!-- Body: left scrollable content + right fixed sidebar -->
+    <HBox spacing="0" VBox.vgrow="ALWAYS">
+
+        <!-- LEFT: scrollable food picker -->
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    HBox.hgrow="ALWAYS"
+                    style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+            <VBox spacing="16" style="-fx-background-color: #F6FBF7;">
+                <padding><Insets top="20" right="16" bottom="24" left="24"/></padding>
+
+                <!-- Live Tracker -->
+                <VBox style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 16;
+                             -fx-border-color: #E2E8F0; -fx-border-radius: 12;" spacing="10">
+                    <Label text="LIVE TRACKER"
+                           style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #94A3B8;"/>
+                    <HBox spacing="12">
+                        <VBox alignment="CENTER" spacing="2" prefWidth="90">
+                            <Label fx:id="trackerCal" text="0"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #eb7147;"/>
+                            <Label fx:id="trackerCalTarget" text="/ 0"
+                                   style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            <Label text="Calories" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="2" prefWidth="90">
+                            <Label fx:id="trackerProtein" text="0g"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2E7D5A;"/>
+                            <Label fx:id="trackerProteinTarget" text="/ 0g"
+                                   style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            <Label text="Protein" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="2" prefWidth="90">
+                            <Label fx:id="trackerCarbs" text="0g"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+                            <Label fx:id="trackerCarbsTarget" text="/ 0g"
+                                   style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            <Label text="Carbs" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="2" prefWidth="90">
+                            <Label fx:id="trackerFats" text="0g"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                            <Label fx:id="trackerFatsTarget" text="/ 0g"
+                                   style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            <Label text="Fats" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+                    </HBox>
+                    <ProgressBar fx:id="trackerProgress" progress="0" prefWidth="9999"
+                                 style="-fx-accent: #eb7147;"/>
+                </VBox>
+
+                <!-- Search -->
+                <TextField fx:id="searchField" promptText="🔍 Search foods..." prefHeight="40"
+                           style="-fx-background-color: white; -fx-border-color: #E2E8F0;
+                                  -fx-border-radius: 10; -fx-background-radius: 10;
+                                  -fx-padding: 0 12; -fx-font-size: 13px;"/>
+
+                <!-- Category Tabs -->
+                <HBox fx:id="categoryTabs" spacing="8"/>
+
+                <!-- Food Grid -->
+                <FlowPane fx:id="foodGrid" hgap="12" vgap="12"/>
+
+                <!-- Custom Food Section -->
+                <VBox style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 18;
+                             -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-border-style: dashed;"
+                      spacing="12">
+                    <Label text="➕ Add Custom Food"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <GridPane hgap="12" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <!-- Name (full width) -->
+                        <VBox spacing="3" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+                            <Label text="Food Name *"
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="customNameField" promptText="e.g., Homemade pasta" prefHeight="36"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0;
+                                              -fx-border-radius: 8; -fx-background-radius: 8;
+                                              -fx-padding: 0 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="customNameError" text="" managed="false" visible="false"
+                                   style="-fx-font-size: 11px; -fx-text-fill: #DC2626;"/>
+                        </VBox>
+
+                        <!-- Calories -->
+                        <VBox spacing="3" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Calories *"
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="customCalField" promptText="kcal" prefHeight="36"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0;
+                                              -fx-border-radius: 8; -fx-background-radius: 8;
+                                              -fx-padding: 0 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="customCalError" text="" managed="false" visible="false"
+                                   style="-fx-font-size: 11px; -fx-text-fill: #DC2626;"/>
+                        </VBox>
+
+                        <!-- Protein -->
+                        <VBox spacing="3" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Protein (g) *"
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="customProteinField" promptText="0–300g" prefHeight="36"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0;
+                                              -fx-border-radius: 8; -fx-background-radius: 8;
+                                              -fx-padding: 0 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="customProteinError" text="" managed="false" visible="false"
+                                   style="-fx-font-size: 11px; -fx-text-fill: #DC2626;"/>
+                        </VBox>
+
+                        <!-- Carbs -->
+                        <VBox spacing="3" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="Carbs (g) *"
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="customCarbsField" promptText="0–500g" prefHeight="36"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0;
+                                              -fx-border-radius: 8; -fx-background-radius: 8;
+                                              -fx-padding: 0 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="customCarbsError" text="" managed="false" visible="false"
+                                   style="-fx-font-size: 11px; -fx-text-fill: #DC2626;"/>
+                        </VBox>
+
+                        <!-- Fats -->
+                        <VBox spacing="3" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <Label text="Fats (g) *"
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="customFatsField" promptText="0–150g" prefHeight="36"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0;
+                                              -fx-border-radius: 8; -fx-background-radius: 8;
+                                              -fx-padding: 0 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="customFatsError" text="" managed="false" visible="false"
+                                   style="-fx-font-size: 11px; -fx-text-fill: #DC2626;"/>
+                        </VBox>
+                    </GridPane>
+
+                    <Button fx:id="btnAddCustom" text="+ Add Custom Food" onAction="#handleAddCustomFood"
+                            style="-fx-background-color: #eb7147; -fx-text-fill: white;
+                                   -fx-background-radius: 10; -fx-font-size: 13px;
+                                   -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand;"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+
+        <!-- RIGHT: fixed sidebar — does NOT scroll with the page -->
+        <VBox prefWidth="320" minWidth="320" maxWidth="320"
+              style="-fx-background-color: #F8FAFC;
+                     -fx-border-color: transparent transparent transparent #E2E8F0;
+                     -fx-border-width: 0 0 0 1;">
+
+            <!-- Sidebar header (fixed) -->
+            <HBox alignment="CENTER_LEFT" spacing="8"
+                  style="-fx-padding: 16 16 12 16;
+                         -fx-border-color: transparent transparent #E2E8F0 transparent;
+                         -fx-border-width: 0 0 1 0;">
+                <Label text="Selected Foods"
+                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="selectedCount" text="0"
+                       style="-fx-background-color: #eb7147; -fx-text-fill: white;
+                              -fx-background-radius: 10; -fx-padding: 2 8;
+                              -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            </HBox>
+
+            <!-- Scrollable food list (grows) -->
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                        VBox.vgrow="ALWAYS"
+                        style="-fx-background: transparent; -fx-background-color: transparent;
+                               -fx-border-color: transparent;">
+                <VBox fx:id="selectedFoodsList" spacing="8" fillWidth="true">
+                    <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
+                </VBox>
+            </ScrollPane>
+
+            <!-- Save button pinned at bottom (fixed) -->
+            <VBox style="-fx-padding: 12 16 16 16;
+                         -fx-border-color: #E2E8F0 transparent transparent transparent;
+                         -fx-border-width: 1 0 0 0;">
+                <Button text="✓ Save Meal" onAction="#handleSaveMeal"
+                        prefWidth="9999" prefHeight="46"
+                        style="-fx-background-color: #1F4D3A; -fx-text-fill: white;
+                               -fx-background-radius: 10; -fx-font-size: 14px;
+                               -fx-font-weight: bold; -fx-cursor: hand;"/>
+            </VBox>
+        </VBox>
+
+    </HBox>
+</VBox>
