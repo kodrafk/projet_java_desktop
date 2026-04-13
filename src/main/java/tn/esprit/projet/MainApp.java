@@ -10,9 +10,10 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/main_layout.fxml"));
+        tn.esprit.projet.utils.DataSeeder.seed();
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
 
-        Scene scene = new Scene(root, 1200, 700);
+        Scene scene = new Scene(root, 1100, 720);
 
         primaryStage.setTitle("NutriLife - Kitchen Management");
         primaryStage.setScene(scene);

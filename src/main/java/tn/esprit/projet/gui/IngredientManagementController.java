@@ -99,11 +99,17 @@ public class IngredientManagementController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //crée le service pour accéder à la BDD.
         ingredientService = new IngredientService();
+        //initialise les listes déroulantes (catégories, unités, tri)
         setupComboBoxes();
+        //configure les colonnes du tableau (affichage, format, boutons d’action
         setupTableColumns();
+        //récupère tous les ingrédients depuis la BDD et les affiche dans le tableau
         loadTableData();
+        //met à jour les statistiques
         updateStats();
+        //active la recherche et les filtres
         setupSearchAndFilters();
     }
 
@@ -334,7 +340,6 @@ public class IngredientManagementController implements Initializable {
         tableIngredients.setItems(sortedList);
         lblTableInfo.setText("Showing " + sortedList.size() + " ingredient(s)");
     }
-
     private void updateStats() {
         List<Ingredient> all = ingredientService.getAll();
         LocalDate today = LocalDate.now();
@@ -515,14 +520,15 @@ public class IngredientManagementController implements Initializable {
     public void handleShowCalendar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/expiry_calendar.fxml"));
+            //charger contenu depuis fxml
             Parent root = loader.load();
             
             Stage stage = new Stage();
             stage.setTitle("Ingredient Expiry Calendar");
             stage.initModality(Modality.APPLICATION_MODAL);
+            //mettre contenu dans stage
             stage.setScene(new Scene(root));
-            
-            // Set minimal size for the small modal
+
             stage.setResizable(false);
             
             stage.show();

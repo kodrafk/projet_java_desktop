@@ -35,14 +35,15 @@ public class IngredientService implements CRUD<Ingredient> {
             ps.setString(7, ingredient.getNotes());
             ps.setString(8, ingredient.getImage());
 
-           /* int rowsAffected = ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         ingredient.setId(generatedKeys.getInt(1));
                     }
-                } System.out.println("Ingredient ajouté: " + ingredient.getNom() + " (ID: " + ingredient.getId() + ")");
-            }*/
+                } 
+                System.out.println("Ingredient ajouté: " + ingredient.getNom() + " (ID: " + ingredient.getId() + ")");
+            }
 
         } catch (SQLException e) {
             System.err.println("Erreur lors de l'ajout: " + e.getMessage());
@@ -71,12 +72,12 @@ public class IngredientService implements CRUD<Ingredient> {
             ps.setString(8, ingredient.getImage());
             ps.setInt(9, ingredient.getId());
 
-           /* int rowsAffected = ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Ingredient modifié: ID " + ingredient.getId());
             } else {
                 System.out.println("Aucun ingredient trouvé avec l'ID: " + ingredient.getId());
-            }*/
+            }
 
         } catch (SQLException e) {
             System.err.println("Erreur lors de la modification: " + e.getMessage());
@@ -90,12 +91,12 @@ public class IngredientService implements CRUD<Ingredient> {
         try (PreparedStatement ps = cnx.prepareStatement(query)) {
             ps.setInt(1, id);
 
-           /* int rowsAffected = ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Ingredient supprimé: ID " + id);
             } else {
                 System.out.println("Aucun ingredient trouvé avec l'ID: " + id);
-            }*/
+            }
 
         } catch (SQLException e) {
             System.err.println("Erreur lors de la suppression: " + e.getMessage());

@@ -122,7 +122,9 @@
                                style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
                     </StackPane>
 
-                    <Button prefHeight="32" prefWidth="86"
+                    <Button onAction="#handleProfile" prefHeight="32" prefWidth="86" text="Profile" style="-fx-background-color: transparent; -fx-text-fill: #163A2E; -fx-background-radius: 8; -fx-font-size: 11px; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-color: #2E7D5A; -fx-border-radius: 8;" />
+
+                    <Button onAction="#handleLogout" prefHeight="32" prefWidth="86"
                             text="Log Out"
                             style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 11px; -fx-font-weight: bold; -fx-cursor: hand;"/>
                 </HBox>

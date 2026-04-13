@@ -22,6 +22,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import tn.esprit.projet.dao.UserDAO;
+import tn.esprit.projet.utils.SessionManager;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 public class AdminLayoutController {
 
     @FXML private StackPane contentArea;
@@ -42,6 +47,9 @@ public class AdminLayoutController {
     @FXML private Label lblTotalRecipes;
     @FXML private Label lblTotalComplaints;
 
+    @FXML private Label lblAdminName;
+    @FXML private Label lblAdminAvatar;
+
     @FXML private Label lblDate;
     @FXML private Label lblClock;
 
@@ -50,6 +58,7 @@ public class AdminLayoutController {
     // Services
     private IngredientService ingredientService;
     private RecetteService recetteService;
+    private UserDAO userDAO;
 
     private static final String DEFAULT_BUTTON_STYLE =
             "-fx-background-color: transparent; " +
@@ -70,11 +79,11 @@ public class AdminLayoutController {
                     "-fx-alignment: CENTER_LEFT; " +
                     "-fx-padding: 0 0 0 14;";
 
-    @FXML
     public void initialize() {
         // Initialiser les services
         ingredientService = new IngredientService();
         recetteService = new RecetteService();
+        userDAO = new UserDAO();
 
         // Charger les statistiques depuis la base
         loadDashboardStats();
@@ -84,6 +93,17 @@ public class AdminLayoutController {
 
         // Configurer la recherche (placeholder)
         setupSearch();
+
+        // Afficher l'utilisateur connecté
+        tn.esprit.projet.models.User admin = SessionManager.getCurrentUser();
+        if (admin != null) {
+            String firstName = admin.getFirstName() != null ? admin.getFirstName() : "Admin";
+            String lastName = admin.getLastName() != null ? admin.getLastName() : "";
+            if (lblAdminName != null) lblAdminName.setText(firstName + " " + lastName + " 👋");
+            if (lblAdminAvatar != null && !firstName.isEmpty()) {
+                lblAdminAvatar.setText(String.valueOf(firstName.charAt(0)).toUpperCase());
+            }
+        }
 
         System.out.println("AdminLayoutController initialized.");
     }
@@ -138,7 +158,7 @@ public class AdminLayoutController {
     private void handleUsers(ActionEvent event) {
         resetSidebarStyles();
         btnUsers.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Users Management");
+        loadPage("/fxml/user_list.fxml");
     }
 
     @FXML
@@ -179,7 +199,12 @@ public class AdminLayoutController {
     @FXML
     private void handleLogout(ActionEvent event) {
         System.out.println("Logout clicked");
-        // TODO: Implémenter la déconnexion
+        SessionManager.logout();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(root, 1100, 720));
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     // ==================== UTILITAIRES ====================
@@ -281,8 +306,8 @@ public class AdminLayoutController {
 
         // Mettre à jour les labels
         if (lblTotalUsers != null) {
-            // TODO: Remplacer par UserService quand disponible
-            lblTotalUsers.setText("128");
+            int totalUsers = userDAO.countAll();
+            lblTotalUsers.setText(String.valueOf(totalUsers));
         }
 
         if (lblTotalIngredients != null) {

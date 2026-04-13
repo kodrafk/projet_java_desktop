@@ -12,6 +12,10 @@ import javafx.scene.layout.VBox;
 import tn.esprit.projet.services.IngredientService;
 
 import java.io.IOException;
+import tn.esprit.projet.utils.SessionManager;
+import tn.esprit.projet.models.User;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class MainLayoutController {
 
@@ -56,6 +60,9 @@ public class MainLayoutController {
     public void initialize() {
         ingredientService = new IngredientService();
         loadHomeStats();
+        // Update user elements if necessary on load
+        User u = SessionManager.getCurrentUser();
+        // future user-specific initialization
     }
 
     // ========== NAVIGATION ==========
@@ -143,6 +150,24 @@ public class MainLayoutController {
         submenuKitchen.setManaged(false);
 
         showPlaceholder("Events Page");
+    }
+
+    @FXML
+    private void handleProfile(ActionEvent event) {
+        resetButtonStyles();
+        submenuKitchen.setVisible(false);
+        submenuKitchen.setManaged(false);
+        loadPage("/fxml/user_profile.fxml");
+    }
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        SessionManager.logout();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(root, 1100, 720));
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     // ========== UTILITAIRES ==========
