@@ -5,7 +5,7 @@ public class RecetteIngredient {
     private String quantite;
     private int recetteId;
     private int ingredientId;
-    private String ingredientNom; // Pour l'affichage
+    private String ingredientNom;
 
     public RecetteIngredient() {}
 

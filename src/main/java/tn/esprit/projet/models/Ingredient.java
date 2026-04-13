@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Ingredient {
 
-    // ═══════════ ATTRIBUTS ═══════════
+
     private int id;
     private String nom;
     private String nomEn;
@@ -19,13 +19,13 @@ public class Ingredient {
     private String image;
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
-    // ═══════════ CONSTRUCTEURS ═══════════
 
-    /** Constructeur vide (pour JavaFX TableView) */
+
+
     public Ingredient() {
     }
 
-    /** Constructeur complet (SANS id - pour création) */
+
     public Ingredient(String nom, String nomEn, String categorie, double quantite,
                       String unite, LocalDate datePeremption, String notes, String image) {
         this.nom = nom;
@@ -38,7 +38,7 @@ public class Ingredient {
         this.image = image;
     }
 
-    /** Constructeur complet (AVEC id - pour modification/affichage) */
+
     public Ingredient(int id, String nom, String nomEn, String categorie, double quantite,
                       String unite, LocalDate datePeremption, String notes, String image) {
         this.id = id;
@@ -52,7 +52,7 @@ public class Ingredient {
         this.image = image;
     }
 
-    // ═══════════ GETTERS / SETTERS ═══════════
+
 
     public int getId() {
         return id;
@@ -138,7 +138,7 @@ public class Ingredient {
         this.image = image;
     }
 
-    // ═══════════ MÉTHODES UTILITAIRES ═══════════
+
 
     @Override
     public String toString() {

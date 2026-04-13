@@ -100,14 +100,12 @@ public class RecetteService implements CRUD<Recette> {
     private double extractQuantity(String quantiteStr) {
         if (quantiteStr == null || quantiteStr.trim().isEmpty()) return 0;
         try {
-            // Extracts numbers from a string like "200g" or "2 kg"
+            // remplacer caractere G,KG,L PAR VIDE et laisser juste nombre
             String numericPart = quantiteStr.replaceAll("[^0-9.]", "");
             if (numericPart.isEmpty()) return 0;
+            //convertir nombre qui est en texte en double pour calcul de stock apres
             double val = Double.parseDouble(numericPart);
-            
-            // If it contains "kg", multiply by 1000 to normalize to grams?
-            // Actually, we don't know the unit in the ingredient table, but let's assume it matches.
-            // A more robust way would be to check the unit of the ingredient.
+
             return val;
         } catch (Exception e) {
             return 0;
@@ -407,7 +405,6 @@ public class RecetteService implements CRUD<Recette> {
         List<String> etapesList = new ArrayList<>();
         if (etapesStr != null && !etapesStr.isEmpty()) {
             if (etapesStr.startsWith("[") && etapesStr.endsWith("]")) {
-                // Handle JSON format ["a","b"]
                 String content = etapesStr.substring(1, etapesStr.length() - 1);
                 if (!content.isEmpty()) {
                     // Split by "," but be careful with quotes
@@ -417,7 +414,6 @@ public class RecetteService implements CRUD<Recette> {
                     }
                 }
             } else {
-                // Handle old || format
                 etapesList.addAll(Arrays.asList(etapesStr.split("\\|\\|")));
             }
         }

@@ -10,9 +10,6 @@ public class TestCRUD {
     public static void main(String[] args) {
         IngredientService service = new IngredientService();
 
-        System.out.println("════════════════════════════════════");
-        System.out.println("    TEST CRUD INGREDIENT");
-        System.out.println("════════════════════════════════════\n");
 
         // ═══ TEST 1 : AJOUTER ═══
         System.out.println("--- TEST 1 : AJOUTER ---");
@@ -55,8 +52,5 @@ public class TestCRUD {
         List<Ingredient> resultats = service.rechercherParNom("car");
         resultats.forEach(System.out::println);
 
-        System.out.println("\n════════════════════════════════════");
-        System.out.println("    FIN DES TESTS");
-        System.out.println("════════════════════════════════════");
     }
 }

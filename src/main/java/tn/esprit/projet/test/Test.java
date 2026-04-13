@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class Test {
     public static void main(String[] args) {
-        System.out.println("--- Test de connexion et modèle Ingredient ---");
+
 
         // Test connexion BD
         try {
@@ -17,10 +17,10 @@ public class Test {
             Connection cnx = myBD.getCnx();
 
             if (cnx != null && !cnx.isClosed()) {
-                System.out.println("✅ Connexion BD OK");
+                System.out.println(" Connexion BD OK");
             }
         } catch (SQLException e) {
-            System.err.println("❌ Erreur connexion : " + e.getMessage());
+            System.err.println(" Erreur connexion : " + e.getMessage());
         }
 
         // Test création d'un objet Ingredient
@@ -42,6 +42,6 @@ public class Test {
         System.out.println("Quantité : " + ingredient.getQuantite() + " " + ingredient.getUnite());
         System.out.println("Date péremption : " + ingredient.getDatePeremption());
 
-        System.out.println("\n✅ Modèle Ingredient créé avec succès !");
+        System.out.println("\n Modèle Ingredient créé avec succès !");
     }
 }
