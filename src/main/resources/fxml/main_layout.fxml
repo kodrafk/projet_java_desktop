@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.MainLayoutController"
+            prefWidth="1280" prefHeight="760"
+            style="-fx-background-color: #c8e6c9;">
+
+    <!-- ══ TOP NAVBAR ══ -->
+    <top>
+        <HBox prefHeight="56" alignment="CENTER_LEFT"
+              style="-fx-background-color: rgba(255,255,255,0.55); -fx-padding: 0 40;">
+            <Label text="Nutri Coach Pro"
+                   style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1a3a1a; -fx-font-family: Georgia;"/>
+            <Region prefWidth="50"/>
+            <HBox spacing="28" alignment="CENTER">
+                <Label text="Home"                 onMouseClicked="#handleHome"
+                       style="-fx-font-size: 13px; -fx-text-fill: #1a3a1a; -fx-cursor: hand; -fx-font-weight: bold;"/>
+                <Label text="About"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="My Kitchen"           onMouseClicked="#handleKitchen"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="Nutrition Objectives" onMouseClicked="#handleObjectives"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="Events"               onMouseClicked="#handleEvents"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="Wellness"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="Blog"                 onMouseClicked="#handleBlog"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+            </HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="assistant" onAction="#handleAssistant"
+                    style="-fx-background-color: #2E7D32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 22; -fx-cursor: hand; -fx-border-color: transparent;"/>
+            <Region prefWidth="16"/>
+            <MenuButton fx:id="menuAccount" text="Account"
+                        style="-fx-background-color: transparent; -fx-text-fill: #1a3a1a; -fx-font-size: 13px; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-color: transparent; -fx-background-radius: 8; -fx-padding: 6 12;">
+                <items>
+                    <MenuItem text="My Profile"        onAction="#handleMyProfile"/>
+                    <MenuItem text="My Progression"/>
+                    <MenuItem text="My Photos"/>
+                    <MenuItem text="My Achievements"/>
+                    <MenuItem text="Security Settings" onAction="#handleChangePassword"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Logout"            onAction="#handleLogout"/>
+                </items>
+            </MenuButton>
+        </HBox>
+    </top>
+
+    <!-- ══ HERO — full screen, no stats bar ══ -->
+    <center>
+        <StackPane fx:id="contentArea">
+
+            <VBox fx:id="homeContent" alignment="TOP_CENTER"
+                  style="-fx-background-color: linear-gradient(to bottom, #c8e6c9 0%, #d4edda 60%, #e8f5e9 100%);">
+
+                <!-- Full-height hero -->
+                <StackPane VBox.vgrow="ALWAYS">
+
+                    <!-- LEFT fruit: grapefruit — pushed far left, no overlap -->
+                    <StackPane StackPane.alignment="CENTER_LEFT" translateX="60" translateY="10">
+                        <Ellipse radiusX="110" radiusY="110" fill="#FF8C42" opacity="0.90"/>
+                        <Ellipse radiusX="86"  radiusY="86"  fill="#FFA55A" opacity="0.85"/>
+                        <Ellipse radiusX="62"  radiusY="62"  fill="#FFCBA4" opacity="0.72"/>
+                        <Ellipse radiusX="30"  radiusY="30"  fill="#FFE8D6" opacity="0.58"/>
+                        <Ellipse radiusX="6"   radiusY="13"  fill="#4CAF50" opacity="0.9"
+                                 translateX="0" translateY="-114"/>
+                    </StackPane>
+
+                    <!-- RIGHT fruits: strawberries — pushed far right, no overlap -->
+                    <StackPane StackPane.alignment="CENTER_RIGHT" translateX="-50" translateY="20">
+                        <Ellipse radiusX="75" radiusY="88" fill="#E53935" opacity="0.88"
+                                 translateX="-20" translateY="0"/>
+                        <Ellipse radiusX="10" radiusY="19" fill="#388E3C" opacity="0.9"
+                                 translateX="-20" translateY="-92" rotate="-15"/>
+                        <Ellipse radiusX="8"  radiusY="15" fill="#43A047" opacity="0.85"
+                                 translateX="-4"  translateY="-90" rotate="20"/>
+                        <Ellipse radiusX="54" radiusY="64" fill="#EF5350" opacity="0.82"
+                                 translateX="70" translateY="55"/>
+                        <Ellipse radiusX="8"  radiusY="14" fill="#388E3C" opacity="0.9"
+                                 translateX="70" translateY="-7" rotate="-10"/>
+                        <Ellipse radiusX="38" radiusY="46" fill="#E53935" opacity="0.78"
+                                 translateX="130" translateY="22"/>
+                    </StackPane>
+
+                    <!-- Scattered leaves -->
+                    <Ellipse radiusX="6" radiusY="16" fill="#66BB6A" opacity="0.80"
+                             StackPane.alignment="CENTER_LEFT" translateX="260" translateY="90" rotate="30"/>
+                    <Ellipse radiusX="5" radiusY="13" fill="#81C784" opacity="0.70"
+                             StackPane.alignment="CENTER_LEFT" translateX="190" translateY="-70" rotate="-20"/>
+                    <Ellipse radiusX="5" radiusY="14" fill="#66BB6A" opacity="0.75"
+                             StackPane.alignment="CENTER_RIGHT" translateX="-290" translateY="-90" rotate="15"/>
+                    <Ellipse radiusX="4" radiusY="11" fill="#A5D6A7" opacity="0.65"
+                             StackPane.alignment="CENTER_RIGHT" translateX="-210" translateY="110" rotate="-25"/>
+
+                    <!-- CENTER TEXT — perfectly centered, fruits are on sides -->
+                    <VBox alignment="CENTER" spacing="20" maxWidth="520"
+                          StackPane.alignment="CENTER">
+                        <Label text="Fuel Your Life With"
+                               style="-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #1a3a1a; -fx-font-family: Georgia;"/>
+                        <Label text="Nutrition"
+                               style="-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #2E7D32; -fx-font-family: Georgia; -fx-font-style: italic;"/>
+                        <Label text="Our nutrition counseling helps you make lasting, healthy changes. Boost energy, manage weight, and feel better with our expert guidance."
+                               wrapText="true" textAlignment="CENTER" maxWidth="460"
+                               style="-fx-font-size: 14px; -fx-text-fill: #3a5a3a; -fx-line-spacing: 4;"/>
+                        <Button text="Book Appointment" onAction="#handleBookAppointment"
+                                prefHeight="46" prefWidth="200"
+                                style="-fx-background-color: #FF7043; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 23; -fx-cursor: hand; -fx-border-color: transparent;"/>
+                    </VBox>
+
+                </StackPane>
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>
