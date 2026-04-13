@@ -46,7 +46,9 @@ public class DailyLog {
         public double carbs;
         public double fats;
         public boolean logged;
-        public List<String> foodNames = new java.util.ArrayList<>(); // individual food names
+        public List<String> foodNames = new java.util.ArrayList<>();
+        // Per-food macros: key = food name, value = [cal, protein, carbs, fats]
+        public Map<String, double[]> foodMacros = new HashMap<>();
     }
 
     // ── Meal helpers ──
@@ -74,6 +76,11 @@ public class DailyLog {
 
     public void setMealMacros(String mealType, int cal, double protein, double carbs, double fats,
                                java.util.List<String> foodNames) {
+        setMealMacros(mealType, cal, protein, carbs, fats, foodNames, new HashMap<>());
+    }
+
+    public void setMealMacros(String mealType, int cal, double protein, double carbs, double fats,
+                               java.util.List<String> foodNames, Map<String, double[]> foodMacros) {
         MealData m = meals.computeIfAbsent(mealType, k -> new MealData());
         m.calories   = cal;
         m.protein    = protein;
@@ -81,6 +88,7 @@ public class DailyLog {
         m.fats       = fats;
         m.logged     = true;
         m.foodNames  = foodNames != null ? foodNames : new java.util.ArrayList<>();
+        m.foodMacros = foodMacros != null ? foodMacros : new HashMap<>();
         recalculateTotals();
     }
 
@@ -124,8 +132,22 @@ public class DailyLog {
                     sb.append("\"").append(m.foodNames.get(i).replace("\"", "'")).append("\"");
                 }
             }
-            sb.append("],\"foods\":[],\"customFoods\":[]")
-              .append("}");
+            sb.append("],\"foods\":[],\"customFoods\":[],\"foodMacros\":{");
+            // Serialize per-food macros
+            if (m.foodMacros != null) {
+                boolean firstFood = true;
+                for (Map.Entry<String, double[]> entry : m.foodMacros.entrySet()) {
+                    if (!firstFood) sb.append(",");
+                    double[] mac = entry.getValue();
+                    sb.append("\"").append(entry.getKey().replace("\"", "'")).append("\":[")
+                      .append(mac.length > 0 ? mac[0] : 0).append(",")
+                      .append(mac.length > 1 ? mac[1] : 0).append(",")
+                      .append(mac.length > 2 ? mac[2] : 0).append(",")
+                      .append(mac.length > 3 ? mac[3] : 0).append("]");
+                    firstFood = false;
+                }
+            }
+            sb.append("}}");
             first = false;
         }
         sb.append("}");
@@ -137,14 +159,53 @@ public class DailyLog {
         if (json == null || json.isBlank()) return;
         for (String type : MEAL_TYPES) {
             MealData m = meals.computeIfAbsent(type, k -> new MealData());
-            m.calories = extractInt(json, type, "calories");
-            m.protein  = extractDouble(json, type, "protein");
-            m.carbs    = extractDouble(json, type, "carbs");
-            m.fats     = extractDouble(json, type, "fats");
-            m.logged   = extractBool(json, type, "logged");
+            m.calories  = extractInt(json, type, "calories");
+            m.protein   = extractDouble(json, type, "protein");
+            m.carbs     = extractDouble(json, type, "carbs");
+            m.fats      = extractDouble(json, type, "fats");
+            m.logged    = extractBool(json, type, "logged");
             m.foodNames = extractStringArray(json, type, "foodNames");
+            m.foodMacros = extractFoodMacros(json, type);
         }
         recalculateTotals();
+    }
+
+    private Map<String, double[]> extractFoodMacros(String json, String meal) {
+        Map<String, double[]> result = new HashMap<>();
+        try {
+            String mealPattern = "\"" + meal + "\":{";
+            int mealStart = json.indexOf(mealPattern);
+            if (mealStart < 0) return result;
+            String mealSub = json.substring(mealStart + mealPattern.length());
+            String key = "\"foodMacros\":{";
+            int ki = mealSub.indexOf(key);
+            if (ki < 0) return result;
+            int start = ki + key.length();
+            int end = mealSub.indexOf("}", start);
+            if (end < 0) return result;
+            String macroStr = mealSub.substring(start, end).trim();
+            if (macroStr.isEmpty()) return result;
+            // Parse entries like "FoodName":[cal,pro,carb,fat]
+            int pos = 0;
+            while (pos < macroStr.length()) {
+                int nameStart = macroStr.indexOf("\"", pos);
+                if (nameStart < 0) break;
+                int nameEnd = macroStr.indexOf("\"", nameStart + 1);
+                if (nameEnd < 0) break;
+                String foodName = macroStr.substring(nameStart + 1, nameEnd);
+                int arrStart = macroStr.indexOf("[", nameEnd);
+                int arrEnd = macroStr.indexOf("]", arrStart);
+                if (arrStart < 0 || arrEnd < 0) break;
+                String[] parts = macroStr.substring(arrStart + 1, arrEnd).split(",");
+                double[] macros = new double[4];
+                for (int i = 0; i < Math.min(parts.length, 4); i++) {
+                    try { macros[i] = Double.parseDouble(parts[i].trim()); } catch (Exception ignored) {}
+                }
+                result.put(foodName, macros);
+                pos = arrEnd + 1;
+            }
+        } catch (Exception ignored) {}
+        return result;
     }
 
     private int extractInt(String json, String meal, String key) {

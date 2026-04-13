@@ -176,6 +176,7 @@ public class ObjectiveEditController {
             Parent page = loader.load();
             ObjectiveEditCustomController ctrl = loader.getController();
             ctrl.setObjective(objective);
+            ctrl.setBackTarget("/fxml/objective_edit.fxml");
             StackPane contentArea = (StackPane) lblHeaderTitle.getScene().lookup("#contentArea");
             if (contentArea != null) contentArea.getChildren().setAll(page);
         } catch (Exception e) { e.printStackTrace(); }

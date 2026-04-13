@@ -25,8 +25,7 @@ public class ObjectiveConfirmController {
     public void setPlan(String goalType, String goalLabel, String planLevel, String planLevelLabel, int[] plan) {
         this.goalType = goalType; this.goalLabel = goalLabel;
         this.planLevel = planLevel; this.planLevelLabel = planLevelLabel;
-        this.plan = plan;
-        lblSummaryTitle.setText(goalLabel + " — " + planLevelLabel);
+        this.plan = plan;        lblSummaryTitle.setText(goalLabel + " — " + planLevelLabel);
         lblSummarySub.setText("Your personalized 7-day nutrition plan");
         lblSumCal.setText(String.valueOf(plan[0]));
         lblSumProtein.setText(plan[1] + "g");
@@ -71,7 +70,16 @@ public class ObjectiveConfirmController {
         }
     }
 
-    @FXML private void handleBack() { navigateTo("/fxml/objective_choose_plan.fxml"); }
+    @FXML private void handleBack() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/objective_choose_plan.fxml"));
+            Parent page = loader.load();
+            ObjectiveChoosePlanController ctrl = loader.getController();
+            ctrl.setGoal(goalType, goalLabel);
+            StackPane contentArea = (StackPane) startDatePicker.getScene().lookup("#contentArea");
+            if (contentArea != null) contentArea.getChildren().setAll(page);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
 
     private void navigateTo(String fxml) {
         try {

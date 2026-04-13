@@ -24,7 +24,8 @@
 
     <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
                 style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
-        <VBox spacing="20" maxWidth="800" style="-fx-background-color: #F6FBF7;">
+        <StackPane style="-fx-background-color: #F6FBF7;">
+        <VBox spacing="20" maxWidth="800" style="-fx-background-color: #F6FBF7;" alignment="CENTER">
             <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
 
             <!-- ═══ BASIC INFO ═══ -->
@@ -136,5 +137,6 @@
             </HBox>
 
         </VBox>
+        </StackPane>
     </ScrollPane>
 </VBox>

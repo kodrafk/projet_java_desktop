@@ -77,6 +77,10 @@
                 <Button fx:id="btnBlogs" text="Blogs" onAction="#handleBlogs"
                         prefHeight="42" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnObjectives" text="Objectives" onAction="#handleObjectives"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
             </VBox>
 
             <Region VBox.vgrow="ALWAYS"/>

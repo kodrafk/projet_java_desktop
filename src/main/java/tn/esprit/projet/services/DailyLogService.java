@@ -124,20 +124,26 @@ public class DailyLogService {
         Date d = rs.getDate("date");
         if (d != null) log.setDate(d.toLocalDate());
         log.setCompleted(rs.getBoolean("completed"));
-        log.setCaloriesConsumed(rs.getInt("calories_consumed"));
-        log.setProteinConsumed(rs.getDouble("protein_consumed"));
-        log.setCarbsConsumed(rs.getDouble("carbs_consumed"));
-        log.setFatsConsumed(rs.getDouble("fats_consumed"));
+        // Read DB columns as source of truth for totals
+        int dbCal    = rs.getInt("calories_consumed");
+        double dbPro = rs.getDouble("protein_consumed");
+        double dbCarb = rs.getDouble("carbs_consumed");
+        double dbFat  = rs.getDouble("fats_consumed");
         log.setWaterConsumed(rs.getDouble("water_consumed"));
         log.setMood(rs.getString("mood"));
         log.setNotes(rs.getString("notes"));
-        // Parse meals JSON
+        // Parse meals JSON (may recalculate totals from meal breakdown)
         try {
             String mealsJson = rs.getString("meals");
             if (mealsJson != null && !mealsJson.isBlank()) {
                 log.parseMealsJson(mealsJson);
             }
         } catch (SQLException ignored) {}
+        // Always override totals with the authoritative DB columns
+        if (dbCal > 0)  log.setCaloriesConsumed(dbCal);
+        if (dbPro > 0)  log.setProteinConsumed(dbPro);
+        if (dbCarb > 0) log.setCarbsConsumed(dbCarb);
+        if (dbFat > 0)  log.setFatsConsumed(dbFat);
         return log;
     }
 }

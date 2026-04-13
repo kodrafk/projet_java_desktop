@@ -161,10 +161,12 @@ public class DailyLogsController {
 
     private void openOverview(DailyLog log) {
         try {
+            // Always fetch fresh from DB to get latest admin edits
+            DailyLog fresh = service.getById(log.getId());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/daily_log_overview.fxml"));
             Parent page = loader.load();
             DailyLogOverviewController ctrl = loader.getController();
-            ctrl.setData(objective, log);
+            ctrl.setData(objective, fresh != null ? fresh : log);
             StackPane contentArea = (StackPane) dayCardsContainer.getScene().lookup("#contentArea");
             if (contentArea != null) contentArea.getChildren().setAll(page);
         } catch (Exception e) { e.printStackTrace(); }

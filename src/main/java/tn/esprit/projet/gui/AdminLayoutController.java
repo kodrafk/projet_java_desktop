@@ -2,6 +2,8 @@ package tn.esprit.projet.gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -21,6 +23,7 @@ public class AdminLayoutController {
     @FXML private Button btnComplaints;
     @FXML private Button btnEvents;
     @FXML private Button btnBlogs;
+    @FXML private Button btnObjectives;
     @FXML private Button btnLogout;
 
     @FXML private Label lblTotalUsers;
@@ -104,6 +107,13 @@ public class AdminLayoutController {
         showPlaceholder("Blogs Management");
     }
 
+    @FXML
+    private void handleObjectives(ActionEvent event) {
+        resetSidebarStyles();
+        btnObjectives.setStyle(ACTIVE_BUTTON_STYLE);
+        loadPage("/fxml/admin_objectives.fxml");
+    }
+
     private void resetSidebarStyles() {
         btnDashboard.setStyle(DEFAULT_BUTTON_STYLE);
         btnUsers.setStyle(DEFAULT_BUTTON_STYLE);
@@ -112,6 +122,19 @@ public class AdminLayoutController {
         btnComplaints.setStyle(DEFAULT_BUTTON_STYLE);
         btnEvents.setStyle(DEFAULT_BUTTON_STYLE);
         btnBlogs.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnObjectives != null) btnObjectives.setStyle(DEFAULT_BUTTON_STYLE);
+    }
+
+    private void loadPage(String fxmlPath) {
+        try {
+            Parent page = FXMLLoader.load(getClass().getResource(fxmlPath));
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(page);
+        } catch (Exception e) {
+            System.err.println("Error loading: " + fxmlPath);
+            e.printStackTrace();
+            showPlaceholder("Page not found");
+        }
     }
 
     private void showHomePage() {

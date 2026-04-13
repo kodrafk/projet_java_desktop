@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminObjectivesController"
+      style="-fx-background-color: #F0F4F8;" spacing="0" VBox.vgrow="ALWAYS">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1 0; -fx-padding: 18 26;">
+        <VBox spacing="3">
+            <Label text="Objectives Management"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            <Label text="View, edit and manage all nutrition objectives"
+                   style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <TextField fx:id="searchField" promptText="Search objectives..."
+                       prefHeight="36" prefWidth="220"
+                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 10; -fx-font-size: 12px;"/>
+            <ComboBox fx:id="sortCombo" prefHeight="36" prefWidth="160"
+                      style="-fx-font-size: 12px;"/>
+            <Label fx:id="lblCount" text="" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+        </HBox>
+    </HBox>
+
+    <!-- Table header -->
+    <HBox style="-fx-background-color: #F8FAFC; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-padding: 10 26;">
+        <Label text="Title" prefWidth="260" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+        <Label text="Status" prefWidth="100" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+        <Label text="Goal" prefWidth="120" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+        <Label text="Calories" prefWidth="90" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+        <Label text="Start Date" prefWidth="110" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Actions" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+    </HBox>
+
+    <!-- Rows -->
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS"
+                style="-fx-background: #F0F4F8; -fx-background-color: #F0F4F8; -fx-border-color: transparent;">
+        <VBox fx:id="objectivesContainer" spacing="1" style="-fx-background-color: #F0F4F8;">
+            <padding><Insets top="4" right="0" bottom="8" left="0"/></padding>
+        </VBox>
+    </ScrollPane>
+</VBox>

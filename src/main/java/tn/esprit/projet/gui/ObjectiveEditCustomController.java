@@ -18,6 +18,7 @@ public class ObjectiveEditCustomController {
 
     private NutritionObjective objective;
     private final NutritionObjectiveService service = new NutritionObjectiveService();
+    private String backFxml = "/fxml/objective_show.fxml"; // default back target
 
     public void setObjective(NutritionObjective obj) {
         this.objective = obj;
@@ -39,6 +40,10 @@ public class ObjectiveEditCustomController {
         carbsField.textProperty().addListener((o, old, n)    -> clearErr(errCarbs, carbsField));
         fatsField.textProperty().addListener((o, old, n)     -> clearErr(errFats, fatsField));
         waterField.textProperty().addListener((o, old, n)    -> clearErr(errWater, waterField));
+    }
+
+    public void setBackTarget(String fxml) {
+        this.backFxml = fxml;
     }
 
     @FXML
@@ -160,10 +165,37 @@ public class ObjectiveEditCustomController {
         objective.setTargetFats(fats);
         objective.setTargetWater(water);
         service.update(objective);
-        navigateTo("/fxml/objectives.fxml");
+
+        // After save, go to objectives list (works for both admin and user)
+        String afterSave = backFxml.contains("admin") ? "/fxml/admin_objectives.fxml" : "/fxml/objectives.fxml";
+        navigateTo(afterSave);
     }
 
-    @FXML private void handleBack() { navigateTo("/fxml/objective_edit.fxml"); }
+    @FXML private void handleBack() {
+        try {
+            // If going back to the edit chooser, pass the objective
+            if ("/fxml/objective_edit.fxml".equals(backFxml)) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(backFxml));
+                Parent page = loader.load();
+                ObjectiveEditController ctrl = loader.getController();
+                ctrl.setObjective(objective);
+                StackPane contentArea = (StackPane) titleField.getScene().lookup("#contentArea");
+                if (contentArea != null) contentArea.getChildren().setAll(page);
+            } else if ("/fxml/objective_show.fxml".equals(backFxml)) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(backFxml));
+                Parent page = loader.load();
+                ObjectiveShowController ctrl = loader.getController();
+                ctrl.setObjective(objective);
+                StackPane contentArea = (StackPane) titleField.getScene().lookup("#contentArea");
+                if (contentArea != null) contentArea.getChildren().setAll(page);
+            } else {
+                // admin_objectives or any plain fxml with no controller data needed
+                Parent page = FXMLLoader.load(getClass().getResource(backFxml));
+                StackPane contentArea = (StackPane) titleField.getScene().lookup("#contentArea");
+                if (contentArea != null) contentArea.getChildren().setAll(page);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+    }
 
     private void showErr(Label lbl, TextField field, String msg) {
         lbl.setText("⚠ " + msg);

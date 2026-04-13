@@ -97,12 +97,20 @@ public class DailyLogEditController {
                                 break;
                             }
                         }
-                        if (!found && existing.calories > 0) {
-                            int perFood = existing.calories / Math.max(1, existing.foodNames.size());
-                            double perPro = existing.protein / Math.max(1, existing.foodNames.size());
-                            double perCarb = existing.carbs / Math.max(1, existing.foodNames.size());
-                            double perFat = existing.fats / Math.max(1, existing.foodNames.size());
-                            selectedFoods.add(new Object[]{foodName, "Custom", perFood, perPro, perCarb, perFat});
+                        if (!found) {
+                            // Use per-food macros if available (set by admin or previous save)
+                            double[] fm = (existing.foodMacros != null) ? existing.foodMacros.get(foodName) : null;
+                            if (fm != null) {
+                                selectedFoods.add(new Object[]{foodName, "Custom",
+                                    (int) fm[0], fm[1], fm[2], fm[3]});
+                            } else if (existing.calories > 0) {
+                                // Fallback: divide evenly (old behaviour)
+                                int perFood = existing.calories / Math.max(1, existing.foodNames.size());
+                                double perPro  = existing.protein / Math.max(1, existing.foodNames.size());
+                                double perCarb = existing.carbs   / Math.max(1, existing.foodNames.size());
+                                double perFat  = existing.fats    / Math.max(1, existing.foodNames.size());
+                                selectedFoods.add(new Object[]{foodName, "Custom", perFood, perPro, perCarb, perFat});
+                            }
                         }
                     }
                 } else if (existing.calories > 0) {
@@ -438,7 +446,14 @@ public class DailyLogEditController {
                 .map(f -> (String) f[0])
                 .collect(java.util.stream.Collectors.toList());
 
-        log.setMealMacros(mealType, totalCal, protein, carbs, fats, foodNames);
+        // Build per-food macros map
+        java.util.Map<String, double[]> foodMacros = new java.util.LinkedHashMap<>();
+        for (Object[] food : selectedFoods) {
+            String name = (String) food[0];
+            foodMacros.put(name, new double[]{(int) food[2], (double) food[3], (double) food[4], (double) food[5]});
+        }
+
+        log.setMealMacros(mealType, totalCal, protein, carbs, fats, foodNames, foodMacros);
         service.update(log);
 
         // Check if all 7 logs completed
