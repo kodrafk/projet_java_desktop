@@ -16,6 +16,7 @@ public class ObjectiveEditSettingsController {
     @FXML private Label lblPlanTag;
     @FXML private DatePicker startDatePicker;
     @FXML private CheckBox autoActivateCheck;
+    @FXML private Label errDate;
 
     private NutritionObjective objective;
     private NutritionObjectiveService service = new NutritionObjectiveService();
@@ -25,6 +26,9 @@ public class ObjectiveEditSettingsController {
         lblPlanTag.setText(obj.getGoalLabel() + " · " + obj.getPlanLabel() + " · " + obj.getTargetCalories() + " cal/day");
         startDatePicker.setValue(obj.getPlannedStartDate() != null ? obj.getPlannedStartDate() : LocalDate.now());
         autoActivateCheck.setSelected(obj.isAutoActivate());
+        startDatePicker.valueProperty().addListener((o, old, n) -> {
+            errDate.setVisible(false); errDate.setManaged(false);
+        });
     }
 
     @FXML private void setToday()      { startDatePicker.setValue(LocalDate.now()); }
@@ -33,7 +37,17 @@ public class ObjectiveEditSettingsController {
     @FXML private void setNextWeek()   { startDatePicker.setValue(LocalDate.now().plusWeeks(1)); }
 
     @FXML private void handleSave() {
-        objective.setPlannedStartDate(startDatePicker.getValue());
+        LocalDate date = startDatePicker.getValue();
+        if (date == null) {
+            errDate.setText("⚠ Please select a start date.");
+            errDate.setVisible(true); errDate.setManaged(true); return;
+        }
+        if (date.isBefore(LocalDate.now())) {
+            errDate.setText("⚠ Start date must be today or in the future.");
+            errDate.setVisible(true); errDate.setManaged(true); return;
+        }
+        errDate.setVisible(false); errDate.setManaged(false);
+        objective.setPlannedStartDate(date);
         objective.setAutoActivate(autoActivateCheck.isSelected());
         service.update(objective);
         navigateTo("/fxml/objectives.fxml");

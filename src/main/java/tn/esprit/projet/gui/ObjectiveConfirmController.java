@@ -18,6 +18,7 @@ public class ObjectiveConfirmController {
     @FXML private Label lblSumCal, lblSumProtein, lblSumCarbs, lblSumFats, lblSumWater;
     @FXML private DatePicker startDatePicker;
     @FXML private CheckBox autoActivateCheck;
+    @FXML private Label errDate;
 
     private String goalType, goalLabel, planLevel, planLevelLabel;
     private int[] plan;
@@ -33,6 +34,9 @@ public class ObjectiveConfirmController {
         lblSumFats.setText(plan[3] + "g");
         lblSumWater.setText(plan[4] + "L");
         startDatePicker.setValue(LocalDate.now());
+        startDatePicker.valueProperty().addListener((o, old, n) -> {
+            errDate.setVisible(false); errDate.setManaged(false);
+        });
     }
 
     @FXML private void setToday()      { startDatePicker.setValue(LocalDate.now()); }
@@ -42,7 +46,16 @@ public class ObjectiveConfirmController {
 
     @FXML
     private void handleCreate() {
-        if (startDatePicker.getValue() == null) return;
+        LocalDate date = startDatePicker.getValue();
+        if (date == null) {
+            errDate.setText("⚠ Please select a start date.");
+            errDate.setVisible(true); errDate.setManaged(true); return;
+        }
+        if (date.isBefore(LocalDate.now())) {
+            errDate.setText("⚠ Start date must be today or in the future.");
+            errDate.setVisible(true); errDate.setManaged(true); return;
+        }
+        errDate.setVisible(false); errDate.setManaged(false);
 
         NutritionObjective obj = new NutritionObjective();
         obj.setTitle(goalLabel + " — " + planLevelLabel);
@@ -53,7 +66,7 @@ public class ObjectiveConfirmController {
         obj.setTargetCarbs(plan[2]);
         obj.setTargetFats(plan[3]);
         obj.setTargetWater(plan[4]);
-        obj.setPlannedStartDate(startDatePicker.getValue());
+        obj.setPlannedStartDate(date);
         obj.setAutoActivate(autoActivateCheck.isSelected());
         obj.setStatus("pending");
 

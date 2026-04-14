@@ -111,6 +111,8 @@
                            style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
                     <DatePicker fx:id="startDatePicker" prefWidth="300"
                                 style="-fx-font-size: 13px;"/>
+                    <Label fx:id="errDate" text="" visible="false" managed="false"
+                           style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
                     <Label text="The 7-day plan runs from this date."
                            style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
                 </VBox>
