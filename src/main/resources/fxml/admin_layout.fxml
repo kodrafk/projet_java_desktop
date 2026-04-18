@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="780.0" prefWidth="1320.0"
+            style="-fx-background-color: #F0F4F8;"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.AdminLayoutController">
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <left>
+        <VBox prefWidth="230"
+              style="-fx-background-color: #0F2820; -fx-border-color: transparent #0A1E16 transparent transparent; -fx-border-width: 0 1 0 0;">
+
+            <!-- Branding -->
+            <HBox alignment="CENTER_LEFT" spacing="10" prefHeight="72"
+                  style="-fx-padding: 16 16 16 16; -fx-background-color: #0A1E16;">
+                <StackPane prefWidth="40" prefHeight="40"
+                           style="-fx-background-color: #2E7D5A; -fx-background-radius: 10;">
+                    <Label text="N"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                </StackPane>
+                <VBox spacing="2">
+                    <Label text="Nutri Coach Pro"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label text="Admin Panel"
+                           style="-fx-font-size: 10px; -fx-text-fill: #5A8A72;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Menu title -->
+            <Label text="MAIN MENU"
+                   style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 16 16 8 18;"/>
+
+            <!-- Sidebar Buttons -->
+            <VBox spacing="4" style="-fx-padding: 0 10 0 10;">
+
+                <Button fx:id="btnDashboard" text="Dashboard" onAction="#handleDashboard"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-size: 12.5px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnUsers" text="Users" onAction="#handleUsers"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnIngredients" text="Ingredients" onAction="#handleIngredients"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnRecipes" text="Recipes" onAction="#handleRecipes"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnComplaints" text="Complaints" onAction="#handleComplaints"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnEvents" text="Events" onAction="#handleEvents"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnBlogs" text="Blogs" onAction="#handleBlogs"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Bottom block -->
+            <VBox spacing="10" style="-fx-padding: 12 12 16 12;">
+                <VBox spacing="7"
+                      style="-fx-background-color: #163322; -fx-background-radius: 12; -fx-padding: 14;">
+                    <Label text="Administration Area"
+                           style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label text="Manage all modules and monitor platform activity from this centralized dashboard."
+                           wrapText="true"
+                           style="-fx-font-size: 10px; -fx-text-fill: #7AAA90;"/>
+                </VBox>
+
+                <Button fx:id="btnLogout" text="Log Out"
+                        prefHeight="40" maxWidth="Infinity"
+                        style="-fx-background-color: #991B1B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- ===================== MAIN CONTENT ===================== -->
+    <center>
+        <VBox style="-fx-background-color: #F0F4F8;">
+
+            <!-- ===== TOP HEADER BAR ===== -->
+            <HBox alignment="CENTER_LEFT" prefHeight="74" spacing="14"
+                  style="-fx-background-color: white; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1 0;">
+                <padding>
+                    <Insets top="0" right="24" bottom="0" left="26"/>
+                </padding>
+
+                <VBox spacing="3">
+                    <Label text="Admin Dashboard"
+                           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Monitor and manage your platform from a centralized workspace"
+                           style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <HBox alignment="CENTER_LEFT" spacing="8" prefHeight="40" prefWidth="280"
+                      style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-padding: 0 12 0 12;">
+                    <Label text="🔍"
+                           style="-fx-font-size: 14px; -fx-text-fill: #94A3B8;"/>
+                    <TextField fx:id="searchField"
+                               promptText="Search..."
+                               prefHeight="36" HBox.hgrow="ALWAYS"
+                               style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12px; -fx-text-fill: #475569; -fx-prompt-text-fill: #94A3B8;"/>
+                </HBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="8">
+                    <Button prefHeight="38" prefWidth="38" text="🔔"
+                            style="-fx-background-color: transparent; -fx-font-size: 16px; -fx-text-fill: #475569; -fx-background-radius: 10; -fx-cursor: hand;"/>
+
+                    <Button prefHeight="38" prefWidth="38" text="⚙"
+                            style="-fx-background-color: transparent; -fx-font-size: 16px; -fx-text-fill: #475569; -fx-background-radius: 10; -fx-cursor: hand;"/>
+
+                    <StackPane prefWidth="40" prefHeight="40"
+                               style="-fx-background-color: #1A3A6B; -fx-background-radius: 20;">
+                        <Label text="AU"
+                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    </StackPane>
+                </HBox>
+            </HBox>
+
+            <!-- Dynamic Content Area -->
+            <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS" style="-fx-background-color: #F0F4F8;">
+
+                <!-- Dashboard Home -->
+                <ScrollPane fx:id="dashboardScrollPane" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                            style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                    <VBox fx:id="homeContent" spacing="20" style="-fx-background-color: #F0F4F8;">
+                        <padding>
+                            <Insets top="22" right="26" bottom="26" left="26"/>
+                        </padding>
+
+                        <!-- Welcome banner -->
+                        <HBox alignment="CENTER_LEFT" prefHeight="112" spacing="0"
+                              style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);">
+
+                            <VBox spacing="8" HBox.hgrow="ALWAYS" style="-fx-padding: 22 24;">
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label text="Hello,"
+                                           style="-fx-font-size: 16px; -fx-text-fill: #475569;"/>
+                                    <Label text="Admin User 👋"
+                                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                </HBox>
+                                <Label text="Welcome to your Nutri Coach Pro dashboard. Here is a quick overview of your current platform activity."
+                                       style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                                <HBox spacing="10" style="-fx-padding: 4 0 0 0;">
+                                    <Button text="View alerts"
+                                            prefHeight="32" prefWidth="120"
+                                            style="-fx-background-color: transparent; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-text-fill: #475569; -fx-font-size: 11px; -fx-cursor: hand;"/>
+                                    <Button text="Generate report"
+                                            prefHeight="32" prefWidth="130"
+                                            style="-fx-background-color: transparent; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-text-fill: #475569; -fx-font-size: 11px; -fx-cursor: hand;"/>
+                                </HBox>
+                            </VBox>
+
+                            <VBox alignment="CENTER_RIGHT" spacing="4"
+                                  style="-fx-padding: 22 28; -fx-background-color: #FAFCFE; -fx-background-radius: 0 16 16 0; -fx-border-color: transparent transparent transparent #E0E8F0; -fx-border-width: 0 0 0 1;">
+                                <Label text="Today"
+                                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                                <Label fx:id="lblDate" text="April 5, 2026"
+                                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                <Label fx:id="lblClock" text="15:23:02"
+                                       style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #2E7D5A;"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Alert banner -->
+                        <HBox alignment="CENTER_LEFT" prefHeight="48" spacing="12"
+                              style="-fx-background-color: #FFFBEB; -fx-background-radius: 12; -fx-border-color: #FDE68A; -fx-border-radius: 12; -fx-padding: 0 16;">
+                            <Label text="⚠"
+                                   style="-fx-font-size: 15px; -fx-text-fill: #D97706;"/>
+                            <Label text="Attention required"
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #92400E;"/>
+                            <Label text="8 verification requests require urgent action."
+                                   style="-fx-font-size: 12px; -fx-text-fill: #78350F;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="View details"
+                                    prefHeight="30" prefWidth="120"
+                                    style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 11px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                            <Button text="✕"
+                                    prefHeight="24" prefWidth="24"
+                                    style="-fx-background-color: transparent; -fx-font-size: 12px; -fx-text-fill: #94A3B8; -fx-cursor: hand;"/>
+                        </HBox>
+
+                        <!-- Stats cards row -->
+                        <HBox spacing="16">
+
+                            <VBox prefHeight="140" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 14; -fx-padding: 18; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);">
+                                <HBox alignment="CENTER_LEFT">
+                                    <StackPane prefWidth="38" prefHeight="38"
+                                               style="-fx-background-color: #E8F5EE; -fx-background-radius: 10;">
+                                        <Label text="👥" style="-fx-font-size: 16px;"/>
+                                    </StackPane>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="⋮"
+                                            style="-fx-background-color: transparent; -fx-font-size: 16px; -fx-text-fill: #94A3B8; -fx-cursor: hand;"/>
+                                </HBox>
+                                <Region VBox.vgrow="ALWAYS"/>
+                                <Label text="Total Users"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label fx:id="lblTotalUsers" text="128"
+                                           style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                    <Label text="+12%"
+                                           style="-fx-font-size: 11px; -fx-text-fill: #16A34A; -fx-background-color: #DCFCE7; -fx-background-radius: 6; -fx-padding: 2 6;"/>
+                                </HBox>
+                                <Label text="Compared to last month"
+                                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            </VBox>
+
+                            <VBox prefHeight="140" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 14; -fx-padding: 18; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);">
+                                <HBox alignment="CENTER_LEFT">
+                                    <StackPane prefWidth="38" prefHeight="38"
+                                               style="-fx-background-color: #EFF6FF; -fx-background-radius: 10;">
+                                        <Label text="🥕" style="-fx-font-size: 16px;"/>
+                                    </StackPane>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="⋮"
+                                            style="-fx-background-color: transparent; -fx-font-size: 16px; -fx-text-fill: #94A3B8; -fx-cursor: hand;"/>
+                                </HBox>
+                                <Region VBox.vgrow="ALWAYS"/>
+                                <Label text="Ingredients"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label fx:id="lblTotalIngredients" text="54"
+                                           style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                    <Label text="+8%"
+                                           style="-fx-font-size: 11px; -fx-text-fill: #16A34A; -fx-background-color: #DCFCE7; -fx-background-radius: 6; -fx-padding: 2 6;"/>
+                                </HBox>
+                                <Label text="Compared to last month"
+                                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            </VBox>
+
+                            <VBox prefHeight="140" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 14; -fx-padding: 18; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);">
+                                <HBox alignment="CENTER_LEFT">
+                                    <StackPane prefWidth="38" prefHeight="38"
+                                               style="-fx-background-color: #FFF7ED; -fx-background-radius: 10;">
+                                        <Label text="📋" style="-fx-font-size: 16px;"/>
+                                    </StackPane>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="⋮"
+                                            style="-fx-background-color: transparent; -fx-font-size: 16px; -fx-text-fill: #94A3B8; -fx-cursor: hand;"/>
+                                </HBox>
+                                <Region VBox.vgrow="ALWAYS"/>
+                                <Label text="Total Recipes"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label fx:id="lblTotalRecipes" text="31"
+                                           style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                    <Label text="+15%"
+                                           style="-fx-font-size: 11px; -fx-text-fill: #16A34A; -fx-background-color: #DCFCE7; -fx-background-radius: 6; -fx-padding: 2 6;"/>
+                                </HBox>
+                                <Label text="Compared to last month"
+                                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            </VBox>
+
+                            <VBox prefHeight="140" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 14; -fx-padding: 18; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);">
+                                <HBox alignment="CENTER_LEFT">
+                                    <StackPane prefWidth="38" prefHeight="38"
+                                               style="-fx-background-color: #FEF2F2; -fx-background-radius: 10;">
+                                        <Label text="⚠" style="-fx-font-size: 16px;"/>
+                                    </StackPane>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="⋮"
+                                            style="-fx-background-color: transparent; -fx-font-size: 16px; -fx-text-fill: #94A3B8; -fx-cursor: hand;"/>
+                                </HBox>
+                                <Region VBox.vgrow="ALWAYS"/>
+                                <Label text="Complaints"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label fx:id="lblTotalComplaints" text="12"
+                                           style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                    <Label text="-3%"
+                                           style="-fx-font-size: 11px; -fx-text-fill: #DC2626; -fx-background-color: #FEE2E2; -fx-background-radius: 6; -fx-padding: 2 6;"/>
+                                </HBox>
+                                <Label text="Compared to last month"
+                                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Main dashboard grid -->
+                        <GridPane hgap="18" vgap="18">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="58"/>
+                                <ColumnConstraints percentWidth="42"/>
+                            </columnConstraints>
+
+                            <!-- Platform overview -->
+                            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                  spacing="16"
+                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 14; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);">
+                                <HBox alignment="CENTER_LEFT">
+                                    <VBox spacing="2">
+                                        <Label text="Platform Overview"
+                                               style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                        <Label text="Monthly performance summary"
+                                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                    </VBox>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <HBox spacing="6">
+                                        <Label text="● Inflows"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #2E7D5A;"/>
+                                        <Label text="● Outflows"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #D97706;"/>
+                                    </HBox>
+                                </HBox>
+
+                                <VBox spacing="10"
+                                      style="-fx-background-color: #F8FAFC; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 12;">
+                                    <Label text="System Stability"
+                                           style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                                    <Label text="84%"
+                                           style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                    <ProgressBar prefWidth="520" progress="0.84"
+                                                 style="-fx-accent: #2E7D5A; -fx-pref-height: 14px;"/>
+                                    <Label text="Overall operational stability across all modules"
+                                           style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                                </VBox>
+
+                                <HBox spacing="14">
+                                    <VBox HBox.hgrow="ALWAYS"
+                                          style="-fx-background-color: #F8FAFC; -fx-background-radius: 12; -fx-padding: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 12; -fx-spacing: 4;">
+                                        <Label text="Pending complaints"
+                                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                        <Label text="12"
+                                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+                                        <Label text="View details →"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #2E7D5A; -fx-cursor: hand;"/>
+                                    </VBox>
+
+                                    <VBox HBox.hgrow="ALWAYS"
+                                          style="-fx-background-color: #F8FAFC; -fx-background-radius: 12; -fx-padding: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 12; -fx-spacing: 4;">
+                                        <Label text="Upcoming events"
+                                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                        <Label text="5"
+                                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                        <Label text="View details →"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #2E7D5A; -fx-cursor: hand;"/>
+                                    </VBox>
+
+                                    <VBox HBox.hgrow="ALWAYS"
+                                          style="-fx-background-color: #F8FAFC; -fx-background-radius: 12; -fx-padding: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 12; -fx-spacing: 4;">
+                                        <Label text="Published blogs"
+                                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                        <Label text="18"
+                                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                        <Label text="View details →"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #2E7D5A; -fx-cursor: hand;"/>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Module distribution -->
+                            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                  spacing="12"
+                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E0E8F0; -fx-border-radius: 14; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Module Distribution"
+                                           style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="⤢"
+                                            style="-fx-background-color: transparent; -fx-font-size: 13px; -fx-text-fill: #94A3B8; -fx-cursor: hand;"/>
+                                </HBox>
+                                <Label text="Operational distribution across platform modules"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+
+                                <VBox spacing="12" style="-fx-padding: 4 0 0 0;">
+
+                                    <VBox spacing="5">
+                                        <HBox>
+                                            <Label text="Users" style="-fx-font-size: 11px; -fx-text-fill: #475569;"/>
+                                            <Region HBox.hgrow="ALWAYS"/>
+                                            <Label text="36%" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #2E7D5A;"/>
+                                        </HBox>
+                                        <ProgressBar progress="0.36" maxWidth="Infinity"
+                                                     style="-fx-accent: #2E7D5A; -fx-pref-height: 14px;"/>
+                                    </VBox>
+
+                                    <VBox spacing="5">
+                                        <HBox>
+                                            <Label text="Recipes &amp; Ingredients" style="-fx-font-size: 11px; -fx-text-fill: #475569;"/>
+                                            <Region HBox.hgrow="ALWAYS"/>
+                                            <Label text="28%" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #3B82F6;"/>
+                                        </HBox>
+                                        <ProgressBar progress="0.28" maxWidth="Infinity"
+                                                     style="-fx-accent: #3B82F6; -fx-pref-height: 14px;"/>
+                                    </VBox>
+
+                                    <VBox spacing="5">
+                                        <HBox>
+                                            <Label text="Blogs &amp; Events" style="-fx-font-size: 11px; -fx-text-fill: #475569;"/>
+                                            <Region HBox.hgrow="ALWAYS"/>
+                                            <Label text="22%" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+                                        </HBox>
+                                        <ProgressBar progress="0.22" maxWidth="Infinity"
+                                                     style="-fx-accent: #D97706; -fx-pref-height: 14px;"/>
+                                    </VBox>
+
+                                    <VBox spacing="5">
+                                        <HBox>
+                                            <Label text="Complaints" style="-fx-font-size: 11px; -fx-text-fill: #475569;"/>
+                                            <Region HBox.hgrow="ALWAYS"/>
+                                            <Label text="14%" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
+                                        </HBox>
+                                        <ProgressBar progress="0.14" maxWidth="Infinity"
+                                                     style="-fx-accent: #DC2626; -fx-pref-height: 14px;"/>
+                                    </VBox>
+                                </VBox>
+
+                                <Region VBox.vgrow="ALWAYS"/>
+
+                                <VBox spacing="8"
+                                      style="-fx-background-color: #F0FDF4; -fx-background-radius: 12; -fx-padding: 14; -fx-border-color: #BBF7D0; -fx-border-radius: 12;">
+                                    <Label text="Administrative Insight"
+                                           style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #166534;"/>
+                                    <Label text="Use this dashboard to supervise content, monitor operations, and maintain consistency across the platform."
+                                           wrapText="true"
+                                           style="-fx-font-size: 10px; -fx-text-fill: #15803D;"/>
+                                </VBox>
+                            </VBox>
+                        </GridPane>
+
+                        <!-- Recent activity -->
+                        <VBox spacing="12">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Recent Administrative Activity"
+                                       style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="View all →"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #2E7D5A; -fx-cursor: hand;"/>
+                            </HBox>
+
+                            <GridPane hgap="16" vgap="14">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="50"/>
+                                    <ColumnConstraints percentWidth="50"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                </rowConstraints>
+
+                                <HBox GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                      alignment="CENTER_LEFT" spacing="12"
+                                      style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E0E8F0; -fx-border-radius: 12; -fx-padding: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0, 0, 1);">
+                                    <StackPane prefWidth="34" prefHeight="34"
+                                               style="-fx-background-color: #DCFCE7; -fx-background-radius: 8;">
+                                        <Label text="👥" style="-fx-font-size: 14px;"/>
+                                    </StackPane>
+                                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                        <Label text="New accounts reviewed"
+                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                        <Label text="Today"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+                                    </VBox>
+                                    <Label text="24 accounts"
+                                           style="-fx-background-color: #DCFCE7; -fx-text-fill: #166534; -fx-background-radius: 8; -fx-padding: 4 10; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                </HBox>
+
+                                <HBox GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                      alignment="CENTER_LEFT" spacing="12"
+                                      style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E0E8F0; -fx-border-radius: 12; -fx-padding: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0, 0, 1);">
+                                    <StackPane prefWidth="34" prefHeight="34"
+                                               style="-fx-background-color: #FEF9C3; -fx-background-radius: 8;">
+                                        <Label text="⚠" style="-fx-font-size: 14px;"/>
+                                    </StackPane>
+                                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                        <Label text="Complaint queue updated"
+                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                        <Label text="2 hours ago"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+                                    </VBox>
+                                    <Label text="Pending"
+                                           style="-fx-background-color: #FFF7ED; -fx-text-fill: #9A3412; -fx-background-radius: 8; -fx-padding: 4 10; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                </HBox>
+
+                                <HBox GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                      alignment="CENTER_LEFT" spacing="12"
+                                      style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E0E8F0; -fx-border-radius: 12; -fx-padding: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0, 0, 1);">
+                                    <StackPane prefWidth="34" prefHeight="34"
+                                               style="-fx-background-color: #EFF6FF; -fx-background-radius: 8;">
+                                        <Label text="📋" style="-fx-font-size: 14px;"/>
+                                    </StackPane>
+                                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                        <Label text="Recipe content moderation completed"
+                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                        <Label text="Yesterday"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+                                    </VBox>
+                                    <Label text="Completed"
+                                           style="-fx-background-color: #DCFCE7; -fx-text-fill: #166534; -fx-background-radius: 8; -fx-padding: 4 10; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                </HBox>
+
+                                <HBox GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                      alignment="CENTER_LEFT" spacing="12"
+                                      style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E0E8F0; -fx-border-radius: 12; -fx-padding: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0, 0, 1);">
+                                    <StackPane prefWidth="34" prefHeight="34"
+                                               style="-fx-background-color: #F3E8FF; -fx-background-radius: 8;">
+                                        <Label text="📅" style="-fx-font-size: 14px;"/>
+                                    </StackPane>
+                                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                        <Label text="Event publication scheduled"
+                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                        <Label text="This week"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+                                    </VBox>
+                                    <Label text="Scheduled"
+                                           style="-fx-background-color: #EFF6FF; -fx-text-fill: #1D4ED8; -fx-background-radius: 8; -fx-padding: 4 10; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                </HBox>
+                            </GridPane>
+                        </VBox>
+
+                    </VBox>
+                </ScrollPane>
+            </StackPane>
+        </VBox>
+    </center>
+
+</BorderPane>

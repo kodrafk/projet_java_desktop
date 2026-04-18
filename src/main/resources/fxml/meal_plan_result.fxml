@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fitToWidth="true"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.projet.controllers.MealPlanResultController"
+            style="-fx-background-color: #F8FAFC;">
+
+    <VBox spacing="20" style="-fx-background-color: #F8FAFC;">
+        <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+
+        <!-- TITRE -->
+        <VBox alignment="CENTER" spacing="6"
+              style="-fx-background-color: #1F4D3A;
+                     -fx-background-radius: 16;
+                     -fx-padding: 20;">
+            <Label text="OPTIMIZED MEAL PLAN"
+                   style="-fx-text-fill: white;
+                          -fx-font-size: 20px;
+                          -fx-font-weight: bold;"/>
+            <Label text="Reducing food waste while meeting your nutritional needs"
+                   style="-fx-text-fill: #a7d5c1; -fx-font-size: 12px;"/>
+        </VBox>
+
+        <!-- RÉSUMÉ IMPACT -->
+        <HBox spacing="16">
+            <VBox alignment="CENTER" spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 12;
+                         -fx-padding: 16;
+                         -fx-border-color: #10B981;
+                         -fx-border-radius: 12;">
+                <Label fx:id="labelIngredientsSauves" text="—"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #10B981;"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 12;
+                         -fx-padding: 16;
+                         -fx-border-color: #F59E0B;
+                         -fx-border-radius: 12;">
+                <Label fx:id="labelPourcentageStock" text="—"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #F59E0B;"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 12;
+                         -fx-padding: 16;
+                         -fx-border-color: #3B82F6;
+                         -fx-border-radius: 12;">
+                <Label fx:id="labelTotalCalories" text="—"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3B82F6;"/>
+            </VBox>
+        </HBox>
+
+        <!-- GRILLE PLAN -->
+        <VBox style="-fx-background-color: white;
+                     -fx-background-radius: 12;
+                     -fx-padding: 20;
+                     -fx-border-color: #E2E8F0;
+                     -fx-border-radius: 12;">
+
+            <Label text="Weekly Plan"
+                   style="-fx-font-weight: bold;
+                          -fx-font-size: 15px;
+                          -fx-text-fill: #1E293B;
+                          -fx-padding: 0 0 12 0;"/>
+
+            <ScrollPane fitToWidth="true"
+                        style="-fx-background-color: transparent;">
+                <GridPane fx:id="gridPlan" hgap="10" vgap="10"
+                          style="-fx-padding: 8;"/>
+            </ScrollPane>
+        </VBox>
+
+        <!-- LÉGENDE -->
+        <HBox spacing="20" alignment="CENTER_LEFT"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 10;
+                     -fx-padding: 14;
+                     -fx-border-color: #E2E8F0;
+                     -fx-border-radius: 10;">
+
+            <Label text="Legend :" style="-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #1E293B;"/>
+            <Label text="Urgent (≤2d)"
+                   style="-fx-font-size: 12px; -fx-text-fill: #DC2626;
+                          -fx-background-color: #FEE2E2; -fx-background-radius: 6; -fx-padding: 4 8;"/>
+            <Label text="Soon (3-5d)"
+                   style="-fx-font-size: 12px; -fx-text-fill: #F59E0B;
+                          -fx-background-color: #FEF3C7; -fx-background-radius: 6; -fx-padding: 4 8;"/>
+            <Label text="OK (>5d)"
+                   style="-fx-font-size: 12px; -fx-text-fill: #10B981;
+                          -fx-background-color: #D1FAE5; -fx-background-radius: 6; -fx-padding: 4 8;"/>
+        </HBox>
+
+        <!-- RÉSUMÉ -->
+        <VBox spacing="8"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 12;
+                     -fx-padding: 18;
+                     -fx-border-color: #E2E8F0;
+                     -fx-border-radius: 12;">
+
+            <Label text="Weekly Summary"
+                   style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #1E293B;"/>
+            <Label fx:id="labelCaloriesSemaine" text="—"
+                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+            <Label fx:id="labelGaspillageEvite" text="—"
+                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+        </VBox>
+
+        <!-- BOUTONS -->
+        <HBox spacing="16">
+            <Button fx:id="btnRegenerer"
+                    text="Regenerate Plan"
+                    onAction="#onRegenerer"
+                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    style="-fx-background-color: white;
+                           -fx-text-fill: #1E293B;
+                           -fx-font-size: 14px; -fx-font-weight: bold;
+                           -fx-padding: 14px; -fx-background-radius: 10;
+                           -fx-border-color: #E2E8F0; -fx-border-radius: 10;
+                           -fx-cursor: hand;"/>
+
+            <Button fx:id="btnValider"
+                    text="VALIDATE AND START TRACKING"
+                    onAction="#onValider"
+                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    style="-fx-background-color: #1F4D3A;
+                           -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold;
+                           -fx-padding: 14px; -fx-background-radius: 10;
+                           -fx-cursor: hand;"/>
+        </HBox>
+
+    </VBox>
+</ScrollPane>
