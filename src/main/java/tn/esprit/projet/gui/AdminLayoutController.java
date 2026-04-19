@@ -4,11 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import tn.esprit.projet.utils.SessionManager;
 
 public class AdminLayoutController {
 
@@ -18,21 +21,22 @@ public class AdminLayoutController {
 
     @FXML private Button btnDashboard;
     @FXML private Button btnUsers;
+    @FXML private Button btnStatistics;
     @FXML private Button btnIngredients;
     @FXML private Button btnRecipes;
-    @FXML private Button btnComplaints;
     @FXML private Button btnEvents;
     @FXML private Button btnBlogs;
     @FXML private Button btnObjectives;
     @FXML private Button btnLogout;
 
     @FXML private Label lblTotalUsers;
-    @FXML private Label lblTotalIngredients;
-    @FXML private Label lblTotalRecipes;
-    @FXML private Label lblTotalComplaints;
-
-    @FXML private Label lblDate;
-    @FXML private Label lblClock;
+    @FXML private Label lblActiveUsers;
+    @FXML private Label lblInactiveUsers;
+    @FXML private Label lblAdmins;
+    @FXML private Label lblNewThisMonth;
+    @FXML private Label lblPageTitle;
+    @FXML private Label lblAdminEmail;
+    @FXML private Label lblAdminAvatar;
 
     private static final String DEFAULT_BUTTON_STYLE =
             "-fx-background-color: transparent; " +
@@ -69,7 +73,7 @@ public class AdminLayoutController {
     private void handleUsers(ActionEvent event) {
         resetSidebarStyles();
         btnUsers.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Users Management");
+        loadPage("/fxml/user_list.fxml");
     }
 
     @FXML
@@ -84,13 +88,6 @@ public class AdminLayoutController {
         resetSidebarStyles();
         btnRecipes.setStyle(ACTIVE_BUTTON_STYLE);
         showPlaceholder("Recipes Management");
-    }
-
-    @FXML
-    private void handleComplaints(ActionEvent event) {
-        resetSidebarStyles();
-        btnComplaints.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Complaints Management");
     }
 
     @FXML
@@ -110,19 +107,43 @@ public class AdminLayoutController {
     @FXML
     private void handleObjectives(ActionEvent event) {
         resetSidebarStyles();
-        btnObjectives.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnObjectives != null) btnObjectives.setStyle(ACTIVE_BUTTON_STYLE);
         loadPage("/fxml/admin_objectives.fxml");
     }
 
+    @FXML
+    private void handleStatistics(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnStatistics != null) btnStatistics.setStyle(ACTIVE_BUTTON_STYLE);
+        loadPage("/fxml/statistics.fxml");
+    }
+
+    @FXML
+    private void handleAddUser(ActionEvent event) {
+        loadPage("/fxml/user_form.fxml");
+    }
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        SessionManager.logout();
+        try {
+            Parent login = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(login));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void resetSidebarStyles() {
-        btnDashboard.setStyle(DEFAULT_BUTTON_STYLE);
-        btnUsers.setStyle(DEFAULT_BUTTON_STYLE);
-        btnIngredients.setStyle(DEFAULT_BUTTON_STYLE);
-        btnRecipes.setStyle(DEFAULT_BUTTON_STYLE);
-        btnComplaints.setStyle(DEFAULT_BUTTON_STYLE);
-        btnEvents.setStyle(DEFAULT_BUTTON_STYLE);
-        btnBlogs.setStyle(DEFAULT_BUTTON_STYLE);
-        if (btnObjectives != null) btnObjectives.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnDashboard   != null) btnDashboard.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnUsers       != null) btnUsers.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnStatistics  != null) btnStatistics.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnIngredients != null) btnIngredients.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnRecipes     != null) btnRecipes.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnEvents      != null) btnEvents.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnBlogs       != null) btnBlogs.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnObjectives  != null) btnObjectives.setStyle(DEFAULT_BUTTON_STYLE);
     }
 
     private void loadPage(String fxmlPath) {
@@ -170,17 +191,20 @@ public class AdminLayoutController {
     }
 
     private void loadDashboardStats() {
-        lblTotalUsers.setText("128");
-        lblTotalIngredients.setText("54");
-        lblTotalRecipes.setText("31");
-        lblTotalComplaints.setText("12");
+        if (lblTotalUsers    != null) lblTotalUsers.setText("128");
+        if (lblActiveUsers   != null) lblActiveUsers.setText("104");
+        if (lblInactiveUsers != null) lblInactiveUsers.setText("24");
+        if (lblAdmins        != null) lblAdmins.setText("3");
+        if (lblNewThisMonth  != null) lblNewThisMonth.setText("12");
 
-        if (lblDate != null) {
-            lblDate.setText("April 5, 2026");
+        if (lblAdminEmail != null) {
+            var user = SessionManager.getCurrentUser();
+            lblAdminEmail.setText(user != null ? user.getEmail() : "admin");
         }
-
-        if (lblClock != null) {
-            lblClock.setText("15:23:02");
+        if (lblAdminAvatar != null) {
+            var user = SessionManager.getCurrentUser();
+            String name = user != null ? user.getEmail() : "A";
+            lblAdminAvatar.setText(name.substring(0, 1).toUpperCase());
         }
     }
 }

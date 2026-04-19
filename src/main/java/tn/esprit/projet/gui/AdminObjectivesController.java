@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import tn.esprit.projet.models.NutritionObjective;
+import tn.esprit.projet.models.User;
 import tn.esprit.projet.services.NutritionObjectiveService;
 
 import java.time.format.DateTimeFormatter;
@@ -23,6 +24,7 @@ public class AdminObjectivesController {
 
     private NutritionObjectiveService service;
     private List<NutritionObjective> all;
+    private User filteredUser = null; // when set, show only this user's objectives
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("MMM d, yyyy");
 
     @FXML
@@ -37,6 +39,22 @@ public class AdminObjectivesController {
         sortCombo.setValue("All");
         sortCombo.setOnAction(e -> render(filter(searchField.getText())));
         searchField.textProperty().addListener((o, old, n) -> render(filter(n)));
+        render(all);
+    }
+
+    /** Called from UserListController to show only one user's objectives */
+    public void setUserFilter(User user) {
+        this.filteredUser = user;
+        // Reload filtered by this user
+        all = service.getAllForAdmin().stream()
+            .filter(o -> {
+                // We need to get user_id from DB — use a service method
+                return true; // will filter below
+            })
+            .collect(java.util.stream.Collectors.toList());
+        // Actually filter by user_id via a dedicated query
+        all = service.getAllByUserId(user.getId());
+        lblCount.setText("Objectives for: " + user.getFullName() + " (" + all.size() + ")");
         render(all);
     }
 

@@ -6,15 +6,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import tn.esprit.projet.utils.DataSeeder;
+
 public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/main_layout.fxml"));
-
-        Scene scene = new Scene(root, 1200, 700);
-
-        primaryStage.setTitle("NutriLife - Kitchen Management");
+        DataSeeder.seed(); // create default admin if none exists
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+        Scene scene = new Scene(root, 1100, 720);
+        primaryStage.setTitle("NutriLife - Login");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

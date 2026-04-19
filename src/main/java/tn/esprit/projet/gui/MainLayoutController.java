@@ -4,212 +4,110 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import tn.esprit.projet.services.IngredientService;
-
-import java.io.IOException;
+import tn.esprit.projet.utils.SessionManager;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 public class MainLayoutController {
 
     @FXML private StackPane contentArea;
     @FXML private VBox homeContent;
-    @FXML private VBox submenuKitchen;
-
-    @FXML private Button btnHome;
-    @FXML private Button btnDailyFood;
-    @FXML private Button btnMyKitchen;
-    @FXML private Button btnIngredients;
-    @FXML private Button btnRecipes;
-    @FXML private Button btnBlog;
-    @FXML private Button btnComplaints;
-    @FXML private Button btnEvents;
-    @FXML private Button btnObjectives;
-
-    @FXML private Label lblTotalIngredients;
-    @FXML private Label lblTotalRecipes;
-    @FXML private Label lblExpiredItems;
-
-    @FXML private Label lblTotalIngredients2;
-    @FXML private Label lblTotalRecipes2;
-    @FXML private Label lblExpiredItems2;
 
     private IngredientService ingredientService;
 
-    private static final String DEFAULT_BUTTON_STYLE =
-            "-fx-background-color: transparent; " +
-                    "-fx-text-fill: #D7E6DF; " +
-                    "-fx-font-size: 12px; " +
-                    "-fx-background-radius: 8; " +
-                    "-fx-cursor: hand;";
-
-    private static final String ACTIVE_BUTTON_STYLE =
-            "-fx-background-color: #2E7D5A; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-font-size: 12px; " +
-                    "-fx-background-radius: 8; " +
-                    "-fx-font-weight: bold; " +
-                    "-fx-cursor: hand;";
     @FXML
     public void initialize() {
         ingredientService = new IngredientService();
-        loadHomeStats();
     }
 
-    // ========== NAVIGATION ==========
+    // ── Nav handlers (onMouseClicked → MouseEvent) ──────────────────────────
 
     @FXML
-    private void handleHome(ActionEvent event) {
-        resetButtonStyles();
-        btnHome.setStyle(ACTIVE_BUTTON_STYLE);
-
-        submenuKitchen.setVisible(false);
-        submenuKitchen.setManaged(false);
-
+    private void handleHome(MouseEvent event) {
         showHomePage();
     }
 
     @FXML
-    private void handleDailyFood(ActionEvent event) {
-        resetButtonStyles();
-        btnDailyFood.setStyle(ACTIVE_BUTTON_STYLE);
-
-        submenuKitchen.setVisible(false);
-        submenuKitchen.setManaged(false);
-
-        // TODO: remplacer par le vrai FXML plus tard
-        showPlaceholder("Daily Food Page");
+    private void handleKitchen(MouseEvent event) {
+        showPlaceholder("My Kitchen");
     }
 
     @FXML
-    private void toggleKitchenMenu(ActionEvent event) {
-        boolean isVisible = submenuKitchen.isVisible();
-        submenuKitchen.setVisible(!isVisible);
-        submenuKitchen.setManaged(!isVisible);
-    }
-
-    @FXML
-    private void handleIngredients(ActionEvent event) {
-        resetButtonStyles();
-        btnMyKitchen.setStyle(ACTIVE_BUTTON_STYLE);
-
-        submenuKitchen.setVisible(false);
-        submenuKitchen.setManaged(false);
-
-        loadPage("/fxml/ingredients.fxml");
-    }
-
-    @FXML
-    private void handleRecipes(ActionEvent event) {
-        resetButtonStyles();
-        btnMyKitchen.setStyle(ACTIVE_BUTTON_STYLE);
-
-        submenuKitchen.setVisible(false);
-        submenuKitchen.setManaged(false);
-
-        loadPage("/fxml/recettes.fxml");
-    }
-
-    @FXML
-    private void handleBlog(ActionEvent event) {
-        resetButtonStyles();
-        btnBlog.setStyle(ACTIVE_BUTTON_STYLE);
-
-        submenuKitchen.setVisible(false);
-        submenuKitchen.setManaged(false);
-
-        showPlaceholder("Blog Page");
-    }
-
-    @FXML
-    private void handleComplaints(ActionEvent event) {
-        resetButtonStyles();
-        btnComplaints.setStyle(ACTIVE_BUTTON_STYLE);
-
-        submenuKitchen.setVisible(false);
-        submenuKitchen.setManaged(false);
-
-        showPlaceholder("Complaints Page");
-    }
-
-    @FXML
-    private void handleEvents(ActionEvent event) {
-        resetButtonStyles();
-        btnEvents.setStyle(ACTIVE_BUTTON_STYLE);
-
-        submenuKitchen.setVisible(false);
-        submenuKitchen.setManaged(false);
-
-        showPlaceholder("Events Page");
-    }
-
-    @FXML
-    private void handleObjectives(ActionEvent event) {
-        resetButtonStyles();
-
-        submenuKitchen.setVisible(false);
-        submenuKitchen.setManaged(false);
-
+    private void handleObjectives(MouseEvent event) {
         loadPage("/fxml/objectives.fxml");
     }
 
-    // ========== UTILITAIRES ==========
-
-    private void resetButtonStyles() {
-        btnHome.setStyle(DEFAULT_BUTTON_STYLE);
-        btnDailyFood.setStyle(DEFAULT_BUTTON_STYLE);
-        btnMyKitchen.setStyle(DEFAULT_BUTTON_STYLE);
-        btnBlog.setStyle(DEFAULT_BUTTON_STYLE);
-        btnComplaints.setStyle(DEFAULT_BUTTON_STYLE);
-        btnEvents.setStyle(DEFAULT_BUTTON_STYLE);
-        if (btnObjectives != null) btnObjectives.setStyle(DEFAULT_BUTTON_STYLE);
+    @FXML
+    private void handleEvents(MouseEvent event) {
+        showPlaceholder("Events");
     }
 
+    @FXML
+    private void handleBlog(MouseEvent event) {
+        showPlaceholder("Blog");
+    }
+
+    // ── Button / MenuItem handlers (onAction → ActionEvent) ─────────────────
+
+    @FXML
+    private void handleAssistant(ActionEvent event) {
+        showPlaceholder("AI Assistant");
+    }
+
+    @FXML
+    private void handleBookAppointment(ActionEvent event) {
+        showPlaceholder("Book Appointment");
+    }
+
+    @FXML
+    private void handleMyProfile(ActionEvent event) {
+        loadPage("/fxml/user_profile.fxml");
+    }
+
+    @FXML
+    private void handleChangePassword(ActionEvent event) {
+        loadPage("/fxml/change_password.fxml");
+    }
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        SessionManager.getInstance().logout();
+        try {
+            Parent login = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(login));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
     private void showHomePage() {
-        contentArea.getChildren().clear();
-        contentArea.getChildren().add(homeContent);
-        loadHomeStats();
+        if (homeContent != null) {
+            contentArea.getChildren().setAll(homeContent);
+        }
     }
 
     private void loadPage(String fxmlPath) {
         try {
             Parent page = FXMLLoader.load(getClass().getResource(fxmlPath));
-            contentArea.getChildren().clear();
-            contentArea.getChildren().add(page);
+            contentArea.getChildren().setAll(page);
         } catch (Exception e) {
-            System.err.println("Erreur de chargement de la page : " + fxmlPath);
+            System.err.println("Failed to load: " + fxmlPath);
             e.printStackTrace();
             showPlaceholder("Page not found");
         }
     }
 
     private void showPlaceholder(String pageName) {
-        Label placeholder = new Label(pageName + " - Coming Soon");
-        placeholder.setStyle(
-                "-fx-font-size: 28px; " +
-                        "-fx-text-fill: #475569; " +
-                        "-fx-font-weight: bold;"
-        );
-        contentArea.getChildren().clear();
-        contentArea.getChildren().add(placeholder);
-    }
-
-    private void loadHomeStats() {
-        int totalIngredients = 0;
-        try {
-            totalIngredients = ingredientService.getAll().size();
-        } catch (Exception e) {
-            System.err.println("Could not load ingredients (DB unavailable?): " + e.getMessage());
-        }
-
-        lblTotalIngredients.setText(String.valueOf(totalIngredients));
-        if (lblTotalIngredients2 != null) lblTotalIngredients2.setText(String.valueOf(totalIngredients));
-
-        lblTotalRecipes.setText("0");
-        lblExpiredItems.setText("0");
-        if (lblTotalRecipes2 != null) lblTotalRecipes2.setText("0");
-        if (lblExpiredItems2 != null) lblExpiredItems2.setText("0");
+        Label lbl = new Label(pageName + " — Coming Soon");
+        lbl.setStyle("-fx-font-size: 28px; -fx-text-fill: #475569; -fx-font-weight: bold;");
+        contentArea.getChildren().setAll(lbl);
     }
 }

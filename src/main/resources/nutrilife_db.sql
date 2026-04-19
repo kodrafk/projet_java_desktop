@@ -7,15 +7,29 @@ USE nutrilife_db;
 
 -- ── user (required as FK for nutrition_objective) ──────────
 CREATE TABLE IF NOT EXISTS `user` (
-    `id`       INT          NOT NULL AUTO_INCREMENT,
-    `name`     VARCHAR(100) NOT NULL DEFAULT 'Default User',
-    `email`    VARCHAR(150) NOT NULL DEFAULT 'user@nutrilife.com',
-    PRIMARY KEY (`id`)
+    `id`               INT          NOT NULL AUTO_INCREMENT,
+    `name`             VARCHAR(100) NOT NULL DEFAULT 'Default User',
+    `email`            VARCHAR(150) NOT NULL DEFAULT 'user@nutrilife.com',
+    `password`         VARCHAR(255) NOT NULL DEFAULT '',
+    `roles`            VARCHAR(50)  NOT NULL DEFAULT 'ROLE_USER',
+    `is_active`        TINYINT(1)   NOT NULL DEFAULT 1,
+    `created_at`       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `first_name`       VARCHAR(100) NOT NULL DEFAULT '',
+    `last_name`        VARCHAR(100) NOT NULL DEFAULT '',
+    `birthday`         DATE         NOT NULL DEFAULT '2000-01-01',
+    `weight`           FLOAT                 DEFAULT NULL,
+    `height`           FLOAT                 DEFAULT NULL,
+    `phone_number`     VARCHAR(20)           DEFAULT NULL,
+    `phone_verified`   TINYINT(1)   NOT NULL DEFAULT 0,
+    `photo_filename`   VARCHAR(255)          DEFAULT NULL,
+    `welcome_message`  TEXT                  DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `idx_email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert a default user so the FK subquery always finds one
-INSERT IGNORE INTO `user` (`id`, `name`, `email`)
-VALUES (1, 'Default User', 'user@nutrilife.com');
+-- Insert a default admin user
+INSERT IGNORE INTO `user` (`id`, `name`, `email`, `roles`, `is_active`, `first_name`, `last_name`)
+VALUES (1, 'Admin User', 'admin@nutrilife.com', 'ROLE_ADMIN', 1, 'Admin', 'User');
 
 -- ── ingredient ─────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS `ingredient` (

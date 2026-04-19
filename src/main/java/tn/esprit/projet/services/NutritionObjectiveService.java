@@ -22,12 +22,50 @@ public class NutritionObjectiveService {
             System.err.println("⚠️ No DB connection — returning empty objectives list.");
             return list;
         }
-        String sql = "SELECT * FROM nutrition_objective ORDER BY created_at DESC";
-        try (Statement stmt = cnx.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) list.add(map(rs));
+        // Filter by current logged-in user
+        tn.esprit.projet.models.User currentUser = tn.esprit.projet.utils.SessionManager.getCurrentUser();
+        String sql = currentUser != null
+            ? "SELECT * FROM nutrition_objective WHERE user_id = ? ORDER BY created_at DESC"
+            : "SELECT * FROM nutrition_objective ORDER BY created_at DESC";
+        try {
+            if (currentUser != null) {
+                PreparedStatement ps = cnx.prepareStatement(sql);
+                ps.setInt(1, currentUser.getId());
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) list.add(map(rs));
+            } else {
+                Statement stmt = cnx.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                while (rs.next()) list.add(map(rs));
+            }
         } catch (SQLException e) {
             System.err.println("Error fetching objectives: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<NutritionObjective> getAllForAdmin() {
+        List<NutritionObjective> list = new ArrayList<>();
+        if (cnx == null) return list;
+        String sql = "SELECT * FROM nutrition_objective ORDER BY created_at DESC";
+        try (Statement stmt = cnx.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) list.add(map(rs));
+        } catch (SQLException e) {
+            System.err.println("Error fetching all objectives: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<NutritionObjective> getAllByUserId(int userId) {
+        List<NutritionObjective> list = new ArrayList<>();
+        if (cnx == null) return list;
+        try (PreparedStatement ps = cnx.prepareStatement(
+                "SELECT * FROM nutrition_objective WHERE user_id = ? ORDER BY created_at DESC")) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(map(rs));
+        } catch (SQLException e) {
+            System.err.println("Error fetching objectives by user: " + e.getMessage());
         }
         return list;
     }
@@ -47,10 +85,20 @@ public class NutritionObjectiveService {
 
     public NutritionObjective getActive() {
         if (cnx == null) return null;
-        try (Statement stmt = cnx.createStatement();
-             ResultSet rs = stmt.executeQuery(
-                     "SELECT * FROM nutrition_objective WHERE status = 'active' LIMIT 1")) {
-            if (rs.next()) return map(rs);
+        tn.esprit.projet.models.User currentUser = tn.esprit.projet.utils.SessionManager.getCurrentUser();
+        try {
+            if (currentUser != null) {
+                PreparedStatement ps = cnx.prepareStatement(
+                    "SELECT * FROM nutrition_objective WHERE status = 'active' AND user_id = ? LIMIT 1");
+                ps.setInt(1, currentUser.getId());
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) return map(rs);
+            } else {
+                Statement stmt = cnx.createStatement();
+                ResultSet rs = stmt.executeQuery(
+                    "SELECT * FROM nutrition_objective WHERE status = 'active' LIMIT 1");
+                if (rs.next()) return map(rs);
+            }
         } catch (SQLException e) {
             System.err.println("Error fetching active: " + e.getMessage());
         }
@@ -62,54 +110,9 @@ public class NutritionObjectiveService {
             System.err.println("❌ Cannot save: no DB connection.");
             return;
         }
-        // user_id is NOT NULL in Symfony schema — use a default value of 1
-        // or check if there's a user with id=1, otherwise use NULL if allowed
-        String sql = """
-            INSERT INTO nutrition_objective
-            (title, description, goal_type, plan_level, target_calories, target_protein,
-             target_carbs, target_fats, target_water, status, planned_start_date,
-             start_date, end_date, auto_activate, created_at, updated_at, user_id)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),NOW(),
-                (SELECT id FROM user LIMIT 1))
-        """;
-        try (PreparedStatement ps = cnx.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, obj.getTitle());
-            ps.setString(2, obj.getDescription());
-            ps.setString(3, obj.getGoalType());
-            ps.setString(4, obj.getPlanLevel());
-            ps.setInt(5, obj.getTargetCalories());
-            ps.setDouble(6, obj.getTargetProtein());
-            ps.setDouble(7, obj.getTargetCarbs());
-            ps.setDouble(8, obj.getTargetFats());
-            ps.setDouble(9, obj.getTargetWater());
-            ps.setString(10, obj.getStatus());
-            ps.setObject(11, obj.getPlannedStartDate() != null
-                    ? java.sql.Date.valueOf(obj.getPlannedStartDate()) : null);
-            ps.setObject(12, obj.getStartDate() != null
-                    ? java.sql.Timestamp.valueOf(obj.getStartDate().atStartOfDay()) : null);
-            ps.setObject(13, obj.getEndDate() != null
-                    ? java.sql.Timestamp.valueOf(obj.getEndDate().atStartOfDay()) : null);
-            ps.setBoolean(14, obj.isAutoActivate());
-            ps.executeUpdate();
-            ResultSet keys = ps.getGeneratedKeys();
-            if (keys.next()) {
-                obj.setId(keys.getInt(1));
-                System.out.println("✅ Saved objective ID: " + obj.getId());
-            }
-        } catch (SQLException e) {
-            System.err.println("❌ Error saving objective: " + e.getMessage());
-            // Fallback: try without user_id subquery
-            saveFallback(obj);
-        }
-    }
-
-    private void saveFallback(NutritionObjective obj) {
-        // Try to find any user id
-        int userId = 1;
-        try (Statement stmt = cnx.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id FROM user LIMIT 1")) {
-            if (rs.next()) userId = rs.getInt(1);
-        } catch (SQLException ignored) {}
+        // Use the logged-in user's ID
+        tn.esprit.projet.models.User currentUser = tn.esprit.projet.utils.SessionManager.getCurrentUser();
+        int userId = currentUser != null ? currentUser.getId() : 1;
 
         String sql = """
             INSERT INTO nutrition_objective
@@ -141,10 +144,10 @@ public class NutritionObjectiveService {
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) {
                 obj.setId(keys.getInt(1));
-                System.out.println("✅ Saved objective ID (fallback): " + obj.getId());
+                System.out.println("✅ Saved objective ID: " + obj.getId() + " for user " + userId);
             }
         } catch (SQLException e) {
-            System.err.println("❌ Fallback save failed: " + e.getMessage());
+            System.err.println("❌ Error saving objective: " + e.getMessage());
         }
     }
 
