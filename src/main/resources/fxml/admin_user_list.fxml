@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminUserListController"
+      prefWidth="1060" prefHeight="700" spacing="0"
+      style="-fx-background-color:#F0F4F8;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding:20 24 16 24;">
+        <Label text="User Management" style="-fx-font-size:22px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="searchField" promptText="🔍 Search by email or name..." prefWidth="280"
+                   style="-fx-background-color:white;-fx-border-color:#E2E8F0;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:9 14;-fx-font-size:13px;"/>
+        <Button text="+ Add New User" onAction="#handleAddUser"
+                style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:9 18;"/>
+    </HBox>
+
+    <HBox style="-fx-padding:0 24 10 24;">
+        <Label fx:id="lblCount" text="0 user(s)" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+    </HBox>
+
+    <TableView fx:id="userTable" VBox.vgrow="ALWAYS"
+               style="-fx-background-color:white;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-background-radius:12;-fx-margin:0 24;">
+        <columns>
+            <TableColumn fx:id="colId"        text="ID"         prefWidth="60"  sortable="true"/>
+            <TableColumn fx:id="colEmail"     text="Email"      prefWidth="200" sortable="true"/>
+            <TableColumn fx:id="colFullName"  text="Full Name"  prefWidth="160" sortable="true"/>
+            <TableColumn fx:id="colRole"      text="Role"       prefWidth="110" sortable="true"/>
+            <TableColumn fx:id="colStatus"    text="Status"     prefWidth="90"  sortable="true"/>
+            <TableColumn fx:id="colCreatedAt" text="Created At" prefWidth="110" sortable="true"/>
+            <TableColumn fx:id="colActions"   text="Actions"    prefWidth="310" sortable="false"/>
+        </columns>
+    </TableView>
+</VBox>

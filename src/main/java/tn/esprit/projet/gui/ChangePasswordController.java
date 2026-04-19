@@ -3,118 +3,68 @@ package tn.esprit.projet.gui;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import tn.esprit.projet.dao.UserDAO;
+import org.mindrot.jbcrypt.BCrypt;
 import tn.esprit.projet.models.User;
-import tn.esprit.projet.utils.AlertUtil;
-import tn.esprit.projet.utils.PasswordUtil;
-import tn.esprit.projet.utils.SessionManager;
-import tn.esprit.projet.utils.UserValidator;
+import tn.esprit.projet.repository.UserRepository;
+import tn.esprit.projet.utils.Session;
+import tn.esprit.projet.utils.Toasts;
+import tn.esprit.projet.utils.Validator;
 
 public class ChangePasswordController {
 
-    @FXML private PasswordField fieldCurrent;
-    @FXML private PasswordField fieldNew;
-    @FXML private PasswordField fieldConfirm;
-    @FXML private Label         errCurrent;
-    @FXML private Label         errNew;
-    @FXML private Label         errConfirm;
-    @FXML private Button        btnUpdate;
+    @FXML private PasswordField currentPasswordField;
+    @FXML private PasswordField newPasswordField;
+    @FXML private PasswordField confirmNewPasswordField;
+    @FXML private Label         errorLabel;
+    @FXML private Button        changeButton;
 
-    private final UserDAO dao = new UserDAO();
+    private final UserRepository repo = new UserRepository();
 
     @FXML
     public void initialize() {
-        fieldCurrent.focusedProperty().addListener((o, was, now) -> {
-            if (!now && !fieldCurrent.getText().isBlank())
-                applyField(fieldCurrent, errCurrent, null); // current checked on submit
-            updateButton();
-        });
-        fieldNew.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldNew, errNew,
-                    UserValidator.validatePassword(fieldNew.getText()));
-            // re-check confirm
-            if (!fieldConfirm.getText().isBlank())
-                applyField(fieldConfirm, errConfirm,
-                        UserValidator.validateConfirmPassword(
-                                fieldNew.getText(), fieldConfirm.getText()));
-            updateButton();
-        });
-        fieldConfirm.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldConfirm, errConfirm,
-                    UserValidator.validateConfirmPassword(
-                            fieldNew.getText(), fieldConfirm.getText()));
-            updateButton();
-        });
-
-        fieldCurrent.textProperty().addListener((o, a, b) -> updateButton());
-        fieldNew.textProperty().addListener((o, a, b) -> updateButton());
-        fieldConfirm.textProperty().addListener((o, a, b) -> updateButton());
-
-        updateButton();
+        errorLabel.setVisible(false);
     }
 
     @FXML
-    private void handleSave() {
-        boolean ok = true;
-
-        User u = SessionManager.getCurrentUser();
+    private void handleChange() {
+        errorLabel.setVisible(false);
+        User u = Session.getCurrentUser();
         if (u == null) return;
-        User fresh = dao.findById(u.getId());
 
-        // Validate current password
-        String current = fieldCurrent.getText();
-        if (current.isBlank()) {
-            applyField(fieldCurrent, errCurrent, "Current password is required.");
-            ok = false;
-        } else if (fresh == null || !PasswordUtil.checkPassword(current, fresh.getPassword())) {
-            applyField(fieldCurrent, errCurrent, "Current password is incorrect.");
-            ok = false;
-        } else {
-            applyField(fieldCurrent, errCurrent, null);
+        String current = currentPasswordField.getText();
+        if (current.isEmpty()) { show("Current password is required."); return; }
+
+        // Verify current password
+        User fresh = repo.findById(u.getId());
+        if (fresh == null || !BCrypt.checkpw(current, fresh.getPassword())) {
+            show("Current password is incorrect.");
+            return;
         }
 
-        // Validate new password
-        ok &= applyField(fieldNew, errNew,
-                UserValidator.validatePassword(fieldNew.getText()));
+        String newPwd = newPasswordField.getText();
+        String pwdErr = Validator.password(newPwd);
+        if (pwdErr != null) { show(pwdErr); return; }
 
-        // Validate confirm
-        ok &= applyField(fieldConfirm, errConfirm,
-                UserValidator.validateConfirmPassword(
-                        fieldNew.getText(), fieldConfirm.getText()));
+        String confirmErr = Validator.confirmPassword(newPwd, confirmNewPasswordField.getText());
+        if (confirmErr != null) { show(confirmErr); return; }
 
-        if (!ok) return;
+        String hashed = BCrypt.hashpw(newPwd, BCrypt.gensalt(10));
+        repo.updatePassword(u.getId(), hashed);
+        u.setPassword(hashed);
+        Session.login(u);
 
-        u.setPassword(PasswordUtil.hashPassword(fieldNew.getText()));
-        if (dao.update(u)) {
-            Stage owner = (Stage) fieldCurrent.getScene().getWindow();
-            owner.close();
-            AlertUtil.show(AlertUtil.Type.SUCCESS, "Password Updated", "Your password has been changed successfully.");
-        } else {
-            applyField(fieldCurrent, errCurrent, "Failed to update password. Please try again.");
-        }
+        Stage stage = (Stage) currentPasswordField.getScene().getWindow();
+        Toasts.show(stage, "Your password has been changed successfully!", Toasts.Type.SUCCESS);
+        stage.close();
     }
 
-    private boolean applyField(Control field, Label errLabel, String error) {
-        if (error != null) {
-            errLabel.setText(error);
-            field.setStyle(UserValidator.getErrorStyle());
-            return false;
-        } else {
-            errLabel.setText("");
-            field.setStyle(UserValidator.getOkStyle());
-            return true;
-        }
+    @FXML
+    private void handleCancel() {
+        ((Stage) currentPasswordField.getScene().getWindow()).close();
     }
 
-    private void updateButton() {
-        if (btnUpdate == null) return;
-        btnUpdate.setDisable(
-                fieldCurrent.getText().isBlank() ||
-                fieldNew.getText().isBlank() ||
-                fieldConfirm.getText().isBlank());
-    }
-
-    @FXML private void handleCancel() {
-        ((Stage) fieldCurrent.getScene().getWindow()).close();
+    private void show(String msg) {
+        errorLabel.setText(msg);
+        errorLabel.setVisible(true);
     }
 }

@@ -70,8 +70,7 @@ public class UserViewController {
         }
 
         lblBirthday.setText(u.getBirthday() != null ? u.getBirthday().format(D_FMT) : "—");
-        lblPhone.setText(u.getPhoneNumber() != null && !u.getPhoneNumber().isBlank()
-                ? u.getPhoneNumber() : "—");
+        lblPhone.setText("—");
         lblCreatedAt.setText(u.getCreatedAt() != null ? u.getCreatedAt().format(DT_FMT) : "—");
     }
 

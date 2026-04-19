@@ -114,6 +114,12 @@
                     <Button text="Change Password" onAction="#handleChangePassword"
                             maxWidth="Infinity" prefHeight="40"
                             style="-fx-background-color: #F1F5F9; -fx-border-color: #CBD5E1; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand;"/>
+                    <Button text="🎭 Manage Face ID" onAction="#handleFaceId"
+                            maxWidth="Infinity" prefHeight="40"
+                            style="-fx-background-color: #EFF6FF; -fx-border-color: #BFDBFE; -fx-border-radius: 10; -fx-background-radius: 10; -fx-text-fill: #1D4ED8; -fx-font-size: 13px; -fx-cursor: hand;"/>
+                    <Button text="🏆 My Badges" onAction="#handleBadges"
+                            maxWidth="Infinity" prefHeight="40"
+                            style="-fx-background-color: #FEF3C7; -fx-border-color: #FDE68A; -fx-border-radius: 10; -fx-background-radius: 10; -fx-text-fill: #D97706; -fx-font-size: 13px; -fx-cursor: hand;"/>
                     <Button text="Deactivate My Account" onAction="#handleDeactivate"
                             maxWidth="Infinity" prefHeight="40"
                             style="-fx-background-color: transparent; -fx-border-color: #EF4444; -fx-border-radius: 10; -fx-background-radius: 10; -fx-text-fill: #EF4444; -fx-font-size: 13px; -fx-cursor: hand;"/>

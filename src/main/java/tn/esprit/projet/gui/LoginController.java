@@ -4,137 +4,175 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import tn.esprit.projet.dao.UserDAO;
+import org.mindrot.jbcrypt.BCrypt;
 import tn.esprit.projet.models.User;
-import tn.esprit.projet.utils.PasswordUtil;
-import tn.esprit.projet.utils.SessionManager;
-import tn.esprit.projet.utils.UserValidator;
+import tn.esprit.projet.repository.UserRepository;
+import tn.esprit.projet.utils.Nav;
+import tn.esprit.projet.utils.Session;
+
+import java.util.Random;
 
 public class LoginController {
 
-    @FXML private TextField     fieldEmail;
-    @FXML private PasswordField fieldPassword;
-    @FXML private TextField     fieldPasswordVisible;   // plain text overlay
-    @FXML private Button        btnTogglePassword;
-    @FXML private Label         errEmail;
-    @FXML private Label         errPassword;
-    @FXML private Label         errGeneral;
+    @FXML private TextField     emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private CheckBox      rememberMeCheckbox;
+    @FXML private Label         captchaLabel;
+    @FXML private TextField     captchaField;
+    @FXML private Label         errorLabel;
+    @FXML private Button        loginButton;
+    @FXML private Button        faceIdButton;
+    @FXML private Button        googleButton;
 
-    private boolean passwordVisible = false;
-    private final UserDAO userDAO = new UserDAO();
+    private int captchaA, captchaB;
+    private final UserRepository       repo = new UserRepository();
 
     @FXML
     public void initialize() {
-        // Keep both fields in sync
-        fieldPasswordVisible.textProperty().bindBidirectional(
-                new javafx.beans.property.SimpleStringProperty() {
-                    @Override public String get() { return fieldPassword.getText(); }
-                    @Override public void set(String v) { fieldPassword.setText(v); }
-                });
-        // Simpler: just sync manually
-        fieldPasswordVisible.textProperty().addListener((o, a, b) -> {
-            if (passwordVisible) fieldPassword.setText(b);
-        });
-        fieldPassword.textProperty().addListener((o, a, b) -> {
-            if (!passwordVisible) fieldPasswordVisible.setText(b);
-        });
-        fieldPasswordVisible.setVisible(false);
-        fieldPasswordVisible.setManaged(false);
+        if (errorLabel != null) errorLabel.setVisible(false);
+        generateCaptcha();
     }
 
-    @FXML
-    private void handleTogglePassword() {
-        passwordVisible = !passwordVisible;
-        if (passwordVisible) {
-            fieldPasswordVisible.setText(fieldPassword.getText());
-            fieldPasswordVisible.setVisible(true);
-            fieldPasswordVisible.setManaged(true);
-            fieldPassword.setVisible(false);
-            fieldPassword.setManaged(false);
-            btnTogglePassword.setText("🙈");
-        } else {
-            fieldPassword.setText(fieldPasswordVisible.getText());
-            fieldPassword.setVisible(true);
-            fieldPassword.setManaged(true);
-            fieldPasswordVisible.setVisible(false);
-            fieldPasswordVisible.setManaged(false);
-            btnTogglePassword.setText("👁");
-        }
+    private void generateCaptcha() {
+        Random rng = new Random();
+        captchaA = rng.nextInt(9) + 1;
+        captchaB = rng.nextInt(9) + 1;
+        if (captchaLabel != null)
+            captchaLabel.setText("What is " + captchaA + " + " + captchaB + "?");
+        if (captchaField != null) captchaField.clear();
     }
 
-    private String getPasswordText() {
-        return passwordVisible ? fieldPasswordVisible.getText() : fieldPassword.getText();
-    }
+    // ── Password login ─────────────────────────────────────────────────────────
 
     @FXML
     private void handleLogin() {
-        clearErrors();
+        hideError();
 
-        String email    = fieldEmail.getText().trim();
-        String password = getPasswordText();
-        boolean ok      = true;
-
-        String emailErr = UserValidator.validateEmail(email);
-        if (emailErr != null) {
-            errEmail.setText(emailErr);
-            fieldEmail.setStyle(UserValidator.getErrorStyle());
-            ok = false;
-        }
-        if (password.isBlank()) {
-            errPassword.setText("Password is required.");
-            fieldPassword.setStyle(UserValidator.getErrorStyle());
-            fieldPasswordVisible.setStyle(UserValidator.getErrorStyle());
-            ok = false;
-        }
-        if (!ok) return;
-
-        User user = userDAO.findByEmail(email);
-        if (user == null || !PasswordUtil.checkPassword(password, user.getPassword())) {
-            errGeneral.setText("Invalid email or password.");
-            return;
-        }
-        if (!user.isActive()) {
-            errGeneral.setText("Your account has been deactivated. Contact an administrator.");
+        // Captcha
+        String capText = captchaField != null ? captchaField.getText().trim() : "";
+        try {
+            if (Integer.parseInt(capText) != captchaA + captchaB) {
+                showError("Incorrect captcha answer.");
+                generateCaptcha();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showError("Incorrect captcha answer.");
+            generateCaptcha();
             return;
         }
 
-        SessionManager.setCurrentUser(user);
-        if ("ROLE_ADMIN".equals(user.getRoles())) {
-            navigate("/fxml/admin_layout.fxml", "NutriLife - Admin Panel", 1320, 780, true);
-        } else {
-            navigate("/fxml/main_layout.fxml", "NutriLife - Dashboard", 1280, 760, true);
+        String email    = emailField.getText().trim();
+        String password = passwordField.getText();
+
+        if (email.isEmpty())    { showError("Email is required.");    return; }
+        if (password.isEmpty()) { showError("Password is required."); return; }
+
+        User user = repo.findByEmail(email);
+        if (user == null) { showError("Invalid email or password."); generateCaptcha(); return; }
+        if (!user.isActive()) { showError("Your user account is deactivated."); return; }
+        if (!BCrypt.checkpw(password, user.getPassword())) {
+            showError("Invalid email or password.");
+            generateCaptcha();
+            return;
         }
+
+        Session.login(user);
+        navigateAfterLogin(user);
+    }
+
+    // ── Face ID login ──────────────────────────────────────────────────────────
+
+    @FXML
+    private void handleFaceIdLogin() {
+        hideError();
+        // Open camera directly — no email needed.
+        // The verify controller will scan ALL enrolled users and find the match.
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_verify.fxml"));
+            Parent root = loader.load();
+            FaceIdVerifyController ctrl = loader.getController();
+            ctrl.setTargetUser(null); // null = scan all enrolled users
+            ctrl.setOnSuccess(() -> {
+                // Session is already set inside FaceIdVerifyController on match
+                if (Session.isLoggedIn()) navigateAfterLogin(Session.getCurrentUser());
+            });
+            ctrl.setOnFailure(() -> showError("Too many failed Face ID attempts. Please use password login."));
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner((Stage) emailField.getScene().getWindow());
+            stage.setTitle("Face ID — Login");
+            stage.setScene(new Scene(root, 520, 520));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            // Check if login succeeded after window closed
+            if (Session.isLoggedIn()) navigateAfterLogin(Session.getCurrentUser());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Could not open camera: " + e.getMessage());
+        }
+    }
+
+    // ── Google login ───────────────────────────────────────────────────────────
+
+    @FXML
+    private void handleGoogleLogin() {
+        hideError();
+        try {
+            GoogleAuthController.fromRegister = false;
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/google_auth.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner((Stage) emailField.getScene().getWindow());
+            stage.setTitle("Sign in with Google");
+            stage.setScene(new Scene(root, 520, 620));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            // If login succeeded, Session will be set by GoogleAuthController
+            if (Session.isLoggedIn()) {
+                navigateAfterLogin(Session.getCurrentUser());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Could not open Google login: " + e.getMessage());
+        }
+    }
+
+    // ── Navigation ─────────────────────────────────────────────────────────────
+
+    @FXML
+    private void handleForgotPassword() {
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        Nav.go(stage, "forgot_password.fxml", "NutriLife - Forgot Password");
     }
 
     @FXML
     private void handleGoRegister() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/register.fxml"));
-            Stage stage = (Stage) fieldEmail.getScene().getWindow();
-            stage.setScene(new Scene(root, 1100, 720));
-            stage.setTitle("NutriLife - Register");
-        } catch (Exception ex) { ex.printStackTrace(); }
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        Nav.go(stage, "register.fxml", "NutriLife - Register");
     }
 
-    private void navigate(String fxml, String title, int w, int h, boolean maximize) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
-            Stage stage = (Stage) fieldEmail.getScene().getWindow();
-            stage.setScene(new Scene(root, w, h));
-            stage.setTitle(title);
-            stage.setMaximized(maximize);
-        } catch (Exception ex) { ex.printStackTrace(); }
+    private void navigateAfterLogin(User user) {
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        if (user.isAdmin()) {
+            Nav.go(stage, "admin_dashboard.fxml", "NutriLife - Admin", 1320, 780, true);
+        } else {
+            Nav.go(stage, "home.fxml", "NutriLife - Home", 1280, 760, true);
+        }
     }
 
-    private void clearErrors() {
-        errEmail.setText(""); errPassword.setText(""); errGeneral.setText("");
-        fieldEmail.setStyle(UserValidator.getNeutralStyle());
-        fieldPassword.setStyle(UserValidator.getNeutralStyle());
-        fieldPasswordVisible.setStyle(UserValidator.getNeutralStyle());
+    private void showError(String msg) {
+        if (errorLabel != null) { errorLabel.setText(msg); errorLabel.setVisible(true); }
+    }
+
+    private void hideError() {
+        if (errorLabel != null) { errorLabel.setVisible(false); errorLabel.setText(""); }
     }
 }

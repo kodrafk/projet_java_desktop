@@ -49,7 +49,6 @@ public class UserProfileController {
     @FXML private TextField  fieldLastName;
     @FXML private TextField  fieldWeight;
     @FXML private TextField  fieldHeight;
-    @FXML private TextField  fieldPhone;
     @FXML private TextArea   fieldWelcomeMessage;
     @FXML private Button     btnChoosePhoto;
     @FXML private Label      errFirstName;
@@ -122,19 +121,8 @@ public class UserProfileController {
         }
 
         set(lblBirthday, u.getBirthday() != null ? u.getBirthday().format(D_FMT) : "—");
-        set(lblPhone, u.getPhoneNumber() != null && !u.getPhoneNumber().isBlank()
-                ? u.getPhoneNumber() : "—");
-
-        if (lblPhoneVerified != null) {
-            if (u.getPhoneNumber() != null && !u.getPhoneNumber().isBlank()) {
-                lblPhoneVerified.setText(u.isPhoneVerified() ? "✓ Verified" : "✗ Not verified");
-                lblPhoneVerified.setStyle(u.isPhoneVerified()
-                        ? "-fx-text-fill: #16A34A; -fx-font-size: 11px; -fx-font-weight: bold;"
-                        : "-fx-text-fill: #DC2626; -fx-font-size: 11px;");
-            } else {
-                lblPhoneVerified.setText("");
-            }
-        }
+        if (lblPhone != null) set(lblPhone, "—");
+        if (lblPhoneVerified != null) lblPhoneVerified.setText("");
 
         set(lblWelcomeMsg, u.getWelcomeMessage() != null && !u.getWelcomeMessage().isBlank()
                 ? "\"" + u.getWelcomeMessage() + "\"" : "—");
@@ -144,7 +132,6 @@ public class UserProfileController {
         if (fieldLastName  != null) fieldLastName.setText(nvl(u.getLastName()));
         if (fieldWeight    != null) fieldWeight.setText(u.getWeight() > 0 ? String.valueOf(u.getWeight()) : "");
         if (fieldHeight    != null) fieldHeight.setText(u.getHeight() > 0 ? String.valueOf(u.getHeight()) : "");
-        if (fieldPhone     != null) fieldPhone.setText(nvl(u.getPhoneNumber()));
         if (fieldWelcomeMessage != null) fieldWelcomeMessage.setText(nvl(u.getWelcomeMessage()));
     }
 
@@ -173,6 +160,33 @@ public class UserProfileController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Change Password");
             stage.setScene(new Scene(root, 420, 340));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception ex) { ex.printStackTrace(); }
+    }
+
+    @FXML
+    private void handleFaceId() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/face_id.fxml"));
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Face ID Management");
+            stage.setScene(new Scene(root, 460, 340));
+            stage.setResizable(false);
+            stage.showAndWait();
+            loadProfile();
+        } catch (Exception ex) { ex.printStackTrace(); }
+    }
+
+    @FXML
+    private void handleBadges() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/badges.fxml"));
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("My Badges");
+            stage.setScene(new Scene(root, 680, 600));
             stage.setResizable(false);
             stage.showAndWait();
         } catch (Exception ex) { ex.printStackTrace(); }
@@ -224,10 +238,9 @@ public class UserProfileController {
         User u = SessionManager.getCurrentUser();
         u.setFirstName(fieldFirstName.getText().trim());
         u.setLastName(fieldLastName.getText().trim());
-        if (!fieldWeight.getText().isBlank()) u.setWeight(Float.parseFloat(fieldWeight.getText().trim()));
-        if (!fieldHeight.getText().isBlank()) u.setHeight(Float.parseFloat(fieldHeight.getText().trim()));
-        u.setPhoneNumber(fieldPhone.getText().trim().isBlank() ? null : fieldPhone.getText().trim());
-        if (fieldWelcomeMessage != null) u.setWelcomeMessage(fieldWelcomeMessage.getText().trim());
+        if (!fieldWeight.getText().isBlank()) u.setWeight(Double.parseDouble(fieldWeight.getText().trim()));
+        if (!fieldHeight.getText().isBlank()) u.setHeight(Double.parseDouble(fieldHeight.getText().trim()));
+        u.setWelcomeMessage(fieldWelcomeMessage != null ? fieldWelcomeMessage.getText().trim() : null);
 
         if (selectedPhotoFile != null) {
             String fn = savePhoto(selectedPhotoFile);

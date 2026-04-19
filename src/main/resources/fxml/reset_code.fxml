@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.ResetCodeController"
+           prefWidth="1100" prefHeight="720">
+
+    <Pane style="-fx-background-color: linear-gradient(to bottom right, #e8f5e9, #fffde7, #fce4ec);"/>
+    <Circle radius="28" fill="#7E57C2" opacity="0.6" StackPane.alignment="TOP_LEFT" translateX="200" translateY="150"/>
+    <Ellipse radiusX="20" radiusY="28" fill="#FF7043" opacity="0.7" StackPane.alignment="BOTTOM_RIGHT" translateX="-100" translateY="-120"/>
+
+    <VBox alignment="CENTER" spacing="0">
+        <Label text="Enter Verification Code" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #1a2e1a; -fx-font-family: Georgia;"/>
+        <Label text="Enter the 6-digit code sent to your email" style="-fx-font-size: 13px; -fx-text-fill: #6B7280; -fx-padding: 6 0 24 0;"/>
+
+        <VBox spacing="14" prefWidth="400" maxWidth="400"
+              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 30 36; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.10),24,0,0,6);">
+
+            <Label fx:id="lblDevCode" text="" style="-fx-font-size: 13px; -fx-text-fill: #2E7D32; -fx-font-weight: bold;"/>
+
+            <VBox spacing="5">
+                <Label text="6-Digit Code" style="-fx-font-size: 13px; -fx-text-fill: #1a2e1a; -fx-font-weight: bold;"/>
+                <TextField fx:id="fieldCode" promptText="000000"
+                           style="-fx-background-color: #F0F7F0; -fx-border-color: #C8E6C9; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 11 14; -fx-font-size: 20px; -fx-alignment: center; letter-spacing: 8px;"/>
+                <Label fx:id="errCode" text="" style="-fx-text-fill: #DC2626; -fx-font-size: 10px;"/>
+            </VBox>
+
+            <Button fx:id="btnVerify" text="Verify Code" onAction="#handleVerify"
+                    maxWidth="Infinity" prefHeight="46"
+                    style="-fx-background-color: #2E7D32; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand; -fx-border-color: transparent;"/>
+
+            <HBox alignment="CENTER">
+                <Button text="← Back" onAction="#handleBack"
+                        style="-fx-background-color: transparent; -fx-text-fill: #2E7D32; -fx-font-size: 12px; -fx-cursor: hand; -fx-border-color: transparent; -fx-padding: 0;"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</StackPane>

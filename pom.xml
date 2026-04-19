@@ -57,6 +57,39 @@
             <artifactId>javafx-swing</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+
+        <!-- JavaFX Web for Google OAuth WebView -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- JavaFX Media for webcam capture -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- Webcam Capture — real camera access, Java 17 compatible -->
+        <dependency>
+            <groupId>com.github.sarxos</groupId>
+            <artifactId>webcam-capture</artifactId>
+            <version>0.3.12</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.nativelibs4java</groupId>
+                    <artifactId>bridj</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Use newer bridj that works with Java 17 -->
+        <dependency>
+            <groupId>com.nativelibs4java</groupId>
+            <artifactId>bridj</artifactId>
+            <version>0.7.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -68,6 +101,19 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>tn.esprit.projet.MainApp</mainClass>
+                    <options>
+                        <!-- Required for sarxos webcam-capture (bridj) on Java 17 -->
+                        <option>--add-opens=java.base/java.lang=ALL-UNNAMED</option>
+                        <option>--add-opens=java.base/java.io=ALL-UNNAMED</option>
+                        <option>--add-opens=java.base/java.util=ALL-UNNAMED</option>
+                        <option>--add-opens=java.base/java.nio=ALL-UNNAMED</option>
+                        <option>--add-opens=java.base/sun.nio.ch=ALL-UNNAMED</option>
+                        <option>--add-opens=java.base/java.lang.reflect=ALL-UNNAMED</option>
+                        <option>--add-opens=java.desktop/sun.awt=ALL-UNNAMED</option>
+                        <option>--add-opens=java.desktop/java.awt=ALL-UNNAMED</option>
+                        <option>-Djava.awt.headless=false</option>
+                        <option>-Dbridj.nativelibs.path=</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>

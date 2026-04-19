@@ -42,7 +42,6 @@ public class UserFormController {
     @FXML private ComboBox<Integer> cbBirthYear;
     @FXML private TextField     fieldWeight;
     @FXML private TextField     fieldHeight;
-    @FXML private TextField     fieldPhone;
     @FXML private ImageView     photoPreview;
     @FXML private Label         photoInitials;
     @FXML private Button        btnChoosePhoto;
@@ -56,7 +55,6 @@ public class UserFormController {
     @FXML private Label errBirthday;
     @FXML private Label errWeight;
     @FXML private Label errHeight;
-    @FXML private Label errPhone;
     @FXML private Label errPhoto;
 
     private User     editUser;
@@ -185,11 +183,6 @@ public class UserFormController {
                     UserValidator.validateHeight(fieldHeight.getText()));
             updateSaveButton();
         });
-        fieldPhone.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldPhone, errPhone,
-                    UserValidator.validatePhone(fieldPhone.getText()));
-            updateSaveButton();
-        });
         chkRoleUser.selectedProperty().addListener((o, a, b) -> {
             validateRoles(); updateSaveButton();
         });
@@ -216,7 +209,6 @@ public class UserFormController {
         setBirthday(u.getBirthday());
         fieldWeight.setText(u.getWeight() > 0 ? String.valueOf(u.getWeight()) : "");
         fieldHeight.setText(u.getHeight() > 0 ? String.valueOf(u.getHeight()) : "");
-        fieldPhone.setText(nvl(u.getPhoneNumber()));
 
         if (u.getFirstName() != null && !u.getFirstName().isEmpty())
             photoInitials.setText(String.valueOf(u.getFirstName().charAt(0)).toUpperCase());
@@ -278,8 +270,6 @@ public class UserFormController {
                 UserValidator.validateWeight(fieldWeight.getText()));
         ok &= applyField(fieldHeight, errHeight,
                 UserValidator.validateHeight(fieldHeight.getText()));
-        ok &= applyField(fieldPhone, errPhone,
-                UserValidator.validatePhone(fieldPhone.getText()));
 
         if (!ok) return;
 
@@ -293,10 +283,8 @@ public class UserFormController {
         u.setFirstName(fieldFirstName.getText().trim());
         u.setLastName(fieldLastName.getText().trim());
         u.setBirthday(getBirthday());
-        u.setWeight(Float.parseFloat(fieldWeight.getText().trim()));
-        u.setHeight(Float.parseFloat(fieldHeight.getText().trim()));
-        String phone = fieldPhone.getText().trim();
-        u.setPhoneNumber(phone.isBlank() ? null : phone);
+        u.setWeight(Double.parseDouble(fieldWeight.getText().trim()));
+        u.setHeight(Double.parseDouble(fieldHeight.getText().trim()));
 
         if (selectedPhotoFile != null) {
             String fn = savePhoto(selectedPhotoFile);

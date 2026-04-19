@@ -1,331 +1,279 @@
 package tn.esprit.projet.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;import org.mindrot.jbcrypt.BCrypt;
-import tn.esprit.projet.dao.UserDAO;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.mindrot.jbcrypt.BCrypt;
 import tn.esprit.projet.models.User;
-import tn.esprit.projet.utils.SessionManager;
-import tn.esprit.projet.utils.AlertUtil;
-import tn.esprit.projet.utils.PasswordUtil;
-import tn.esprit.projet.utils.UserValidator;
+import tn.esprit.projet.repository.UserRepository;
+import tn.esprit.projet.utils.Nav;
+import tn.esprit.projet.utils.Session;
+import tn.esprit.projet.utils.Validator;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.YearMonth;
-import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.Random;
 
 public class RegisterController {
 
-    @FXML private TextField     fieldFirstName;
-    @FXML private TextField     fieldLastName;
-    @FXML private TextField     fieldEmail;
-    @FXML private PasswordField fieldPassword;
-    @FXML private PasswordField fieldConfirmPassword;
-    @FXML private TextField     fieldPasswordVisible;
-    @FXML private TextField     fieldConfirmVisible;
-    @FXML private Button        btnTogglePwd;
-    @FXML private Button        btnToggleConfirm;
+    @FXML private TextField     emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private TextField     firstNameField;
+    @FXML private TextField     lastNameField;
+    @FXML private DatePicker    birthdayPicker;
+    @FXML private TextField     weightField;
+    @FXML private TextField     heightField;
+    @FXML private Label         captchaLabel;
+    @FXML private TextField     captchaField;
+    @FXML private Button        registerButton;
 
-    private boolean pwdVisible     = false;
-    private boolean confirmVisible = false;
-    @FXML private TextField     fieldWeight;
-    @FXML private TextField     fieldHeight;
-    @FXML private TextField     fieldPhone;
-    @FXML private Button        btnSubmit;
-
-    // Birthday combo boxes
-    @FXML private ComboBox<Integer> cbBirthDay;
-    @FXML private ComboBox<String>  cbBirthMonth;
-    @FXML private ComboBox<Integer> cbBirthYear;
-
-    @FXML private Label errFirstName;
-    @FXML private Label errLastName;
+    // Inline error labels
     @FXML private Label errEmail;
     @FXML private Label errPassword;
-    @FXML private Label errConfirmPassword;
+    @FXML private Label errConfirm;
+    @FXML private Label errFirstName;
+    @FXML private Label errLastName;
     @FXML private Label errBirthday;
     @FXML private Label errWeight;
     @FXML private Label errHeight;
-    @FXML private Label errPhone;
-    @FXML private Label errGeneral;
+    @FXML private Label errCaptcha;
+    @FXML private Label errorLabel;
 
-    private final UserDAO dao = new UserDAO();
-
-    private static final String CB_STYLE_OK =
-            "-fx-background-color: #F0F7F0; -fx-border-color: #C8E6C9; " +
-            "-fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand;";
-    private static final String CB_STYLE_ERR =
-            "-fx-background-color: #FFF5F5; -fx-border-color: #EF4444; " +
-            "-fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand;";
+    private int captchaA, captchaB;
+    private final UserRepository repo = new UserRepository();
 
     @FXML
     public void initialize() {
-        // Hide visible fields initially
-        if (fieldPasswordVisible != null) { fieldPasswordVisible.setVisible(false); fieldPasswordVisible.setManaged(false); }
-        if (fieldConfirmVisible  != null) { fieldConfirmVisible.setVisible(false);  fieldConfirmVisible.setManaged(false); }
-        initBirthdayPicker();
-        setupRealtimeValidation();
-        updateSubmitButton();
+        if (errorLabel != null) errorLabel.setVisible(false);
+        generateCaptcha();
+
+        // Pre-fill from Google if data is available
+        prefillFromGoogle();
+
+        // Real-time inline validation
+        emailField.focusedProperty().addListener((o, was, now) -> { if (!now) validateEmail(); });
+        passwordField.focusedProperty().addListener((o, was, now) -> {
+            if (!now) Validator.apply(passwordField, errPassword, Validator.password(passwordField.getText()));
+        });
+        confirmPasswordField.focusedProperty().addListener((o, was, now) -> {
+            if (!now) Validator.apply(confirmPasswordField, errConfirm,
+                    Validator.confirmPassword(passwordField.getText(), confirmPasswordField.getText()));
+        });
+        firstNameField.focusedProperty().addListener((o, was, now) -> {
+            if (!now) Validator.apply(firstNameField, errFirstName, Validator.name(firstNameField.getText(), "First name"));
+        });
+        lastNameField.focusedProperty().addListener((o, was, now) -> {
+            if (!now) Validator.apply(lastNameField, errLastName, Validator.name(lastNameField.getText(), "Last name"));
+        });
+        birthdayPicker.valueProperty().addListener((o, a, b) -> validateBirthday());
+        weightField.focusedProperty().addListener((o, was, now) -> {
+            if (!now) Validator.apply(weightField, errWeight, Validator.weight(weightField.getText()));
+        });
+        heightField.focusedProperty().addListener((o, was, now) -> {
+            if (!now) Validator.apply(heightField, errHeight, Validator.height(heightField.getText()));
+        });
     }
 
-    @FXML private void handleTogglePassword() {
-        pwdVisible = !pwdVisible;
-        if (pwdVisible) {
-            fieldPasswordVisible.setText(fieldPassword.getText());
-            fieldPasswordVisible.setVisible(true); fieldPasswordVisible.setManaged(true);
-            fieldPassword.setVisible(false); fieldPassword.setManaged(false);
-            if (btnTogglePwd != null) btnTogglePwd.setText("🙈");
-        } else {
-            fieldPassword.setText(fieldPasswordVisible.getText());
-            fieldPassword.setVisible(true); fieldPassword.setManaged(true);
-            fieldPasswordVisible.setVisible(false); fieldPasswordVisible.setManaged(false);
-            if (btnTogglePwd != null) btnTogglePwd.setText("👁");
+    /** Pre-fill fields if coming from Google OAuth */
+    private void prefillFromGoogle() {
+        GoogleAuthController.GoogleTempData g = null;
+        if (GoogleAuthController.GoogleTempData.email != null) {
+            if (emailField    != null) emailField.setText(GoogleAuthController.GoogleTempData.email);
+            if (firstNameField != null) firstNameField.setText(nvl(GoogleAuthController.GoogleTempData.firstName));
+            if (lastNameField  != null) lastNameField.setText(nvl(GoogleAuthController.GoogleTempData.lastName));
+            // Lock email field since it came from Google
+            if (emailField != null) emailField.setEditable(false);
+            // Show info banner
+            if (errorLabel != null) {
+                errorLabel.setText("✅ Google account connected! Complete your profile to finish registration.");
+                errorLabel.setStyle("-fx-text-fill:#16A34A;-fx-font-size:12px;-fx-font-weight:bold;");
+                errorLabel.setVisible(true);
+            }
         }
     }
 
-    @FXML private void handleToggleConfirm() {
-        confirmVisible = !confirmVisible;
-        if (confirmVisible) {
-            fieldConfirmVisible.setText(fieldConfirmPassword.getText());
-            fieldConfirmVisible.setVisible(true); fieldConfirmVisible.setManaged(true);
-            fieldConfirmPassword.setVisible(false); fieldConfirmPassword.setManaged(false);
-            if (btnToggleConfirm != null) btnToggleConfirm.setText("🙈");
-        } else {
-            fieldConfirmPassword.setText(fieldConfirmVisible.getText());
-            fieldConfirmPassword.setVisible(true); fieldConfirmPassword.setManaged(true);
-            fieldConfirmVisible.setVisible(false); fieldConfirmVisible.setManaged(false);
-            if (btnToggleConfirm != null) btnToggleConfirm.setText("👁");
-        }
+    private void generateCaptcha() {
+        Random rng = new Random();
+        captchaA = rng.nextInt(9) + 1;
+        captchaB = rng.nextInt(9) + 1;
+        if (captchaLabel != null) captchaLabel.setText("What is " + captchaA + " + " + captchaB + "?");
+        if (captchaField != null) captchaField.clear();
     }
 
-    private String getPwd()     { return pwdVisible     ? fieldPasswordVisible.getText() : fieldPassword.getText(); }
-    private String getConfirm() { return confirmVisible ? fieldConfirmVisible.getText()  : fieldConfirmPassword.getText(); }
-
-    // ── Birthday picker setup ──────────────────────────────────────────────────
-    private void initBirthdayPicker() {
-        // Months
-        List<String> months = new ArrayList<>();
-        for (Month m : Month.values())
-            months.add(m.getDisplayName(TextStyle.FULL, Locale.ENGLISH));
-        cbBirthMonth.setItems(FXCollections.observableArrayList(months));
-
-        // Years: max 18 years ago → 100 years ago
-        int currentYear = LocalDate.now().getYear();
-        List<Integer> years = new ArrayList<>();
-        for (int y = currentYear - 18; y >= currentYear - 100; y--) years.add(y);
-        cbBirthYear.setItems(FXCollections.observableArrayList(years));
-
-        // Days: rebuild when month/year changes
-        cbBirthMonth.valueProperty().addListener((o, a, b) -> rebuildDays());
-        cbBirthYear.valueProperty().addListener((o, a, b)  -> rebuildDays());
-        rebuildDays();
-
-        // Validate on change
-        cbBirthDay.valueProperty().addListener((o, a, b)   -> { validateBirthday(); updateSubmitButton(); });
-        cbBirthMonth.valueProperty().addListener((o, a, b) -> { validateBirthday(); updateSubmitButton(); });
-        cbBirthYear.valueProperty().addListener((o, a, b)  -> { validateBirthday(); updateSubmitButton(); });
+    private boolean validateEmail() {
+        String err = Validator.email(emailField.getText());
+        if (err == null && repo.emailExistsExcluding(emailField.getText().trim(), 0))
+            err = "This email is already registered.";
+        return Validator.apply(emailField, errEmail, err);
     }
 
-    private void rebuildDays() {
-        Integer selectedDay = cbBirthDay.getValue();
-        int month = cbBirthMonth.getValue() != null
-                ? cbBirthMonth.getItems().indexOf(cbBirthMonth.getValue()) + 1 : 1;
-        int year  = cbBirthYear.getValue() != null
-                ? cbBirthYear.getValue() : LocalDate.now().getYear();
-        int maxDay = YearMonth.of(year, month).lengthOfMonth();
-        List<Integer> days = new ArrayList<>();
-        for (int d = 1; d <= maxDay; d++) days.add(d);
-        cbBirthDay.setItems(FXCollections.observableArrayList(days));
-        if (selectedDay != null && selectedDay <= maxDay) cbBirthDay.setValue(selectedDay);
-        else cbBirthDay.setValue(null);
+    private boolean validateBirthday() {
+        String err = Validator.birthday(birthdayPicker.getValue());
+        if (errBirthday != null) errBirthday.setText(err != null ? err : "");
+        return err == null;
     }
 
-    private LocalDate getBirthday() {
-        if (cbBirthDay.getValue() == null || cbBirthMonth.getValue() == null || cbBirthYear.getValue() == null)
-            return null;
-        int month = cbBirthMonth.getItems().indexOf(cbBirthMonth.getValue()) + 1;
-        return LocalDate.of(cbBirthYear.getValue(), month, cbBirthDay.getValue());
-    }
+    // ── Main register ──────────────────────────────────────────────────────────
 
-    private void validateBirthday() {
-        String err = UserValidator.validateBirthday(getBirthday());
-        errBirthday.setText(err != null ? err : "");
-        String style = err != null ? CB_STYLE_ERR : CB_STYLE_OK;
-        cbBirthDay.setStyle(style);
-        cbBirthMonth.setStyle(style);
-        cbBirthYear.setStyle(style);
-    }
-
-    // ── Real-time validation ───────────────────────────────────────────────────
-    private void setupRealtimeValidation() {
-        fieldFirstName.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldFirstName, errFirstName,
-                    UserValidator.validateName(fieldFirstName.getText(), "First name"));
-            updateSubmitButton();
-        });
-        fieldLastName.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldLastName, errLastName,
-                    UserValidator.validateName(fieldLastName.getText(), "Last name"));
-            updateSubmitButton();
-        });
-        fieldEmail.focusedProperty().addListener((o, was, now) -> {
-            if (!now) {
-                String err = UserValidator.validateEmail(fieldEmail.getText());
-                if (err == null && dao.emailExists(fieldEmail.getText().trim(), 0))
-                    err = "Email is already in use.";
-                applyField(fieldEmail, errEmail, err);
-            }
-            updateSubmitButton();
-        });
-        fieldPassword.focusedProperty().addListener((o, was, now) -> {
-            if (!now) {
-                applyField(fieldPassword, errPassword,
-                        UserValidator.validatePassword(getPwd()));
-                if (!getConfirm().isBlank())
-                    applyField(fieldConfirmPassword, errConfirmPassword,
-                            UserValidator.validateConfirmPassword(getPwd(), getConfirm()));
-            }
-            updateSubmitButton();
-        });
-        fieldConfirmPassword.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldConfirmPassword, errConfirmPassword,
-                    UserValidator.validateConfirmPassword(getPwd(), getConfirm()));
-            updateSubmitButton();
-        });
-        fieldWeight.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldWeight, errWeight,
-                    UserValidator.validateWeight(fieldWeight.getText()));
-            updateSubmitButton();
-        });
-        fieldHeight.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldHeight, errHeight,
-                    UserValidator.validateHeight(fieldHeight.getText()));
-            updateSubmitButton();
-        });
-        fieldPhone.focusedProperty().addListener((o, was, now) -> {
-            if (!now) applyField(fieldPhone, errPhone,
-                    UserValidator.validatePhone(fieldPhone.getText()));
-        });
-
-        fieldFirstName.textProperty().addListener((o, a, b) -> updateSubmitButton());
-        fieldLastName.textProperty().addListener((o, a, b)  -> updateSubmitButton());
-        fieldEmail.textProperty().addListener((o, a, b)     -> updateSubmitButton());
-        fieldPassword.textProperty().addListener((o, a, b)  -> updateSubmitButton());
-        fieldConfirmPassword.textProperty().addListener((o, a, b) -> updateSubmitButton());
-        fieldWeight.textProperty().addListener((o, a, b)    -> updateSubmitButton());
-        fieldHeight.textProperty().addListener((o, a, b)    -> updateSubmitButton());
-    }
-
-    // ── Submit ─────────────────────────────────────────────────────────────────
     @FXML
     private void handleRegister() {
         boolean ok = true;
+        ok &= validateEmail();
+        ok &= Validator.apply(passwordField, errPassword, Validator.password(passwordField.getText()));
+        ok &= Validator.apply(confirmPasswordField, errConfirm,
+                Validator.confirmPassword(passwordField.getText(), confirmPasswordField.getText()));
+        ok &= Validator.apply(firstNameField, errFirstName, Validator.name(firstNameField.getText(), "First name"));
+        ok &= Validator.apply(lastNameField, errLastName, Validator.name(lastNameField.getText(), "Last name"));
+        ok &= validateBirthday();
+        ok &= Validator.apply(weightField, errWeight, Validator.weight(weightField.getText()));
+        ok &= Validator.apply(heightField, errHeight, Validator.height(heightField.getText()));
 
-        ok &= applyField(fieldFirstName, errFirstName,
-                UserValidator.validateName(fieldFirstName.getText(), "First name"));
-        ok &= applyField(fieldLastName, errLastName,
-                UserValidator.validateName(fieldLastName.getText(), "Last name"));
-
-        String emailErr = UserValidator.validateEmail(fieldEmail.getText());
-        if (emailErr == null && dao.emailExists(fieldEmail.getText().trim(), 0))
-            emailErr = "Email is already in use.";
-        ok &= applyField(fieldEmail, errEmail, emailErr);
-
-        ok &= applyField(fieldPassword, errPassword,
-                UserValidator.validatePassword(getPwd()));
-        ok &= applyField(fieldConfirmPassword, errConfirmPassword,
-                UserValidator.validateConfirmPassword(getPwd(), getConfirm()));
-
-        // Birthday
-        String bdErr = UserValidator.validateBirthday(getBirthday());
-        errBirthday.setText(bdErr != null ? bdErr : "");
-        String bdStyle = bdErr != null ? CB_STYLE_ERR : CB_STYLE_OK;
-        cbBirthDay.setStyle(bdStyle); cbBirthMonth.setStyle(bdStyle); cbBirthYear.setStyle(bdStyle);
-        if (bdErr != null) ok = false;
-
-        ok &= applyField(fieldWeight, errWeight,
-                UserValidator.validateWeight(fieldWeight.getText()));
-        ok &= applyField(fieldHeight, errHeight,
-                UserValidator.validateHeight(fieldHeight.getText()));
-        ok &= applyField(fieldPhone, errPhone,
-                UserValidator.validatePhone(fieldPhone.getText()));
+        // Captcha
+        try {
+            if (Integer.parseInt(captchaField.getText().trim()) != captchaA + captchaB) {
+                if (errCaptcha != null) errCaptcha.setText("Incorrect captcha answer.");
+                generateCaptcha();
+                ok = false;
+            } else {
+                if (errCaptcha != null) errCaptcha.setText("");
+            }
+        } catch (NumberFormatException e) {
+            if (errCaptcha != null) errCaptcha.setText("Incorrect captcha answer.");
+            generateCaptcha();
+            ok = false;
+        }
 
         if (!ok) return;
 
         User u = new User();
-        u.setFirstName(fieldFirstName.getText().trim());
-        u.setLastName(fieldLastName.getText().trim());
-        u.setEmail(fieldEmail.getText().trim());
-        u.setPassword(PasswordUtil.hashPassword(getPwd()));
-        u.setRoles("ROLE_USER");
+        u.setEmail(emailField.getText().trim());
+        u.setPassword(BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt(10)));
+        u.setFirstName(firstNameField.getText().trim());
+        u.setLastName(lastNameField.getText().trim());
+        u.setBirthday(birthdayPicker.getValue());
+        u.setWeight(Double.parseDouble(weightField.getText().trim()));
+        u.setHeight(Double.parseDouble(heightField.getText().trim()));
+        u.setRole("ROLE_USER");
         u.setActive(true);
-        u.setBirthday(getBirthday());
-        u.setWeight(Float.parseFloat(fieldWeight.getText().trim()));
-        u.setHeight(Float.parseFloat(fieldHeight.getText().trim()));
-        String phone = fieldPhone.getText().trim();
-        u.setPhoneNumber(phone.isBlank() ? null : phone);
 
-        if (!dao.create(u)) {
-            AlertUtil.show(AlertUtil.Type.ERROR, "Registration Failed",
-                    "Could not create your account.\n\nError: " + dao.getLastError());
+        // Attach Google ID if came from Google OAuth
+        if (GoogleAuthController.GoogleTempData.googleId != null) {
+            u.setGoogleId(GoogleAuthController.GoogleTempData.googleId);
+            // Clear temp data
+            GoogleAuthController.GoogleTempData.email     = null;
+            GoogleAuthController.GoogleTempData.googleId  = null;
+            GoogleAuthController.GoogleTempData.firstName = null;
+            GoogleAuthController.GoogleTempData.lastName  = null;
+        }
+
+        repo.save(u);
+
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        Nav.go(stage, "login.fxml", "NutriLife - Login");
+    }
+
+    // ── Google Sign Up ─────────────────────────────────────────────────────────
+
+    @FXML
+    private void handleGoogleSignUp() {
+        try {
+            GoogleAuthController.fromRegister = true;
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/google_auth.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner((Stage) emailField.getScene().getWindow());
+            stage.setTitle("Sign up with Google");
+            stage.setScene(new Scene(root, 520, 620));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            // After Google auth, pre-fill was set in GoogleTempData — re-run prefill
+            prefillFromGoogle();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Could not open Google sign-up: " + e.getMessage());
+        }
+    }
+
+    // ── Face ID Sign Up ────────────────────────────────────────────────────────
+
+    @FXML
+    private void handleFaceIdSignUp() {
+        // Face ID during registration: user must first fill in their details,
+        // then enroll their face. We save the account first, then open camera.
+        boolean ok = true;
+        ok &= validateEmail();
+        ok &= Validator.apply(passwordField, errPassword, Validator.password(passwordField.getText()));
+        ok &= Validator.apply(confirmPasswordField, errConfirm,
+                Validator.confirmPassword(passwordField.getText(), confirmPasswordField.getText()));
+        ok &= Validator.apply(firstNameField, errFirstName, Validator.name(firstNameField.getText(), "First name"));
+        ok &= Validator.apply(lastNameField, errLastName, Validator.name(lastNameField.getText(), "Last name"));
+        ok &= validateBirthday();
+        ok &= Validator.apply(weightField, errWeight, Validator.weight(weightField.getText()));
+        ok &= Validator.apply(heightField, errHeight, Validator.height(heightField.getText()));
+
+        if (!ok) {
+            showError("Please fill in all required fields before enrolling Face ID.");
             return;
         }
 
-        AlertUtil.show(AlertUtil.Type.SUCCESS, "Account Created",
-                "Your account has been created successfully!\nPlease sign in to continue.");
-        SessionManager.setCurrentUser(u);
+        // Create the user first
+        User u = new User();
+        u.setEmail(emailField.getText().trim());
+        u.setPassword(BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt(10)));
+        u.setFirstName(firstNameField.getText().trim());
+        u.setLastName(lastNameField.getText().trim());
+        u.setBirthday(birthdayPicker.getValue());
+        u.setWeight(Double.parseDouble(weightField.getText().trim()));
+        u.setHeight(Double.parseDouble(heightField.getText().trim()));
+        u.setRole("ROLE_USER");
+        u.setActive(true);
+        repo.save(u);
+
+        // Set session so FaceIdEnrollController can save the descriptor
+        Session.login(u);
+
+        // Open camera for enrollment
         try {
-            // Redirect to login with success — per spec
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-            Stage stage = (Stage) fieldEmail.getScene().getWindow();
-            stage.setScene(new Scene(root, 1100, 720));
-            stage.setTitle("NutriLife - Login");
-        } catch (Exception ex) { ex.printStackTrace(); }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_enroll.fxml"));
+            Parent root = loader.load();
+            FaceIdEnrollController ctrl = loader.getController();
+            ctrl.setTargetUser(u);
+            ctrl.setOnEnrolled(() -> {
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                Nav.go(stage, "login.fxml", "NutriLife - Login");
+            });
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner((Stage) emailField.getScene().getWindow());
+            stage.setTitle("Face ID — Enroll");
+            stage.setScene(new Scene(root, 560, 620));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Could not open camera: " + e.getMessage());
+        }
     }
 
     @FXML
-    private void handleGoLogin(javafx.event.ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-            Stage stage = (Stage) fieldEmail.getScene().getWindow();
-            stage.setScene(new Scene(root, 1100, 720));
-            stage.setTitle("NutriLife - Login");
-        } catch (Exception ex) { ex.printStackTrace(); }
+    private void handleGoLogin() {
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        Nav.go(stage, "login.fxml", "NutriLife - Login");
     }
 
-    // ── Helpers ────────────────────────────────────────────────────────────────
-    private boolean applyField(Control field, Label errLabel, String error) {
-        if (error != null) {
-            errLabel.setText(error);
-            field.setStyle(UserValidator.getErrorStyle());
-            return false;
+    private void showError(String msg) {
+        if (errorLabel != null) {
+            errorLabel.setText(msg);
+            errorLabel.setStyle("-fx-text-fill:#DC2626;-fx-font-size:12px;-fx-font-weight:bold;");
+            errorLabel.setVisible(true);
         }
-        errLabel.setText("");
-        field.setStyle(UserValidator.getOkStyle());
-        return true;
     }
 
-    private void updateSubmitButton() {
-        if (btnSubmit == null) return;
-        boolean ready =
-                !fieldFirstName.getText().isBlank() &&
-                !fieldLastName.getText().isBlank() &&
-                !fieldEmail.getText().isBlank() &&
-                !fieldPassword.getText().isBlank() &&
-                !fieldConfirmPassword.getText().isBlank() &&
-                cbBirthDay.getValue() != null &&
-                cbBirthMonth.getValue() != null &&
-                cbBirthYear.getValue() != null &&
-                !fieldWeight.getText().isBlank() &&
-                !fieldHeight.getText().isBlank();
-        btnSubmit.setDisable(!ready);
-    }
+    private String nvl(String s) { return s != null ? s : ""; }
 }

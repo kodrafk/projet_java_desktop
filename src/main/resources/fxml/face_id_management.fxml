@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.FaceIdManagementController"
+           prefWidth="500" prefHeight="440">
+
+    <!-- Gradient background -->
+    <Pane style="-fx-background-color:linear-gradient(to bottom right,#e8f5e9,#fffde7,#fce4ec);"/>
+    <Circle radius="18" fill="#66BB6A" opacity="0.5" StackPane.alignment="TOP_RIGHT" translateX="-30" translateY="40"/>
+    <Circle radius="12" fill="#EF5350" opacity="0.4" StackPane.alignment="BOTTOM_LEFT" translateX="40" translateY="-30"/>
+
+    <VBox spacing="0" StackPane.alignment="TOP_CENTER" maxWidth="Infinity">
+
+        <!-- Header -->
+        <HBox prefHeight="56" alignment="CENTER_LEFT" spacing="12"
+              style="-fx-background-color:rgba(255,255,255,0.92);
+                     -fx-border-color:transparent transparent #E8EDE8 transparent;
+                     -fx-border-width:0 0 1 0;-fx-padding:0 24;">
+            <Label text="🎭" style="-fx-font-size:20px;"/>
+            <Label text="Face ID Management"
+                   style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"
+                   HBox.hgrow="ALWAYS"/>
+            <Button text="✕" onAction="#handleClose"
+                    style="-fx-background-color:transparent;-fx-text-fill:#6B7280;-fx-font-size:16px;
+                           -fx-cursor:hand;-fx-border-color:transparent;"/>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
+            <VBox alignment="TOP_CENTER" spacing="16"
+                  style="-fx-background-color:transparent;-fx-padding:24 28;">
+
+                <!-- Status card -->
+                <VBox spacing="6" alignment="CENTER"
+                      style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:24 20;
+                             -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),16,0,0,4);
+                             -fx-border-color:#E8F5E9;-fx-border-radius:16;-fx-border-width:1;">
+
+                    <!-- Big icon -->
+                    <StackPane prefWidth="72" prefHeight="72" alignment="CENTER"
+                               style="-fx-background-color:#F0FDF4;-fx-background-radius:36;">
+                        <Label text="🎭" style="-fx-font-size:32px;"/>
+                    </StackPane>
+
+                    <Label fx:id="statusLabel" text="Loading..."
+                           style="-fx-font-size:16px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <Label fx:id="enrolledDateLabel" text=""
+                           style="-fx-font-size:12px;-fx-text-fill:#6B7280;"/>
+                </VBox>
+
+                <!-- How it works card -->
+                <VBox spacing="6"
+                      style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:14 16;
+                             -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.05),8,0,0,2);
+                             -fx-border-color:#E8F5E9;-fx-border-radius:12;-fx-border-width:1;">
+                    <Label text="🔒  How Face ID works"
+                           style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <Label text="Your face is captured in 3 positions and encrypted with AES-256-GCM. It never leaves your device and is used only to verify your identity."
+                           wrapText="true"
+                           style="-fx-font-size:11px;-fx-text-fill:#6B7280;"/>
+                </VBox>
+
+                <!-- Enroll button -->
+                <Button fx:id="enrollButton" text="📷  Enroll Face ID" onAction="#handleEnroll"
+                        maxWidth="Infinity" prefHeight="46"
+                        style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:14px;
+                               -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;
+                               -fx-border-color:transparent;"/>
+
+                <!-- Remove button -->
+                <Button fx:id="removeButton" text="🗑  Remove Face ID" onAction="#handleRemove"
+                        maxWidth="Infinity" prefHeight="46"
+                        style="-fx-background-color:white;-fx-text-fill:#DC2626;-fx-font-size:13px;
+                               -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;
+                               -fx-border-color:#FECACA;-fx-border-width:1;-fx-border-radius:12;"/>
+
+                <!-- Close button -->
+                <Button text="Close" onAction="#handleClose"
+                        maxWidth="Infinity" prefHeight="40"
+                        style="-fx-background-color:transparent;-fx-text-fill:#6B7280;-fx-font-size:13px;
+                               -fx-background-radius:12;-fx-cursor:hand;
+                               -fx-border-color:#E2E8F0;-fx-border-width:1;-fx-border-radius:12;"/>
+
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</StackPane>
