@@ -78,7 +78,10 @@ public class GoogleAuthController {
         engine.locationProperty().addListener((obs, oldUrl, newUrl) -> {
             if (newUrl != null && newUrl.startsWith(REDIRECT_URI)) {
                 engine.load("about:blank");
-                if (statusLabel != null) statusLabel.setText("Authenticating...");
+                if (statusLabel != null) {
+                    statusLabel.setText("Authenticating with Google...");
+                    statusLabel.setStyle("-fx-font-size:12px;-fx-text-fill:#2E7D32;-fx-font-weight:bold;");
+                }
                 if (spinner != null) spinner.setVisible(true);
 
                 String code = extractParam(newUrl, "code");
@@ -180,15 +183,20 @@ public class GoogleAuthController {
         if (webView != null) webView.setVisible(false);
         if (statusLabel != null) {
             statusLabel.setText(
-                "⚙️  Google OAuth not configured.\n\n" +
-                "To enable Google login:\n" +
+                "⚙️  Google OAuth not configured yet.\n\n" +
+                "To enable:\n" +
                 "1. Go to console.cloud.google.com\n" +
-                "2. Create OAuth 2.0 credentials\n" +
+                "2. Create OAuth 2.0 credentials (Desktop app)\n" +
                 "3. Add redirect URI: http://localhost:8080/callback\n" +
                 "4. Set CLIENT_ID and CLIENT_SECRET in GoogleAuthController.java"
             );
             statusLabel.setWrapText(true);
-            statusLabel.setStyle("-fx-font-size:13px;-fx-text-fill:#374151;-fx-padding:20;");
+            statusLabel.setStyle(
+                "-fx-font-size:12px;-fx-text-fill:#374151;" +
+                "-fx-background-color:#FEF3C7;-fx-background-radius:10;" +
+                "-fx-padding:14 16;-fx-border-color:#FDE68A;" +
+                "-fx-border-radius:10;-fx-border-width:1;"
+            );
         }
     }
 

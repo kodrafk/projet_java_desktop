@@ -1,34 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.web.*?>
 
-<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="tn.esprit.projet.gui.GoogleAuthController"
-      prefWidth="520" prefHeight="620" spacing="0"
-      style="-fx-background-color:white;">
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.GoogleAuthController"
+           prefWidth="580" prefHeight="680">
 
-    <!-- Header -->
-    <HBox alignment="CENTER_LEFT" spacing="12"
-          style="-fx-background-color:#4285F4;-fx-padding:14 20;">
-        <Label text="🌐" style="-fx-font-size:20px;"/>
-        <Label text="Sign in with Google"
-               style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:white;"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button text="✕" onAction="#handleClose"
-                style="-fx-background-color:transparent;-fx-text-fill:white;-fx-font-size:16px;
-                       -fx-cursor:hand;-fx-border-color:transparent;"/>
-    </HBox>
+    <!-- Gradient background — same as the rest of the app -->
+    <Pane style="-fx-background-color:linear-gradient(to bottom right,#e8f5e9,#fffde7,#fce4ec);"/>
 
-    <!-- Status / instructions -->
-    <Label fx:id="statusLabel" text="Loading Google sign-in..." wrapText="true"
-           style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-padding:8 16 4 16;"/>
+    <!-- Decorative shapes -->
+    <Circle radius="28" fill="#EF5350" opacity="0.5" StackPane.alignment="CENTER_LEFT" translateX="30" translateY="80"/>
+    <Ellipse radiusX="20" radiusY="28" fill="#66BB6A" opacity="0.5" StackPane.alignment="TOP_RIGHT" translateX="-40" translateY="100"/>
+    <Circle radius="14" fill="#FFEE58" opacity="0.6" StackPane.alignment="BOTTOM_LEFT" translateX="60" translateY="-60"/>
+    <Circle radius="10" fill="#7E57C2" opacity="0.4" StackPane.alignment="TOP_LEFT" translateX="80" translateY="160"/>
 
-    <!-- Spinner -->
-    <HBox alignment="CENTER" style="-fx-padding:4 0;">
-        <ProgressIndicator fx:id="spinner" prefWidth="24" prefHeight="24" visible="false"/>
-    </HBox>
+    <VBox StackPane.alignment="TOP_CENTER" maxWidth="Infinity">
 
-    <!-- WebView fills remaining space -->
-    <WebView fx:id="webView" VBox.vgrow="ALWAYS"/>
-</VBox>
+        <!-- Navbar -->
+        <HBox prefHeight="56" alignment="CENTER_LEFT"
+              style="-fx-background-color:rgba(255,255,255,0.92);
+                     -fx-border-color:transparent transparent #E8EDE8 transparent;
+                     -fx-border-width:0 0 1 0;-fx-padding:0 24;">
+            <Label text="🥗 NutriLife"
+                   style="-fx-font-size:17px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
+            <VBox alignment="TOP_CENTER"
+                  style="-fx-background-color:transparent;-fx-padding:32 24 32 24;" spacing="0">
+
+                <!-- Google icon -->
+                <StackPane prefWidth="60" prefHeight="60" alignment="CENTER"
+                           style="-fx-background-color:white;-fx-background-radius:30;
+                                  -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.10),12,0,0,3);">
+                    <Label text="🌐" style="-fx-font-size:26px;"/>
+                </StackPane>
+                <Label text="" style="-fx-padding:0 0 6 0;"/>
+
+                <Label text="Sign in with Google"
+                       style="-fx-font-size:24px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                <Label text="Use your Google account to continue"
+                       style="-fx-font-size:13px;-fx-text-fill:#6B7280;-fx-padding:4 0 20 0;"/>
+
+                <!-- Main card -->
+                <VBox spacing="14" prefWidth="480" maxWidth="480"
+                      style="-fx-background-color:white;-fx-background-radius:20;-fx-padding:20 24;
+                             -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.10),24,0,0,6);">
+
+                    <!-- Status message -->
+                    <Label fx:id="statusLabel" text="Loading Google sign-in..." wrapText="true"
+                           style="-fx-font-size:12px;-fx-text-fill:#6B7280;"/>
+
+                    <!-- Spinner row -->
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <ProgressIndicator fx:id="spinner" prefWidth="20" prefHeight="20" visible="false"/>
+                        <Label text="Please complete sign-in in the browser window below"
+                               style="-fx-font-size:11px;-fx-text-fill:#94A3B8;"/>
+                    </HBox>
+
+                    <!-- WebView — the actual Google OAuth page -->
+                    <WebView fx:id="webView" prefHeight="380" VBox.vgrow="ALWAYS"
+                             style="-fx-background-radius:12;"/>
+
+                    <!-- Info box -->
+                    <VBox spacing="4"
+                          style="-fx-background-color:#F0FDF4;-fx-background-radius:10;-fx-padding:10 14;
+                                 -fx-border-color:#BBF7D0;-fx-border-radius:10;-fx-border-width:1;">
+                        <Label text="🔒  Secure sign-in"
+                               style="-fx-font-size:11px;-fx-font-weight:bold;-fx-text-fill:#166534;"/>
+                        <Label text="Your credentials are handled directly by Google. NutriLife never sees your password."
+                               wrapText="true"
+                               style="-fx-font-size:11px;-fx-text-fill:#166534;"/>
+                    </VBox>
+
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</StackPane>

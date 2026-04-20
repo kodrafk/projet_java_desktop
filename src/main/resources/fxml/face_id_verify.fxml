@@ -24,11 +24,7 @@
                      -fx-border-width:0 0 1 0;-fx-padding:0 24;">
             <Label text="🎭" style="-fx-font-size:20px;"/>
             <Label text="Face ID — Sign In"
-                   style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"
-                   HBox.hgrow="ALWAYS"/>
-            <Button text="✕" onAction="#handleCancel"
-                    style="-fx-background-color:transparent;-fx-text-fill:#6B7280;-fx-font-size:16px;
-                           -fx-cursor:hand;-fx-border-color:transparent;"/>
+                   style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
         </HBox>
 
         <!-- Progress bar -->
