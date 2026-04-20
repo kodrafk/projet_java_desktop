@@ -149,6 +149,8 @@ public class LoginController {
 
     @FXML
     private void handleForgotPassword() {
+        // Pass whatever email the user already typed in the login field
+        ForgotPasswordController.prefillEmail = emailField.getText().trim();
         Stage stage = (Stage) emailField.getScene().getWindow();
         Nav.go(stage, "forgot_password.fxml", "NutriLife - Forgot Password");
     }
