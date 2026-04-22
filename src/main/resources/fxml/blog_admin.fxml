@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20" style="-fx-background-color: #e9ecef; -fx-padding: 20;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.BlogFrontController">
+    <Label text="Gestion du Blog (Admin)" textFill="#2c3e50">
+        <font><Font name="System Bold" size="28" /></font>
+    </Label>
+
+
+    <!-- Create Post Area -->
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+        <Label text="Créer une nouvelle publication" style="-fx-font-weight: bold;" />
+        <TextField fx:id="newPostTitle" promptText="Titre de la publication" style="-fx-padding: 8;" />
+        <TextArea fx:id="newPostContent" promptText="Que voulez-vous partager ?" prefRowCount="3" wrapText="true" style="-fx-padding: 5;" />
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Button text="📷 Ajouter une image" onAction="#handleUploadImage" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-padding: 8 15; -fx-background-radius: 20;" />
+            <Label fx:id="lblImagePath" text="Aucune image sélectionnée" textFill="gray" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Publier" onAction="#handleCreatePost" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-padding: 8 20; -fx-font-weight: bold; -fx-background-radius: 20;" />
+        </HBox>
+    </VBox>
+
+    <!-- Search & Sort Controls -->
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 10 15; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
+        <Label text="🔍 Rechercher :" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+        <TextField fx:id="searchField" promptText="Titre, contenu, auteur..." prefWidth="300" style="-fx-padding: 8; -fx-background-radius: 20; -fx-border-color: #ced4da; -fx-border-radius: 20; -fx-background-color: transparent;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="Trier par :" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+        <ComboBox fx:id="sortCombo" prefWidth="180" style="-fx-background-radius: 20; -fx-padding: 4; -fx-background-color: #f8f9fa; -fx-border-color: #ced4da; -fx-border-radius: 20;" />
+    </HBox>
+
+    <!-- Feed Area -->
+    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+        <VBox fx:id="feedContainer" spacing="15" style="-fx-background-color: #e9ecef; -fx-padding: 5;" />
+    </ScrollPane>
+</VBox>
