@@ -1263,24 +1263,7 @@ public class RecipeManagementController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleOpenMealPlanner() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/meal_planner_form.fxml"));
-            Parent root = loader.load();
 
-            Stage stage = new Stage();
-            stage.setTitle("🧠 Smart Anti-Waste Meal Planner");
-            stage.setScene(new Scene(root, 900, 700));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-        } catch (IOException e) {
-            System.err.println("❌ handleOpenMealPlanner : " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
     @FXML
     private void handleOpenHistorique() {
         try {
@@ -1316,4 +1299,51 @@ public class RecipeManagementController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
+    // ─── Ouvrir Meal Planner ──────────────────────────
+    @FXML
+    private void handleOpenMealPlanner() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/meal_planner_form.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Smart Meal Planner");
+            stage.setScene(new Scene(root, 900, 700));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("❌ handleOpenMealPlanner : " + e.getMessage());
+        }
+    }
+
+    // ─── Ouvrir AI Generator ──────────────────────────
+    @FXML
+    private void handleOpenAIGenerator() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/ai_recipe_form.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("AI Recipe Chef");
+            stage.setScene(new Scene(root, 800, 700));
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            // ✅ FIX : Rafraîchir tableau quand fenêtre AI se ferme
+            stage.setOnHidden(e -> {
+                handleRefresh(null);
+                System.out.println("✅ Tableau rafraîchi après fermeture AI");
+            });
+
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("❌ handleOpenAIGenerator : " + e.getMessage());
+        }
+    }
+
 }

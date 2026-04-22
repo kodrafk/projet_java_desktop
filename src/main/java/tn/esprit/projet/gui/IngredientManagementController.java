@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.concurrent.Task;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.projet.models.CourseItem;
 import tn.esprit.projet.models.Ingredient;
@@ -25,6 +26,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
@@ -128,7 +130,9 @@ public class IngredientManagementController implements Initializable {
         loadTableData();
         updateStats();
         setupSearchAndFilters();
-        loadOutOfStockComboBox();
+        if (cmbOutOfStock != null) {
+            loadOutOfStockComboBox();
+        }
     }
 
     // ═══════════════════════════════════
@@ -616,6 +620,7 @@ public class IngredientManagementController implements Initializable {
     // ═══════════════════════════════════
 
     private void loadOutOfStockComboBox() {
+        if (cmbOutOfStock == null) return;
         List<Ingredient> outOfStock = substitutionService.getOutOfStockIngredients();
         cmbOutOfStock.setItems(FXCollections.observableArrayList(outOfStock));
 
@@ -1201,6 +1206,27 @@ public class IngredientManagementController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
             showToast("❌ Error opening scanner: " + e.getMessage());
+        }
+    }
+    @FXML
+    public void handleShowCalendar(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/expiry_calendar.fxml"));
+            //charger contenu depuis fxml
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Ingredient Expiry Calendar");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            //mettre contenu dans stage
+            stage.setScene(new Scene(root));
+
+            stage.setResizable(false);
+
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading expiry calendar: " + e.getMessage());
         }
     }
 }

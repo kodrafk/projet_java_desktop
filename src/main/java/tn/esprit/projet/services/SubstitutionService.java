@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class SubstitutionService {
 
     // ✅ Clé API OpenRouter
-    private static final String API_KEY = "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"; // sk-or-v1-...
+    private static final String API_KEY = "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"; // sk-or-v1-...
 
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
 

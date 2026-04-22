@@ -8,7 +8,7 @@ public class MyBDConnexion {
 
     private static final String USER = "root";
     private static final String PASSWORD = "";
-    private static final String URL = "jdbc:mysql://localhost:3306/proj_web?serverTimezone=UTC&sslMode=DISABLED";
+    private static final String URL = "jdbc:mysql://localhost:3306/nutriCoachpro?serverTimezone=UTC&sslMode=DISABLED";
 
     private static MyBDConnexion instance;
     private Connection cnx;

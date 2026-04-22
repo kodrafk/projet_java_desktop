@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.DropShadow?>
+
+<ScrollPane fitToWidth="true"
+            hbarPolicy="NEVER"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.controllers.AIRecipeResultController"
+            style="-fx-background-color: #F0F4F8;
+                   -fx-background: #F0F4F8;
+                   -fx-border-color: transparent;">
+
+    <VBox spacing="0" style="-fx-background-color: #F0F4F8;">
+
+        <!-- ═══ HEADER ═══ -->
+        <HBox alignment="CENTER_LEFT" spacing="16"
+              style="-fx-background-color: linear-gradient(to right, #1A5C40, #2E7D5A);
+                     -fx-padding: 20 28;">
+            <effect>
+                <DropShadow color="rgba(26,92,64,0.4)" radius="15" offsetY="6"/>
+            </effect>
+
+            <VBox spacing="3" HBox.hgrow="ALWAYS">
+                <Label text="AI Generated Recipe"
+                       style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: white;
+                              -fx-font-family: 'Segoe UI';"/>
+                <Label text="Review, edit if needed, then save to your collection"
+                       style="-fx-font-size: 12px;
+                              -fx-text-fill: rgba(255,255,255,0.8);"/>
+            </VBox>
+
+            <Button text="X"
+                    onAction="#onClose"
+                    style="-fx-background-color: rgba(255,255,255,0.15);
+                           -fx-text-fill: white;
+                           -fx-font-size: 14px;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 10;
+                           -fx-cursor: hand;
+                           -fx-padding: 8 14;"/>
+        </HBox>
+
+        <!-- ═══ CONTENT ═══ -->
+        <VBox spacing="20"
+              style="-fx-padding: 24 28 32 28;
+                     -fx-background-color: #F0F4F8;">
+
+            <!-- ─── IMAGE + BASIC INFO ─── -->
+            <HBox spacing="20">
+
+                <!-- Image Card -->
+                <VBox spacing="10" alignment="CENTER"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 16;
+                             -fx-border-color: #E0E8F0;
+                             -fx-border-radius: 16;
+                             -fx-padding: 16;
+                             -fx-min-width: 340;
+                             -fx-max-width: 340;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.06)" radius="10" offsetY="4"/>
+                    </effect>
+
+                    <StackPane>
+                        <ImageView fx:id="imageRecette"
+                                   fitWidth="308" fitHeight="220"
+                                   preserveRatio="true"/>
+                        <Label fx:id="lblImageLoading"
+                               text="Loading image..."
+                               style="-fx-background-color: rgba(0,0,0,0.5);
+                                      -fx-text-fill: white;
+                                      -fx-padding: 10 20;
+                                      -fx-background-radius: 8;
+                                      -fx-font-size: 12px;"/>
+                    </StackPane>
+
+                    <Button fx:id="btnRegenerateImage"
+                            text="Regenerate Image"
+                            onAction="#onRegenerateImage"
+                            maxWidth="Infinity"
+                            style="-fx-background-color: #F8FAFC;
+                                   -fx-text-fill: #1A5C40;
+                                   -fx-font-size: 12px;
+                                   -fx-font-weight: bold;
+                                   -fx-border-color: #1A5C40;
+                                   -fx-border-radius: 10;
+                                   -fx-background-radius: 10;
+                                   -fx-cursor: hand;
+                                   -fx-padding: 8 0;"/>
+                </VBox>
+
+                <!-- Basic Info -->
+                <VBox spacing="14" HBox.hgrow="ALWAYS">
+
+                    <!-- Recipe Name -->
+                    <VBox spacing="6"
+                          style="-fx-background-color: white;
+                                 -fx-background-radius: 16;
+                                 -fx-border-color: #E0E8F0;
+                                 -fx-border-radius: 16;
+                                 -fx-padding: 16 20;">
+                        <effect>
+                            <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                        </effect>
+                        <Label text="Recipe Name"
+                               style="-fx-font-size: 11px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #64748B;"/>
+                        <TextField fx:id="txtNom"
+                                   prefHeight="44"
+                                   style="-fx-font-size: 16px;
+                                          -fx-font-weight: bold;
+                                          -fx-text-fill: #1E293B;
+                                          -fx-background-color: #F8FAFC;
+                                          -fx-border-color: #E2E8F0;
+                                          -fx-border-radius: 10;
+                                          -fx-background-radius: 10;
+                                          -fx-padding: 8 14;"/>
+                    </VBox>
+
+                    <!-- Badges -->
+                    <HBox spacing="10">
+                        <Label fx:id="lblType"
+                               text="—"
+                               style="-fx-background-color: #DCFCE7;
+                                      -fx-text-fill: #16A34A;
+                                      -fx-font-weight: bold;
+                                      -fx-font-size: 12px;
+                                      -fx-padding: 6 14;
+                                      -fx-background-radius: 20;"/>
+                        <Label fx:id="lblDifficulte"
+                               text="—"
+                               style="-fx-background-color: #FEF3C7;
+                                      -fx-text-fill: #92400E;
+                                      -fx-font-weight: bold;
+                                      -fx-font-size: 12px;
+                                      -fx-padding: 6 14;
+                                      -fx-background-radius: 20;"/>
+                        <Label fx:id="lblTemps"
+                               text="—"
+                               style="-fx-background-color: #DBEAFE;
+                                      -fx-text-fill: #1D4ED8;
+                                      -fx-font-weight: bold;
+                                      -fx-font-size: 12px;
+                                      -fx-padding: 6 14;
+                                      -fx-background-radius: 20;"/>
+                        <Label fx:id="lblServings"
+                               text="—"
+                               style="-fx-background-color: #FCE7F3;
+                                      -fx-text-fill: #9D174D;
+                                      -fx-font-weight: bold;
+                                      -fx-font-size: 12px;
+                                      -fx-padding: 6 14;
+                                      -fx-background-radius: 20;"/>
+                    </HBox>
+
+                    <!-- Description -->
+                    <VBox spacing="6"
+                          VBox.vgrow="ALWAYS"
+                          style="-fx-background-color: white;
+                                 -fx-background-radius: 16;
+                                 -fx-border-color: #E0E8F0;
+                                 -fx-border-radius: 16;
+                                 -fx-padding: 16 20;">
+                        <effect>
+                            <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                        </effect>
+                        <Label text="Description"
+                               style="-fx-font-size: 11px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #64748B;"/>
+                        <TextArea fx:id="txtDescription"
+                                  prefRowCount="4"
+                                  wrapText="true"
+                                  style="-fx-font-size: 13px;
+                                         -fx-text-fill: #475569;
+                                         -fx-background-color: #F8FAFC;
+                                         -fx-border-color: #E2E8F0;
+                                         -fx-border-radius: 10;
+                                         -fx-background-radius: 10;"/>
+                    </VBox>
+
+                    <!-- Tags -->
+                    <HBox fx:id="hboxTags"
+                          spacing="8"
+                          alignment="CENTER_LEFT"/>
+
+                </VBox>
+            </HBox>
+
+            <!-- ─── NUTRITION ─── -->
+            <VBox spacing="12"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 16;
+                         -fx-border-color: #E0E8F0;
+                         -fx-border-radius: 16;
+                         -fx-padding: 20 24;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                </effect>
+
+                <Label text="Nutritional Information (AI Estimated)"
+                       style="-fx-font-size: 15px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #1E293B;"/>
+
+                <HBox spacing="12">
+
+                    <!-- Calories -->
+                    <VBox alignment="CENTER" spacing="6"
+                          HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #FEF3C7;
+                                 -fx-background-radius: 12;
+                                 -fx-padding: 16 12;
+                                 -fx-border-color: #FDE68A;
+                                 -fx-border-radius: 12;">
+                        <Label text="Calories"
+                               style="-fx-font-size: 11px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #78350F;"/>
+                        <Label fx:id="lblCalories"
+                               text="—"
+                               style="-fx-font-size: 22px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #92400E;"/>
+                        <Label text="kcal"
+                               style="-fx-font-size: 10px;
+                                      -fx-text-fill: #92400E;"/>
+                    </VBox>
+
+                    <!-- Protein -->
+                    <VBox alignment="CENTER" spacing="6"
+                          HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #DBEAFE;
+                                 -fx-background-radius: 12;
+                                 -fx-padding: 16 12;
+                                 -fx-border-color: #BFDBFE;
+                                 -fx-border-radius: 12;">
+                        <Label text="Protein"
+                               style="-fx-font-size: 11px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #1E40AF;"/>
+                        <Label fx:id="lblProteines"
+                               text="—"
+                               style="-fx-font-size: 22px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #1D4ED8;"/>
+                        <Label text="grams"
+                               style="-fx-font-size: 10px;
+                                      -fx-text-fill: #1D4ED8;"/>
+                    </VBox>
+
+                    <!-- Carbs -->
+                    <VBox alignment="CENTER" spacing="6"
+                          HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #DCFCE7;
+                                 -fx-background-radius: 12;
+                                 -fx-padding: 16 12;
+                                 -fx-border-color: #BBF7D0;
+                                 -fx-border-radius: 12;">
+                        <Label text="Carbs"
+                               style="-fx-font-size: 11px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #14532D;"/>
+                        <Label fx:id="lblGlucides"
+                               text="—"
+                               style="-fx-font-size: 22px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #166534;"/>
+                        <Label text="grams"
+                               style="-fx-font-size: 10px;
+                                      -fx-text-fill: #166534;"/>
+                    </VBox>
+
+                    <!-- Fats -->
+                    <VBox alignment="CENTER" spacing="6"
+                          HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #FCE7F3;
+                                 -fx-background-radius: 12;
+                                 -fx-padding: 16 12;
+                                 -fx-border-color: #FBCFE8;
+                                 -fx-border-radius: 12;">
+                        <Label text="Fats"
+                               style="-fx-font-size: 11px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #831843;"/>
+                        <Label fx:id="lblLipides"
+                               text="—"
+                               style="-fx-font-size: 22px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #9D174D;"/>
+                        <Label text="grams"
+                               style="-fx-font-size: 10px;
+                                      -fx-text-fill: #9D174D;"/>
+                    </VBox>
+
+                </HBox>
+            </VBox>
+
+            <!-- ─── INGREDIENTS ─── -->
+            <VBox spacing="12"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 16;
+                         -fx-border-color: #E0E8F0;
+                         -fx-border-radius: 16;
+                         -fx-padding: 20 24;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                </effect>
+
+                <Label text="Ingredients"
+                       style="-fx-font-size: 15px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #1E293B;"/>
+
+                <VBox fx:id="vboxIngredients" spacing="6"/>
+            </VBox>
+
+            <!-- ─── STEPS ─── -->
+            <VBox spacing="12"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 16;
+                         -fx-border-color: #E0E8F0;
+                         -fx-border-radius: 16;
+                         -fx-padding: 20 24;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                </effect>
+
+                <Label text="Preparation Steps"
+                       style="-fx-font-size: 15px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #1E293B;"/>
+
+                <VBox fx:id="vboxSteps" spacing="12"/>
+            </VBox>
+
+            <!-- ─── ACTION BUTTONS ─── -->
+            <HBox spacing="14" alignment="CENTER">
+
+                <Button text="Generate Another Recipe"
+                        onAction="#onGenerateAnother"
+                        prefHeight="50" prefWidth="220"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #475569;
+                               -fx-font-size: 13px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 12;
+                               -fx-border-color: #D1D5DB;
+                               -fx-border-radius: 12;
+                               -fx-cursor: hand;"/>
+
+                <!-- ✅ FIX : fx:id="btnSave" ajouté -->
+                <Button fx:id="btnSave"
+                        text="SAVE TO DATABASE"
+                        onAction="#onSave"
+                        prefHeight="50" prefWidth="240"
+                        style="-fx-background-color: linear-gradient(to bottom, #2E7D5A, #1A5C40);
+                               -fx-text-fill: white;
+                               -fx-font-size: 15px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 12;
+                               -fx-cursor: hand;">
+                    <effect>
+                        <DropShadow color="rgba(46,125,90,0.5)"
+                                    radius="12" offsetY="4"/>
+                    </effect>
+                </Button>
+
+            </HBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>
