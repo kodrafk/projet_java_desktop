@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.BadgesController"
+      prefWidth="700" prefHeight="620" spacing="0"
+      style="-fx-background-color:#F8FAFC;">
+
+    <HBox style="-fx-background-color:white;-fx-padding:16 24;-fx-border-color:transparent transparent #E2E8F0 transparent;-fx-border-width:0 0 1 0;"
+          alignment="CENTER_LEFT" spacing="12">
+        <Label text="🏆" style="-fx-font-size:22px;"/>
+        <VBox spacing="2" HBox.hgrow="ALWAYS">
+            <Label text="My Badges" style="-fx-font-size:17px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+            <Label text="Track your achievements" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+        </VBox>
+        <Button text="🎰 Spin" onAction="#handleSpinWheel"
+                style="-fx-background-color:#FEF3C7;-fx-text-fill:#D97706;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:8 14;"/>
+        <Button text="🎯 Challenge" onAction="#handleSurpriseChallenge"
+                style="-fx-background-color:#EDE9FE;-fx-text-fill:#7C3AED;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:8 14;"/>
+        <Button text="✕" onAction="#handleClose"
+                style="-fx-background-color:#F1F5F9;-fx-text-fill:#64748B;-fx-font-size:13px;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:6 12;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
+        <VBox spacing="20" style="-fx-padding:20 24;">
+
+            <!-- Unlocked -->
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="✅ Unlocked" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#16A34A;"/>
+                    <Label fx:id="lblUnlockedCount" text="0"
+                           style="-fx-background-color:#DCFCE7;-fx-text-fill:#166534;-fx-background-radius:10;-fx-padding:1 8;-fx-font-size:11px;-fx-font-weight:bold;"/>
+                </HBox>
+                <VBox fx:id="unlockedList" spacing="8"/>
+            </VBox>
+
+            <!-- In Progress -->
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="⏳ In Progress" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#D97706;"/>
+                    <Label fx:id="lblInProgressCount" text="0"
+                           style="-fx-background-color:#FEF3C7;-fx-text-fill:#92400E;-fx-background-radius:10;-fx-padding:1 8;-fx-font-size:11px;-fx-font-weight:bold;"/>
+                </HBox>
+                <VBox fx:id="inProgressList" spacing="8"/>
+            </VBox>
+
+            <!-- Locked -->
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔒 Locked" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#64748B;"/>
+                    <Label fx:id="lblLockedCount" text="0"
+                           style="-fx-background-color:#F1F5F9;-fx-text-fill:#475569;-fx-background-radius:10;-fx-padding:1 8;-fx-font-size:11px;-fx-font-weight:bold;"/>
+                </HBox>
+                <VBox fx:id="lockedList" spacing="8"/>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

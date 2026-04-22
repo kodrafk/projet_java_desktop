@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.HomeController"
+            prefWidth="1280" prefHeight="760"
+            style="-fx-background-color:#F0F4F8;">
+
+    <!-- Top navbar -->
+    <top>
+        <HBox prefHeight="60" alignment="CENTER_LEFT" spacing="16"
+              style="-fx-background-color:white;-fx-border-color:transparent transparent #E2E8F0 transparent;-fx-border-width:0 0 1 0;-fx-padding:0 32;">
+            <Label text="🥗 NutriLife" style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <MenuButton fx:id="menuAccount" text="My Account"
+                        style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;">
+                <items>
+                    <MenuItem text="My Profile"       onAction="#handleMyProfile"/>
+                    <MenuItem text="Change Password"  onAction="#handleChangePassword"/>
+                    <MenuItem text="My Badges 🏆"     onAction="#handleMyBadges"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Logout"           onAction="#handleLogout"/>
+                </items>
+            </MenuButton>
+        </HBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="contentArea">
+            <VBox alignment="CENTER" spacing="16" style="-fx-padding:60;">
+                <Label fx:id="lblWelcome" text="Welcome!"
+                       style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                <Label text="Use the menu above to access your profile, badges, and more."
+                       style="-fx-font-size:14px;-fx-text-fill:#64748B;"/>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

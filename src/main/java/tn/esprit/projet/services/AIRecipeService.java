@@ -15,14 +15,13 @@ import java.util.List;
 public class AIRecipeService {
 
     // ─── OpenRouter Config ────────────────────────────
-    private static final String API_KEY  = "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"; // ← ta clé
+    private static final String API_KEY  = System.getProperty("openrouter.api.key", "YOUR_OPENROUTER_API_KEY");
     private static final String API_URL  = "https://openrouter.ai/api/v1/chat/completions";
     private static final String MODEL    = "google/gemini-2.0-flash-001";
 
     // ─── Unsplash Config ──────────────────────────────
     private static final String UNSPLASH_URL = "https://api.unsplash.com/photos/random";
-    private static final String UNSPLASH_KEY = "5I5Js5Y0EqBKkdW3UqvHpHK6Fl4FttZJKgyYYRmQtJY";
-    // ↑ Inscription gratuite sur unsplash.com/developers
+    private static final String UNSPLASH_KEY = System.getProperty("unsplash.api.key", "YOUR_UNSPLASH_KEY");
 
     private final HttpClient     httpClient;
     private final ObjectMapper   mapper;

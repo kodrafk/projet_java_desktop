@@ -6,15 +6,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import tn.esprit.projet.dao.UserDAO;
 import tn.esprit.projet.services.IngredientService;
 import tn.esprit.projet.services.RecetteService;
+import tn.esprit.projet.utils.SessionManager;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -50,6 +54,7 @@ public class AdminLayoutController {
     // Services
     private IngredientService ingredientService;
     private RecetteService recetteService;
+    private UserDAO userDAO;
 
     private static final String DEFAULT_BUTTON_STYLE =
             "-fx-background-color: transparent; " +
@@ -75,6 +80,7 @@ public class AdminLayoutController {
         // Initialiser les services
         ingredientService = new IngredientService();
         recetteService = new RecetteService();
+        userDAO = new UserDAO();
 
         // Charger les statistiques depuis la base
         loadDashboardStats();
@@ -138,7 +144,7 @@ public class AdminLayoutController {
     private void handleUsers(ActionEvent event) {
         resetSidebarStyles();
         btnUsers.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Users Management");
+        loadPage("/fxml/admin_user_list.fxml");
     }
 
     @FXML
@@ -178,8 +184,16 @@ public class AdminLayoutController {
 
     @FXML
     private void handleLogout(ActionEvent event) {
-        System.out.println("Logout clicked");
-        // TODO: Implémenter la déconnexion
+        SessionManager.logout();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(root, 1100, 720));
+            stage.setTitle("NutriLife - Login");
+            stage.setMaximized(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // ==================== UTILITAIRES ====================
@@ -281,8 +295,11 @@ public class AdminLayoutController {
 
         // Mettre à jour les labels
         if (lblTotalUsers != null) {
-            // TODO: Remplacer par UserService quand disponible
-            lblTotalUsers.setText("128");
+            try {
+                lblTotalUsers.setText(String.valueOf(userDAO.countAll()));
+            } catch (Exception e) {
+                lblTotalUsers.setText("0");
+            }
         }
 
         if (lblTotalIngredients != null) {
