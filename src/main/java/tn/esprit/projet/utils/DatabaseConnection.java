@@ -4,12 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Singleton JDBC connection to nutrilife_db.
- */
 public class DatabaseConnection {
 
-    private static final String URL      = "jdbc:mysql://127.0.0.1:3306/nutrilife_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String URL      = "jdbc:mysql://localhost:3306/nutriCoachpro?serverTimezone=UTC&sslMode=DISABLED";
     private static final String USER     = "root";
     private static final String PASSWORD = "";
 
@@ -20,7 +17,7 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("[DB] Connected to nutrilife_db");
+            System.out.println("[DB] Connected to nutriCoachpro");
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("[DB] Connection failed: " + e.getMessage());
             throw new RuntimeException(e);
