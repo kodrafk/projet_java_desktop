@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
@@ -94,6 +95,41 @@
                       spacing="12">
                     <Label text="➕ Add Custom Food"
                            style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    
+                    <!-- AI Scanner Option -->
+                    <VBox fx:id="aiScannerSection" spacing="12" style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 16; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+                        <Label text="🤖 AI Food Scanner"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        
+                        <Label fx:id="scanStatusLabel" text="📷 Take a photo of your meal to automatically detect nutrition info!"
+                               style="-fx-font-size: 12px; -fx-text-fill: #059669; -fx-wrap-text: true;"/>
+                        
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Button fx:id="uploadImageBtn" text="📷 Upload Image" onAction="#handleUploadImage"
+                                    style="-fx-background-color: #3B82F6; -fx-text-fill: white;
+                                           -fx-background-radius: 8; -fx-font-size: 12px;
+                                           -fx-font-weight: bold; -fx-padding: 8 16; -fx-cursor: hand;"/>
+                            
+                            <Button fx:id="analyzeImageBtn" text="🤖 Analyze" onAction="#handleAnalyzeImage" disable="true"
+                                    style="-fx-background-color: #059669; -fx-text-fill: white;
+                                           -fx-background-radius: 8; -fx-font-size: 12px;
+                                           -fx-font-weight: bold; -fx-padding: 8 16; -fx-cursor: hand;"/>
+                        </HBox>
+                        
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <ImageView fx:id="previewImageView" fitWidth="120" fitHeight="90" 
+                                       preserveRatio="true" visible="false"
+                                       style="-fx-background-color: white; -fx-background-radius: 8;"/>
+                            
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <ProgressBar fx:id="scanProgressBar" prefWidth="9999" visible="false"
+                                             style="-fx-accent: #059669;" prefHeight="6"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                    
+                    <Separator style="-fx-background-color: #E5E7EB;"/>
+                    
                     <GridPane hgap="12" vgap="10">
                         <columnConstraints>
                             <ColumnConstraints percentWidth="50"/>

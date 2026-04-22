@@ -14,6 +14,7 @@ public class DailyLog {
     public static final String[] MEAL_COLORS = {"#f7a325", "#eb7147", "#52b788", "#a78bfa"};
 
     private int id;
+    //liee au aubjective directement pas id 
     private int nutritionObjectiveId;
     private int dayNumber;
     private LocalDate date;

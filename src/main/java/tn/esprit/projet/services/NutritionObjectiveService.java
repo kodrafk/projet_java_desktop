@@ -1,12 +1,16 @@
 package tn.esprit.projet.services;
 
 import tn.esprit.projet.models.NutritionObjective;
+import tn.esprit.projet.models.User;
 import tn.esprit.projet.utils.MyBDConnexion;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+/** Holds one notification entry for the bell panel. */
+// See InactiveUserNotification.java
 
 public class NutritionObjectiveService {
 
@@ -205,13 +209,68 @@ public class NutritionObjectiveService {
         }
     }
 
+    /**
+     * Returns all non-admin users who have at least one objective but none active.
+     * Also includes users who have never created an objective.
+     * inactiveSince = date of their most recent objective creation (or account creation).
+     */
+    public List<InactiveUserNotification> getInactiveUserNotifications() {
+        List<InactiveUserNotification> result = new ArrayList<>();
+        if (cnx == null) return result;
+
+        // Users with objectives but none active
+        String sql = """
+            SELECT u.id, u.email, u.first_name, u.last_name, u.roles, u.is_active,
+                   u.created_at,
+                   MAX(o.created_at) AS last_obj_date,
+                   (SELECT title FROM nutrition_objective
+                    WHERE user_id = u.id ORDER BY created_at DESC LIMIT 1) AS last_title
+            FROM user u
+            LEFT JOIN nutrition_objective o ON o.user_id = u.id
+            WHERE u.roles NOT LIKE '%ROLE_ADMIN%'
+              AND u.is_active = 1
+            GROUP BY u.id
+            HAVING SUM(CASE WHEN o.status = 'active' THEN 1 ELSE 0 END) = 0
+            ORDER BY last_obj_date ASC
+            """;
+        try (Statement stmt = cnx.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                User u = new User();
+                u.setId(rs.getInt("id"));
+                u.setEmail(rs.getString("email"));
+                u.setFirstName(rs.getString("first_name"));
+                u.setLastName(rs.getString("last_name"));
+                u.setRoles(rs.getString("roles"));
+                u.setActive(rs.getBoolean("is_active"));
+
+                Timestamp lastObjTs = rs.getTimestamp("last_obj_date");
+                LocalDate since;
+                if (lastObjTs != null) {
+                    since = lastObjTs.toLocalDateTime().toLocalDate();
+                } else {
+                    // Never created an objective — use account creation date
+                    Timestamp created = rs.getTimestamp("created_at");
+                    since = created != null ? created.toLocalDateTime().toLocalDate() : LocalDate.now();
+                }
+
+                String lastTitle = rs.getString("last_title");
+                result.add(new InactiveUserNotification(u, since, lastTitle));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching inactive notifications: " + e.getMessage());
+        }
+        return result;
+    }
+
     public void activate(NutritionObjective obj) {
         obj.setStatus("active");
-        LocalDate start = obj.getPlannedStartDate() != null
-                ? obj.getPlannedStartDate() : LocalDate.now();
+        // Always start from today when activating — never use a future planned date
+        LocalDate start = LocalDate.now();
         obj.setStartDate(start);
         obj.setEndDate(start.plusDays(6));
         update(obj);
+        // Delete any existing logs (in case of re-activation) then recreate from today
+        new DailyLogService().deleteByObjectiveId(obj.getId());
         new DailyLogService().createLogsForObjective(obj.getId(), start);
     }
 

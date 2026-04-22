@@ -1,16 +1,25 @@
 package tn.esprit.projet.gui;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import tn.esprit.projet.models.DailyLog;
 import tn.esprit.projet.models.NutritionObjective;
+import tn.esprit.projet.services.AIFoodAnalyzerService;
 import tn.esprit.projet.services.DailyLogService;
 import tn.esprit.projet.services.NutritionObjectiveService;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +38,25 @@ public class DailyLogEditController {
     @FXML private VBox selectedFoodsList;
     @FXML private Label selectedCount;
 
+    // AI Scanner components
+    @FXML private VBox aiScannerSection;
+    @FXML private Button uploadImageBtn, analyzeImageBtn;
+    @FXML private ImageView previewImageView;
+    @FXML private Label scanStatusLabel;
+    @FXML private ProgressBar scanProgressBar;
+
     private NutritionObjective objective;
     private DailyLog log;
     private String mealType;
     private DailyLogService service;
     private String currentCategory = "All";
     private Object[] editingCustomFood = null;
+
+    // AI Scanner variables
+    private AIFoodAnalyzerService aiService;
+    private byte[] selectedImageBytes;
+    private String selectedImageMimeType;
+    private AIFoodAnalyzerService.FoodAnalysisResult lastAnalysisResult;
 
     private static final Object[][] FOODS = {
         {"Chicken Breast", "Meat",       165, 31.0,  0.0,  3.6},
@@ -72,6 +94,10 @@ public class DailyLogEditController {
         this.log = dailyLog;
         this.mealType = mealType;
         this.service = new DailyLogService();
+        this.aiService = new AIFoodAnalyzerService();
+
+        // Initialize AI scanner
+        initializeAiScanner();
 
         String mealLabel = getMealLabel(mealType);
         lblMealType.setText(mealLabel.toUpperCase());
@@ -125,6 +151,187 @@ public class DailyLogEditController {
         updateSidebar();
         updateTracker();
         searchField.textProperty().addListener((obs, o, n) -> buildFoodGrid(currentCategory, n));
+    }
+
+    // ═══ AI SCANNER METHODS ═══
+    private void initializeAiScanner() {
+        if (previewImageView != null) previewImageView.setVisible(false);
+        if (analyzeImageBtn != null) analyzeImageBtn.setDisable(true);
+        if (scanProgressBar != null) scanProgressBar.setVisible(false);
+        if (scanStatusLabel != null) {
+            scanStatusLabel.setText("📷 Take a photo of your meal to automatically detect nutrition info!");
+        }
+    }
+
+    @FXML
+    private void handleUploadImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Food Image");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"),
+            new FileChooser.ExtensionFilter("JPEG Images", "*.jpg", "*.jpeg"),
+            new FileChooser.ExtensionFilter("PNG Images", "*.png")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(uploadImageBtn.getScene().getWindow());
+        if (selectedFile != null) {
+            try {
+                selectedImageBytes = Files.readAllBytes(selectedFile.toPath());
+                selectedImageMimeType = Files.probeContentType(selectedFile.toPath());
+                
+                if (selectedImageMimeType == null) {
+                    String fileName = selectedFile.getName().toLowerCase();
+                    if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+                        selectedImageMimeType = "image/jpeg";
+                    } else if (fileName.endsWith(".png")) {
+                        selectedImageMimeType = "image/png";
+                    } else {
+                        selectedImageMimeType = "image/jpeg"; // default
+                    }
+                }
+
+                // Display preview
+                if (previewImageView != null) {
+                    Image image = new Image(new ByteArrayInputStream(selectedImageBytes));
+                    previewImageView.setImage(image);
+                    previewImageView.setVisible(true);
+                }
+
+                // Enable analyze button
+                if (analyzeImageBtn != null) {
+                    analyzeImageBtn.setDisable(false);
+                }
+
+                updateScanStatus("✅ Image loaded! Click 'Analyze' to detect food and nutrition.", false);
+
+            } catch (IOException e) {
+                updateScanStatus("❌ Error loading image: " + e.getMessage(), true);
+            }
+        }
+    }
+
+    @FXML
+    private void handleAnalyzeImage() {
+        if (selectedImageBytes == null) {
+            updateScanStatus("❌ Please select an image first.", true);
+            return;
+        }
+
+        // Show progress
+        if (scanProgressBar != null) {
+            scanProgressBar.setVisible(true);
+            scanProgressBar.setProgress(-1); // Indeterminate
+        }
+        
+        if (analyzeImageBtn != null) {
+            analyzeImageBtn.setDisable(true);
+        }
+
+        updateScanStatus("🤖 Analyzing your meal with AI...", false);
+
+        // Create and run analysis task
+        Task<AIFoodAnalyzerService.FoodAnalysisResult> analysisTask = 
+            aiService.analyzeImageAsync(selectedImageBytes, selectedImageMimeType);
+
+        // Bind progress
+        if (scanProgressBar != null) {
+            scanProgressBar.progressProperty().bind(analysisTask.progressProperty());
+        }
+
+        // Update status with task messages
+        analysisTask.messageProperty().addListener((obs, oldMsg, newMsg) -> {
+            if (newMsg != null) {
+                updateScanStatus("🤖 " + newMsg, false);
+            }
+        });
+
+        // Handle completion
+        analysisTask.setOnSucceeded(e -> {
+            lastAnalysisResult = analysisTask.getValue();
+            
+            if (scanProgressBar != null) {
+                scanProgressBar.setVisible(false);
+            }
+            
+            if (analyzeImageBtn != null) {
+                analyzeImageBtn.setDisable(false);
+            }
+
+            if (lastAnalysisResult.isSuccess()) {
+                updateScanStatus("✅ Food detected: " + lastAnalysisResult.getName() + 
+                               " (" + lastAnalysisResult.getCalories() + " cal)", false);
+                
+                // Auto-fill the custom food form with AI data
+                fillCustomFormWithAiData(lastAnalysisResult);
+                
+            } else {
+                updateScanStatus("❌ " + lastAnalysisResult.getError(), true);
+            }
+        });
+
+        analysisTask.setOnFailed(e -> {
+            if (scanProgressBar != null) {
+                scanProgressBar.setVisible(false);
+            }
+            
+            if (analyzeImageBtn != null) {
+                analyzeImageBtn.setDisable(false);
+            }
+
+            Throwable exception = analysisTask.getException();
+            updateScanStatus("❌ Analysis failed: " + 
+                           (exception != null ? exception.getMessage() : "Unknown error"), true);
+        });
+
+        // Run task in background thread
+        Thread analysisThread = new Thread(analysisTask);
+        analysisThread.setDaemon(true);
+        analysisThread.start();
+    }
+
+    @FXML
+    private void handleUseAiData() {
+        // This method is no longer needed since we auto-fill the form
+        // Keeping it for FXML compatibility but it does nothing
+    }
+
+    private void fillCustomFormWithAiData(AIFoodAnalyzerService.FoodAnalysisResult result) {
+        if (result != null && result.isSuccess()) {
+            // Fill the custom food form fields with AI-detected data
+            if (customNameField != null) {
+                customNameField.setText(result.getName());
+            }
+            if (customCalField != null) {
+                customCalField.setText(String.valueOf(result.getCalories()));
+            }
+            if (customProteinField != null) {
+                customProteinField.setText(String.valueOf((int) result.getProtein()));
+            }
+            if (customCarbsField != null) {
+                customCarbsField.setText(String.valueOf((int) result.getCarbs()));
+            }
+            if (customFatsField != null) {
+                customFatsField.setText(String.valueOf((int) result.getFats()));
+            }
+            
+            // Clear any previous errors
+            clearError(customNameError);
+            clearError(customCalError);
+            clearError(customProteinError);
+            clearError(customCarbsError);
+            clearError(customFatsError);
+            
+            updateScanStatus("✅ Form auto-filled! Review and click 'Add Custom Food' to save.", false);
+        }
+    }
+
+    private void updateScanStatus(String message, boolean isError) {
+        if (scanStatusLabel != null) {
+            scanStatusLabel.setText(message);
+            scanStatusLabel.setStyle(isError ? 
+                "-fx-text-fill: #dc3545; -fx-font-weight: bold;" : 
+                "-fx-text-fill: #059669; -fx-font-weight: normal;");
+        }
     }
 
     // ═══ CATEGORY TABS ═══

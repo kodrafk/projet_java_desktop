@@ -28,7 +28,7 @@ public class MyBDConnexion {
 
     /** Ensure the user table exists with the correct schema. */
     private void initTable() {
-        // Always ensure table exists first
+        // Step 1: Create table fresh
         String create = "CREATE TABLE IF NOT EXISTS `user` (" +
                 "`id`               INT AUTO_INCREMENT PRIMARY KEY," +
                 "`email`            VARCHAR(180)  NOT NULL UNIQUE," +
@@ -48,11 +48,31 @@ public class MyBDConnexion {
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
         try (Statement st = cnx.createStatement()) {
             st.executeUpdate(create);
+            System.out.println("[initTable] Table created/verified.");
         } catch (SQLException e) {
-            System.err.println("[initTable] create: " + e.getMessage());
+            System.err.println("[initTable] create failed: " + e.getMessage());
+            return; // Can't proceed if table creation failed
         }
 
-        // Add any missing columns (handles old schema upgrades)
+        // Step 2: Verify the table is actually accessible
+        try (Statement st = cnx.createStatement()) {
+            st.executeQuery("SELECT 1 FROM `user` LIMIT 1");
+        } catch (SQLException e) {
+            // Table exists in metadata but engine file is broken — force recreate
+            System.err.println("[initTable] Table inaccessible, forcing recreate: " + e.getMessage());
+            try (Statement st = cnx.createStatement()) {
+                st.executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
+                st.executeUpdate("DROP TABLE IF EXISTS `user`");
+                st.executeUpdate("SET FOREIGN_KEY_CHECKS = 1");
+                st.executeUpdate(create);
+                System.out.println("[initTable] Table force-recreated.");
+            } catch (SQLException ex) {
+                System.err.println("[initTable] Force recreate failed: " + ex.getMessage());
+                return;
+            }
+        }
+
+        // Step 3: Add any missing columns (safe upgrades)
         String[][] columns = {
             {"first_name",     "VARCHAR(100) NOT NULL DEFAULT ''"},
             {"last_name",      "VARCHAR(100) NOT NULL DEFAULT ''"},
@@ -80,21 +100,11 @@ public class MyBDConnexion {
             }
         }
 
-        // Fix roles column if it's still JSON type or has CHECK constraint
-        try (PreparedStatement ps = cnx.prepareStatement(
-                "SELECT DATA_TYPE FROM information_schema.COLUMNS " +
-                "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='user' AND COLUMN_NAME='roles'")) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                // Always force correct type ÔÇö removes any CHECK constraint
-                cnx.createStatement().executeUpdate(
-                        "ALTER TABLE `user` MODIFY COLUMN `roles` VARCHAR(50) NOT NULL DEFAULT 'ROLE_USER'");
-                // Fix any remaining JSON-format values in existing rows
-                cnx.createStatement().executeUpdate(
-                        "UPDATE `user` SET `roles` = 'ROLE_ADMIN' WHERE `roles` LIKE '%ROLE_ADMIN%' AND `roles` != 'ROLE_ADMIN'");
-                cnx.createStatement().executeUpdate(
-                        "UPDATE `user` SET `roles` = 'ROLE_USER' WHERE `roles` NOT IN ('ROLE_USER','ROLE_ADMIN')");
-            }
+        // Step 4: Fix roles column type (safe — only if column exists)
+        try (Statement st = cnx.createStatement()) {
+            st.executeUpdate("ALTER TABLE `user` MODIFY COLUMN `roles` VARCHAR(50) NOT NULL DEFAULT 'ROLE_USER'");
+            st.executeUpdate("UPDATE `user` SET `roles` = 'ROLE_ADMIN' WHERE `roles` LIKE '%ROLE_ADMIN%' AND `roles` != 'ROLE_ADMIN'");
+            st.executeUpdate("UPDATE `user` SET `roles` = 'ROLE_USER' WHERE `roles` NOT IN ('ROLE_USER','ROLE_ADMIN')");
         } catch (SQLException e) {
             System.err.println("[initTable] roles fix: " + e.getMessage());
         }

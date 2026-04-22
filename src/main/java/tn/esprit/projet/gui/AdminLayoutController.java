@@ -8,8 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.projet.utils.SessionManager;
 
@@ -130,6 +132,34 @@ public class AdminLayoutController {
             Parent login = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             Stage stage = (Stage) contentArea.getScene().getWindow();
             stage.setScene(new Scene(login));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleBackToSite(ActionEvent event) {
+        try {
+            Parent main = FXMLLoader.load(getClass().getResource("/fxml/main_layout.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(main, 1280, 760));
+            stage.setTitle("NutriLife");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleAdminProfile(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user_profile.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("My Profile");
+            stage.setScene(new Scene(root, 620, 700));
+            stage.setResizable(false);
+            stage.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();
         }

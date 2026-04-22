@@ -30,7 +30,21 @@ public class DataSeeder {
                 System.out.println("✅ Admin created: admin@nutrilife.com / Admin@1234");
         }
 
-        // Default regular user
+        // Salim admin account
+        if (dao.findByEmail("salim@gmail.com") == null) {
+            User salim = new User();
+            salim.setFirstName("Salim");
+            salim.setLastName("Admin");
+            salim.setEmail("salim@gmail.com");
+            salim.setPassword(PasswordUtil.hashPassword("Salim@1234"));
+            salim.setRoles("ROLE_ADMIN");
+            salim.setActive(true);
+            salim.setBirthday(LocalDate.of(1995, 1, 1));
+            salim.setWeight(70f);
+            salim.setHeight(175f);
+            if (dao.create(salim))
+                System.out.println("✅ Admin created: salim@gmail.com / Salim@1234");
+        }
         if (dao.findByEmail("user@nutrilife.com") == null) {
             User user = new User();
             user.setFirstName("Demo");

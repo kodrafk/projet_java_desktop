@@ -21,6 +21,7 @@ public class AdminObjectivesController {
     @FXML private TextField searchField;
     @FXML private ComboBox<String> sortCombo;
     @FXML private Label lblCount;
+    @FXML private HBox headerBox;
 
     private NutritionObjectiveService service;
     private List<NutritionObjective> all;
@@ -45,16 +46,21 @@ public class AdminObjectivesController {
     /** Called from UserListController to show only one user's objectives */
     public void setUserFilter(User user) {
         this.filteredUser = user;
-        // Reload filtered by this user
-        all = service.getAllForAdmin().stream()
-            .filter(o -> {
-                // We need to get user_id from DB — use a service method
-                return true; // will filter below
-            })
-            .collect(java.util.stream.Collectors.toList());
-        // Actually filter by user_id via a dedicated query
         all = service.getAllByUserId(user.getId());
         lblCount.setText("Objectives for: " + user.getFullName() + " (" + all.size() + ")");
+
+        // Inject a back button into the header so admin can return to user list
+        try {
+            javafx.scene.Node header = objectivesContainer.getScene() != null
+                    ? objectivesContainer.getScene().lookup("#adminObjHeader") : null;
+            // We add the back button programmatically into the header HBox via scene lookup
+            // The FXML header HBox has no fx:id, so we rebuild the label instead
+        } catch (Exception ignored) {}
+
+        // Show back button by updating lblCount to include a back action hint,
+        // and inject a real back button node before the container
+        injectBackButton(user);
+
         render(all);
     }
 
@@ -260,8 +266,27 @@ public class AdminObjectivesController {
             Parent page = loader.load();
             AdminDailyLogsController ctrl = loader.getController();
             ctrl.setObjective(obj, getContentArea());
+            if (filteredUser != null) {
+                ctrl.setBackUser(filteredUser); // so back returns to this user's objectives
+            }
             getContentArea().getChildren().setAll(page);
         } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    /** Injects a "← Back to Users" button into the header when in user-filter mode. */
+    private void injectBackButton(User user) {
+        Button backBtn = new Button("← Back to Users");
+        backBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #2E7D5A; " +
+                "-fx-border-color: #2E7D5A; -fx-border-radius: 8; -fx-background-radius: 8; " +
+                "-fx-font-size: 12px; -fx-padding: 6 14; -fx-cursor: hand;");
+        backBtn.setOnAction(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user_list.fxml"));
+                Parent page = loader.load();
+                getContentArea().getChildren().setAll(page);
+            } catch (Exception ex) { ex.printStackTrace(); }
+        });
+        headerBox.getChildren().add(backBtn);
     }
 
     private void openEdit(NutritionObjective obj) {

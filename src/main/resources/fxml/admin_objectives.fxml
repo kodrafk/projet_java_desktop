@@ -8,7 +8,7 @@
       style="-fx-background-color: #F0F4F8;" spacing="0" VBox.vgrow="ALWAYS">
 
     <!-- Header -->
-    <HBox alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1 0; -fx-padding: 18 26;">
+    <HBox fx:id="headerBox" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1 0; -fx-padding: 18 26;">
         <VBox spacing="3">
             <Label text="Objectives Management"
                    style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>

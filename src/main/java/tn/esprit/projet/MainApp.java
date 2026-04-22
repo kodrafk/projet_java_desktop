@@ -13,6 +13,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         DataSeeder.seed(); // create default admin if none exists
+
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
         Scene scene = new Scene(root, 1100, 720);
         primaryStage.setTitle("NutriLife - Login");

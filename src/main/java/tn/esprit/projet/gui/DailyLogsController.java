@@ -39,6 +39,7 @@ public class DailyLogsController {
     }
 
     private void populate() {
+        //fills the daily logs 'header title objective name etc' 
         lblHeaderTitle.setText("Daily Logs");
         lblHeaderSub.setText(objective.getTitle());
 
@@ -72,10 +73,14 @@ public class DailyLogsController {
     private HBox buildDayCard(DailyLog log) {
         HBox card = new HBox(0);
         boolean isToday = log.isToday();
-        boolean isFuture = log.isFuture();
+
+        // A day is "available" if its day number has been reached since activation.
+        // Day 1 = activation day (startDate), Day 2 = next day, etc.
+        // We compare against the objective's startDate, not the stored log date.
+        boolean isAvailable = isAvailable(log);
 
         String accentColor = log.isCompleted() ? "#2E7D5A" : isToday ? "#eb7147" : "#E2E8F0";
-        String opacity = isFuture && !log.isCompleted() ? "-fx-opacity: 0.6;" : "";
+        String opacity = !isAvailable && !log.isCompleted() ? "-fx-opacity: 0.6;" : "";
 
         // Accent bar
         javafx.scene.layout.Region accent = new javafx.scene.layout.Region();
@@ -109,7 +114,7 @@ public class DailyLogsController {
         Label dateLabel = new Label(log.getDate() != null ? log.getDate().format(FMT) : "Day " + log.getDayNumber());
         dateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;");
 
-        String tagText = isToday ? "● Today" : log.isCompleted() ? "✓ " + log.getLoggedMealsCount() + "/4 meals" : isFuture ? "Upcoming" : "Missed";
+        String tagText = isToday ? "● Today" : log.isCompleted() ? "✓ " + log.getLoggedMealsCount() + "/4 meals" : !isAvailable ? "Upcoming" : "Missed";
         String tagColor = isToday ? "#eb7147" : log.isCompleted() ? "#2E7D5A" : "#94A3B8";
         Label tag = new Label(tagText);
         tag.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: " + tagColor + ";");
@@ -120,7 +125,7 @@ public class DailyLogsController {
         if (log.isCompleted()) {
             btn = new javafx.scene.control.Button("View →");
             btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #2E7D5A; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-color: #2E7D5A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 14;");
-        } else if (isToday || (!isFuture)) {
+        } else if (isAvailable) {
             btn = new javafx.scene.control.Button("Log Day →");
             btn.setStyle("-fx-background-color: #eb7147; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 8; -fx-padding: 8 14;");
         } else {
@@ -151,6 +156,18 @@ public class DailyLogsController {
                 "-fx-border-color: " + (isToday ? "rgba(235,113,71,0.2)" : "#E2E8F0") +
                 "; -fx-border-radius: 12; " + opacity);
         return card;
+    }
+
+    /**
+     * A day is available to log if its day number has been reached since activation.
+     * Day 1 is always available (activation day), Day 2 from the next day, etc.
+     * This is based on elapsed days since startDate, NOT the stored log date.
+     */
+    private boolean isAvailable(DailyLog log) {
+        if (objective.getStartDate() == null) return log.getDayNumber() == 1;
+        long elapsed = java.time.temporal.ChronoUnit.DAYS.between(objective.getStartDate(), java.time.LocalDate.now());
+        // Day N is available when elapsed >= N-1  (Day 1 available on day 0, Day 2 on day 1, etc.)
+        return elapsed >= log.getDayNumber() - 1;
     }
 
     private Label macroLabel(String icon, String text) {

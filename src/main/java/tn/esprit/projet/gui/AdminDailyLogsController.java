@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import tn.esprit.projet.models.DailyLog;
 import tn.esprit.projet.models.NutritionObjective;
+import tn.esprit.projet.models.User;
 import tn.esprit.projet.services.DailyLogService;
 
 import java.time.format.DateTimeFormatter;
@@ -46,6 +47,7 @@ public class AdminDailyLogsController {
     private List<DailyLog> logs;
     private DailyLog editingLog;
     private StackPane contentArea;
+    private User backUser; // when set, back returns to this user's objectives
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("EEE, MMM d");
 
     public void setObjective(NutritionObjective obj, StackPane contentArea) {
@@ -54,6 +56,11 @@ public class AdminDailyLogsController {
         this.service = new DailyLogService();
         lblObjectiveTitle.setText(obj.getTitle() + " — Daily Logs");
         reload();
+    }
+
+    /** Call this after setObjective so the back button returns to the correct user's objectives. */
+    public void setBackUser(User user) {
+        this.backUser = user;
     }
 
     private void reload() {
@@ -626,6 +633,10 @@ public class AdminDailyLogsController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_objectives.fxml"));
             Parent page = loader.load();
+            AdminObjectivesController ctrl = loader.getController();
+            if (backUser != null) {
+                ctrl.setUserFilter(backUser);
+            }
             contentArea.getChildren().setAll(page);
         } catch (Exception e) { e.printStackTrace(); }
     }

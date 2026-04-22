@@ -189,10 +189,16 @@ public class UserProfileController {
             SessionManager.logout();
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-                Stage stage = (Stage) lblFullName.getScene().getWindow();
+                javafx.scene.Node anyNode = lblFullName != null ? lblFullName : fieldFirstName;
+                Stage stage = (Stage) anyNode.getScene().getWindow();
                 stage.setScene(new Scene(root, 1100, 720));
                 stage.setTitle("NutriLife - Login");
                 stage.setMaximized(false);
+                // If it was a modal, also close the owner's scene
+                if (stage.getOwner() instanceof Stage ownerStage) {
+                    ownerStage.setScene(new Scene(root, 1100, 720));
+                    stage.close();
+                }
             } catch (Exception ex) { ex.printStackTrace(); }
         }
     }
@@ -290,9 +296,22 @@ public class UserProfileController {
     private void set(Label lbl, String val) { if (lbl != null) lbl.setText(val); }
     private String nvl(String s) { return s != null ? s : ""; }
 
-    @FXML private void handleClose() { closeStage(); }
+    @FXML private void handleClose() {
+        // Works both as a modal dialog and when loaded inline in the main layout
+        Stage stage = (Stage) (lblFullName != null ? lblFullName : fieldFirstName).getScene().getWindow();
+        // If it's a modal (owner exists), just close it
+        if (stage.getOwner() != null) {
+            stage.close();
+        } else {
+            // Inline mode — navigate back to home by reloading main layout home content
+            try {
+                Parent main = FXMLLoader.load(getClass().getResource("/fxml/main_layout.fxml"));
+                stage.setScene(new Scene(main, 1280, 760));
+            } catch (Exception ex) { ex.printStackTrace(); }
+        }
+    }
+
     private void closeStage() {
-        Stage s = (Stage) (lblFullName != null ? lblFullName : fieldFirstName).getScene().getWindow();
-        s.close();
+        handleClose();
     }
 }
