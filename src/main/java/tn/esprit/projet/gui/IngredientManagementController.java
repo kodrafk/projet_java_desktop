@@ -96,7 +96,15 @@ public class IngredientManagementController implements Initializable {
     @FXML private Button btnPrevPage;
     @FXML private Button btnNextPage;
     @FXML private Label lblPageInfo;
-
+    // Champ FXML à ajouter
+    @FXML private TableView<Ingredient> tableIngredients;
+    @FXML private TableColumn<Ingredient, String> colNom;
+    @FXML private TableColumn<Ingredient, String> colCategorie;
+    @FXML private TableColumn<Ingredient, Double> colQuantite;
+    @FXML private TableColumn<Ingredient, String> colDatePeremption;
+    @FXML private TableColumn<Ingredient, String> colStatus;
+    @FXML private TableColumn<Ingredient, String> colNotes;
+    @FXML private TableColumn<Ingredient, Void> colActions;
     private int currentPage = 0;
     private static final int ITEMS_PER_PAGE = 9;
     private List<Ingredient> currentDisplayList = new ArrayList<>();
@@ -133,7 +141,7 @@ public class IngredientManagementController implements Initializable {
         courseService = new CourseService();
 
         setupComboBoxes();
-
+        setupTable();
         loadTableData();
         updateStats();
         setupSearchAndFilters();
@@ -181,7 +189,67 @@ public class IngredientManagementController implements Initializable {
     // TABLE COLUMNS SETUP
     // ═══════════════════════════════════
 
+    private void setupTable() {
+        if (tableIngredients == null || colNom == null) return;
 
+        // Colonnes simples
+        colNom.setCellValueFactory(
+                new PropertyValueFactory<>("nom"));
+        colCategorie.setCellValueFactory(
+                new PropertyValueFactory<>("categorie"));
+        colQuantite.setCellValueFactory(
+                new PropertyValueFactory<>("quantite"));
+        colNotes.setCellValueFactory(
+                new PropertyValueFactory<>("notes"));
+
+        // Date formatée
+        colDatePeremption.setCellValueFactory(data -> {
+            LocalDate date = data.getValue().getDatePeremption();
+            return new SimpleStringProperty(
+                    date != null ? date.toString() : "—"
+            );
+        });
+
+        // Status calculé
+        colStatus.setCellValueFactory(data ->
+                new SimpleStringProperty(
+                        getStatusText(data.getValue())
+                )
+        );
+
+        // Actions
+        colActions.setCellFactory(col -> new TableCell<>() {
+            private final Button btnEdit = new Button("✏");
+            private final Button btnDel  = new Button("🗑");
+            private final HBox box = new HBox(8, btnEdit, btnDel);
+            {
+                box.setAlignment(Pos.CENTER);
+                btnEdit.setStyle(
+                        "-fx-background-color: #FEF3C7;" +
+                                "-fx-text-fill: #D97706;" +
+                                "-fx-background-radius: 6;" +
+                                "-fx-cursor: hand;");
+                btnDel.setStyle(
+                        "-fx-background-color: #FEE2E2;" +
+                                "-fx-text-fill: #DC2626;" +
+                                "-fx-background-radius: 6;" +
+                                "-fx-cursor: hand;");
+
+                btnEdit.setOnAction(e ->
+                        handleEdit(getTableView()
+                                .getItems().get(getIndex())));
+                btnDel.setOnAction(e ->
+                        handleDelete(getTableView()
+                                .getItems().get(getIndex())));
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : box);
+            }
+        });
+    }
 
 
 
@@ -192,6 +260,9 @@ public class IngredientManagementController implements Initializable {
     private void loadTableData() {
         List<Ingredient> all = ingredientService.getAll();
         filteredIngredients = new FilteredList<>(FXCollections.observableArrayList(all), p -> true);
+        if (tableIngredients != null) {
+            tableIngredients.setItems(filteredIngredients);
+        }
         buildIngredientsGrid(filteredIngredients);
         updateStats();
     }

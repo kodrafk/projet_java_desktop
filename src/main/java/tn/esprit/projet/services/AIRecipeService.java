@@ -20,8 +20,8 @@ public class AIRecipeService {
     private static final String MODEL    = "google/gemini-2.0-flash-001";
 
     // ─── Unsplash Config ──────────────────────────────
-    private static final String UNSPLASH_URL = "https://api.unsplash.com/photos/random";
-    private static final String UNSPLASH_KEY = "5I5Js5Y0EqBKkdW3UqvHpHK6Fl4FttZJKgyYYRmQtJY";
+    private static final String PEXELS_URL = "https://api.pexels.com/v1/search";
+    private static final String PEXELS_KEY = "K6f0ozU0tpZgDw69Zo1mb7nLKGN6ECr7GivPxbgcQeYuxhFv8ONOaV5W";
     // ↑ Inscription gratuite sur unsplash.com/developers
 
     private final HttpClient     httpClient;
@@ -46,8 +46,8 @@ public class AIRecipeService {
         System.out.println("🤖 Étape 3 : Parsing réponse...");
         AIRecipeResult result = parseGeminiResponse(jsonResponse);
 
-        System.out.println("🤖 Étape 4 : Génération image Unsplash...");
-        String imageUrl = fetchUnsplashImage(result.getImageKeywords(),
+        System.out.println("🤖 Étape 4 : Génération image Pexels...");
+        String imageUrl = fetchPexelsImage(result.getImageKeywords(),
                 request.getImageStyle());
         result.setImageUrl(imageUrl);
 
@@ -69,45 +69,44 @@ public class AIRecipeService {
     // ═════════════════════════════════════════════════
     private String buildPrompt(AIRecipeRequest req) {
         return """
-                You are a professional chef AI. Generate a complete recipe in JSON format.
-                
-                REQUIREMENTS:
-                - Dish Type      : %s
-                - Cuisine Style  : %s
-                - Difficulty     : %s
-                - Max Time       : %d minutes
-                - Servings       : %d people
-                - Calorie Range  : %s
-                - Dietary        : %s
-                - Extra Notes    : %s
-                
-                RESPOND ONLY WITH THIS EXACT JSON FORMAT (no markdown, no extra text):
-                {
-                  "nom": "Recipe Name",
-                  "description": "Short appetizing description (2-3 sentences)",
-                  "type": "%s",
-                  "difficulte": "%s",
-                  "temps_preparation": %d,
-                  "servings": %d,
-                  "ingredients": [
-                    "250g Flour",
-                    "150ml Warm Water",
-                    "2 tbsp Olive Oil"
-                  ],
-                  "steps": [
-                    "Step 1 description",
-                    "Step 2 description",
-                    "Step 3 description"
-                  ],
-                  "nutrition": {
-                    "calories": 450,
-                    "proteines": 18.5,
-                    "lipides": 12.0,
-                    "glucides": 62.0
-                  },
-                  "image_keywords": "pizza tunisian spicy food photography"
-                }
-                """.formatted(
+            You are a professional chef AI. Generate a complete recipe in JSON format.
+            
+            REQUIREMENTS:
+            - Dish Type      : %s
+            - Cuisine Style  : %s
+            - Difficulty     : %s
+            - Max Time       : %d minutes
+            - Servings       : %d people
+            - Calorie Range  : %s
+            - Dietary        : %s
+            - Extra Notes    : %s
+            
+            RESPOND ONLY WITH THIS EXACT JSON FORMAT (no markdown, no extra text):
+            {
+              "nom": "Recipe Name",
+              "description": "Short appetizing description (2-3 sentences)",
+              "type": "%s",
+              "difficulte": "%s",
+              "temps_preparation": %d,
+              "servings": %d,
+              "ingredients": [
+                "250g Flour",
+                "150ml Warm Water",
+                "2 tbsp Olive Oil"
+              ],
+              "steps": [
+                "Step 1 description",
+                "Step 2 description"
+              ],
+              "nutrition": {
+                "calories": 450,
+                "proteines": 18.5,
+                "lipides": 12.0,
+                "glucides": 62.0
+              },
+              "image_keywords": "ONLY 2-3 words: the exact dish name and main ingredient. Example: pasta carbonara, chicken curry, chocolate cake. NO style words."
+            }
+            """.formatted(
                 req.getDishType(),
                 req.getCuisineStyle(),
                 req.getDifficulty(),
@@ -247,75 +246,121 @@ public class AIRecipeService {
         return content.trim();
     }
 
-    // ═════════════════════════════════════════════════
-    // ÉTAPE 4 — Fetch image depuis Unsplash
-    // ═════════════════════════════════════════════════
-    private String fetchUnsplashImage(String keywords, String imageStyle) {
 
+    // ═════════════════════════════════════════════════
+// ÉTAPE 4 — Fetch image depuis Pexels
+// ═════════════════════════════════════════════════
+    private String fetchPexelsImage(String keywords, String imageStyle) {
         try {
-            // Construire query selon style visuel
-            String styleQuery = getStyleQuery(imageStyle);
-            String fullQuery  = keywords + " " + styleQuery + " food";
+            // Construire query précise
+            String query = buildPexelsQuery(keywords, imageStyle);
+            String encodedQuery = query.replace(" ", "%20");
 
-            // Encoder la query
-            String encodedQuery = fullQuery.replace(" ", "%20");
+            // Numéro de page aléatoire pour diversité
+            int randomPage = (int)(Math.random() * 5) + 1;
 
-            String url = UNSPLASH_URL
+            String url = PEXELS_URL
                     + "?query="       + encodedQuery
-                    + "&orientation=" + "landscape"
-                    + "&content_filter=high"
-                    + "&client_id="   + UNSPLASH_KEY;
+                    + "&per_page=5"
+                    + "&page="        + randomPage
+                    + "&orientation=landscape";
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
-                    .header("Accept-Version", "v1")
+                    .header("Authorization", PEXELS_KEY)
                     .GET()
                     .build();
 
             HttpResponse<String> response = httpClient.send(
                     request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
-                JsonNode json     = mapper.readTree(response.body());
-                String   imageUrl = json.path("urls").path("regular").asText();
+            System.out.println("📡 Pexels Status : " + response.statusCode());
 
-                System.out.println("✅ Image Unsplash : " + imageUrl);
-                return imageUrl;
+            if (response.statusCode() == 200) {
+                JsonNode json   = mapper.readTree(response.body());
+                JsonNode photos = json.path("photos");
+
+                if (photos.isArray() && photos.size() > 0) {
+                    // Choisir une photo aléatoire parmi les résultats
+                    int randomIndex = (int)(Math.random() * photos.size());
+                    JsonNode photo  = photos.get(randomIndex);
+                    String imageUrl = photo.path("src").path("large").asText();
+
+                    System.out.println("✅ Pexels image : " + imageUrl);
+                    return imageUrl;
+                }
             }
 
+            System.err.println("⚠️ Pexels no results → fallback");
+
         } catch (Exception e) {
-            System.err.println("❌ Unsplash error : " + e.getMessage());
+            System.err.println("❌ Pexels error : " + e.getMessage());
         }
 
-        // Fallback → image par défaut food
-        return "https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
-                + "?w=800&q=80";
+        return getFallbackImage();
     }
 
-    // ─── Style visuel → query Unsplash ───────────────
-    private String getStyleQuery(String imageStyle) {
-        if (imageStyle == null) return "professional";
-
-        switch (imageStyle) {
-            case "Professional" -> { return "professional studio photography"; }
-            case "Rustic"       -> { return "rustic wooden background"; }
-            case "Minimalist"   -> { return "minimalist clean white background"; }
-            case "Dark & Moody" -> { return "dark moody dramatic lighting"; }
-            case "Colorful"     -> { return "colorful bright vibrant"; }
-            default             -> { return "professional food photography"; }
+    /**
+     * Construit une query Pexels précise
+     * basée sur les keywords de la recette
+     */
+    private String buildPexelsQuery(String keywords, String imageStyle) {
+        if (keywords == null || keywords.isBlank()) {
+            return "food dish meal";
         }
+
+        // Garder les 3 premiers mots les plus pertinents
+        String[] words = keywords.trim().split("\\s+");
+        StringBuilder query = new StringBuilder();
+
+        int maxWords = Math.min(3, words.length);
+        for (int i = 0; i < maxWords; i++) {
+            String word = words[i]
+                    .toLowerCase()
+                    .replaceAll("[^a-zA-Z0-9]", "");
+            if (!word.isBlank()) {
+                if (query.length() > 0) query.append(" ");
+                query.append(word);
+            }
+        }
+
+        // Toujours ajouter food pour rester dans le contexte
+        query.append(" food");
+
+        System.out.println("🔍 Pexels query : " + query);
+        return query.toString();
+    }
+
+    /**
+     * Image fallback si Pexels échoue
+     */
+    private String getFallbackImage() {
+        // Images food Pexels directes comme fallback
+        String[] fallbacks = {
+                "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
+                "https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg",
+                "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
+                "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg",
+                "https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg"
+        };
+        return fallbacks[(int)(Math.random() * fallbacks.length)];
     }
 
     // ═════════════════════════════════════════════════
     // REGÉNÉRER IMAGE SEULEMENT
     // ═════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════
+// REGÉNÉRER IMAGE — avec Pexels
+// ═════════════════════════════════════════════════
     public String regenerateImage(String keywords, String imageStyle) {
         try {
-            return fetchUnsplashImage(keywords, imageStyle);
+            // Pexels retourne image différente grâce à la page aléatoire
+            String newUrl = fetchPexelsImage(keywords, imageStyle);
+            System.out.println("🔄 Regenerated image : " + newUrl);
+            return newUrl;
         } catch (Exception e) {
             System.err.println("❌ regenerateImage : " + e.getMessage());
-            return "https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
-                    + "?w=800&q=80";
+            return getFallbackImage();
         }
     }
 }

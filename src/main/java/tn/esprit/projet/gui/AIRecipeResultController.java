@@ -1,4 +1,4 @@
-package tn.esprit.projet.controllers;
+package tn.esprit.projet.gui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -94,38 +94,77 @@ public class AIRecipeResultController implements Initializable {
 
     // ─── Image ────────────────────────────────────────
     private void afficherImage() {
-        if (result.getImageUrl() == null || result.getImageUrl().isEmpty()) return;
+        if (result.getImageUrl() == null
+                || result.getImageUrl().isEmpty()) return;
 
-        // Afficher loading
+        System.out.println("🖼️ Loading : " + result.getImageUrl());
+
         if (lblImageLoading != null) {
             lblImageLoading.setVisible(true);
         }
 
-        // Charger image en background
         new Thread(() -> {
             try {
-                Image image = new Image(result.getImageUrl(),
-                        760, 320, true, true, true);
+                // ✅ Télécharger via HttpClient avec headers corrects
+                java.net.http.HttpClient client =
+                        java.net.http.HttpClient.newHttpClient();
 
-                Platform.runLater(() -> {
-                    imageRecette.setImage(image);
+                java.net.http.HttpRequest request =
+                        java.net.http.HttpRequest.newBuilder()
+                                .uri(java.net.URI.create(result.getImageUrl()))
+                                .header("User-Agent",
+                                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                                .header("Referer", "https://www.pexels.com/")
+                                .GET()
+                                .build();
 
-                    // Rounded corners
-                    Rectangle clip = new Rectangle(760, 320);
-                    clip.setArcWidth(16);
-                    clip.setArcHeight(16);
-                    imageRecette.setClip(clip);
+                java.net.http.HttpResponse<java.io.InputStream> response =
+                        client.send(request,
+                                java.net.http.HttpResponse.BodyHandlers.ofInputStream());
 
-                    if (lblImageLoading != null) {
-                        lblImageLoading.setVisible(false);
-                    }
-                });
+                System.out.println("📡 Image HTTP status : "
+                        + response.statusCode());
+
+                if (response.statusCode() == 200) {
+                    // Lire le stream et créer l'image
+                    java.io.InputStream inputStream = response.body();
+                    Image image = new Image(inputStream);
+
+                    System.out.println("✅ Image ready : "
+                            + image.getWidth() + "x" + image.getHeight());
+
+                    Platform.runLater(() -> {
+                        imageRecette.setImage(image);
+                        imageRecette.setFitWidth(308);
+                        imageRecette.setFitHeight(220);
+
+                        // Clip arrondi
+                        javafx.scene.shape.Rectangle clip =
+                                new javafx.scene.shape.Rectangle(308, 220);
+                        clip.setArcWidth(20);
+                        clip.setArcHeight(20);
+                        imageRecette.setClip(clip);
+
+                        if (lblImageLoading != null)
+                            lblImageLoading.setVisible(false);
+                    });
+                } else {
+                    System.err.println("❌ HTTP " + response.statusCode());
+                    Platform.runLater(() -> {
+                        if (lblImageLoading != null)
+                            lblImageLoading.setVisible(false);
+                    });
+                }
+
             } catch (Exception e) {
                 System.err.println("❌ Image load error : " + e.getMessage());
+                Platform.runLater(() -> {
+                    if (lblImageLoading != null)
+                        lblImageLoading.setVisible(false);
+                });
             }
         }).start();
     }
-
     // ─── Infos de base ────────────────────────────────
     private void afficherInfosBase() {
         txtNom      .setText(result.getNom());
@@ -268,21 +307,60 @@ public class AIRecipeResultController implements Initializable {
     // ═════════════════════════════════════════════════
     @FXML
     private void onRegenerateImage() {
-        btnRegenerateImage.setDisable(true);
-        btnRegenerateImage.setText("Loading...");
+        if (result == null) return;
+
+        // Désactiver bouton pendant chargement
+        if (btnRegenerateImage != null) {
+            btnRegenerateImage.setDisable(true);
+            btnRegenerateImage.setText("⏳ Loading...");
+        }
+
+        // Afficher loading
+        if (lblImageLoading != null) {
+            lblImageLoading.setVisible(true);
+        }
 
         new Thread(() -> {
-            String newUrl = aiService.regenerateImage(
-                    result.getImageKeywords(),
-                    request.getImageStyle());
+            try {
+                // Keywords de la recette actuelle
+                String keywords = result.getImageKeywords();
+                String style    = request != null
+                        ? request.getImageStyle()
+                        : "Professional";
 
-            result.setImageUrl(newUrl);
+                System.out.println("🔄 Regenerating image for : " + keywords);
 
-            Platform.runLater(() -> {
-                afficherImage();
-                btnRegenerateImage.setDisable(false);
-                btnRegenerateImage.setText("🔄 Regenerate Image");
-            });
+                // Appel Pexels
+                String newUrl = aiService.regenerateImage(keywords, style);
+
+                // Mettre à jour le résultat
+                result.setImageUrl(newUrl);
+
+                Platform.runLater(() -> {
+                    // Recharger image
+                    afficherImage();
+
+                    // Réactiver bouton
+                    if (btnRegenerateImage != null) {
+                        btnRegenerateImage.setDisable(false);
+                        btnRegenerateImage.setText("🔄 Regenerate Image");
+                    }
+                });
+
+            } catch (Exception e) {
+                System.err.println("❌ onRegenerateImage error : "
+                        + e.getMessage());
+
+                Platform.runLater(() -> {
+                    if (btnRegenerateImage != null) {
+                        btnRegenerateImage.setDisable(false);
+                        btnRegenerateImage.setText("🔄 Regenerate Image");
+                    }
+                    if (lblImageLoading != null) {
+                        lblImageLoading.setVisible(false);
+                    }
+                });
+            }
         }).start();
     }
 
@@ -296,13 +374,42 @@ public class AIRecipeResultController implements Initializable {
                     getClass().getResource("/fxml/ai_recipe_form.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) btnGenerateAnother.getScene().getWindow();
-            stage.setScene(new Scene(root, 800, 700));
-            stage.setTitle("🤖 AI Recipe Chef");
+            // Restaurer les valeurs du formulaire
+            AIRecipeFormController ctrl = loader.getController();
+            if (request != null) {
+                ctrl.restoreRequest(request);
+            }
+
+            // Trouver le stage depuis n'importe quel nœud disponible
+            Stage stage = getStage();
+            if (stage != null) {
+                stage.setScene(new Scene(root, 800, 700));
+                stage.setTitle("🤖 AI Recipe Chef");
+            }
 
         } catch (IOException e) {
             System.err.println("❌ onGenerateAnother : " + e.getMessage());
+            e.printStackTrace();
         }
+    }
+    private Stage getStage() {
+        if (btnSave != null
+                && btnSave.getScene() != null) {
+            return (Stage) btnSave.getScene().getWindow();
+        }
+        if (btnRegenerateImage != null
+                && btnRegenerateImage.getScene() != null) {
+            return (Stage) btnRegenerateImage.getScene().getWindow();
+        }
+        if (imageRecette != null
+                && imageRecette.getScene() != null) {
+            return (Stage) imageRecette.getScene().getWindow();
+        }
+        if (txtNom != null
+                && txtNom.getScene() != null) {
+            return (Stage) txtNom.getScene().getWindow();
+        }
+        return null;
     }
 
     // ─── Succès sauvegarde ────────────────────────────
@@ -329,8 +436,21 @@ public class AIRecipeResultController implements Initializable {
     }
     @FXML
     private void onClose() {
-        Stage stage = (Stage) btnGenerateAnother.getScene().getWindow();
-        stage.close();
+        Stage stage = null;
+
+        if (btnSave != null && btnSave.getScene() != null) {
+            stage = (Stage) btnSave.getScene().getWindow();
+        } else if (btnRegenerateImage != null
+                && btnRegenerateImage.getScene() != null) {
+            stage = (Stage) btnRegenerateImage.getScene().getWindow();
+        } else if (imageRecette != null
+                && imageRecette.getScene() != null) {
+            stage = (Stage) imageRecette.getScene().getWindow();
+        }
+
+        if (stage != null) {
+            stage.close();
+        }
     }
     @FXML
     private void onSave() {

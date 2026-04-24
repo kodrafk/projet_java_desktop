@@ -1,4 +1,4 @@
-package tn.esprit.projet.controllers;
+package tn.esprit.projet.gui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -326,7 +326,7 @@ public class AIRecipeFormController implements Initializable {
                     getClass().getResource("/fxml/ai_recipe_result.fxml"));
             Parent root = loader.load();
 
-            AIRecipeResultController ctrl = loader.getController();
+            tn.esprit.projet.gui.AIRecipeResultController ctrl = loader.getController();
             ctrl.setResult(result, request);
 
             Stage stage = (Stage) vboxForm.getScene().getWindow();
@@ -340,6 +340,62 @@ public class AIRecipeFormController implements Initializable {
         }
     }
 
+
+    /**
+     * Restaure les valeurs du formulaire depuis un request précédent
+     */
+    public void restoreRequest(AIRecipeRequest request) {
+        if (request == null) return;
+
+        restoreToggle(groupDishType,   request.getDishType());
+        restoreToggle(groupDifficulty, request.getDifficulty());
+        restoreToggle(groupCuisine,    request.getCuisineStyle());
+        restoreToggle(groupCalorie,    request.getCalorieRange());
+        restoreToggle(groupImageStyle, request.getImageStyle());
+
+        if (txtMaxTime != null)
+            txtMaxTime.setText(String.valueOf(request.getMaxTime()));
+        if (txtServings != null)
+            txtServings.setText(String.valueOf(request.getServings()));
+        if (txtExtraInstructions != null
+                && request.getExtraInstructions() != null)
+            txtExtraInstructions.setText(request.getExtraInstructions());
+
+        if (checkVegetarian != null)
+            checkVegetarian.setSelected(request.isVegetarian());
+        if (checkVegan != null)
+            checkVegan.setSelected(request.isVegan());
+        if (checkHalal != null)
+            checkHalal.setSelected(request.isHalal());
+        if (checkGlutenFree != null)
+            checkGlutenFree.setSelected(request.isGlutenFree());
+        if (checkNoLactose != null)
+            checkNoLactose.setSelected(request.isNoLactose());
+        if (checkNoNuts != null)
+            checkNoNuts.setSelected(request.isNoNuts());
+        if (checkNoEggs != null)
+            checkNoEggs.setSelected(request.isNoEggs());
+    }
+    /**
+     * Sélectionne le bon ToggleButton dans un groupe
+     */
+    private void restoreToggle(ToggleGroup group, String value) {
+        if (value == null || group == null) return;
+
+        for (Toggle toggle : group.getToggles()) {
+            if (toggle instanceof ToggleButton btn) {
+                String btnValue = btn.getUserData() != null
+                        ? btn.getUserData().toString()
+                        : btn.getText();
+
+                if (btnValue.equalsIgnoreCase(value)
+                        || btn.getText().equalsIgnoreCase(value)) {
+                    btn.setSelected(true);
+                    return;
+                }
+            }
+        }
+    }
     @FXML
     private void onCancel() {
         Stage stage = (Stage) vboxForm.getScene().getWindow();

@@ -10,7 +10,7 @@
             hbarPolicy="NEVER"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.projet.controllers.AIRecipeResultController"
+            fx:controller="tn.esprit.projet.gui.AIRecipeResultController"
             style="-fx-background-color: #F0F4F8;
                    -fx-background: #F0F4F8;
                    -fx-border-color: transparent;">
@@ -68,17 +68,36 @@
                         <DropShadow color="rgba(0,0,0,0.06)" radius="10" offsetY="4"/>
                     </effect>
 
-                    <StackPane>
+                    <StackPane prefWidth="308" prefHeight="220">
+
+                        <!-- Background placeholder -->
+                        <VBox alignment="CENTER"
+                              style="-fx-background-color: #F1F5F9;
+                 -fx-background-radius: 12;">
+                            <Label text="🍽️"
+                                   style="-fx-font-size: 40px;"/>
+                            <Label text="Loading image..."
+                                   style="-fx-font-size: 11px;
+                      -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+
+                        <!-- Image réelle -->
                         <ImageView fx:id="imageRecette"
-                                   fitWidth="308" fitHeight="220"
-                                   preserveRatio="true"/>
+                                   fitWidth="308"
+                                   fitHeight="220"
+                                   preserveRatio="false"
+                                   smooth="true"/>
+
+                        <!-- Loading overlay -->
                         <Label fx:id="lblImageLoading"
-                               text="Loading image..."
+                               text="⏳ Loading image..."
+                               visible="false"
                                style="-fx-background-color: rgba(0,0,0,0.5);
-                                      -fx-text-fill: white;
-                                      -fx-padding: 10 20;
-                                      -fx-background-radius: 8;
-                                      -fx-font-size: 12px;"/>
+                  -fx-text-fill: white;
+                  -fx-padding: 10 20;
+                  -fx-background-radius: 8;
+                  -fx-font-size: 12px;"/>
+
                     </StackPane>
 
                     <Button fx:id="btnRegenerateImage"
@@ -345,17 +364,18 @@
             <!-- ─── ACTION BUTTONS ─── -->
             <HBox spacing="14" alignment="CENTER">
 
-                <Button text="Generate Another Recipe"
+                <Button fx:id="btnGenerateAnother"
+                        text="Generate Another Recipe"
                         onAction="#onGenerateAnother"
                         prefHeight="50" prefWidth="220"
                         style="-fx-background-color: white;
-                               -fx-text-fill: #475569;
-                               -fx-font-size: 13px;
-                               -fx-font-weight: bold;
-                               -fx-background-radius: 12;
-                               -fx-border-color: #D1D5DB;
-                               -fx-border-radius: 12;
-                               -fx-cursor: hand;"/>
+               -fx-text-fill: #475569;
+               -fx-font-size: 13px;
+               -fx-font-weight: bold;
+               -fx-background-radius: 12;
+               -fx-border-color: #D1D5DB;
+               -fx-border-radius: 12;
+               -fx-cursor: hand;"/>
 
                 <!-- ✅ FIX : fx:id="btnSave" ajouté -->
                 <Button fx:id="btnSave"
