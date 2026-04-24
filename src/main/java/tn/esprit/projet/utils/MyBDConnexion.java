@@ -115,6 +115,29 @@ public class MyBDConnexion {
         try (java.sql.Statement st = cnx.createStatement()) {
             st.executeUpdate(create);
             System.out.println("[initComplaintsTable] Complaint Table ready.");
+            
+            // Add image_path to TEXT type safely
+            try (java.sql.PreparedStatement ps = cnx.prepareStatement(
+                    "SELECT COUNT(*) FROM information_schema.COLUMNS " +
+                            "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='complaint' AND COLUMN_NAME='image_path'")) {
+                java.sql.ResultSet rs = ps.executeQuery();
+                if (rs.next() && rs.getInt(1) == 0) {
+                    st.executeUpdate("ALTER TABLE `complaint` ADD COLUMN `image_path` TEXT");
+                } else {
+                    st.executeUpdate("ALTER TABLE `complaint` MODIFY COLUMN `image_path` TEXT");
+                }
+            }
+
+            // Add incident_date safely
+            try (java.sql.PreparedStatement ps = cnx.prepareStatement(
+                    "SELECT COUNT(*) FROM information_schema.COLUMNS " +
+                            "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='complaint' AND COLUMN_NAME='incident_date'")) {
+                java.sql.ResultSet rs = ps.executeQuery();
+                if (rs.next() && rs.getInt(1) == 0) {
+                    st.executeUpdate("ALTER TABLE `complaint` ADD COLUMN `incident_date` DATE");
+                }
+            }
+            
         } catch (SQLException e) {
             System.err.println("[initComplaintsTable] error : " + e.getMessage());
         }

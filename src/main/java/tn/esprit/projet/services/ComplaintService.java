@@ -17,8 +17,8 @@ public class ComplaintService implements CRUD<Complaint> {
 
     @Override
     public void ajouter(Complaint c) {
-        String req = "INSERT INTO complaint (user_id, title, description, phone_number, rate, date_of_complaint, status, image_path) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT INTO complaint (user_id, title, description, phone_number, rate, date_of_complaint, status, image_path, incident_date) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, c.getUserId());
             ps.setString(2, c.getTitle());
@@ -28,6 +28,11 @@ public class ComplaintService implements CRUD<Complaint> {
             ps.setTimestamp(6, Timestamp.valueOf(c.getDateOfComplaint()));
             ps.setString(7, c.getStatus());
             ps.setString(8, c.getImagePath());
+            if (c.getIncidentDate() != null) {
+                ps.setDate(9, java.sql.Date.valueOf(c.getIncidentDate()));
+            } else {
+                ps.setNull(9, java.sql.Types.DATE);
+            }
             ps.executeUpdate();
             
             ResultSet keys = ps.getGeneratedKeys();
@@ -42,7 +47,7 @@ public class ComplaintService implements CRUD<Complaint> {
 
     @Override
     public void modifier(Complaint c) {
-        String req = "UPDATE complaint SET title=?, description=?, phone_number=?, rate=?, status=?, image_path=? WHERE id=?";
+        String req = "UPDATE complaint SET title=?, description=?, phone_number=?, rate=?, status=?, image_path=?, incident_date=? WHERE id=?";
         try (PreparedStatement ps = cnx.prepareStatement(req)) {
             ps.setString(1, c.getTitle());
             ps.setString(2, c.getDescription());
@@ -50,7 +55,12 @@ public class ComplaintService implements CRUD<Complaint> {
             ps.setInt(4, c.getRate());
             ps.setString(5, c.getStatus());
             ps.setString(6, c.getImagePath());
-            ps.setInt(7, c.getId());
+            if (c.getIncidentDate() != null) {
+                ps.setDate(7, java.sql.Date.valueOf(c.getIncidentDate()));
+            } else {
+                ps.setNull(7, java.sql.Types.DATE);
+            }
+            ps.setInt(8, c.getId());
             ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -70,7 +80,7 @@ public class ComplaintService implements CRUD<Complaint> {
 
     @Override
     public Complaint getById(int id) {
-        String req = "SELECT c.*, u.first_name, u.last_name, cr.id as response_id, cr.response_content, cr.response_date " +
+        String req = "SELECT c.*, u.email, u.first_name, u.last_name, cr.id as response_id, cr.response_content, cr.response_date " +
                      "FROM complaint c " +
                      "JOIN user u ON c.user_id = u.id " +
                      "LEFT JOIN complaint_response cr ON c.id = cr.complaint_id " +
@@ -90,7 +100,7 @@ public class ComplaintService implements CRUD<Complaint> {
     @Override
     public List<Complaint> getAll() {
         List<Complaint> list = new ArrayList<>();
-        String req = "SELECT c.*, u.first_name, u.last_name, cr.id as response_id, cr.response_content, cr.response_date " +
+        String req = "SELECT c.*, u.email, u.first_name, u.last_name, cr.id as response_id, cr.response_content, cr.response_date " +
                      "FROM complaint c " +
                      "JOIN user u ON c.user_id = u.id " +
                      "LEFT JOIN complaint_response cr ON c.id = cr.complaint_id " +
@@ -108,7 +118,7 @@ public class ComplaintService implements CRUD<Complaint> {
 
     public List<Complaint> getByUserId(int userId) {
         List<Complaint> list = new ArrayList<>();
-        String req = "SELECT c.*, u.first_name, u.last_name, cr.id as response_id, cr.response_content, cr.response_date " +
+        String req = "SELECT c.*, u.email, u.first_name, u.last_name, cr.id as response_id, cr.response_content, cr.response_date " +
                      "FROM complaint c " +
                      "JOIN user u ON c.user_id = u.id " +
                      "LEFT JOIN complaint_response cr ON c.id = cr.complaint_id " +
@@ -162,6 +172,19 @@ public class ComplaintService implements CRUD<Complaint> {
         
         try {
             c.setImagePath(rs.getString("image_path"));
+        } catch (SQLException ignored) {
+        }
+        
+        try {
+            java.sql.Date idate = rs.getDate("incident_date");
+            if (idate != null) {
+                c.setIncidentDate(idate.toLocalDate());
+            }
+        } catch (SQLException ignored) {
+        }
+        
+        try {
+            c.setUserEmail(rs.getString("email"));
         } catch (SQLException ignored) {
         }
         

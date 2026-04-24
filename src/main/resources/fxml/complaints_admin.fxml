@@ -17,8 +17,10 @@
             <Label text="Review and respond to active user issues" style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
         </VBox>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button onAction="#handleExportExcel" text="Export to Excel" 
+        <Button onAction="#handleExportExcel" text="Excel" 
                 style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 16; -fx-font-weight: bold;"/>
+        <Button onAction="#handleExportPDF" text="PDF" 
+                style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 16; -fx-font-weight: bold;"/>
         <Button onAction="#handleRefresh" text="Refresh Data" 
                 style="-fx-background-color: #E2E8F0; -fx-text-fill: #475569; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 16;"/>
     </HBox>
@@ -30,32 +32,18 @@
             
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Search:" style="-fx-font-size: 12px; -fx-text-fill: #475569; font-weight: bold;"/>
-                <TextField fx:id="fldSearch" promptText="Search by title or status" 
+                <TextField fx:id="fldSearch" promptText="Search by title, status..." 
                            style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;" />
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Sort:" style="-fx-font-size: 12px; -fx-text-fill: #475569; font-weight: bold;"/>
+                <ComboBox fx:id="cmbSort" promptText="Sort By" style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6;"/>
             </HBox>
 
-            <TableView fx:id="tvComplaints" VBox.vgrow="ALWAYS" style="-fx-border-color: #E2E8F0; -fx-border-radius: 6;">
-                <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="50">
-                        <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="colUserName" text="User Name" prefWidth="120">
-                        <cellValueFactory><PropertyValueFactory property="userName"/></cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="colDate" text="Date" prefWidth="120">
-                        <cellValueFactory><PropertyValueFactory property="dateOfComplaint"/></cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="colTitle" text="Title" prefWidth="150">
-                        <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="colStatus" text="Status" prefWidth="100">
-                        <cellValueFactory><PropertyValueFactory property="status"/></cellValueFactory>
-                    </TableColumn>
-                </columns>
-                <columnResizePolicy>
-                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                </columnResizePolicy>
-            </TableView>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0;">
+                <content>
+                    <FlowPane fx:id="cardsContainer" hgap="15" vgap="15" style="-fx-padding: 5;"/>
+                </content>
+            </ScrollPane>
         </VBox>
 
         <!-- Response Panel (Right side) -->
@@ -83,9 +71,6 @@
                           style="-fx-control-inner-background: #F1F5F9; -fx-border-color: #CBD5E1; -fx-border-radius: 6;"/>
             </VBox>
 
-            <Button fx:id="btnViewImage" text="View Attached Image" onAction="#handleViewImage" 
-                    visible="false" managed="false" style="-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12; -fx-cursor: hand;"/>
-
             <Separator style="-fx-background-color: #E2E8F0;"/>
             
             <Label text="Admin Action" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
@@ -96,7 +81,11 @@
             </VBox>
 
             <VBox spacing="5" VBox.vgrow="ALWAYS">
-                <Label text="Response *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Response *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="✨ AI Suggest" onAction="#handleSuggestResponseAI" style="-fx-background-color: #F0FDF4; -fx-text-fill: #166534; -fx-font-size: 10px; -fx-padding: 3 8; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                </HBox>
                 <TextArea fx:id="fldResponse" promptText="Type the resolution/response here..." wrapText="true" VBox.vgrow="ALWAYS" 
                           style="-fx-control-inner-background: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6;"/>
             </VBox>

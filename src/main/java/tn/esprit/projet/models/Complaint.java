@@ -1,6 +1,7 @@
 package tn.esprit.projet.models;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Complaint {
     private int id;
@@ -10,9 +11,11 @@ public class Complaint {
     private String phoneNumber;
     private int rate;
     private LocalDateTime dateOfComplaint;
+    private LocalDate incidentDate;
     private String status;
     private ComplaintResponse responseObj;
     private String userName;
+    private String userEmail;
     private String imagePath;
 
     public Complaint() {
@@ -38,11 +41,20 @@ public class Complaint {
     public String getPhoneNumber() { return phoneNumber; }
     public int getRate() { return rate; }
     public LocalDateTime getDateOfComplaint() { return dateOfComplaint; }
+    public LocalDate getIncidentDate() { return incidentDate; }
     public String getStatus() { return status; }
     public String getAdminResponse() { return responseObj != null ? responseObj.getResponseContent() : null; }
     public ComplaintResponse getResponseObj() { return responseObj; }
     public String getUserName() { return userName; }
+    public String getUserEmail() { return userEmail; }
     public String getImagePath() { return imagePath; }
+
+    public java.util.List<String> getImagePathsList() {
+        if (imagePath == null || imagePath.trim().isEmpty()) {
+            return new java.util.ArrayList<>();
+        }
+        return java.util.Arrays.asList(imagePath.split(";"));
+    }
 
     // Setters
     public void setId(int id) { this.id = id; }
@@ -52,6 +64,7 @@ public class Complaint {
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
     public void setRate(int rate) { this.rate = rate; }
     public void setDateOfComplaint(LocalDateTime dateOfComplaint) { this.dateOfComplaint = dateOfComplaint; }
+    public void setIncidentDate(LocalDate incidentDate) { this.incidentDate = incidentDate; }
     public void setStatus(String status) { this.status = status; }
     public void setAdminResponse(String adminResponse) {
         if (adminResponse == null) {
@@ -68,5 +81,6 @@ public class Complaint {
         this.responseObj = responseObj;
     }
     public void setUserName(String userName) { this.userName = userName; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 }
