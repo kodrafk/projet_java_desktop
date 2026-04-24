@@ -44,20 +44,34 @@
             </HBox>
 
             <!-- Menu title -->
-            <Label text="MAIN MENU"
+            <Label text="MAIN"
                    style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 16 16 8 18;"/>
 
             <!-- Sidebar Buttons -->
-            <VBox spacing="4" style="-fx-padding: 0 10 0 10;">
+            <VBox spacing="2" style="-fx-padding: 0 10 0 10;">
 
                 <Button fx:id="btnDashboard" text="Dashboard" onAction="#handleDashboard"
                         prefHeight="42" maxWidth="Infinity"
                         style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-size: 12.5px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+            </VBox>
 
+            <Label text="MANAGEMENT"
+                   style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 14 16 8 18;"/>
+
+            <VBox spacing="2" style="-fx-padding: 0 10 0 10;">
                 <Button fx:id="btnUsers" text="Users" onAction="#handleUsers"
                         prefHeight="42" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
 
+                <Button fx:id="btnStatistics" text="Statistics" onAction="#handleStatistics"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+            </VBox>
+
+            <Label text="CONTENT"
+                   style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 14 16 8 18;"/>
+
+            <VBox spacing="2" style="-fx-padding: 0 10 0 10;">
                 <Button fx:id="btnIngredients" text="Ingredients" onAction="#handleIngredients"
                         prefHeight="42" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
@@ -66,15 +80,28 @@
                         prefHeight="42" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
 
-                <Button fx:id="btnComplaints" text="Complaints" onAction="#handleComplaints"
-                        prefHeight="42" maxWidth="Infinity"
-                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
-
                 <Button fx:id="btnEvents" text="Events" onAction="#handleEvents"
                         prefHeight="42" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
 
-                <Button fx:id="btnBlogs" text="Blogs" onAction="#handleBlogs"
+                <Button fx:id="btnSponsors" text="Sponsors" onAction="#handleSponsors"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+            </VBox>
+
+            <Label text="MODULES"
+                   style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 14 16 8 18;"/>
+
+            <VBox spacing="2" style="-fx-padding: 0 10 0 10;">
+                <Button fx:id="btnSMS" text="SMS" onAction="#handleSMS"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnNutrition" text="Nutrition" onAction="#handleNutrition"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+
+                <Button fx:id="btnWellness" text="Wellness" onAction="#handleWellness"
                         prefHeight="42" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
             </VBox>
@@ -82,19 +109,14 @@
             <Region VBox.vgrow="ALWAYS"/>
 
             <!-- Bottom block -->
-            <VBox spacing="10" style="-fx-padding: 12 12 16 12;">
-                <VBox spacing="7"
-                      style="-fx-background-color: #163322; -fx-background-radius: 12; -fx-padding: 14;">
-                    <Label text="Administration Area"
-                           style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <Label text="Manage all modules and monitor platform activity from this centralized dashboard."
-                           wrapText="true"
-                           style="-fx-font-size: 10px; -fx-text-fill: #7AAA90;"/>
-                </VBox>
+            <VBox spacing="8" style="-fx-padding: 12 12 16 12;">
+                <Button text="← Back to Site" onAction="#handleBackToSite"
+                        prefHeight="38" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
 
-                <Button fx:id="btnLogout" text="Log Out"
-                        prefHeight="40" maxWidth="Infinity"
-                        style="-fx-background-color: #991B1B; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;"/>
+                <Button fx:id="btnLogout" text="Logout" onAction="#handleLogout"
+                        prefHeight="38" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
             </VBox>
         </VBox>
     </left>

@@ -187,11 +187,11 @@
                               -fx-text-fill: #1E293B;"/>
 
                 <Label fx:id="labelUrgent" text="—"
-                       style="-fx-font-size: 13px; -fx-text-fill: #DC2626;"/>
+                       style="-fx-font-size: 13px; -fx-text-fill: #EA580C; -fx-font-weight: bold;"/>
                 <Label fx:id="labelBientot" text="—"
-                       style="-fx-font-size: 13px; -fx-text-fill: #F59E0B;"/>
+                       style="-fx-font-size: 13px; -fx-text-fill: #DC2626; -fx-font-weight: bold;"/>
                 <Label fx:id="labelOk" text="—"
-                       style="-fx-font-size: 13px; -fx-text-fill: #10B981;"/>
+                       style="-fx-font-size: 13px; -fx-text-fill: #10B981; -fx-font-weight: bold;"/>
             </VBox>
 
             <!-- BOUTON -->

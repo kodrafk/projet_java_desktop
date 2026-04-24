@@ -139,6 +139,85 @@
                     </HBox>
                     <Label fx:id="lblPaginationInfo" text="Page 1 sur 1" style="-fx-text-fill: #64748B; -fx-font-size: 13px;"/>
                 </VBox>
+                <!-- ═══════════════════════════════════════════════════════ -->
+                <!-- 🤖 RECOMMENDED FOR YOU SECTION                         -->
+                <!-- ═══════════════════════════════════════════════════════ -->
+                <VBox fx:id="recommendationSection"
+                      spacing="20"
+                      visible="false"
+                      managed="false"
+                      style="-fx-background-color: #F0FDF4;
+             -fx-background-radius: 20;
+             -fx-border-color: #A7F3D0;
+             -fx-border-radius: 20;
+             -fx-padding: 25 30 25 30;">
+
+                    <!-- Loading State -->
+                    <VBox fx:id="recommendationLoading"
+                          alignment="CENTER"
+                          spacing="15"
+                          visible="false"
+                          managed="false"
+                          style="-fx-padding: 30 0;">
+                        <ProgressIndicator style="-fx-progress-color: #1F4D3A;"/>
+                        <Label text="🤖 AI is analyzing your preferences..."
+                               style="-fx-font-size: 14px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+
+                    <!-- Empty State -->
+                    <VBox fx:id="recommendationEmpty"
+                          alignment="CENTER"
+                          spacing="12"
+                          visible="false"
+                          managed="false"
+                          style="-fx-padding: 30 0;">
+                        <Label text="🤖" style="-fx-font-size: 40px;"/>
+                        <Label text="No recommendations yet"
+                               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        <Label text="Add recipes to favorites to get personalized suggestions"
+                               style="-fx-text-fill: #64748B;"/>
+                        <Button text="❤️ Browse Recipes"
+                                onAction="#handleBrowseRecipesForReco"
+                                style="-fx-background-color: #1F4D3A; -fx-text-fill: white;
+                       -fx-font-weight: bold; -fx-background-radius: 10;
+                       -fx-padding: 10 25; -fx-cursor: hand;"/>
+                    </VBox>
+
+                    <!-- Header -->
+                    <HBox fx:id="recommendationHeader"
+                          alignment="CENTER_LEFT"
+                          spacing="10"
+                          visible="true"
+                          managed="true">
+                        <Label text="🤖" style="-fx-font-size: 28px;"/>
+                        <VBox spacing="2">
+                            <Label text="Recommended For You"
+                                   style="-fx-font-size: 20px; -fx-font-weight: 900; -fx-text-fill: #1E293B;"/>
+                            <Label text="Personalized recipes based on your favorites &amp; available stock"
+                                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnRefreshRecommendations"
+                                text="🔄 Refresh"
+                                onAction="#handleRefreshRecommendations"
+                                style="-fx-background-color: transparent;
+                       -fx-text-fill: #1F4D3A; -fx-font-weight: bold;
+                       -fx-border-color: #A7F3D0; -fx-border-radius: 20;
+                       -fx-background-radius: 20; -fx-padding: 8 18;
+                       -fx-cursor: hand; -fx-font-size: 13px;"/>
+                    </HBox>
+
+                    <!-- Separator -->
+                    <Separator style="-fx-background-color: #A7F3D0; -fx-pref-height: 1;"/>
+
+                    <!-- Cards Container (scrollable horizontal) -->
+                    <HBox fx:id="recommendationCardsContainer"
+                          spacing="20"
+                          alignment="CENTER_LEFT"
+                          style="-fx-padding: 5 0 5 0;">
+                        <!-- Cartes ajoutées dynamiquement dans le controller -->
+                    </HBox>
+                </VBox>
             </VBox>
         </VBox>
     </ScrollPane>

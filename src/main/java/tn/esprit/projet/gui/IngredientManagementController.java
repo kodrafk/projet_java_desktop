@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.concurrent.Task;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.projet.models.CourseItem;
 import tn.esprit.projet.models.Ingredient;
@@ -25,10 +26,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Pattern;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
+import java.util.List;
 
 public class IngredientManagementController implements Initializable {
 
@@ -50,17 +61,7 @@ public class IngredientManagementController implements Initializable {
     @FXML private ComboBox<String> cmbFilterCategory;
     @FXML private ComboBox<String> cmbSortBy;
 
-    // Table
-    @FXML private TableView<Ingredient> tableIngredients;
-    @FXML private TableColumn<Ingredient, String> colImage;
-    @FXML private TableColumn<Ingredient, Boolean> colSelect;
-    @FXML private TableColumn<Ingredient, String> colNom;
-    @FXML private TableColumn<Ingredient, String> colCategorie;
-    @FXML private TableColumn<Ingredient, String> colQuantite;
-    @FXML private TableColumn<Ingredient, LocalDate> colDatePeremption;
-    @FXML private TableColumn<Ingredient, String> colStatus;
-    @FXML private TableColumn<Ingredient, String> colNotes;
-    @FXML private TableColumn<Ingredient, Void> colActions;
+
 
     // Add/Edit Modal
     @FXML private StackPane formOverlay;
@@ -90,7 +91,15 @@ public class IngredientManagementController implements Initializable {
     @FXML private VBox shoppingListContainer;
     @FXML private HBox emptyShoppingState;
     @FXML private Label lblShoppingCount;
+    @FXML private GridPane gridIngredients;
+    @FXML private HBox paginationBar;
+    @FXML private Button btnPrevPage;
+    @FXML private Button btnNextPage;
+    @FXML private Label lblPageInfo;
 
+    private int currentPage = 0;
+    private static final int ITEMS_PER_PAGE = 9;
+    private List<Ingredient> currentDisplayList = new ArrayList<>();
     // ═══════════════════════════════════
     // SERVICES & VARIABLES
     // ═══════════════════════════════════
@@ -124,11 +133,13 @@ public class IngredientManagementController implements Initializable {
         courseService = new CourseService();
 
         setupComboBoxes();
-        setupTableColumns();
+
         loadTableData();
         updateStats();
         setupSearchAndFilters();
-        loadOutOfStockComboBox();
+        if (cmbOutOfStock != null) {
+            loadOutOfStockComboBox();
+        }
     }
 
     // ═══════════════════════════════════
@@ -170,179 +181,9 @@ public class IngredientManagementController implements Initializable {
     // TABLE COLUMNS SETUP
     // ═══════════════════════════════════
 
-    private void setupTableColumns() {
-        if (tableIngredients == null) return;
 
-        // Image column
-        if (colImage != null) {
-            colImage.setCellValueFactory(new PropertyValueFactory<>("image"));
-            colImage.setCellFactory(column -> new TableCell<>() {
-                private final ImageView imageView = new ImageView();
-                {
-                    imageView.setFitWidth(40);
-                    imageView.setFitHeight(40);
-                    imageView.setPreserveRatio(true);
-                }
 
-                @Override
-                protected void updateItem(String imageUrl, boolean empty) {
-                    super.updateItem(imageUrl, empty);
-                    if (empty || imageUrl == null || imageUrl.isBlank()) {
-                        setGraphic(null);
-                    } else {
-                        try {
-                            Image img = new Image(imageUrl, 40, 40, true, true, true);
-                            imageView.setImage(img);
-                            javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(40, 40);
-                            clip.setArcWidth(10);
-                            clip.setArcHeight(10);
-                            imageView.setClip(clip);
-                            setGraphic(imageView);
-                        } catch (Exception e) {
-                            setGraphic(null);
-                        }
-                    }
-                    setAlignment(Pos.CENTER);
-                }
-            });
-        }
 
-        // Select column
-        if (colSelect != null) {
-            colSelect.setCellValueFactory(cellData -> cellData.getValue().selectedProperty());
-            colSelect.setCellFactory(CheckBoxTableCell.forTableColumn(colSelect));
-            colSelect.setEditable(true);
-            tableIngredients.setEditable(true);
-        }
-
-        // Name column
-        if (colNom != null) {
-            colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
-            colNom.setCellFactory(column -> new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        setText(item);
-                        setStyle("-fx-font-weight: bold; -fx-text-fill: #1E293B;");
-                    }
-                }
-            });
-        }
-
-        // Category column
-        if (colCategorie != null) {
-            colCategorie.setCellValueFactory(new PropertyValueFactory<>("categorie"));
-            colCategorie.setCellFactory(column -> new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item);
-                        setStyle("-fx-text-fill: #475569;");
-                    }
-                }
-            });
-        }
-
-        // Quantity column
-        if (colQuantite != null) {
-            colQuantite.setCellValueFactory(cellData -> {
-                Ingredient i = cellData.getValue();
-                String unit = i.getUnite() != null ? " " + i.getUnite() : "";
-                return new SimpleStringProperty(i.getQuantite() + unit);
-            });
-        }
-
-        // Expiry date column
-        if (colDatePeremption != null) {
-            colDatePeremption.setCellValueFactory(new PropertyValueFactory<>("datePeremption"));
-            colDatePeremption.setCellFactory(column -> new TableCell<>() {
-                @Override
-                protected void updateItem(LocalDate item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText("—");
-                        setStyle("-fx-text-fill: #94A3B8;");
-                    } else {
-                        setText(item.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                        setStyle("-fx-text-fill: #475569;");
-                    }
-                }
-            });
-        }
-
-        // Status column
-        if (colStatus != null) {
-            colStatus.setCellValueFactory(this::getStatusCell);
-            colStatus.setCellFactory(column -> new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setGraphic(null);
-                    } else {
-                        Label label = new Label(item);
-                        String style = "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 4 10; -fx-background-radius: 6; ";
-                        if (item.contains("Expired")) {
-                            style += "-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626;";
-                        } else if (item.contains("Soon")) {
-                            style += "-fx-background-color: #FEF3C7; -fx-text-fill: #D97706;";
-                        } else {
-                            style += "-fx-background-color: #DCFCE7; -fx-text-fill: #16A34A;";
-                        }
-                        label.setStyle(style);
-                        setGraphic(label);
-                    }
-                }
-            });
-        }
-
-        // Notes column
-        if (colNotes != null) {
-            colNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
-        }
-
-        // Actions column
-        if (colActions != null) {
-            colActions.setCellFactory(param -> new TableCell<>() {
-                private final Button editBtn = new Button("✏");
-                private final Button deleteBtn = new Button("🗑");
-                private final HBox buttons = new HBox(8, editBtn, deleteBtn);
-                {
-                    buttons.setAlignment(Pos.CENTER);
-                    editBtn.setStyle("-fx-background-color: #F1F5F9; -fx-text-fill: #475569; -fx-font-size: 14px; -fx-background-radius: 6; -fx-cursor: hand;");
-                    deleteBtn.setStyle("-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-font-size: 14px; -fx-background-radius: 6; -fx-cursor: hand;");
-                    editBtn.setOnAction(e -> handleEdit(getTableView().getItems().get(getIndex())));
-                    deleteBtn.setOnAction(e -> handleDelete(getTableView().getItems().get(getIndex())));
-                }
-
-                @Override
-                protected void updateItem(Void item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setGraphic(empty ? null : buttons);
-                }
-            });
-        }
-    }
-
-    private SimpleStringProperty getStatusCell(TableColumn.CellDataFeatures<Ingredient, String> cellData) {
-        Ingredient i = cellData.getValue();
-        if (i.getDatePeremption() == null) return new SimpleStringProperty("— No date");
-
-        LocalDate today = LocalDate.now();
-        if (i.getDatePeremption().isBefore(today)) return new SimpleStringProperty("❌ Expired");
-
-        long daysRemaining = java.time.temporal.ChronoUnit.DAYS.between(today, i.getDatePeremption());
-        if (daysRemaining <= 3) return new SimpleStringProperty("⚠️ " + daysRemaining + "d Soon");
-
-        return new SimpleStringProperty("✅ " + daysRemaining + " days");
-    }
 
     // ═══════════════════════════════════
     // TABLE DATA & FILTERS
@@ -351,7 +192,8 @@ public class IngredientManagementController implements Initializable {
     private void loadTableData() {
         List<Ingredient> all = ingredientService.getAll();
         filteredIngredients = new FilteredList<>(FXCollections.observableArrayList(all), p -> true);
-        applyFilters();
+        buildIngredientsGrid(filteredIngredients);
+        updateStats();
     }
 
     private void setupSearchAndFilters() {
@@ -395,7 +237,9 @@ public class IngredientManagementController implements Initializable {
             }
         }
 
-        tableIngredients.setItems(sortedList);
+        currentDisplayList = new ArrayList<>(sortedList);
+        currentPage = 0;
+        displayCurrentPage();
         lblTableInfo.setText("Showing " + sortedList.size() + " ingredient(s)");
     }
 
@@ -616,6 +460,7 @@ public class IngredientManagementController implements Initializable {
     // ═══════════════════════════════════
 
     private void loadOutOfStockComboBox() {
+        if (cmbOutOfStock == null) return;
         List<Ingredient> outOfStock = substitutionService.getOutOfStockIngredients();
         cmbOutOfStock.setItems(FXCollections.observableArrayList(outOfStock));
 
@@ -1202,5 +1047,170 @@ public class IngredientManagementController implements Initializable {
             e.printStackTrace();
             showToast("❌ Error opening scanner: " + e.getMessage());
         }
+    }
+    @FXML
+    public void handleShowCalendar(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/expiry_calendar.fxml"));
+            //charger contenu depuis fxml
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Ingredient Expiry Calendar");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            //mettre contenu dans stage
+            stage.setScene(new Scene(root));
+
+            stage.setResizable(false);
+
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading expiry calendar: " + e.getMessage());
+        }
+    }
+    private void buildIngredientsGrid(javafx.collections.ObservableList<Ingredient> ingredients) {
+        if (gridIngredients == null) return;
+
+        currentDisplayList = new ArrayList<>(ingredients);
+        currentPage = 0;
+        displayCurrentPage();
+    }
+
+    private void displayCurrentPage() {
+        gridIngredients.getChildren().clear();
+
+        int totalItems = currentDisplayList.size();
+        int totalPages = Math.max(1, (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE));
+
+        if (currentPage >= totalPages) currentPage = totalPages - 1;
+        if (currentPage < 0) currentPage = 0;
+
+        int startIndex = currentPage * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+
+        int col = 0;
+        int row = 0;
+
+        for (int i = startIndex; i < endIndex; i++) {
+            VBox card = createIngredientCard(currentDisplayList.get(i));
+            GridPane.setConstraints(card, col, row);
+            gridIngredients.getChildren().add(card);
+
+            col++;
+            if (col == 3) {
+                col = 0;
+                row++;
+            }
+        }
+
+        // Update pagination UI
+        if (lblPageInfo != null)
+            lblPageInfo.setText("Page " + (currentPage + 1) + " / " + totalPages);
+        if (btnPrevPage != null)
+            btnPrevPage.setDisable(currentPage <= 0);
+        if (btnNextPage != null)
+            btnNextPage.setDisable(currentPage >= totalPages - 1);
+    }
+    @FXML
+    private void handlePrevPage(ActionEvent event) {
+        if (currentPage > 0) {
+            currentPage--;
+            displayCurrentPage();
+        }
+    }
+
+    @FXML
+    private void handleNextPage(ActionEvent event) {
+        int totalPages = (int) Math.ceil((double) currentDisplayList.size() / ITEMS_PER_PAGE);
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            displayCurrentPage();
+        }
+    }
+    private VBox createIngredientCard(Ingredient i) {
+        VBox card = new VBox(10);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setPrefWidth(280);
+        card.setPrefHeight(300);
+        card.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-border-color: #E2E8F0;" +
+                        "-fx-border-radius: 16;" +
+                        "-fx-padding: 16;" +
+                        "-fx-cursor: hand;"
+        );
+
+        // Image
+        StackPane imageBox = new StackPane();
+        imageBox.setPrefSize(120, 120);
+        imageBox.setMaxSize(120, 120);
+        imageBox.setStyle("-fx-background-color: #F8FAFC; -fx-background-radius: 14;");
+        ImageView img = new ImageView();
+        img.setFitWidth(120);
+        img.setFitHeight(120);
+        img.setPreserveRatio(true);
+        if (i.getImage() != null && !i.getImage().isBlank()) {
+            try {
+                img.setImage(new Image(i.getImage(), true));
+                javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(120, 120);
+                clip.setArcWidth(20);
+                clip.setArcHeight(20);
+                img.setClip(clip);
+            } catch (Exception ignored) {}
+        }
+        imageBox.getChildren().add(img);
+
+        // Nom
+        Label lblNom = new Label(i.getNom() != null ? i.getNom() : "—");
+        lblNom.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;");
+
+        // Catégorie
+        Label lblCat = new Label(i.getCategorie() != null ? i.getCategorie() : "—");
+        lblCat.setStyle("-fx-font-size: 12px; -fx-text-fill: #64748B;");
+
+        // Quantité + unité
+        String unit = (i.getUnite() != null) ? " " + i.getUnite() : "";
+        Label lblQty = new Label(i.getQuantite() + unit);
+        lblQty.setStyle("-fx-font-size: 12px; -fx-text-fill: #475569;");
+
+        // Status
+        Label lblStatus = new Label(getStatusText(i));
+        lblStatus.setStyle(getStatusStyle(i));
+
+        // Actions
+        HBox actions = new HBox(8);
+        actions.setAlignment(Pos.CENTER);
+        Button editBtn = new Button("✏");
+        editBtn.setStyle("-fx-background-color: #F1F5F9; -fx-text-fill: #475569; -fx-font-size: 12px; -fx-background-radius: 6; -fx-cursor: hand;");
+        editBtn.setOnAction(e -> handleEdit(i));
+        Button deleteBtn = new Button("🗑");
+        deleteBtn.setStyle("-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-font-size: 12px; -fx-background-radius: 6; -fx-cursor: hand;");
+        deleteBtn.setOnAction(e -> handleDelete(i));
+        actions.getChildren().addAll(editBtn, deleteBtn);
+
+        card.getChildren().addAll(imageBox, lblNom, lblCat, lblQty, lblStatus, actions);
+        return card;
+    }
+    private String getStatusText(Ingredient i) {
+        if (i.getDatePeremption() == null) return "— No date";
+        LocalDate today = LocalDate.now();
+        if (i.getDatePeremption().isBefore(today)) return "❌ Expired";
+        long days = java.time.temporal.ChronoUnit.DAYS.between(today, i.getDatePeremption());
+        if (days <= 3) return "⚠️ " + days + "d Soon";
+        return "✅ " + days + " days";
+    }
+
+    private String getStatusStyle(Ingredient i) {
+        if (i.getDatePeremption() == null)
+            return "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 4 10; -fx-background-radius: 6; -fx-background-color: #F1F5F9; -fx-text-fill: #94A3B8;";
+        LocalDate today = LocalDate.now();
+        if (i.getDatePeremption().isBefore(today))
+            return "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 4 10; -fx-background-radius: 6; -fx-background-color: #FEE2E2; -fx-text-fill: #DC2626;";
+        long days = java.time.temporal.ChronoUnit.DAYS.between(today, i.getDatePeremption());
+        if (days <= 3)
+            return "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 4 10; -fx-background-radius: 6; -fx-background-color: #FEF3C7; -fx-text-fill: #D97706;";
+        return "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 4 10; -fx-background-radius: 6; -fx-background-color: #DCFCE7; -fx-text-fill: #16A34A;";
     }
 }

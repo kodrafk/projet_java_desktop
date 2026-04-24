@@ -30,11 +30,14 @@ public class AdminLayoutController {
 
     @FXML private Button btnDashboard;
     @FXML private Button btnUsers;
+    @FXML private Button btnStatistics;
     @FXML private Button btnIngredients;
     @FXML private Button btnRecipes;
-    @FXML private Button btnComplaints;
     @FXML private Button btnEvents;
-    @FXML private Button btnBlogs;
+    @FXML private Button btnSponsors;
+    @FXML private Button btnSMS;
+    @FXML private Button btnNutrition;
+    @FXML private Button btnWellness;
     @FXML private Button btnLogout;
 
     @FXML private Label lblTotalUsers;
@@ -137,43 +140,70 @@ public class AdminLayoutController {
     @FXML
     private void handleUsers(ActionEvent event) {
         resetSidebarStyles();
-        btnUsers.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnUsers != null) btnUsers.setStyle(ACTIVE_BUTTON_STYLE);
         showPlaceholder("Users Management");
+    }
+
+    @FXML
+    private void handleStatistics(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnStatistics != null) btnStatistics.setStyle(ACTIVE_BUTTON_STYLE);
+        showPlaceholder("Statistics");
     }
 
     @FXML
     private void handleIngredients(ActionEvent event) {
         resetSidebarStyles();
-        btnIngredients.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnIngredients != null) btnIngredients.setStyle(ACTIVE_BUTTON_STYLE);
         loadPage("/fxml/ingredient_management.fxml");
     }
 
     @FXML
     private void handleRecipes(ActionEvent event) {
         resetSidebarStyles();
-        btnRecipes.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnRecipes != null) btnRecipes.setStyle(ACTIVE_BUTTON_STYLE);
         loadPage("/fxml/recipe_management.fxml");
-    }
-
-    @FXML
-    private void handleComplaints(ActionEvent event) {
-        resetSidebarStyles();
-        btnComplaints.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Complaints Management");
     }
 
     @FXML
     private void handleEvents(ActionEvent event) {
         resetSidebarStyles();
-        btnEvents.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnEvents != null) btnEvents.setStyle(ACTIVE_BUTTON_STYLE);
         showPlaceholder("Events Management");
     }
 
     @FXML
-    private void handleBlogs(ActionEvent event) {
+    private void handleSponsors(ActionEvent event) {
         resetSidebarStyles();
-        btnBlogs.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Blogs Management");
+        if (btnSponsors != null) btnSponsors.setStyle(ACTIVE_BUTTON_STYLE);
+        showPlaceholder("Sponsors Management");
+    }
+
+    @FXML
+    private void handleSMS(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnSMS != null) btnSMS.setStyle(ACTIVE_BUTTON_STYLE);
+        showPlaceholder("SMS Module");
+    }
+
+    @FXML
+    private void handleNutrition(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnNutrition != null) btnNutrition.setStyle(ACTIVE_BUTTON_STYLE);
+        showPlaceholder("Nutrition Module");
+    }
+
+    @FXML
+    private void handleWellness(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnWellness != null) btnWellness.setStyle(ACTIVE_BUTTON_STYLE);
+        showPlaceholder("Wellness Module");
+    }
+
+    @FXML
+    private void handleBackToSite(ActionEvent event) {
+        System.out.println("Back to Site clicked");
+        // TODO: navigate back to main_layout
     }
 
     @FXML
@@ -187,11 +217,14 @@ public class AdminLayoutController {
     private void resetSidebarStyles() {
         if (btnDashboard != null) btnDashboard.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnUsers != null) btnUsers.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnStatistics != null) btnStatistics.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnIngredients != null) btnIngredients.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnRecipes != null) btnRecipes.setStyle(DEFAULT_BUTTON_STYLE);
-        if (btnComplaints != null) btnComplaints.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnEvents != null) btnEvents.setStyle(DEFAULT_BUTTON_STYLE);
-        if (btnBlogs != null) btnBlogs.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnSponsors != null) btnSponsors.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnSMS != null) btnSMS.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnNutrition != null) btnNutrition.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnWellness != null) btnWellness.setStyle(DEFAULT_BUTTON_STYLE);
     }
 
     private void showHomePage() {

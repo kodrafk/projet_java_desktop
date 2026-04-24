@@ -11,11 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import tn.esprit.projet.models.Ingredient;
-import tn.esprit.projet.models.Recette;
-import tn.esprit.projet.models.RecetteIngredient;
-import tn.esprit.projet.services.IngredientService;
-import tn.esprit.projet.services.RecetteService;
+import tn.esprit.projet.models.*;
+import tn.esprit.projet.services.*;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -28,8 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import java.io.IOException;
-import tn.esprit.projet.models.MealPlan;
-import tn.esprit.projet.services.MealPlanService;
+
 import tn.esprit.projet.controllers.MealPlanTrackingController;
 import javafx.scene.control.Alert;
 public class RecipeManagementController implements Initializable {
@@ -99,16 +95,26 @@ public class RecipeManagementController implements Initializable {
     @FXML private HBox toastNotification;
     @FXML private Label lblToastIcon;
     @FXML private Label lblToastMessage;
+    // Recommendation Section
+    @FXML private VBox recommendationSection;
+    @FXML private VBox recommendationLoading;
+    @FXML private VBox recommendationEmpty;
+    @FXML private HBox recommendationHeader;
+    @FXML private HBox recommendationCardsContainer;
+    @FXML private Button btnRefreshRecommendations;
 
     // Data
     private RecetteService recetteService;
     private IngredientService ingredientService;
+    private RecetteFavorisService favorisService;
+    private static final int CURRENT_USER_ID = 1;
+    private boolean showFavoritesOnly = false;
     private FilteredList<Recette> filteredRecipes;
     private Recette currentRecette = null;
     private boolean isEditMode = false;
     private List<TextField> stepFields = new ArrayList<>();
     private Map<Integer, RecetteIngredient> selectedIngredientsMap = new HashMap<>();
-
+    private RecipeRecommendationService recommendationService;
     private int currentPage = 1;
     private int itemsPerPage = 6;
     private int totalPages = 1;
@@ -130,7 +136,8 @@ public class RecipeManagementController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         recetteService = new RecetteService();
         ingredientService = new IngredientService();
-        
+        favorisService = new RecetteFavorisService();
+        recommendationService = new RecipeRecommendationService();
         setupTable();
         setupFilters();
         setupSearchListener();
@@ -170,34 +177,50 @@ public class RecipeManagementController implements Initializable {
                 }
             });
         }
+        loadRecommendations();
     }
 
     private void renderTypePills() {
         filterPillsContainer.getChildren().clear();
-        
+
         // "ALL" Pill
-        Button allPill = createPill("🍽️ ALL", "All".equals(currentTypeFilter));
+        Button allPill = createPill("🍽️ ALL", "All".equals(currentTypeFilter) && !showFavoritesOnly);
         allPill.setOnAction(e -> {
             currentTypeFilter = "All";
+            showFavoritesOnly = false;
             currentPage = 1;
             renderTypePills();
             applyFilters();
         });
         filterPillsContainer.getChildren().add(allPill);
-        
-        // Other Pills
+
+        // Type Pills
         for (int i = 0; i < TYPES_LABELS.length; i++) {
             String label = TYPES_LABELS[i];
             String emoji = TYPES_EMOJIS[i];
-            Button pill = createPill(emoji + " " + label.toUpperCase(), label.equals(currentTypeFilter));
+            Button pill = createPill(emoji + " " + label.toUpperCase(),
+                    label.equals(currentTypeFilter) && !showFavoritesOnly);
             pill.setOnAction(e -> {
                 currentTypeFilter = label;
+                showFavoritesOnly = false;
                 currentPage = 1;
                 renderTypePills();
                 applyFilters();
             });
             filterPillsContainer.getChildren().add(pill);
         }
+
+        // Favorites Pill
+        int favCount = favorisService.countFavorites(CURRENT_USER_ID);
+        Button favPill = createPill("❤️ FAVORITES (" + favCount + ")", showFavoritesOnly);
+        favPill.setOnAction(e -> {
+            showFavoritesOnly = true;
+            currentTypeFilter = "All";
+            currentPage = 1;
+            renderTypePills();
+            applyFilters();
+        });
+        filterPillsContainer.getChildren().add(favPill);
     }
 
     private Button createPill(String text, boolean isActive) {
@@ -272,17 +295,41 @@ public class RecipeManagementController implements Initializable {
         typeBadge.setStyle("-fx-background-color: " + badgeColor + "; -fx-text-fill: white; -fx-padding: 6 12; -fx-background-radius: 8; -fx-font-size: 11px; -fx-font-weight: 900;");
         StackPane.setAlignment(typeBadge, Pos.TOP_LEFT);
         StackPane.setMargin(typeBadge, new Insets(15));
-        
-        Button btnFav = new Button("❤");
-        btnFav.setStyle("-fx-background-color: rgba(255,255,255,0.9); -fx-text-fill: #F43F5E; -fx-min-width: 36; -fx-min-height: 36; -fx-background-radius: 18; -fx-cursor: hand; -fx-font-size: 16px;");
-        StackPane.setAlignment(btnFav, Pos.TOP_RIGHT);
-        StackPane.setMargin(btnFav, new Insets(15));
 
+        boolean isFav = favorisService.isFavorite(CURRENT_USER_ID, recette.getId());
+        Button btnFav = new Button(isFav ? "\u2764" : "\u2661");
+        btnFav.setStyle(
+                "-fx-background-color: rgba(255,255,255,0.95);" +
+                        "-fx-text-fill: " + (isFav ? "#F43F5E" : "#94A3B8") + ";" +
+                        "-fx-min-width: 38; -fx-min-height: 38;" +
+                        "-fx-background-radius: 19; -fx-cursor: hand;" +
+                        "-fx-font-size: 20px; -fx-font-weight: bold;"
+        );
         // Hover Actions Overlay
         HBox actionsOverlay = new HBox(10);
         actionsOverlay.setAlignment(Pos.CENTER);
         actionsOverlay.setStyle("-fx-background-color: rgba(0,0,0,0.4); -fx-background-radius: 20 20 0 0;");
         actionsOverlay.setOpacity(0);
+        btnFav.setOnAction(e -> {
+            favorisService.toggleFavorite(CURRENT_USER_ID, recette.getId());
+            boolean nowFav = favorisService.isFavorite(CURRENT_USER_ID, recette.getId());
+            btnFav.setText(nowFav ? "\u2764" : "\u2661");
+            btnFav.setStyle(
+                    "-fx-background-color: rgba(255,255,255,0.95);" +
+                            "-fx-text-fill: " + (nowFav ? "#F43F5E" : "#94A3B8") + ";" +
+                            "-fx-min-width: 38; -fx-min-height: 38;" +
+                            "-fx-background-radius: 19; -fx-cursor: hand;" +
+                            "-fx-font-size: 20px; -fx-font-weight: bold;"
+            );
+            renderTypePills();
+            e.consume();
+        });
+
+        btnFav.setOnMouseEntered(e -> actionsOverlay.setOpacity(0));
+        StackPane.setAlignment(btnFav, Pos.TOP_RIGHT);
+        StackPane.setMargin(btnFav, new Insets(15));
+
+
         
         Button btnEdit = new Button("✏");
         btnEdit.setStyle("-fx-background-color: white; -fx-text-fill: #1E293B; -fx-font-size: 14px; -fx-min-width: 36; -fx-min-height: 36; -fx-background-radius: 10; -fx-cursor: hand;");
@@ -297,7 +344,7 @@ public class RecipeManagementController implements Initializable {
         imageArea.setOnMouseEntered(e -> actionsOverlay.setOpacity(1));
         imageArea.setOnMouseExited(e -> actionsOverlay.setOpacity(0));
 
-        imageArea.getChildren().addAll(imageView, typeBadge, btnFav, actionsOverlay);
+        imageArea.getChildren().addAll(imageView, actionsOverlay, typeBadge, btnFav);
 
         // Content Section
         VBox content = new VBox(12);
@@ -498,7 +545,16 @@ public class RecipeManagementController implements Initializable {
         String difficultyLabel = (cmbFilterDifficulty != null) ? cmbFilterDifficulty.getValue() : "All";
         String timeFilter = (cmbFilterTime != null) ? cmbFilterTime.getValue() : "All";
 
+        List<Integer> favoriteIds = showFavoritesOnly
+                ? favorisService.getFavoriteIds(CURRENT_USER_ID)
+                : null;
+
         filteredRecipes.setPredicate(recette -> {
+            // Favorites filter
+            if (showFavoritesOnly) {
+                if (!favoriteIds.contains(recette.getId())) return false;
+            }
+
             // Search filter
             if (searchText != null && !searchText.isEmpty()) {
                 if (!recette.getNom().toLowerCase().contains(searchText) &&
@@ -508,7 +564,7 @@ public class RecipeManagementController implements Initializable {
             }
 
             // Type filter
-            if (typeLabel != null && !typeLabel.equals("All")) {
+            if (!showFavoritesOnly && typeLabel != null && !typeLabel.equals("All")) {
                 String typeValue = getTypeValue(typeLabel);
                 if (typeValue != null && !recette.getType().equals(typeValue)) {
                     return false;
@@ -665,6 +721,7 @@ public class RecipeManagementController implements Initializable {
         
         loadRecipes();
         updateStats();
+        loadRecommendations();
     }
 
     @FXML
@@ -1263,24 +1320,7 @@ public class RecipeManagementController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleOpenMealPlanner() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/meal_planner_form.fxml"));
-            Parent root = loader.load();
 
-            Stage stage = new Stage();
-            stage.setTitle("🧠 Smart Anti-Waste Meal Planner");
-            stage.setScene(new Scene(root, 900, 700));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-        } catch (IOException e) {
-            System.err.println("❌ handleOpenMealPlanner : " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
     @FXML
     private void handleOpenHistorique() {
         try {
@@ -1316,4 +1356,325 @@ public class RecipeManagementController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
+    // ─── Ouvrir Meal Planner ──────────────────────────
+    @FXML
+    private void handleOpenMealPlanner() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/meal_planner_form.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Smart Meal Planner");
+            stage.setScene(new Scene(root, 900, 700));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("❌ handleOpenMealPlanner : " + e.getMessage());
+        }
+    }
+
+    // ─── Ouvrir AI Generator ──────────────────────────
+    @FXML
+    private void handleOpenAIGenerator() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/ai_recipe_form.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("AI Recipe Chef");
+            stage.setScene(new Scene(root, 800, 700));
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            // ✅ FIX : Rafraîchir tableau quand fenêtre AI se ferme
+            stage.setOnHidden(e -> {
+                handleRefresh(null);
+                System.out.println("✅ Tableau rafraîchi après fermeture AI");
+            });
+
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("❌ handleOpenAIGenerator : " + e.getMessage());
+        }
+    }
+
+    // ==================== RECOMMENDATION SYSTEM ====================
+
+    private void loadRecommendations() {
+        if (recommendationSection == null) return;
+
+        // Afficher la section
+        recommendationSection.setVisible(true);
+        recommendationSection.setManaged(true);
+
+        // Afficher l'état loading
+        showRecommendationLoading();
+
+        // Calcul en arrière-plan
+        Thread thread = new Thread(() -> {
+            try {
+                // Calcul IA (peut prendre un peu de temps)
+                List<RecipeRecommendation> recommendations =
+                        recommendationService.getRecommendations(CURRENT_USER_ID, 5);
+
+                // Retour sur le thread JavaFX
+                Platform.runLater(() -> {
+                    if (recommendations.isEmpty()) {
+                        showRecommendationEmpty();
+                    } else {
+                        showRecommendationResults(recommendations);
+                    }
+                });
+
+            } catch (Exception e) {
+                System.err.println("❌ Erreur chargement recommandations: " + e.getMessage());
+                Platform.runLater(this::showRecommendationEmpty);
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+
+    private void showRecommendationLoading() {
+        if (recommendationLoading != null) {
+            recommendationLoading.setVisible(true);
+            recommendationLoading.setManaged(true);
+        }
+        if (recommendationEmpty != null) {
+            recommendationEmpty.setVisible(false);
+            recommendationEmpty.setManaged(false);
+        }
+        if (recommendationHeader != null) {
+            recommendationHeader.setVisible(false);
+            recommendationHeader.setManaged(false);
+        }
+        if (recommendationCardsContainer != null) {
+            recommendationCardsContainer.setVisible(false);
+            recommendationCardsContainer.setManaged(false);
+        }
+    }
+
+
+    private void showRecommendationEmpty() {
+        if (recommendationLoading != null) {
+            recommendationLoading.setVisible(false);
+            recommendationLoading.setManaged(false);
+        }
+        if (recommendationEmpty != null) {
+            recommendationEmpty.setVisible(true);
+            recommendationEmpty.setManaged(true);
+        }
+        if (recommendationHeader != null) {
+            recommendationHeader.setVisible(false);
+            recommendationHeader.setManaged(false);
+        }
+        if (recommendationCardsContainer != null) {
+            recommendationCardsContainer.setVisible(false);
+            recommendationCardsContainer.setManaged(false);
+        }
+    }
+
+
+    private void showRecommendationResults(List<RecipeRecommendation> recommendations) {
+        if (recommendationLoading != null) {
+            recommendationLoading.setVisible(false);
+            recommendationLoading.setManaged(false);
+        }
+        if (recommendationEmpty != null) {
+            recommendationEmpty.setVisible(false);
+            recommendationEmpty.setManaged(false);
+        }
+        if (recommendationHeader != null) {
+            recommendationHeader.setVisible(true);
+            recommendationHeader.setManaged(true);
+        }
+        if (recommendationCardsContainer != null) {
+            recommendationCardsContainer.setVisible(true);
+            recommendationCardsContainer.setManaged(true);
+            recommendationCardsContainer.getChildren().clear();
+
+            for (RecipeRecommendation reco : recommendations) {
+                VBox card = createRecommendationCard(reco);
+                recommendationCardsContainer.getChildren().add(card);
+            }
+        }
+    }
+
+
+
+    private VBox createRecommendationCard(RecipeRecommendation reco) {
+        Recette recette = reco.getRecette();
+
+        // ── Carte principale ─────────────────────────────────────────────────
+        VBox card = new VBox(0);
+        card.setPrefWidth(260);
+        card.setMaxWidth(260);
+        card.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-border-color: #E2E8F0;" +
+                        "-fx-border-radius: 16;"
+        );
+        card.setEffect(new DropShadow(10, 0, 4, Color.web("#00000015")));
+
+        // ── Image + Badges ────────────────────────────────────────────────────
+        StackPane imageArea = new StackPane();
+        imageArea.setPrefHeight(160);
+        imageArea.setStyle("-fx-background-radius: 16 16 0 0; -fx-background-color: #F8FAFC;");
+
+        // Image
+        javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
+        String imageUrl = (recette.getImage() == null || recette.getImage().isEmpty())
+                ? "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=400"
+                : recette.getImage();
+
+        javafx.scene.image.Image img = new javafx.scene.image.Image(
+                imageUrl, 520, 320, true, true, true
+        );
+        imageView.setImage(img);
+        imageView.setFitWidth(260);
+        imageView.setFitHeight(160);
+
+        // Clip arrondi image
+        javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(260, 160);
+        clip.setArcWidth(32);
+        clip.setArcHeight(32);
+        imageArea.setClip(clip);
+
+        // Badge Score (coin haut gauche)
+        Label scoreBadge = new Label(reco.getBadgeEmoji() + " " + reco.getMatchPercent() + "% Match");
+        scoreBadge.setStyle(
+                "-fx-background-color: " + reco.getBadgeBackgroundColor() + ";" +
+                        "-fx-text-fill: " + reco.getBadgeColor() + ";" +
+                        "-fx-font-size: 11px;" +
+                        "-fx-font-weight: 900;" +
+                        "-fx-padding: 5 10;" +
+                        "-fx-background-radius: 8;"
+        );
+        StackPane.setAlignment(scoreBadge, Pos.TOP_LEFT);
+        StackPane.setMargin(scoreBadge, new Insets(10));
+
+        // Badge AI Pick (coin haut droit)
+        Label aiBadge = new Label("🤖 AI Pick");
+        aiBadge.setStyle(
+                "-fx-background-color: #1F4D3A;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 10px;" +
+                        "-fx-font-weight: 900;" +
+                        "-fx-padding: 5 10;" +
+                        "-fx-background-radius: 8;"
+        );
+        StackPane.setAlignment(aiBadge, Pos.TOP_RIGHT);
+        StackPane.setMargin(aiBadge, new Insets(10));
+
+        imageArea.getChildren().addAll(imageView, scoreBadge, aiBadge);
+
+
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(15));
+
+        // Titre recette
+        Label title = new Label(recette.getNom());
+        title.setStyle(
+                "-fx-font-size: 15px;" +
+                        "-fx-font-weight: 900;" +
+                        "-fx-text-fill: #1E293B;"
+        );
+        title.setWrapText(true);
+
+        // Métadonnées (type + temps)
+        HBox meta = new HBox(8);
+        meta.setAlignment(Pos.CENTER_LEFT);
+
+        Label typeLbl = new Label(recette.getTypeIcon() + " " + recette.getTypeLabel());
+        typeLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #64748B;");
+
+        Label dot = new Label("•");
+        dot.setStyle("-fx-text-fill: #CBD5E1;");
+
+        Label timeLbl = new Label("⏱ " + recette.getTempsPreparation() + " min");
+        timeLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #64748B;");
+
+        meta.getChildren().addAll(typeLbl, dot, timeLbl);
+
+        // Difficulté
+        Label diffLbl = new Label(recette.getDifficultyIcon() + " " + recette.getDifficultyLabel());
+        diffLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #64748B;");
+
+        // Séparateur
+        Separator sep = new Separator();
+        sep.setStyle("-fx-background-color: #E2E8F0;");
+
+        // Statut ingrédients
+        Label ingredientStatus = new Label(reco.getIngredientStatusText());
+        ingredientStatus.setWrapText(true);
+        ingredientStatus.setStyle(
+                "-fx-background-color: " + reco.getIngredientStatusBackground() + ";" +
+                        "-fx-text-fill: " + reco.getIngredientStatusColor() + ";" +
+                        "-fx-font-size: 11px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 6 10;" +
+                        "-fx-background-radius: 6;"
+        );
+
+        // Bouton See Recipe
+        Button btnSee = new Button("See Recipe →");
+        btnSee.setMaxWidth(Double.MAX_VALUE);
+        btnSee.setPrefHeight(40);
+        btnSee.setStyle(
+                "-fx-background-color: #1F4D3A;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: 900;" +
+                        "-fx-font-size: 13px;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;"
+        );
+        btnSee.setOnAction(e -> handleViewDetails(recette));
+
+        btnSee.setOnMouseEntered(e -> btnSee.setStyle(
+                "-fx-background-color: #2E7D5A;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: 900;" +
+                        "-fx-font-size: 13px;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;"
+        ));
+        btnSee.setOnMouseExited(e -> btnSee.setStyle(
+                "-fx-background-color: #1F4D3A;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: 900;" +
+                        "-fx-font-size: 13px;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;"
+        ));
+
+        content.getChildren().addAll(title, meta, diffLbl, sep, ingredientStatus, btnSee);
+        card.getChildren().addAll(imageArea, content);
+
+        return card;
+    }
+
+
+    @FXML
+    private void handleRefreshRecommendations(javafx.event.ActionEvent event) {
+        loadRecommendations();
+    }
+
+    @FXML
+    private void handleBrowseRecipesForReco(javafx.event.ActionEvent event) {
+        // Reset tous les filtres pour montrer toutes les recettes
+        if (txtSearch != null) txtSearch.clear();
+        currentTypeFilter = "All";
+        showFavoritesOnly = false;
+        currentPage = 1;
+        if (filterPillsContainer != null) renderTypePills();
+        applyFilters();
+    }
+
 }

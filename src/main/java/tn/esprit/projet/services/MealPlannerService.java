@@ -137,7 +137,7 @@ public class MealPlannerService {
                 Map<String, Object> row = new HashMap<>();
                 row.put("id",       rs.getInt   ("id"));
                 row.put("nom",      rs.getString("nom"));
-                row.put("image",    rs.getString("image"));   // 🆕
+                row.put("images",    rs.getString("images"));   // 🆕
                 row.put("calories", rs.getInt   ("calories"));
                 recettes.add(row);
             }
