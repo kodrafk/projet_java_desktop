@@ -7,10 +7,10 @@ import java.util.List;
 public class Recette {
     private int id;
     private String nom;
-    private String type;
-    private String difficulte;
-    private int tempsPreparation;
-    private int portions;
+    private String type;           // entree, main dish, dessert, drinks
+    private String difficulte;     // easy, medium, hard
+    private int tempsPreparation;  // en minutes
+    private int portions;          // nombre de portions
     private String description;
     private String image;
     private int userId;
@@ -18,7 +18,7 @@ public class Recette {
     private List<String> etapes;
     private List<RecetteIngredient> recetteIngredients;
 
-
+    // Constructeurs
     public Recette() {
         this.etapes = new ArrayList<>();
         this.recetteIngredients = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Recette {
         this.userId = userId;
     }
 
-
+    // Méthodes utilitaires
     public String getFormattedTime() {
         if (tempsPreparation < 60) {
             return tempsPreparation + " min";

@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import tn.esprit.projet.dao.UserDAO;
 import tn.esprit.projet.models.User;
+import tn.esprit.projet.services.EthicalPointsManager;
 import tn.esprit.projet.utils.PasswordUtil;
 import tn.esprit.projet.utils.SessionManager;
 import tn.esprit.projet.utils.UserValidator;
@@ -104,6 +105,9 @@ public class LoginController {
         }
 
         SessionManager.setCurrentUser(user);
+        EthicalPointsManager.reset(); // reset le cache pour ce nouveau user
+        EthicalPointsManager.loadFromDatabase(); // charger depuis BDD
+        
         if ("ROLE_ADMIN".equals(user.getRoles())) {
             navigate("/fxml/admin_layout.fxml", "NutriLife - Admin Panel", 1320, 780, true);
         } else {

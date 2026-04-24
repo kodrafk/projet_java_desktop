@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.web.WebView?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ObjectiveCustomController"
+      style="-fx-background-color: #F6FBF7;"
+      spacing="0">
+
+    <!-- ═══ HEADER ═══ -->
+    <HBox alignment="CENTER_LEFT" 
+          style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label text="CUSTOM PLAN"
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label text="Build Your Own Objective"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Back" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px; -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <!-- ═══ MAIN AREA: ScrollPane + Floating AI overlay ═══ -->
+    <StackPane VBox.vgrow="ALWAYS">
+
+        <!-- ═══ SCROLLABLE FORM ═══ -->
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    mouseTransparent="false"
+                    style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;"
+                    StackPane.alignment="TOP_CENTER">
+
+            <HBox alignment="TOP_CENTER" style="-fx-background-color: #F6FBF7;">
+            <VBox spacing="20" maxWidth="800" minWidth="400"
+                  style="-fx-background-color: #F6FBF7;" 
+                  alignment="CENTER">
+                <HBox.hgrow>ALWAYS</HBox.hgrow>
+                <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
+
+                <!-- ═══ BASIC INFO ═══ -->
+                <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 28; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="16">
+                    <Label text="Basic Information"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 12 0;"/>
+
+                    <!-- Title with AI inline button -->
+                    <VBox spacing="4">
+                        <Label text="Objective Title *"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                        <HBox spacing="0" alignment="CENTER_LEFT">
+                            <TextField fx:id="titleField"
+                                       promptText="e.g., Weight Loss, Muscle Gain, Keto Diet..."
+                                       prefHeight="42" HBox.hgrow="ALWAYS"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10 0 0 10; -fx-background-radius: 10 0 0 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                            <Button fx:id="aiInlineBtn" text="🤖 AI" onAction="#handleAiInline"
+                                    style="-fx-background-color: #eb7147; -fx-text-fill: white; -fx-border-radius: 0 10 10 0; -fx-background-radius: 0 10 10 0; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 12 16; -fx-cursor: hand;"/>
+                        </HBox>
+                        <Label fx:id="errTitle" text="" visible="false" managed="false"
+                               style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        <Label text="Type a goal then click AI button or press the floating assistant"
+                               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+
+                    <!-- Description -->
+                    <VBox spacing="4">
+                        <Label text="Description"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                        <TextArea fx:id="descriptionField"
+                                  promptText="Describe your nutrition goal..."
+                                  prefHeight="80" wrapText="true"
+                                  style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 8 12; -fx-font-size: 13px;"/>
+                    </VBox>
+                </VBox>
+
+                <!-- ═══ NUTRITION TARGETS ═══ -->
+                <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 28; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="16">
+                    <Label text="Daily Nutrition Targets"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 12 0;"/>
+
+                    <GridPane hgap="16" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <!-- Calories -->
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="🔥 Daily Calorie Target (kcal) *"
+                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="caloriesField" promptText="2000" prefHeight="42"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                            <Label fx:id="errCalories" text="" visible="false" managed="false"
+                                   style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                            <Label text="500 – 5000 kcal" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+
+                        <!-- Protein -->
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="💪 Protein Target (g) *"
+                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="proteinField" promptText="150" prefHeight="42"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                            <Label fx:id="errProtein" text="" visible="false" managed="false"
+                                   style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                            <Label text="10 – 300 g" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+
+                        <!-- Carbs -->
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="🌾 Carbs Target (g) *"
+                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="carbsField" promptText="200" prefHeight="42"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                            <Label fx:id="errCarbs" text="" visible="false" managed="false"
+                                   style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                            <Label text="20 – 500 g" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+
+                        <!-- Fats -->
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="🥑 Fats Target (g) *"
+                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="fatsField" promptText="65" prefHeight="42"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                            <Label fx:id="errFats" text="" visible="false" managed="false"
+                                   style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                            <Label text="10 – 200 g" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+
+                        <!-- Water -->
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="💧 Water Target (L)"
+                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="waterField" promptText="2.5" prefHeight="42"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 0 12; -fx-font-size: 13px;"/>
+                            <Label fx:id="errWater" text="" visible="false" managed="false"
+                                   style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                            <Label text="0 – 10 L (optional)" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ═══ SCHEDULE ═══ -->
+                <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 28; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="16">
+                    <Label text="Schedule"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 12 0;"/>
+
+                    <HBox spacing="24" alignment="CENTER_LEFT">
+                        <VBox spacing="4">
+                            <Label text="📅 Planned Start Date"
+                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <DatePicker fx:id="startDatePicker" prefWidth="240"
+                                        style="-fx-font-size: 13px;"/>
+                            <Label fx:id="errDate" text="" visible="false" managed="false"
+                                   style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                            <Label text="Today or a future date"
+                                   style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <CheckBox fx:id="autoActivateCheck"/>
+                            <Label text="⚡ Auto-activate when the start date arrives"
+                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ═══ ACTIONS ═══ -->
+                <HBox spacing="12" alignment="CENTER_RIGHT">
+                    <Button text="Cancel" onAction="#handleBack"
+                            style="-fx-background-color: white; -fx-text-fill: #374151; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px; -fx-padding: 12 24; -fx-cursor: hand;"/>
+                    <Button text="✓ Create Custom Objective" onAction="#handleCreate"
+                            style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 12 24; -fx-cursor: hand;"/>
+                </HBox>
+            </VBox>
+            </HBox>
+        </ScrollPane>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- ═══ FLOATING AI OVERLAY (does NOT block form input) ═══ -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+
+        <!-- Background Overlay (only shown when panel is open) -->
+        <Pane fx:id="aiOverlay" visible="false" managed="false"
+              mouseTransparent="false"
+              style="-fx-background-color: rgba(0,0,0,0.3);"
+              onMouseClicked="#handleOverlayClick"
+              StackPane.alignment="TOP_LEFT"/>
+
+        <!-- AI Panel (shown when open) -->
+        <VBox fx:id="aiPanel" visible="false" managed="false" spacing="0"
+              mouseTransparent="false"
+              style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E2E8F0; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 4);"
+              maxWidth="380" maxHeight="560"
+              StackPane.alignment="BOTTOM_RIGHT">
+            <StackPane.margin><Insets bottom="165" right="24"/></StackPane.margin>
+
+            <!-- Panel Header -->
+            <HBox fx:id="aiPanelHeader" alignment="CENTER_LEFT" spacing="12"
+                  style="-fx-background-color: linear-gradient(to right, #f8faf9, #f0f4f2); -fx-background-radius: 16 16 0 0; -fx-padding: 16 20; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1 0;">
+                <StackPane fx:id="aiPanelAvatar" prefWidth="38" prefHeight="38"
+                           style="-fx-background-color: #2d6a4f; -fx-background-radius: 10;">
+                    <Label text="🤖" style="-fx-font-size: 18px;"/>
+                </StackPane>
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label fx:id="aiPanelTitle" text="NutriBot Assistant"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <HBox spacing="6" alignment="CENTER_LEFT">
+                        <Circle fx:id="aiStatusDot" radius="3.5" style="-fx-fill: #4ade80;"/>
+                        <Label fx:id="aiPanelStatus" text="Online"
+                               style="-fx-font-size: 11px; -fx-text-fill: #6B7280; -fx-font-weight: 500;"/>
+                    </HBox>
+                </VBox>
+                <Button fx:id="aiPanelClose" text="×" onAction="#handleAiPanelClose"
+                        style="-fx-background-color: white; -fx-text-fill: #6B7280; -fx-border-color: #E2E8F0; -fx-background-radius: 8; -fx-border-radius: 8; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6 10; -fx-cursor: hand;"/>
+            </HBox>
+
+            <!-- Panel Body -->
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                        style="-fx-background: white; -fx-background-color: white; -fx-border-color: transparent;"
+                        VBox.vgrow="ALWAYS">
+                <VBox fx:id="aiPanelBody" spacing="16" style="-fx-padding: 20;">
+
+                    <!-- AI Message -->
+                    <HBox spacing="12" alignment="TOP_LEFT">
+                        <StackPane fx:id="aiMessageAvatar" prefWidth="34" prefHeight="34"
+                                   style="-fx-background-color: #2d6a4f; -fx-background-radius: 10;">
+                            <Label text="🤖" style="-fx-font-size: 16px;"/>
+                        </StackPane>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label fx:id="aiMessage"
+                                   text="Hi! Type your objective title above, then tap Generate below."
+                                   wrapText="true"
+                                   style="-fx-font-size: 13px; -fx-text-fill: #374151; -fx-background-color: #F8FAFC; -fx-background-radius: 4 16 16 16; -fx-padding: 14 18; -fx-border-color: #E2E8F0; -fx-border-radius: 4 16 16 16;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Generate Button -->
+                    <Button fx:id="aiGenerateBtn" text="🤖 Generate Suggestion" onAction="#handleAiGenerate"
+                            prefWidth="9999"
+                            style="-fx-background-color: #2d6a4f; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 14 20; -fx-cursor: hand;"/>
+
+                    <!-- Loading -->
+                    <VBox fx:id="aiLoading" visible="false" managed="false" spacing="8" alignment="CENTER">
+                        <ProgressBar fx:id="aiProgressBar" prefWidth="9999" style="-fx-accent: #2d6a4f;"/>
+                        <Label fx:id="aiLoadingText" text="Analyzing your goal..."
+                               style="-fx-font-size: 12px; -fx-text-fill: #6B7280; -fx-font-weight: 500;"/>
+                    </VBox>
+
+                    <!-- Result -->
+                    <VBox fx:id="aiResult" visible="false" managed="false" spacing="12">
+
+                        <!-- Description -->
+                        <HBox fx:id="aiResultDescContainer" spacing="10" alignment="TOP_LEFT"
+                              style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 14 16; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+                            <Label fx:id="aiResultDescIcon" text="📝" style="-fx-font-size: 14px;"/>
+                            <Label fx:id="aiSugDesc" text="" wrapText="true" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 12px; -fx-text-fill: #374151; -fx-font-weight: 500;"/>
+                        </HBox>
+
+                        <!-- Nutrition Grid -->
+                        <GridPane hgap="8" vgap="8">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+
+                            <!-- Calories -->
+                            <VBox fx:id="aiResultCalories" spacing="2" alignment="CENTER"
+                                  GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                  style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+                                <Label fx:id="aiResultCaloriesLabel" text="CALORIES"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiSugCal" text="—"
+                                       style="-fx-font-size: 18px; -fx-text-fill: #1E293B; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiResultCaloriesUnit" text="kcal"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280;"/>
+                            </VBox>
+
+                            <!-- Protein -->
+                            <VBox fx:id="aiResultProtein" spacing="2" alignment="CENTER"
+                                  GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                  style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+                                <Label fx:id="aiResultProteinLabel" text="PROTEIN"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiSugProt" text="—"
+                                       style="-fx-font-size: 18px; -fx-text-fill: #1E293B; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiResultProteinUnit" text="g"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280;"/>
+                            </VBox>
+
+                            <!-- Carbs -->
+                            <VBox fx:id="aiResultCarbs" spacing="2" alignment="CENTER"
+                                  GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                  style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+                                <Label fx:id="aiResultCarbsLabel" text="CARBS"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiSugCarb" text="—"
+                                       style="-fx-font-size: 18px; -fx-text-fill: #1E293B; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiResultCarbsUnit" text="g"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280;"/>
+                            </VBox>
+
+                            <!-- Fats -->
+                            <VBox fx:id="aiResultFats" spacing="2" alignment="CENTER"
+                                  GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                  style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+                                <Label fx:id="aiResultFatsLabel" text="FATS"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiSugFat" text="—"
+                                       style="-fx-font-size: 18px; -fx-text-fill: #1E293B; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiResultFatsUnit" text="g"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280;"/>
+                            </VBox>
+
+                            <!-- Water -->
+                            <VBox fx:id="aiResultWater" spacing="2" alignment="CENTER"
+                                  GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2"
+                                  style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+                                <Label fx:id="aiResultWaterLabel" text="WATER"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiSugWater" text="—"
+                                       style="-fx-font-size: 18px; -fx-text-fill: #1E293B; -fx-font-weight: bold;"/>
+                                <Label fx:id="aiResultWaterUnit" text="liters"
+                                       style="-fx-font-size: 9px; -fx-text-fill: #6B7280;"/>
+                            </VBox>
+                        </GridPane>
+
+                        <!-- Action Buttons -->
+                        <HBox spacing="8">
+                            <Button fx:id="aiApplyBtn" text="✓ Apply Values" onAction="#handleAiApply"
+                                    HBox.hgrow="ALWAYS"
+                                    style="-fx-background-color: #2d6a4f; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 12 16; -fx-cursor: hand;"/>
+                            <Button fx:id="aiRefreshBtn" text="🔄 New Idea" onAction="#handleAiRefresh"
+                                    HBox.hgrow="ALWAYS"
+                                    style="-fx-background-color: white; -fx-text-fill: #374151; -fx-border-color: #E2E8F0; -fx-background-radius: 10; -fx-border-radius: 10; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 12 16; -fx-cursor: hand;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Error -->
+                    <VBox fx:id="aiError" visible="false" managed="false" spacing="12" alignment="CENTER"
+                          style="-fx-background-color: #FEF2F2; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #FCA5A5; -fx-border-radius: 10;">
+                        <StackPane fx:id="aiErrorIconContainer" prefWidth="42" prefHeight="42"
+                                   style="-fx-background-color: white; -fx-background-radius: 50%; -fx-border-color: #FCA5A5; -fx-border-radius: 50%;">
+                            <Label fx:id="aiErrorIcon" text="⚠"
+                                   style="-fx-font-size: 20px; -fx-text-fill: #DC2626;"/>
+                        </StackPane>
+                        <Label fx:id="aiErrorMsg" text="Something went wrong" wrapText="true"
+                               textAlignment="CENTER"
+                               style="-fx-font-size: 12px; -fx-text-fill: #DC2626; -fx-font-weight: 500;"/>
+                        <Button fx:id="aiRetryBtn" text="🔄 Try Again" onAction="#handleAiRetry"
+                                style="-fx-background-color: white; -fx-text-fill: #374151; -fx-border-color: #E2E8F0; -fx-background-radius: 10; -fx-border-radius: 10; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand;"/>
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </VBox>
+
+        <!-- ═══ SPEECH BUBBLE TOOLTIP ═══ -->
+        <VBox fx:id="aiTooltip" visible="false" managed="false" spacing="0"
+              mouseTransparent="false"
+              maxWidth="260"
+              style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 12 16; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 3);"
+              StackPane.alignment="BOTTOM_RIGHT">
+            <StackPane.margin><Insets bottom="205" right="32"/></StackPane.margin>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <StackPane prefWidth="28" prefHeight="28"
+                           style="-fx-background-color: #2d6a4f; -fx-background-radius: 8;">
+                    <Label text="⚡" style="-fx-font-size: 14px;"/>
+                </StackPane>
+                <Label fx:id="aiTooltipText"
+                       text="Hi! I'm your AI Assistant. Click me to auto-fill!"
+                       wrapText="true" HBox.hgrow="ALWAYS"
+                       style="-fx-font-size: 11px; -fx-text-fill: #374151; -fx-font-weight: 500;"/>
+                <Button fx:id="tooltipClose" text="×" onAction="#handleTooltipClose"
+                        style="-fx-background-color: #F3F4F6; -fx-text-fill: #6B7280; -fx-background-radius: 6; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 2 6; -fx-cursor: hand; -fx-border-width: 0;"/>
+            </HBox>
+        </VBox>
+
+        <!-- ═══ FLOATING AI BUTTON WITH LOTTIE ═══ -->
+        <StackPane fx:id="aiFab"
+                   prefWidth="180" prefHeight="180"
+                   maxWidth="180" maxHeight="180"
+                   style="-fx-cursor: hand; -fx-background-color: transparent;"
+                   StackPane.alignment="BOTTOM_RIGHT">
+            <StackPane.margin><Insets bottom="10" right="10"/></StackPane.margin>
+
+            <!-- LOTTIE WEBVIEW — visual only, mouse transparent -->
+            <WebView fx:id="lottieWebView"
+                     prefWidth="300" prefHeight="300"
+                     maxWidth="300" maxHeight="300"
+                     translateX="-90" translateY="-90"
+                     mouseTransparent="true"
+                     style="-fx-background-color: transparent;"/>
+
+            <!-- Click catcher sized to cover the full WebView visual area -->
+            <Button onAction="#handleAiFabClick"
+                    prefWidth="300" prefHeight="300"
+                    translateX="-90" translateY="-90"
+                    style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-cursor: hand;"
+                    focusTraversable="false"/>
+        </StackPane>
+
+    </StackPane>
+</VBox>

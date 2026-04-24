@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Local config (contains API keys — never commit) ###
+config.properties
+uploads/

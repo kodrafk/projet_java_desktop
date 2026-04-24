@@ -23,9 +23,14 @@
             </HBox>
             <Region HBox.hgrow="ALWAYS"/>
             <!-- Bell icon -->
-            <StackPane prefWidth="36" prefHeight="36"
-                       style="-fx-background-color: #FFF7ED; -fx-background-radius: 10; -fx-cursor: hand;">
-                <Label text="🔔" style="-fx-font-size: 14px;"/>
+            <StackPane prefWidth="42" prefHeight="36" style="-fx-cursor: hand;">
+                <Button fx:id="btnBell" text="🔔"
+                        style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-radius: 10; -fx-background-radius: 10; -fx-cursor: hand; -fx-padding: 6 10; -fx-font-size: 14px;"
+                        prefWidth="42" prefHeight="36"/>
+                <Label fx:id="lblBellBadge" text="0"
+                       style="-fx-background-color: #9ca3af; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 1 5;"
+                       StackPane.alignment="TOP_RIGHT"
+                       translateX="4" translateY="-4"/>
             </StackPane>
             <!-- Create New User button -->
             <Button text="+ Create New User" onAction="#handleAddUser"

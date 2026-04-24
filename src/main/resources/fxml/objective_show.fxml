@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ObjectiveShowController"
+      style="-fx-background-color: #F6FBF7;"
+      spacing="0">
+
+    <!-- ═══ HEADER ═══ -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label text="Objective Details"
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label fx:id="lblHeaderTitle" text=""
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label fx:id="lblHeaderSub" text=""
+                   style="-fx-font-size: 12px; -fx-text-fill: #A7C4B8;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Back" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px; -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <VBox spacing="20" style="-fx-background-color: #F6FBF7;">
+            <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
+
+            <!-- ═══ HERO CARD ═══ -->
+            <VBox style="-fx-background-color: #163A2E; -fx-background-radius: 14; -fx-padding: 28;" spacing="16">
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblTitle" text=""
+                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <Label fx:id="lblDescription" text=""
+                               style="-fx-font-size: 13px; -fx-text-fill: #A7C4B8; -fx-wrap-text: true;"/>
+                        <Label fx:id="lblGoalTag" text=""
+                               style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 4 10; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <Label fx:id="lblStatus" text=""
+                           style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 6 14; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                </HBox>
+
+                <!-- Macros Grid -->
+                <HBox spacing="12">
+                    <VBox alignment="CENTER" spacing="4" prefWidth="110"
+                          style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="🔥" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblCalories" text="—"
+                               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <Label text="Calories" style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" prefWidth="110"
+                          style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="💪" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblProtein" text="—"
+                               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <Label text="Protein (g)" style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" prefWidth="110"
+                          style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="🌾" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblCarbs" text="—"
+                               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <Label text="Carbs (g)" style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" prefWidth="110"
+                          style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="🥑" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblFats" text="—"
+                               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <Label text="Fats (g)" style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" prefWidth="110"
+                          style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 10; -fx-padding: 14;">
+                        <Label text="💧" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="lblWater" text="—"
+                               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <Label text="Water (L)" style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Progress -->
+                <VBox fx:id="progressSection" spacing="8" managed="false" visible="false">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label fx:id="lblDateRange" text=""
+                               style="-fx-font-size: 12px; -fx-text-fill: #A7C4B8;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblProgressPct" text=""
+                               style="-fx-font-size: 12px; -fx-text-fill: #52b788; -fx-font-weight: bold;"/>
+                    </HBox>
+                    <ProgressBar fx:id="progressBar" progress="0" prefWidth="9999"
+                                 style="-fx-accent: #52b788;"/>
+                </VBox>
+            </VBox>
+
+            <!-- ═══ ACTION BUTTONS ═══ -->
+            <HBox fx:id="actionRow" spacing="12" alignment="CENTER_LEFT">
+                <Button fx:id="btnActivate" text="▶ Activate Now" onAction="#handleActivate" managed="false" visible="false"
+                        style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 12 20; -fx-cursor: hand;"/>
+                <Label fx:id="lblBlockedMsg" text="⚠ Another objective is already active. Pause or delete it first."
+                       managed="false" visible="false"
+                       style="-fx-text-fill: #92400E; -fx-background-color: #FEF3C7; -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 12px; -fx-wrap-text: true;"/>
+                <Button fx:id="btnViewLogs" text="📋 View Daily Logs" onAction="#handleViewLogs" managed="false" visible="false"
+                        style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 12 20; -fx-cursor: hand;"/>
+                <Button fx:id="btnPause" text="⏸ Pause" onAction="#handlePause" managed="false" visible="false"
+                        style="-fx-background-color: transparent; -fx-text-fill: #f0ad4e; -fx-border-color: #f0ad4e; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px; -fx-padding: 12 20; -fx-cursor: hand;"/>
+                <Button fx:id="btnResume" text="▶ Resume" onAction="#handleResume" managed="false" visible="false"
+                        style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 12 20; -fx-cursor: hand;"/>
+                <Button fx:id="btnEdit" text="✏ Edit" onAction="#handleEdit" managed="false" visible="false"
+                        style="-fx-background-color: transparent; -fx-text-fill: #1F4D3A; -fx-border-color: #1F4D3A; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px; -fx-padding: 12 20; -fx-cursor: hand;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnDelete" text="🗑 Delete" onAction="#handleDelete"
+                        style="-fx-background-color: transparent; -fx-text-fill: #DC2626; -fx-border-color: #DC2626; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px; -fx-padding: 12 20; -fx-cursor: hand;"/>
+            </HBox>
+
+            <!-- ═══ 7-DAY TIMELINE ═══ -->
+            <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 24; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="16">
+                <Label text="📅  7-Day Timeline"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <HBox fx:id="timelineContainer" spacing="10" alignment="CENTER_LEFT"/>
+                <VBox fx:id="timelineLocked" alignment="CENTER" spacing="12" managed="false" visible="false">
+                    <Label text="🔒" style="-fx-font-size: 36px;"/>
+                    <Label text="Daily logs appear after activation."
+                           style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblPlannedDate" text=""
+                           style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                </VBox>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>
