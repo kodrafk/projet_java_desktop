@@ -4,6 +4,7 @@ import tn.esprit.projet.models.Ingredient;
 import tn.esprit.projet.utils.MyBDConnexion;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class IngredientService implements CRUD<Ingredient> {
                         ingredient.setId(generatedKeys.getInt(1));
                     }
                 }
-                System.out.println("Ingredient ajouté: " + ingredient.getNom() + " (ID: " + ingredient.getId() + ")");
+                System.out.println("Ingredient ajouté avec succès: " + ingredient.getNom() + " (ID: " + ingredient.getId() + ")");
             }
 
         } catch (SQLException e) {
@@ -76,7 +77,7 @@ public class IngredientService implements CRUD<Ingredient> {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Ingredient modifié: ID " + ingredient.getId());
+                System.out.println("Ingredient modifié avec succès: ID " + ingredient.getId());
             } else {
                 System.out.println("Aucun ingredient trouvé avec l'ID: " + ingredient.getId());
             }
@@ -95,7 +96,7 @@ public class IngredientService implements CRUD<Ingredient> {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Ingredient supprimé: ID " + id);
+                System.out.println("Ingredient supprimé avec succès: ID " + id);
             } else {
                 System.out.println("Aucun ingredient trouvé avec l'ID: " + id);
             }
@@ -114,6 +115,8 @@ public class IngredientService implements CRUD<Ingredient> {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return mapResultSetToIngredient(rs);
+                } else {
+                    System.out.println("Aucun ingredient trouvé avec l'ID : " + id);
                 }
             }
         } catch (SQLException e) {

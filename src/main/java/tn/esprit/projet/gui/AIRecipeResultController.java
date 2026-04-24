@@ -67,8 +67,6 @@ public class AIRecipeResultController implements Initializable {
     private final AIRecipeService     aiService   = new AIRecipeService();
     private final AIRecipeSaveService saveService = new AIRecipeSaveService();
 
-    private static final int CURRENT_USER_ID = 1; // ← session user
-
     // ═════════════════════════════════════════════════
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
@@ -482,7 +480,10 @@ public class AIRecipeResultController implements Initializable {
         new Thread(() -> {
             try {
                 AIRecipeSaveService saveService = new AIRecipeSaveService();
-                int recetteId = saveService.sauvegarder(result, CURRENT_USER_ID);
+                int currentUserId = tn.esprit.projet.utils.SessionManager.getCurrentUser() != null 
+                        ? tn.esprit.projet.utils.SessionManager.getCurrentUser().getId() 
+                        : 1;
+                int recetteId = saveService.sauvegarder(result, currentUserId);
 
                 javafx.application.Platform.runLater(() -> {
                     if (recetteId != -1) {

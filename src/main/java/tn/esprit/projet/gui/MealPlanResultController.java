@@ -1,4 +1,4 @@
-package tn.esprit.projet.controllers;
+package tn.esprit.projet.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

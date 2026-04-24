@@ -163,7 +163,7 @@ public class ScannerController implements Initializable {
                     lastScannedBarcode = barcode;
                     statusCircle.setFill(Color.web("#2ECC71"));
                     statusLabel.setText("Decoded: " + barcode);
-                    EthicalPointsManager.addPoints("Product scanned", 5);
+                    EthicalPointsManager.updateTotalPoints();
                     analyzeProduct(barcode);
                 });
 
@@ -190,7 +190,7 @@ public class ScannerController implements Initializable {
         String barcode = manualBarcodeField.getText().trim();
         if (!barcode.isEmpty()) {
             lastScannedBarcode = barcode;
-            EthicalPointsManager.addPoints("Product scanned manually", 5);
+            EthicalPointsManager.updateTotalPoints();
             analyzeProduct(barcode);
         } else {
             showAlert("Error", "Please enter a barcode.");
@@ -377,10 +377,10 @@ public class ScannerController implements Initializable {
     @FXML
     private void addToStock() {
         EthicalPointsManager.incrementScanCount();
-        EthicalPointsManager.addPoints("Product added to stock", 10);
+        EthicalPointsManager.updateTotalPoints();
 
         if (!isBoycotted && currentEcoScore.equalsIgnoreCase("A")) {
-            EthicalPointsManager.addPoints("Eco-Score A product added", 15);
+            EthicalPointsManager.updateTotalPoints();
         }
 
         showAlert("Added to Stock", "Product added successfully.");
@@ -393,7 +393,7 @@ public class ScannerController implements Initializable {
 
         if (isBoycotted) {
             EthicalPointsManager.incrementBoycottRejectCount();
-            EthicalPointsManager.addPoints("Boycotted product rejected", 15);
+            EthicalPointsManager.updateTotalPoints();
             showAlert("Product Rejected", "Product rejected. You earned 15 ethical points!");
         } else {
             showAlert("Product Rejected", "Product rejected.");

@@ -69,7 +69,11 @@ public class RecipeRecommendationService {
     public List<RecipeRecommendation> getRecommendations(int userId, int limit) {
 
         // ── Étape 1 : Charger les données ──────────────────────────────────
-        List<Recette> allRecettes = recetteService.getAll();
+        // Charger toutes les recettes SAUF celles de l'utilisateur
+        List<Recette> allRecettes = recetteService.getAll()
+                .stream()
+                .filter(r -> r.getUserId() != userId)
+                .collect(Collectors.toList());
         List<Ingredient> stockIngredients = ingredientService.getAll();
         List<Integer> favoriteIds = favorisService.getFavoriteIds(userId);
 

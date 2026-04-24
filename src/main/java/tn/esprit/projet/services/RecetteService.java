@@ -22,16 +22,20 @@ public class RecetteService implements CRUD<Recette> {
 
     @Override
     public void ajouter(Recette recette) {
-        // 1. Get a valid user ID first
-        int userId = 1; // Default fallback
-        try (Statement st = cnx.createStatement();
-             ResultSet rs = st.executeQuery("SELECT id FROM `user` LIMIT 1")) {
-            if (rs.next()) {
-                userId = rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            System.err.println("Warning: Could not fetch a valid user ID, using default 1. " + e.getMessage());
+        // Priority 1: use userId already set on the recette (set by the controller from SessionManager)
+        // Priority 2: read SessionManager directly as fallback
+        // Priority 3: hardcoded 1 as last resort
+        int userId;
+        if (recette.getUserId() > 0) {
+            userId = recette.getUserId(); // Controller already set the correct connected user ID
+        } else if (tn.esprit.projet.utils.SessionManager.getCurrentUser() != null) {
+            userId = tn.esprit.projet.utils.SessionManager.getCurrentUser().getId();
+            System.out.println("[RecetteService] Using session userId=" + userId);
+        } else {
+            userId = 1;
+            System.err.println("[RecetteService] WARNING: No user in session and no userId on recette. Using fallback=1.");
         }
+        System.out.println("[RecetteService] Creating recette with user_id=" + userId);
 
         // 2. Get the next ID manually to bypass the "Field 'id' doesn't have a default value" error
         int nextId = 1;
@@ -341,6 +345,26 @@ public class RecetteService implements CRUD<Recette> {
     public List<Recette> getRecettesByType(String type) { return search(null, type, null); }
     public List<Recette> getRecettesByDifficulte(String difficulte) { return search(null, null, difficulte); }
 
+    public List<Recette> getByUserId(int userId) {
+        List<Recette> recettes = new ArrayList<>();
+        String sql = "SELECT * FROM recette WHERE user_id = ? ORDER BY created_at DESC";
+
+        try (PreparedStatement pst = cnx.prepareStatement(sql)) {
+            pst.setInt(1, userId);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Recette r = mapResultSetToRecette(rs);
+                    r.setRecetteIngredients(getIngredientsForRecette(r.getId()));
+                    recettes.add(r);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lecture recettes par user_id: " + e.getMessage());
+        }
+
+        return recettes;
+    }
+
     public int countByType(String type) {
         String sql = "SELECT COUNT(*) FROM recette WHERE type = ?";
         try (PreparedStatement pst = cnx.prepareStatement(sql)) {
@@ -350,6 +374,20 @@ public class RecetteService implements CRUD<Recette> {
             }
         } catch (SQLException e) {
             System.err.println("Erreur countByType: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public int countByTypeAndUserId(String type, int userId) {
+        String sql = "SELECT COUNT(*) FROM recette WHERE type = ? AND user_id = ?";
+        try (PreparedStatement pst = cnx.prepareStatement(sql)) {
+            pst.setString(1, type);
+            pst.setInt(2, userId);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur countByTypeAndUserId: " + e.getMessage());
         }
         return 0;
     }
@@ -367,6 +405,20 @@ public class RecetteService implements CRUD<Recette> {
         return 0;
     }
 
+    public int countByDifficulteAndUserId(String difficulte, int userId) {
+        String sql = "SELECT COUNT(*) FROM recette WHERE difficulte = ? AND user_id = ?";
+        try (PreparedStatement pst = cnx.prepareStatement(sql)) {
+            pst.setString(1, difficulte);
+            pst.setInt(2, userId);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur countByDifficulteAndUserId: " + e.getMessage());
+        }
+        return 0;
+    }
+
     public int countTotal() {
         String sql = "SELECT COUNT(*) FROM recette";
         try (Statement st = cnx.createStatement();
@@ -374,6 +426,19 @@ public class RecetteService implements CRUD<Recette> {
             if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) {
             System.err.println("Erreur countTotal: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public int countTotalByUserId(int userId) {
+        String sql = "SELECT COUNT(*) FROM recette WHERE user_id = ?";
+        try (PreparedStatement pst = cnx.prepareStatement(sql)) {
+            pst.setInt(1, userId);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur countTotalByUserId: " + e.getMessage());
         }
         return 0;
     }
@@ -424,5 +489,17 @@ public class RecetteService implements CRUD<Recette> {
         r.setEtapes(etapesList);
 
         return r;
+    }
+    public int countByUser(int userId) {
+        String sql = "SELECT COUNT(*) FROM recette WHERE user_id = ?";
+        try {
+            PreparedStatement ps = cnx.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("countByUser error: " + e.getMessage());
+        }
+        return 0;
     }
 }

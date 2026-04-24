@@ -82,9 +82,10 @@
                                 prefHeight="36"
                                 style="-fx-background-color: transparent; -fx-text-fill: #1A2E1A; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand;">
                         <items>
-                            <MenuItem text="Profile"/>
-                            <MenuItem text="Settings"/>
-                            <MenuItem text="Log Out"/>
+                            <MenuItem text="My Profile" onAction="#handleMyProfile"/>
+                            <MenuItem text="Kitchen Rank" onAction="#handleKitchenRank"/>
+                            <MenuItem text="Security Settings" onAction="#handleChangePassword"/>
+                            <MenuItem text="Log Out" onAction="#handleLogout"/>
                         </items>
                     </MenuButton>
                 </HBox>
@@ -154,13 +155,13 @@
                         </VBox>
 
                         <VBox prefWidth="270" prefHeight="122"
-                              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #D6A46D; -fx-border-radius: 14; -fx-border-width: 1.2; -fx-padding: 18;">
-                            <Label text="EXPIRED ITEMS"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #2ECC71; -fx-border-radius: 14; -fx-border-width: 1.2; -fx-padding: 18;">
+                            <Label text="INGREDIENTS SAVED"
+                                   style="-fx-font-size: 11px; -fx-text-fill: #27AE60; -fx-font-weight: bold;"/>
                             <Region VBox.vgrow="ALWAYS"/>
-                            <Label fx:id="lblExpiredItems" text="0"
-                                   style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
-                            <Label text="Need immediate attention"
+                            <Label fx:id="lblIngredientsSaved" text="0"
+                                   style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #27AE60;"/>
+                            <Label text="Saved from waste"
                                    style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
                         </VBox>
 
@@ -321,17 +322,11 @@
 
                             <Separator/>
 
-                            <HBox spacing="8" alignment="CENTER_LEFT">
-                                <TextField fx:id="txtBoycottSearch"
-                                           promptText="🔍 Search a brand (e.g. Coca-Cola, Nestlé...)"
-                                           HBox.hgrow="ALWAYS"
-                                           prefHeight="42"
-                                           style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12; -fx-font-size: 13px;"/>
-                                <Button text="Search"
-                                        onAction="#handleBoycottSearch"
-                                        prefHeight="42" prefWidth="90"
-                                        style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
-                            </HBox>
+                            <TextField fx:id="txtBoycottSearch"
+                                       promptText="🔍 Type a brand name to check (e.g. Coca-Cola, L'Oréal...)"
+                                       prefHeight="42"
+                                       maxWidth="Infinity"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12; -fx-font-size: 13px;"/>
 
                             <VBox fx:id="boycottResultsBox"
                                   spacing="8"

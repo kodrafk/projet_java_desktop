@@ -6,15 +6,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import tn.esprit.projet.services.IngredientService;
 import tn.esprit.projet.services.RecetteService;
+import tn.esprit.projet.utils.SessionManager;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -38,12 +43,21 @@ public class AdminLayoutController {
     @FXML private Button btnSMS;
     @FXML private Button btnNutrition;
     @FXML private Button btnWellness;
+    @FXML private Button btnBlogs;
+    @FXML private Button btnObjectives;
     @FXML private Button btnLogout;
 
     @FXML private Label lblTotalUsers;
+    @FXML private Label lblActiveUsers;
+    @FXML private Label lblInactiveUsers;
+    @FXML private Label lblAdmins;
+    @FXML private Label lblNewThisMonth;
     @FXML private Label lblTotalIngredients;
     @FXML private Label lblTotalRecipes;
     @FXML private Label lblTotalComplaints;
+    @FXML private Label lblPageTitle;
+    @FXML private Label lblAdminEmail;
+    @FXML private Label lblAdminAvatar;
 
     @FXML private Label lblDate;
     @FXML private Label lblClock;
@@ -120,10 +134,8 @@ public class AdminLayoutController {
     private void setupSearch() {
         if (searchField != null) {
             searchField.setPromptText("Search...");
-            // TODO: Implémenter la recherche globale plus tard
             searchField.textProperty().addListener((obs, old, newVal) -> {
                 System.out.println("🔍 Recherche: " + newVal);
-                // Placeholder pour recherche future
             });
         }
     }
@@ -133,7 +145,7 @@ public class AdminLayoutController {
     @FXML
     private void handleDashboard(ActionEvent event) {
         resetSidebarStyles();
-        btnDashboard.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnDashboard != null) btnDashboard.setStyle(ACTIVE_BUTTON_STYLE);
         showHomePage();
     }
 
@@ -141,14 +153,14 @@ public class AdminLayoutController {
     private void handleUsers(ActionEvent event) {
         resetSidebarStyles();
         if (btnUsers != null) btnUsers.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Users Management");
+        loadPage("/fxml/user_list.fxml");
     }
 
     @FXML
     private void handleStatistics(ActionEvent event) {
         resetSidebarStyles();
         if (btnStatistics != null) btnStatistics.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Statistics");
+        loadPage("/fxml/statistics.fxml");
     }
 
     @FXML
@@ -201,15 +213,63 @@ public class AdminLayoutController {
     }
 
     @FXML
-    private void handleBackToSite(ActionEvent event) {
-        System.out.println("Back to Site clicked");
-        // TODO: navigate back to main_layout
+    private void handleBlogs(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnBlogs != null) btnBlogs.setStyle(ACTIVE_BUTTON_STYLE);
+        showPlaceholder("Blogs Management");
+    }
+
+    @FXML
+    private void handleObjectives(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnObjectives != null) btnObjectives.setStyle(ACTIVE_BUTTON_STYLE);
+        loadPage("/fxml/admin_objectives.fxml");
+    }
+
+    @FXML
+    private void handleAddUser(ActionEvent event) {
+        loadPage("/fxml/user_form.fxml");
     }
 
     @FXML
     private void handleLogout(ActionEvent event) {
         System.out.println("Logout clicked");
-        // TODO: Implémenter la déconnexion
+        SessionManager.getInstance().logout();
+        try {
+            Parent login = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(login));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleBackToSite(ActionEvent event) {
+        try {
+            Parent main = FXMLLoader.load(getClass().getResource("/fxml/main_layout.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(main, 1280, 760));
+            stage.setTitle("NutriLife");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleAdminProfile(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/user_profile.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("My Profile");
+            stage.setScene(new Scene(root, 620, 700));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ==================== UTILITAIRES ====================
@@ -225,6 +285,8 @@ public class AdminLayoutController {
         if (btnSMS != null) btnSMS.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnNutrition != null) btnNutrition.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnWellness != null) btnWellness.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnBlogs != null) btnBlogs.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnObjectives != null) btnObjectives.setStyle(DEFAULT_BUTTON_STYLE);
     }
 
     private void showHomePage() {
@@ -238,7 +300,6 @@ public class AdminLayoutController {
     private void loadPage(String fxmlPath) {
         try {
             System.out.println("📂 Chargement: " + fxmlPath);
-
             Parent page = FXMLLoader.load(getClass().getResource(fxmlPath));
 
             if (page != null && contentArea != null) {
@@ -246,7 +307,6 @@ public class AdminLayoutController {
                 contentArea.getChildren().add(page);
                 System.out.println("✅ Page chargée avec succès!");
             }
-
         } catch (IOException e) {
             System.err.println("Error loading page: " + fxmlPath);
             e.printStackTrace();
@@ -300,35 +360,40 @@ public class AdminLayoutController {
     }
 
     private void loadDashboardStats() {
-        // Récupérer les vraies données depuis les services
         int totalIngredients = 0;
         int totalRecipes = 0;
 
         try {
             totalIngredients = ingredientService.getAll().size();
-            totalRecipes = recetteService.countTotal();
+            totalRecipes = recetteService != null ? recetteService.countTotal() : 0;
         } catch (Exception e) {
             System.err.println("Error loading stats: " + e.getMessage());
-            // En cas d'erreur, on garde les valeurs par défaut
         }
 
-        // Mettre à jour les labels
-        if (lblTotalUsers != null) {
-            // TODO: Remplacer par UserService quand disponible
-            lblTotalUsers.setText("128");
-        }
+        if (lblTotalUsers != null) lblTotalUsers.setText("128");
+        if (lblActiveUsers != null) lblActiveUsers.setText("104");
+        if (lblInactiveUsers != null) lblInactiveUsers.setText("24");
+        if (lblAdmins != null) lblAdmins.setText("3");
+        if (lblNewThisMonth != null) lblNewThisMonth.setText("12");
 
         if (lblTotalIngredients != null) {
             lblTotalIngredients.setText(String.valueOf(totalIngredients));
         }
-
         if (lblTotalRecipes != null) {
             lblTotalRecipes.setText(String.valueOf(totalRecipes));
         }
-
         if (lblTotalComplaints != null) {
-            // TODO: Remplacer par ComplaintService quand disponible
             lblTotalComplaints.setText("12");
+        }
+
+        if (lblAdminEmail != null) {
+            var user = SessionManager.getInstance().getCurrentUser();
+            lblAdminEmail.setText(user != null ? user.getEmail() : "admin");
+        }
+        if (lblAdminAvatar != null) {
+            var user = SessionManager.getInstance().getCurrentUser();
+            String name = user != null ? user.getEmail() : "A";
+            lblAdminAvatar.setText(name.substring(0, 1).toUpperCase());
         }
 
         System.out.println("Stats loaded - Ingredients: " + totalIngredients + ", Recipes: " + totalRecipes);

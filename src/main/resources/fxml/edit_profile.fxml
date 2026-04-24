@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefWidth="560" prefHeight="620"
+            style="-fx-background-color: #F0F4F8;"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.UserProfileController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="54" spacing="12"
+              style="-fx-background-color: #0F2820; -fx-padding: 0 20;">
+            <Label text="Edit Profile"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="✕" onAction="#handleClose"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16px; -fx-cursor: hand;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    style="-fx-background-color: #F0F4F8; -fx-background: #F0F4F8; -fx-border-color: transparent;">
+            <VBox spacing="14" style="-fx-background-color: #F0F4F8;">
+                <padding><Insets top="16" right="20" bottom="10" left="20"/></padding>
+
+                <!-- Photo -->
+                <VBox spacing="8"
+                      style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 12;">
+                    <Label text="Profile Photo" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="14">
+                        <StackPane prefWidth="60" prefHeight="60"
+                                   style="-fx-background-color: #2E7D5A; -fx-background-radius: 30;">
+                            <Label fx:id="lblAvatarInitials" text="?"
+                                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                            <ImageView fx:id="imgPhoto" fitWidth="60" fitHeight="60"
+                                       preserveRatio="true" visible="false"/>
+                        </StackPane>
+                        <VBox spacing="5">
+                            <Button fx:id="btnChoosePhoto" text="Change Photo"
+                                    onAction="#handleChoosePhoto" prefHeight="32"
+                                    style="-fx-background-color: #F1F5F9; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 12px; -fx-cursor: hand;"/>
+                            <Label text="JPEG or PNG · max 2 MB" style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+                            <Label fx:id="errPhoto" text="" style="-fx-text-fill: #DC2626; -fx-font-size: 10px;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Fields -->
+                <VBox spacing="10"
+                      style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 12;">
+                    <Label text="Personal Information" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+                    <HBox spacing="12">
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="First Name *" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <TextField fx:id="fieldFirstName"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="errFirstName" text="" style="-fx-text-fill: #DC2626; -fx-font-size: 10px;"/>
+                        </VBox>
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="Last Name *" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <TextField fx:id="fieldLastName"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="errLastName" text="" style="-fx-text-fill: #DC2626; -fx-font-size: 10px;"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="12">
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="Weight (kg)" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <TextField fx:id="fieldWeight" promptText="70.0"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="errWeight" text="" style="-fx-text-fill: #DC2626; -fx-font-size: 10px;"/>
+                        </VBox>
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="Height (cm)" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <TextField fx:id="fieldHeight" promptText="175"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 10; -fx-font-size: 13px;"/>
+                            <Label fx:id="errHeight" text="" style="-fx-text-fill: #DC2626; -fx-font-size: 10px;"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox spacing="3">
+                        <Label text="Phone Number" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                        <TextField fx:id="fieldPhone" promptText="+216 XX XXX XXX"
+                                   style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 10; -fx-font-size: 13px;"/>
+                    </VBox>
+
+                    <VBox spacing="3">
+                        <Label text="Welcome Message" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                        <TextArea fx:id="fieldWelcomeMessage" prefRowCount="3" wrapText="true"
+                                  style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 10; -fx-font-size: 13px;"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="12" prefHeight="54"
+              style="-fx-background-color: white; -fx-border-color: #E2E8F0 transparent transparent transparent; -fx-border-width: 1 0 0 0; -fx-padding: 0 20;">
+            <Button text="Cancel" onAction="#handleClose" prefHeight="36" prefWidth="90"
+                    style="-fx-background-color: #F1F5F9; -fx-border-color: #CBD5E1; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand;"/>
+            <Button text="Save Changes" onAction="#handleSave" prefHeight="36" prefWidth="130"
+                    style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

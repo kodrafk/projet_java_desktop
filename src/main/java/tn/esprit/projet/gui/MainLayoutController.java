@@ -4,20 +4,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import tn.esprit.projet.models.BoycottBrand;
 import tn.esprit.projet.services.BoycottService;
 import tn.esprit.projet.services.EthicalPointsManager;
 import tn.esprit.projet.services.IngredientService;
 import tn.esprit.projet.services.RecetteService;
+import tn.esprit.projet.utils.SessionManager;
 
 import java.io.IOException;
 import java.util.List;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.ArrayList;
+
 public class MainLayoutController {
 
     // ═══════════════════════════════════
@@ -45,7 +50,7 @@ public class MainLayoutController {
     // ═══════════════════════════════════
     @FXML private Label lblTotalIngredients;
     @FXML private Label lblTotalRecipes;
-    @FXML private Label lblExpiredItems;
+    @FXML private Label lblIngredientsSaved;
     @FXML private Label lblEthicalPoints;
     @FXML private Label lblEthicalLevel;
 
@@ -56,7 +61,6 @@ public class MainLayoutController {
     @FXML private Label lblTotalRecipes2;
     @FXML private Label lblExpiredItems2;
     @FXML private Label lblEthicalPoints2;
-
 
     @FXML private Label lblWidgetPoints;
     @FXML private ProgressBar progressEthical;
@@ -86,8 +90,8 @@ public class MainLayoutController {
     @FXML private VBox badgeBox4;
 
     // ═══════════════════════════════════
-// SERVICES
-// ═══════════════════════════════════
+    // SERVICES
+    // ═══════════════════════════════════
     private IngredientService ingredientService;
     private BoycottService boycottService;
     private RecetteService recetteService;
@@ -124,6 +128,11 @@ public class MainLayoutController {
         loadHomeStats();
         loadEthicalWidget();
         loadBoycottWidget();
+        if (txtBoycottSearch != null) {
+            txtBoycottSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+                handleBoycottSearch();
+            });
+        }
     }
 
     // ═══════════════════════════════════
@@ -132,7 +141,12 @@ public class MainLayoutController {
     @FXML
     private void handleHome(ActionEvent event) {
         resetButtonStyles();
-        btnHome.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnHome != null) btnHome.setStyle(ACTIVE_BUTTON_STYLE);
+        showHomePage();
+    }
+
+    @FXML
+    private void handleHome(MouseEvent event) {
         showHomePage();
     }
 
@@ -152,30 +166,42 @@ public class MainLayoutController {
 
     @FXML
     private void toggleKitchenMenu(ActionEvent event) {
-        boolean isVisible = submenuKitchen.isVisible();
-        submenuKitchen.setVisible(!isVisible);
-        submenuKitchen.setManaged(!isVisible);
+        if (submenuKitchen != null) {
+            boolean isVisible = submenuKitchen.isVisible();
+            submenuKitchen.setVisible(!isVisible);
+            submenuKitchen.setManaged(!isVisible);
+        }
     }
 
     @FXML
     private void handleIngredients(ActionEvent event) {
         resetButtonStyles();
-        btnMyKitchen.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnMyKitchen != null) btnMyKitchen.setStyle(ACTIVE_BUTTON_STYLE);
         loadPage("/fxml/ingredients.fxml");
     }
 
     @FXML
     private void handleRecipes(ActionEvent event) {
         resetButtonStyles();
-        btnMyKitchen.setStyle(ACTIVE_BUTTON_STYLE);
+        if (btnMyKitchen != null) btnMyKitchen.setStyle(ACTIVE_BUTTON_STYLE);
         loadPage("/fxml/recipes.fxml");
+    }
+
+    @FXML
+    private void handleKitchen(MouseEvent event) {
+        showPlaceholder("My Kitchen");
     }
 
     @FXML
     private void handleNutrition(ActionEvent event) {
         resetButtonStyles();
         if (btnNutrition != null) btnNutrition.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Nutrition Objectives Page");
+        loadPage("/fxml/objectives.fxml");
+    }
+
+    @FXML
+    private void handleObjectives(MouseEvent event) {
+        loadPage("/fxml/objectives.fxml");
     }
 
     @FXML
@@ -183,6 +209,11 @@ public class MainLayoutController {
         resetButtonStyles();
         if (btnBlog != null) btnBlog.setStyle(ACTIVE_BUTTON_STYLE);
         showPlaceholder("Blog Page");
+    }
+
+    @FXML
+    private void handleBlog(MouseEvent event) {
+        showPlaceholder("Blog");
     }
 
     @FXML
@@ -200,10 +231,50 @@ public class MainLayoutController {
     }
 
     @FXML
+    private void handleEvents(MouseEvent event) {
+        showPlaceholder("Events");
+    }
+
+    @FXML
     private void handleWellness(ActionEvent event) {
         resetButtonStyles();
         if (btnWellness != null) btnWellness.setStyle(ACTIVE_BUTTON_STYLE);
         showPlaceholder("Wellness Page");
+    }
+
+    @FXML
+    private void handleAssistant(ActionEvent event) {
+        showPlaceholder("AI Assistant");
+    }
+
+    @FXML
+    private void handleBookAppointment(ActionEvent event) {
+        showPlaceholder("Book Appointment");
+    }
+
+    @FXML
+    private void handleMyProfile(ActionEvent event) {
+        loadPage("/fxml/user_profile.fxml");
+    }
+
+    @FXML
+    private void handleChangePassword(ActionEvent event) {
+        loadPage("/fxml/change_password.fxml");
+    }
+    @FXML
+    private void handleKitchenRank(ActionEvent event) {
+        loadPage("/fxml/kitchen_rank.fxml");
+    }
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        SessionManager.getInstance().logout();
+        try {
+            Parent login = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(login));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ═══════════════════════════════════
@@ -212,19 +283,17 @@ public class MainLayoutController {
     private void loadHomeStats() {
         try {
             int totalIngredients = ingredientService.getAll().size();
-            int totalRecipes     = 0; // TODO: connecter RecetteService
-            int expiredItems     = 0; // TODO: connecter expiry logic
+            int totalRecipes     = recetteService != null ? recetteService.countTotal() : 0;
+            int expiredItems     = 0;
 
-            // Stats cards
             if (lblTotalIngredients != null)
                 lblTotalIngredients.setText(String.valueOf(totalIngredients));
             if (lblTotalRecipes != null)
                 lblTotalRecipes.setText(String.valueOf(totalRecipes));
-            if (lblExpiredItems != null)
-                lblExpiredItems.setText(String.valueOf(expiredItems));
 
-
-
+            if (lblIngredientsSaved != null) {
+                lblIngredientsSaved.setText(String.valueOf(totalIngredients));
+            }
         } catch (Exception e) {
             System.err.println("loadHomeStats error: " + e.getMessage());
         }
@@ -239,101 +308,94 @@ public class MainLayoutController {
             int scanCount = EthicalPointsManager.getScanCount();
             int boycottCount = EthicalPointsManager.getBoycottRejectCount();
             int recipeCount = recetteService != null ? recetteService.countTotal() : 0;
+            int completedPlans = EthicalPointsManager.getCompletedMealPlanCount();
+            int ingredientCount = ingredientService != null ? ingredientService.getAll().size() : 0;
 
-            // Définir les 5 badges
+            int currentLevel = EthicalPointsManager.getCurrentLevel();
+
+            // ═══ Badges selon le niveau actuel ═══
             List<BadgeData> badges = new ArrayList<>();
-            badges.add(new BadgeData(
-                    "First Recipe",
-                    "Create your first recipe",
-                    "first_recipe.png",
-                    recipeCount >= 1,
-                    recipeCount,
-                    1
-            ));
-            badges.add(new BadgeData(
-                    "Master Chef",
-                    "Create 20 recipes",
-                    "master_chef.png",
-                    recipeCount >= 20,
-                    recipeCount,
-                    20
-            ));
-            badges.add(new BadgeData(
-                    "First Scan",
-                    "Scan your first product",
-                    "first_scan.png",
-                    scanCount >= 1,
-                    scanCount,
-                    1
-            ));
-            badges.add(new BadgeData(
-                    "Boycott Hero",
-                    "Reject 3 boycotted products",
-                    "boycott_hero.png",
-                    boycottCount >= 3,
-                    boycottCount,
-                    3
-            ));
-            badges.add(new BadgeData(
-                    "Ethical Legend",
-                    "Reach 500 ethical points",
-                    "ethical_legend.png",
-                    totalPoints >= 500,
-                    totalPoints,
-                    500
-            ));
 
-            // Trier : unlocked d'abord
-            badges.sort((a, b) -> Boolean.compare(!a.unlocked, !b.unlocked));
+            if (currentLevel == 1) {
+                badges.add(new BadgeData("First Recipe", "Create your first recipe", "first_recipe.png",
+                        recipeCount >= 1, recipeCount, 1));
+                badges.add(new BadgeData("First Scan", "Scan your first product", "first_scan.png",
+                        scanCount >= 1, scanCount, 1));
+                badges.add(new BadgeData("Boycott Hero", "Reject 3 boycotted products", "boycott_hero.png",
+                        boycottCount >= 3, boycottCount, 3));
+            } else if (currentLevel == 2) {
+                badges.add(new BadgeData("Meal Plan Champion", "Complete a full meal plan", "meal_champ.png",
+                        completedPlans >= 1, completedPlans, 1));
+                badges.add(new BadgeData("Master Chef", "Create 20 recipes", "master_chef.png",
+                        recipeCount >= 20, recipeCount, 20));
+                badges.add(new BadgeData("Weekly Warrior", "Complete all 21 meals in a week", "weekly_warrior.png",
+                        completedPlans >= 1, completedPlans, 1));
+            } else {
+                badges.add(new BadgeData("Ingredient Master", "Add 50 ingredients", "ingredient_master.png",
+                        ingredientCount >= 50, ingredientCount, 50));
+                badges.add(new BadgeData("Ethical Guardian", "Reject 10 boycotted products", "ethical_guardian.png",
+                        boycottCount >= 10, boycottCount, 10));
+                badges.add(new BadgeData("Legend Crown", "Reach 500 ethical points", "ethical_legend.png",
+                        totalPoints >= 500, totalPoints, 500));
+            }
 
-            // Compter unlocked
+            // ═══ Level info ═══
+            String levelName;
+            String levelIcon;
+            int nextTarget;
+
+            if (currentLevel == 1) {
+                levelName = "Beginner";
+                levelIcon = "🌱";
+                nextTarget = 100;
+            } else if (currentLevel == 2) {
+                levelName = "Ethical Cook";
+                levelIcon = "🌿";
+                nextTarget = 500;
+            } else {
+                levelName = "Ethical Legend";
+                levelIcon = "👑";
+                nextTarget = totalPoints;
+            }
+
+            // ═══ Progress bar → points progression ═══
+            double progressValue = currentLevel == 3 ? 1.0 : Math.min((double) totalPoints / nextTarget, 1.0);
             long unlockedCount = badges.stream().filter(b -> b.unlocked).count();
 
-            // Mettre à jour progress bar
-            if (progressEthical != null)
-                progressEthical.setProgress(unlockedCount / 5.0);
-            if (lblProgressText != null)
-                lblProgressText.setText(unlockedCount + " / 5 badges unlocked");
-            if (lblWidgetPoints != null)
-                lblWidgetPoints.setText(totalPoints + " pts");
-            if (lblEthicalPoints != null)
-                lblEthicalPoints.setText(String.valueOf(totalPoints));
-            if (lblEthicalLevel != null)
-                lblEthicalLevel.setText(EthicalPointsManager.getLevelName());
-            if (lblEthicalPoints2 != null)
-                lblEthicalPoints2.setText(totalPoints + " pts total");
+            if (progressEthical != null) progressEthical.setProgress(progressValue);
+            if (lblProgressText != null) lblProgressText.setText(
+                    levelIcon + " Level " + currentLevel + " — " + levelName + " (" + totalPoints + " / " + nextTarget + " pts)");
+            if (lblWidgetPoints != null) lblWidgetPoints.setText(totalPoints + " pts");
+            if (lblEthicalPoints != null) lblEthicalPoints.setText(String.valueOf(totalPoints));
+            if (lblEthicalLevel != null) lblEthicalLevel.setText(levelIcon + " " + levelName);
+            if (lblEthicalPoints2 != null) lblEthicalPoints2.setText(unlockedCount + " / 3 badges unlocked");
 
-            // Afficher les badges
+            // ═══ Badges grid ═══
             if (badgesContainer != null) {
                 badgesContainer.getChildren().clear();
-
-                // Grid 2 colonnes
                 javafx.scene.layout.GridPane grid = new javafx.scene.layout.GridPane();
                 grid.setHgap(12);
                 grid.setVgap(12);
-
                 javafx.scene.layout.ColumnConstraints col1 = new javafx.scene.layout.ColumnConstraints();
-                col1.setPercentWidth(50);
+                col1.setPercentWidth(33.33);
                 javafx.scene.layout.ColumnConstraints col2 = new javafx.scene.layout.ColumnConstraints();
-                col2.setPercentWidth(50);
-                grid.getColumnConstraints().addAll(col1, col2);
+                col2.setPercentWidth(33.33);
+                javafx.scene.layout.ColumnConstraints col3 = new javafx.scene.layout.ColumnConstraints();
+                col3.setPercentWidth(33.33);
+                grid.getColumnConstraints().addAll(col1, col2, col3);
 
                 for (int i = 0; i < badges.size(); i++) {
                     BadgeData badge = badges.get(i);
                     VBox card = buildBadgeCard(badge);
-                    grid.add(card, i % 2, i / 2);
+                    grid.add(card, i, 0);
                 }
-
                 badgesContainer.getChildren().add(grid);
             }
-
         } catch (Exception e) {
             System.err.println("loadEthicalWidget error: " + e.getMessage());
         }
     }
-    // ═══════════════════════════════════
-// BADGE DATA CLASS
-// ═══════════════════════════════════
+
     private static class BadgeData {
         String name;
         String description;
@@ -359,25 +421,11 @@ public class MainLayoutController {
         card.setPrefWidth(180);
 
         if (badge.unlocked) {
-            card.setStyle(
-                    "-fx-background-color: #F0FFF4;" +
-                            "-fx-background-radius: 14;" +
-                            "-fx-border-color: #2ECC71;" +
-                            "-fx-border-radius: 14;" +
-                            "-fx-border-width: 2;" +
-                            "-fx-padding: 16;"
-            );
+            card.setStyle("-fx-background-color: #F0FFF4;-fx-background-radius: 14;-fx-border-color: #2ECC71;-fx-border-radius: 14;-fx-border-width: 2;-fx-padding: 16;");
         } else {
-            card.setStyle(
-                    "-fx-background-color: #F8FAFC;" +
-                            "-fx-background-radius: 14;" +
-                            "-fx-border-color: #E2E8F0;" +
-                            "-fx-border-radius: 14;" +
-                            "-fx-padding: 16;"
-            );
+            card.setStyle("-fx-background-color: #F8FAFC;-fx-background-radius: 14;-fx-border-color: #E2E8F0;-fx-border-radius: 14;-fx-padding: 16;");
         }
 
-        // Image badge
         StackPane imageContainer = new StackPane();
         imageContainer.setPrefSize(64, 64);
         imageContainer.setMaxSize(64, 64);
@@ -389,9 +437,7 @@ public class MainLayoutController {
                 imageView.setFitWidth(56);
                 imageView.setFitHeight(56);
                 imageView.setPreserveRatio(true);
-                if (!badge.unlocked) {
-                    imageView.setStyle("-fx-opacity: 0.3;");
-                }
+                if (!badge.unlocked) imageView.setStyle("-fx-opacity: 0.3;");
                 imageContainer.getChildren().add(imageView);
             }
         } catch (Exception e) {
@@ -400,50 +446,27 @@ public class MainLayoutController {
             imageContainer.getChildren().add(fallback);
         }
 
-        // Nom badge
         Label nameLabel = new Label(badge.name);
-        nameLabel.setStyle(
-                "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: " + (badge.unlocked ? "#1E293B" : "#94A3B8") + ";" +
-                        "-fx-wrap-text: true;"
-        );
+        nameLabel.setStyle("-fx-font-size: 12px;-fx-font-weight: bold;-fx-text-fill: " + (badge.unlocked ? "#1E293B" : "#94A3B8") + ";-fx-wrap-text: true;");
         nameLabel.setAlignment(Pos.CENTER);
 
-        // Description
         Label descLabel = new Label(badge.description);
-        descLabel.setStyle(
-                "-fx-font-size: 10px;" +
-                        "-fx-text-fill: #94A3B8;" +
-                        "-fx-wrap-text: true;"
-        );
+        descLabel.setStyle("-fx-font-size: 10px;-fx-text-fill: #94A3B8;-fx-wrap-text: true;");
         descLabel.setAlignment(Pos.CENTER);
         descLabel.setWrapText(true);
 
-        // Statut
-        Label statusLabel = new Label(
-                badge.unlocked ? "✅ Unlocked" :
-                        "🔒 " + badge.currentValue + " / " + badge.targetValue
-        );
-        statusLabel.setStyle(
-                "-fx-font-size: 10px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: " + (badge.unlocked ? "#27AE60" : "#64748B") + ";" +
-                        "-fx-background-color: " + (badge.unlocked ? "#DCFCE7" : "#F1F5F9") + ";" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-padding: 3 8;"
-        );
+        Label statusLabel = new Label(badge.unlocked ? "✅ Unlocked" : "🔒 " + badge.currentValue + " / " + badge.targetValue);
+        statusLabel.setStyle("-fx-font-size: 10px;-fx-font-weight: bold;-fx-text-fill: " + (badge.unlocked ? "#27AE60" : "#64748B") + ";-fx-background-color: " + (badge.unlocked ? "#DCFCE7" : "#F1F5F9") + ";-fx-background-radius: 6;-fx-padding: 3 8;");
 
         card.getChildren().addAll(imageContainer, nameLabel, descLabel, statusLabel);
-
-// Rendre cliquable
         card.setStyle(card.getStyle() + "-fx-cursor: hand;");
         card.setOnMouseClicked(e -> showBadgeOverlay(badge));
 
         return card;
     }
+
     private void showBadgeOverlay(BadgeData badge) {
-        // Image
+        if(badgeOverlay == null) return;
         try {
             var imgUrl = getClass().getResource("/images/" + badge.imageName);
             if (imgUrl != null) {
@@ -454,94 +477,35 @@ public class MainLayoutController {
             badgeModalImage.setImage(null);
         }
 
-        // Titre + description
         badgeModalTitle.setText(badge.name);
         badgeModalDescription.setText(badge.description);
 
-        // Statut
         if (badge.unlocked) {
             badgeModalStatus.setText("✅ Unlocked");
-            badgeModalStatus.setStyle(
-                    "-fx-font-size: 13px;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-text-fill: #27AE60;" +
-                            "-fx-background-color: #DCFCE7;" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-padding: 6 16;"
-            );
-            badgeModalImageContainer.setStyle(
-                    "-fx-background-color: #F0FFF4;" +
-                            "-fx-background-radius: 70;" +
-                            "-fx-border-color: #2ECC71;" +
-                            "-fx-border-radius: 70;" +
-                            "-fx-border-width: 3;"
-            );
+            badgeModalStatus.setStyle("-fx-font-size: 13px;-fx-font-weight: bold;-fx-text-fill: #27AE60;-fx-background-color: #DCFCE7;-fx-background-radius: 8;-fx-padding: 6 16;");
+            badgeModalImageContainer.setStyle("-fx-background-color: #F0FFF4;-fx-background-radius: 70;-fx-border-color: #2ECC71;-fx-border-radius: 70;-fx-border-width: 3;");
             badgeModalProgressBox.setVisible(false);
             badgeModalProgressBox.setManaged(false);
         } else {
             badgeModalStatus.setText("🔒 Locked");
-            badgeModalStatus.setStyle(
-                    "-fx-font-size: 13px;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-text-fill: #64748B;" +
-                            "-fx-background-color: #F1F5F9;" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-padding: 6 16;"
-            );
-            badgeModalImageContainer.setStyle(
-                    "-fx-background-color: #F8FAFC;" +
-                            "-fx-background-radius: 70;" +
-                            "-fx-border-color: #E2E8F0;" +
-                            "-fx-border-radius: 70;" +
-                            "-fx-border-width: 3;"
-            );
-
-            // Progression
-            double progress = badge.targetValue > 0
-                    ? (double) badge.currentValue / badge.targetValue
-                    : 0;
+            badgeModalStatus.setStyle("-fx-font-size: 13px;-fx-font-weight: bold;-fx-text-fill: #64748B;-fx-background-color: #F1F5F9;-fx-background-radius: 8;-fx-padding: 6 16;");
+            badgeModalImageContainer.setStyle("-fx-background-color: #F8FAFC;-fx-background-radius: 70;-fx-border-color: #E2E8F0;-fx-border-radius: 70;-fx-border-width: 3;");
+            double progress = badge.targetValue > 0 ? (double) badge.currentValue / badge.targetValue : 0;
             badgeModalProgressBar.setProgress(Math.min(progress, 1.0));
-            badgeModalProgressText.setText(
-                    badge.currentValue + " / " + badge.targetValue
-            );
+            badgeModalProgressText.setText(badge.currentValue + " / " + badge.targetValue);
             badgeModalProgressBox.setVisible(true);
             badgeModalProgressBox.setManaged(true);
         }
 
-        // Afficher overlay
         badgeOverlay.setVisible(true);
         badgeOverlay.setManaged(true);
     }
 
     @FXML
     private void closeBadgeOverlay() {
-        badgeOverlay.setVisible(false);
-        badgeOverlay.setManaged(false);
-    }
-    private void updateBadge(VBox badgeBox, Label badgeLabel, boolean unlocked) {
-        if (badgeBox == null || badgeLabel == null) return;
-
-        if (unlocked) {
-            badgeBox.setStyle(
-                    "-fx-background-color: #F0FFF4;" +
-                            "-fx-background-radius: 14;" +
-                            "-fx-border-color: #2ECC71;" +
-                            "-fx-border-radius: 14;" +
-                            "-fx-border-width: 2;" +
-                            "-fx-padding: 14;"
-            );
-            badgeLabel.setText("✅ Unlocked");
-            badgeLabel.setStyle("-fx-font-size: 9px; -fx-text-fill: #27AE60; -fx-font-weight: bold;");
-        } else {
-            badgeBox.setStyle(
-                    "-fx-background-color: #F8FAFC;" +
-                            "-fx-background-radius: 14;" +
-                            "-fx-border-color: #E2E8F0;" +
-                            "-fx-border-radius: 14;" +
-                            "-fx-padding: 14;"
-            );
-            badgeLabel.setText("🔒 Locked");
-            badgeLabel.setStyle("-fx-font-size: 9px; -fx-text-fill: #94A3B8;");
+        if(badgeOverlay != null) {
+            badgeOverlay.setVisible(false);
+            badgeOverlay.setManaged(false);
         }
     }
 
@@ -550,12 +514,8 @@ public class MainLayoutController {
     // ═══════════════════════════════════
     private void loadBoycottWidget() {
         try {
-            int total = boycottService.getTotalBoycottedBrands();
-
-            if (lblBoycottTotal != null)
-                lblBoycottTotal.setText(total + " brands in database");
-
-
+            int total = boycottService != null ? boycottService.getTotalBoycottedBrands() : 0;
+            if (lblBoycottTotal != null) lblBoycottTotal.setText(total + " brands in database");
         } catch (Exception e) {
             System.err.println("loadBoycottWidget error: " + e.getMessage());
         }
@@ -563,77 +523,70 @@ public class MainLayoutController {
 
     @FXML
     private void handleBoycottSearch() {
-        if (txtBoycottSearch == null || boycottResultsBox == null) return;
+        if (txtBoycottSearch == null || boycottResultsBox == null || boycottService == null) return;
 
         String keyword = txtBoycottSearch.getText().trim();
-        if (keyword.isEmpty()) return;
-
-        List<BoycottBrand> results = boycottService.searchByName(keyword);
         boycottResultsBox.getChildren().clear();
 
+        // Champ vide → message initial
+        if (keyword.isEmpty()) {
+            VBox initialBox = new VBox(8);
+            initialBox.setAlignment(Pos.CENTER);
+            initialBox.setPrefHeight(160);
+            Label icon = new Label("🔍");
+            icon.setStyle("-fx-font-size: 30px;");
+            Label msg = new Label("Search a brand to check");
+            msg.setStyle("-fx-font-size: 13px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;");
+            Label sub = new Label("Type a brand name to check if it's boycotted");
+            sub.setStyle("-fx-font-size: 11px; -fx-text-fill: #CBD5E1;");
+            initialBox.getChildren().addAll(icon, msg, sub);
+            boycottResultsBox.getChildren().add(initialBox);
+            return;
+        }
+
+        // Recherche trop courte
+        if (keyword.length() < 2) return;
+
+        List<BoycottBrand> results = boycottService.searchByName(keyword);
+
         if (results.isEmpty()) {
-            // CLEAN
+            // ✅ Non boycotté
             VBox cleanBox = new VBox(8);
             cleanBox.setAlignment(Pos.CENTER);
             cleanBox.setStyle("-fx-padding: 20;");
-
             Label icon = new Label("🟢");
             icon.setStyle("-fx-font-size: 30px;");
-
-            Label msg = new Label("\"" + keyword + "\" is NOT boycotted");
-            msg.setStyle(
-                    "-fx-font-size: 13px;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-text-fill: #27AE60;"
-            );
-
-            Label sub = new Label("This brand has no reported ties to occupation");
+            Label msg = new Label("\"" + keyword + "\" — Not boycotted");
+            msg.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #27AE60;");
+            Label sub = new Label("Not found in our boycott database");
             sub.setStyle("-fx-font-size: 11px; -fx-text-fill: #64748B;");
             sub.setWrapText(true);
-
             cleanBox.getChildren().addAll(icon, msg, sub);
             boycottResultsBox.getChildren().add(cleanBox);
-
         } else {
-            // BOYCOTTED
+            // 🔴 Boycotté
             for (BoycottBrand brand : results) {
                 VBox card = new VBox(6);
-                card.setStyle(
-                        "-fx-background-color: #FFF0F0;" +
-                                "-fx-background-radius: 8;" +
-                                "-fx-padding: 12;" +
-                                "-fx-border-color: #FECACA;" +
-                                "-fx-border-radius: 8;"
-                );
+                card.setStyle("-fx-background-color: #FFF0F0; -fx-background-radius: 8; -fx-padding: 12; -fx-border-color: #FECACA; -fx-border-radius: 8;");
 
                 Label nameLabel = new Label("🔴 " + brand.getBrandName());
-                nameLabel.setStyle(
-                        "-fx-font-size: 13px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-text-fill: #E74C3C;"
-                );
+                nameLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #E74C3C;");
 
-                Label reasonLabel = new Label("Reason: " + brand.getReason());
-                reasonLabel.setStyle(
-                        "-fx-font-size: 11px;" +
-                                "-fx-text-fill: #64748B;"
-                );
+                Label parentLabel = new Label("🏢 " + brand.getParentCompany());
+                parentLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #475569;");
+
+                Label reasonLabel = new Label("⚠️ " + brand.getReason());
+                reasonLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #64748B;");
                 reasonLabel.setWrapText(true);
 
-                Label catLabel = new Label("Category: " + brand.getCategory());
-                catLabel.setStyle(
-                        "-fx-font-size: 11px;" +
-                                "-fx-text-fill: #94A3B8;"
-                );
+                Label catLabel = new Label("📂 " + brand.getCategory());
+                catLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #94A3B8;");
 
-                Label altLabel = new Label("💡 " + brand.getAlternatives());
-                altLabel.setStyle(
-                        "-fx-font-size: 11px;" +
-                                "-fx-text-fill: #27AE60;"
-                );
+                Label altLabel = new Label("💡 Alternative: " + brand.getAlternatives());
+                altLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #27AE60;");
                 altLabel.setWrapText(true);
 
-                card.getChildren().addAll(nameLabel, reasonLabel, catLabel, altLabel);
+                card.getChildren().addAll(nameLabel, parentLabel, reasonLabel, catLabel, altLabel);
                 boycottResultsBox.getChildren().add(card);
             }
         }
@@ -643,11 +596,13 @@ public class MainLayoutController {
     // HELPERS
     // ═══════════════════════════════════
     private void showHomePage() {
-        contentArea.getChildren().clear();
-        contentArea.getChildren().add(homeContent);
-        loadHomeStats();
-        loadEthicalWidget();
-        loadBoycottWidget();
+        if (contentArea != null && homeContent != null) {
+            contentArea.getChildren().setAll(homeContent);
+            loadHomeStats();
+            loadEthicalWidget();
+            loadBoycottWidget();
+
+        }
     }
 
     private void loadPage(String fxmlPath) {
@@ -660,9 +615,10 @@ public class MainLayoutController {
             }
             FXMLLoader loader = new FXMLLoader(resource);
             Parent page = loader.load();
-            contentArea.getChildren().clear();
-            contentArea.getChildren().add(page);
-        } catch (IOException e) {
+            if(contentArea != null) {
+                contentArea.getChildren().setAll(page);
+            }
+        } catch (Exception e) {
             System.err.println("Error loading: " + fxmlPath);
             e.printStackTrace();
             showPlaceholder("Error loading page");
@@ -670,14 +626,11 @@ public class MainLayoutController {
     }
 
     private void showPlaceholder(String pageName) {
-        Label placeholder = new Label(pageName + " - Coming Soon");
-        placeholder.setStyle(
-                "-fx-font-size: 28px;" +
-                        "-fx-text-fill: #475569;" +
-                        "-fx-font-weight: bold;"
-        );
-        contentArea.getChildren().clear();
-        contentArea.getChildren().add(placeholder);
+        if(contentArea != null) {
+            Label placeholder = new Label(pageName + " - Coming Soon");
+            placeholder.setStyle("-fx-font-size: 28px;-fx-text-fill: #475569;-fx-font-weight: bold;");
+            contentArea.getChildren().setAll(placeholder);
+        }
     }
 
     private void resetButtonStyles() {

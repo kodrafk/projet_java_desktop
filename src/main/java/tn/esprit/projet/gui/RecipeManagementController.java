@@ -107,7 +107,11 @@ public class RecipeManagementController implements Initializable {
     private RecetteService recetteService;
     private IngredientService ingredientService;
     private RecetteFavorisService favorisService;
-    private static final int CURRENT_USER_ID = 1;
+    private int getCurrentUserId() {
+        return tn.esprit.projet.utils.SessionManager.getCurrentUser() != null 
+            ? tn.esprit.projet.utils.SessionManager.getCurrentUser().getId() 
+            : 1;
+    }
     private boolean showFavoritesOnly = false;
     private FilteredList<Recette> filteredRecipes;
     private Recette currentRecette = null;
@@ -138,6 +142,7 @@ public class RecipeManagementController implements Initializable {
         ingredientService = new IngredientService();
         favorisService = new RecetteFavorisService();
         recommendationService = new RecipeRecommendationService();
+        setupFormComboBoxes();
         setupTable();
         setupFilters();
         setupSearchListener();
@@ -179,7 +184,15 @@ public class RecipeManagementController implements Initializable {
         }
         loadRecommendations();
     }
+    private void setupFormComboBoxes() {
+        if (cmbType != null) {
+            cmbType.setItems(FXCollections.observableArrayList(TYPES_LABELS));
+        }
 
+        if (cmbDifficulte != null) {
+            cmbDifficulte.setItems(FXCollections.observableArrayList(DIFFICULTIES_LABELS));
+        }
+    }
     private void renderTypePills() {
         filterPillsContainer.getChildren().clear();
 
@@ -211,7 +224,7 @@ public class RecipeManagementController implements Initializable {
         }
 
         // Favorites Pill
-        int favCount = favorisService.countFavorites(CURRENT_USER_ID);
+        int favCount = favorisService.countFavorites(getCurrentUserId());
         Button favPill = createPill("❤️ FAVORITES (" + favCount + ")", showFavoritesOnly);
         favPill.setOnAction(e -> {
             showFavoritesOnly = true;
@@ -296,8 +309,8 @@ public class RecipeManagementController implements Initializable {
         StackPane.setAlignment(typeBadge, Pos.TOP_LEFT);
         StackPane.setMargin(typeBadge, new Insets(15));
 
-        boolean isFav = favorisService.isFavorite(CURRENT_USER_ID, recette.getId());
-        Button btnFav = new Button(isFav ? "\u2764" : "\u2661");
+        boolean isFav = favorisService.isFavorite(getCurrentUserId(), recette.getId());
+        Button btnFav = new Button(isFav ? "❤" : "♡");
         btnFav.setStyle(
                 "-fx-background-color: rgba(255,255,255,0.95);" +
                         "-fx-text-fill: " + (isFav ? "#F43F5E" : "#94A3B8") + ";" +
@@ -311,9 +324,9 @@ public class RecipeManagementController implements Initializable {
         actionsOverlay.setStyle("-fx-background-color: rgba(0,0,0,0.4); -fx-background-radius: 20 20 0 0;");
         actionsOverlay.setOpacity(0);
         btnFav.setOnAction(e -> {
-            favorisService.toggleFavorite(CURRENT_USER_ID, recette.getId());
-            boolean nowFav = favorisService.isFavorite(CURRENT_USER_ID, recette.getId());
-            btnFav.setText(nowFav ? "\u2764" : "\u2661");
+            favorisService.toggleFavorite(getCurrentUserId(), recette.getId());
+            boolean nowFav = favorisService.isFavorite(getCurrentUserId(), recette.getId());
+            btnFav.setText(nowFav ? "❤" : "♡");
             btnFav.setStyle(
                     "-fx-background-color: rgba(255,255,255,0.95);" +
                             "-fx-text-fill: " + (nowFav ? "#F43F5E" : "#94A3B8") + ";" +
@@ -517,23 +530,35 @@ public class RecipeManagementController implements Initializable {
             cmbFilterTime.setValue("All");
             cmbFilterTime.setOnAction(e -> filterRecipes());
         }
-
-        // Modal ComboBoxes
-        if (cmbType != null) cmbType.setItems(FXCollections.observableArrayList(TYPES_LABELS));
-        if (cmbDifficulte != null) cmbDifficulte.setItems(FXCollections.observableArrayList(DIFFICULTIES_LABELS));
     }
 
     private void setupSearchListener() {
         if (txtSearch != null) {
-            txtSearch.textProperty().addListener((obs, old, newVal) -> filterRecipes());
+            txtSearch.textProperty().addListener((obs, old, newVal) -> {
+                loadRecipes();
+                applyFilters();
+            });
         }
     }
 
     // ==================== LOAD DATA ====================
 
     private void loadRecipes() {
-        List<Recette> allRecipes = recetteService.getAll();
-        filteredRecipes = new FilteredList<>(FXCollections.observableArrayList(allRecipes), p -> true);
+        int currentUserId = getCurrentUserId();
+        List<Recette> allRecipes;
+
+        // Si admin → charger toutes les recettes
+        if (tn.esprit.projet.utils.SessionManager.getCurrentUser() != null
+                && tn.esprit.projet.utils.SessionManager.getCurrentUser().isAdmin()) {
+            allRecipes = recetteService.getAll();
+            System.out.println("➡️ Admin mode → toutes les recettes: " + allRecipes.size());
+        } else {
+            allRecipes = recetteService.getByUserId(currentUserId);
+            System.out.println("➡️ User mode → recettes user " + currentUserId + ": " + allRecipes.size());
+        }
+
+        filteredRecipes = new FilteredList<>(
+                FXCollections.observableArrayList(allRecipes), p -> true);
         applyFilters();
     }
 
@@ -546,7 +571,7 @@ public class RecipeManagementController implements Initializable {
         String timeFilter = (cmbFilterTime != null) ? cmbFilterTime.getValue() : "All";
 
         List<Integer> favoriteIds = showFavoritesOnly
-                ? favorisService.getFavoriteIds(CURRENT_USER_ID)
+                ? favorisService.getFavoriteIds(getCurrentUserId())
                 : null;
 
         filteredRecipes.setPredicate(recette -> {
@@ -660,11 +685,12 @@ public class RecipeManagementController implements Initializable {
     // ==================== STATS ====================
 
     private void updateStats() {
-        if (lblTotalRecipes != null) lblTotalRecipes.setText(String.valueOf(recetteService.countTotal()));
-        if (lblEntrees != null) lblEntrees.setText(String.valueOf(recetteService.countByType("entree")));
-        if (lblPlats != null) lblPlats.setText(String.valueOf(recetteService.countByType("main dish")));
-        if (lblDesserts != null) lblDesserts.setText(String.valueOf(recetteService.countByType("dessert")));
-        if (lblBoissons != null) lblBoissons.setText(String.valueOf(recetteService.countByType("drinks")));
+        int currentUserId = getCurrentUserId();
+        if (lblTotalRecipes != null) lblTotalRecipes.setText(String.valueOf(recetteService.countTotalByUserId(currentUserId)));
+        if (lblEntrees != null) lblEntrees.setText(String.valueOf(recetteService.countByTypeAndUserId("entree", currentUserId)));
+        if (lblPlats != null) lblPlats.setText(String.valueOf(recetteService.countByTypeAndUserId("main dish", currentUserId)));
+        if (lblDesserts != null) lblDesserts.setText(String.valueOf(recetteService.countByTypeAndUserId("dessert", currentUserId)));
+        if (lblBoissons != null) lblBoissons.setText(String.valueOf(recetteService.countByTypeAndUserId("drinks", currentUserId)));
     }
 
     // ==================== HANDLERS ====================
@@ -838,7 +864,13 @@ public class RecipeManagementController implements Initializable {
         recette.setTempsPreparation(Integer.parseInt(txtTemps.getText().trim()));
         recette.setDescription(txtDescription.getText().trim());
         recette.setImage(txtImage.getText().trim());
-        recette.setUserId(1); // TODO: Use logged in user ID
+        // === DIAGNOSTIC LOG ===
+        tn.esprit.projet.models.User sessionUser = tn.esprit.projet.utils.SessionManager.getCurrentUser();
+        System.out.println("[SAVE RECETTE] SessionManager.getCurrentUser() = " + 
+            (sessionUser != null ? "id=" + sessionUser.getId() + " email=" + sessionUser.getEmail() : "NULL"));
+        int resolvedUserId = getCurrentUserId();
+        System.out.println("[SAVE RECETTE] resolvedUserId = " + resolvedUserId);
+        recette.setUserId(resolvedUserId); // Use logged in user ID
 
         // Retrieve steps
         List<String> etapes = new ArrayList<>();
@@ -1420,7 +1452,7 @@ public class RecipeManagementController implements Initializable {
             try {
                 // Calcul IA (peut prendre un peu de temps)
                 List<RecipeRecommendation> recommendations =
-                        recommendationService.getRecommendations(CURRENT_USER_ID, 5);
+                        recommendationService.getRecommendations(getCurrentUserId(), 5);
 
                 // Retour sur le thread JavaFX
                 Platform.runLater(() -> {

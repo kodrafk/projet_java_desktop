@@ -1,4 +1,4 @@
-package tn.esprit.projet.controllers;
+package tn.esprit.projet.gui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import tn.esprit.projet.models.MealPlan;
 import tn.esprit.projet.services.MealPlannerService;
 import tn.esprit.projet.utils.MyBDConnexion;
+import tn.esprit.projet.utils.SessionManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -52,10 +53,11 @@ public class MealPlannerFormController implements Initializable {
     @FXML private VBox        vboxForm;
 
     private final MealPlannerService plannerService = new MealPlannerService();
-    private int currentUserId = 1;
+    private int currentUserId ;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        currentUserId = SessionManager.getInstance().getCurrentUser().getId();
         setupObjectifChoiceBox();
         chargerProfilUser();
         chargerStatsStock();
@@ -71,15 +73,16 @@ public class MealPlannerFormController implements Initializable {
     }
 
     private void chargerProfilUser() {
-        String sql = "SELECT nom, prenom, poids, taille FROM user WHERE id = ?";
-        try (PreparedStatement ps = MyBDConnexion.getInstance()
-                .getCnx().prepareStatement(sql)) {
-            ps.setInt(1, currentUserId);
+        try {
+            int userId = SessionManager.getInstance().getCurrentUser().getId();
+            String sql = "SELECT first_name, last_name, weight, height FROM user WHERE id = ?";
+            PreparedStatement ps = MyBDConnexion.getInstance().getCnx().prepareStatement(sql);
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                labelNom   .setText(rs.getString("prenom") + " " + rs.getString("nom"));
-                labelPoids .setText(rs.getDouble("poids")  + " kg");
-                labelTaille.setText(rs.getDouble("taille") + " cm");
+                labelNom.setText(rs.getString("first_name") + " " + rs.getString("last_name"));
+                labelPoids.setText(rs.getFloat("weight") + " kg");
+                labelTaille.setText(rs.getFloat("height") + " cm");
             }
         } catch (SQLException e) {
             System.err.println("❌ chargerProfilUser : " + e.getMessage());
@@ -174,7 +177,7 @@ public class MealPlannerFormController implements Initializable {
                     getClass().getResource("/fxml/meal_plan_result.fxml"));
             Parent root = loader.load();
 
-            tn.esprit.projet.controllers.MealPlanResultController ctrl = loader.getController();
+            tn.esprit.projet.gui.MealPlanResultController ctrl = loader.getController();
             ctrl.setPlan(plan);
 
             Stage stage = (Stage) vboxForm.getScene().getWindow();

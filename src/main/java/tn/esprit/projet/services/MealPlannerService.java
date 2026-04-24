@@ -63,17 +63,23 @@ public class MealPlannerService {
     // ═════════════════════════════════════════════════════════
     public double calculerBesoinCalorique(int userId,
                                           MealPlan.Objectif objectif) {
-        String sql = "SELECT poids, taille, age, genre FROM user WHERE id = ?";
+        String sql = "SELECT weight, height, birthday, roles FROM user WHERE id = ?";
         double bmr = 1800; // valeur par défaut
 
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                double poids  = rs.getDouble("poids");
-                double taille = rs.getDouble("taille");
-                int    age    = rs.getInt   ("age");
-                String genre  = rs.getString("genre");
+                double poids  = rs.getDouble("weight");
+                double taille = rs.getDouble("height");
+
+                java.sql.Date birthday = rs.getDate("birthday");
+                int age = 25; // valeur par défaut
+                if (birthday != null) {
+                    age = java.time.LocalDate.now().getYear()
+                            - birthday.toLocalDate().getYear();
+                }
+                String genre  = "homme";
 
                 if ("homme".equalsIgnoreCase(genre) ||
                         "male".equalsIgnoreCase(genre)) {
@@ -137,7 +143,7 @@ public class MealPlannerService {
                 Map<String, Object> row = new HashMap<>();
                 row.put("id",       rs.getInt   ("id"));
                 row.put("nom",      rs.getString("nom"));
-                row.put("images",    rs.getString("images"));   // 🆕
+                row.put("image", rs.getString("image"));
                 row.put("calories", rs.getInt   ("calories"));
                 recettes.add(row);
             }
@@ -245,30 +251,19 @@ public class MealPlannerService {
         for (MealPlanItem.JourNom jour : jours) {
             for (RecetteInfoPlus.MomentRepas moment : moments) {
 
-                // 1. Filtrer recettes compatibles
                 List<Map<String, Object>> recettes =
-                        filtrerRecettes(regime, allergies, moment);
+                        filtrerRecettes(regime, allergies, moment, userId);
 
-                // 2. Calculer score final pour chaque recette
                 for (Map<String, Object> r : recettes) {
                     int id  = (int) r.get("id");
                     int cal = (int) r.get("calories");
-
                     double sg = calculerScoreAntiGaspillage(id, stock);
-                    double sn = calculerScoreNutritionnel(cal,
-                            caloriesJournalieres, moment);
-                    double sf = calculerScoreFinal(sg, sn);
-
-                    r.put("score", sf);
+                    double sn = calculerScoreNutritionnel(cal, caloriesJournalieres, moment);
+                    r.put("score", calculerScoreFinal(sg, sn));
                 }
 
-                // 3. Trier par score décroissant
-                recettes.sort((a, b) ->
-                        Double.compare(
-                                (double) b.get("score"),
-                                (double) a.get("score")));
+                recettes.sort((a, b) -> Double.compare((double) b.get("score"), (double) a.get("score")));
 
-                // 4. Prendre TOP 3 non encore utilisées
                 List<Map<String, Object>> top3 = new ArrayList<>();
                 for (Map<String, Object> r : recettes) {
                     if (!dejUtilises.contains((int) r.get("id"))) {
@@ -277,43 +272,30 @@ public class MealPlannerService {
                     }
                 }
 
-                // Si top3 vide → prendre première disponible
+                // ⚠️ Fallback : si pas assez de recettes uniques, autoriser répétition
                 if (top3.isEmpty() && !recettes.isEmpty()) {
                     top3.add(recettes.get(0));
+                    System.out.println("⚠️ Recettes uniques épuisées → répétition autorisée pour " + moment);
                 }
 
-                // Si toujours vide → passer ce créneau
                 if (top3.isEmpty()) continue;
 
-                // 5. Choisir aléatoirement parmi TOP 3
-                Map<String, Object> choisi =
-                        top3.get(random.nextInt(top3.size()));
-
+                Map<String, Object> choisi = top3.get(random.nextInt(top3.size()));
                 int    recetteId  = (int)    choisi.get("id");
                 String recetteNom = (String) choisi.get("nom");
+                String recetteImg = (String) choisi.get("image");
                 int    calories   = (int)    choisi.get("calories");
 
                 dejUtilises.add(recetteId);
 
-                // 6. Déterminer urgence dominante de cette recette
-                MealPlanItem.UrgenceNiveau urgence =
-                        getUrgenceDominante(recetteId, stock);
-
-                // 7. Créer l'item
-                MealPlanItem item = new MealPlanItem(
-                        0,
-                        jour,
+                MealPlanItem.UrgenceNiveau urgence = getUrgenceDominante(recetteId, stock);
+                MealPlanItem item = new MealPlanItem(0, jour,
                         MealPlanItem.MomentRepas.valueOf(moment.name()),
-                        recetteId,
-                        recetteNom,
-                        calories,
-                        urgence
-                );
+                        recetteId, recetteNom, calories, urgence);
+                item.setRecetteImage(recetteImg);
                 plan.add(item);
             }
         }
-
-        System.out.println("✅ Plan généré → " + plan.size() + " repas");
         return plan;
     }
 
@@ -397,5 +379,52 @@ public class MealPlannerService {
         }
         return stats;
     }
+    public List<Map<String, Object>> filtrerRecettes(
+            MealPlan.Regime             regime,
+            MealPlan                    allergies,
+            RecetteInfoPlus.MomentRepas moment,
+            int                         excludeUserId) {
 
+        List<Map<String, Object>> recettes = new ArrayList<>();
+
+        // La requête SQL n'a que DEUX points d'interrogation "?"
+        StringBuilder sql = new StringBuilder(
+                "SELECT r.id, r.nom, r.image, rip.calories " +
+                        "FROM recette r " +
+                        "JOIN recette_info_plus rip ON r.id = rip.recette_id " +
+                        "WHERE rip.moment_repas = ? AND r.user_id != ?"
+        );
+
+        // On ajoute les filtres directement dans le texte SQL (sans "?")
+        switch (regime) {
+            case VEGETARIEN -> sql.append(" AND rip.is_vegetarien = 1");
+            case VEGAN      -> sql.append(" AND rip.is_vegan = 1");
+            case HALAL      -> sql.append(" AND rip.is_halal = 1");
+            default         -> {}
+        }
+
+        if (allergies.isAllergieLactose()) sql.append(" AND rip.contains_lactose = 0");
+        if (allergies.isAllergieGluten())  sql.append(" AND rip.contains_gluten = 0");
+        if (allergies.isAllergieNuts())    sql.append(" AND rip.contains_nuts = 0");
+        if (allergies.isAllergieEggs())    sql.append(" AND rip.contains_eggs = 0");
+
+        try (PreparedStatement ps = cnx.prepareStatement(sql.toString())) {
+            // On ne définit QUE les deux paramètres correspondants aux "?"
+            ps.setString(1, moment.name());
+            ps.setInt(2, excludeUserId);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("id",       rs.getInt("id"));
+                row.put("nom",      rs.getString("nom"));
+                row.put("image",    rs.getString("image"));
+                row.put("calories", rs.getInt("calories"));
+                recettes.add(row);
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ filtrerRecettes : " + e.getMessage());
+        }
+        return recettes;
+    }
 }

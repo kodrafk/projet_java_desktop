@@ -14,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import tn.esprit.projet.models.MealPlanItem;
+import tn.esprit.projet.services.EthicalPointsManager;
 import tn.esprit.projet.services.MealPlanService;
 
 import java.io.IOException;
@@ -197,6 +198,10 @@ public class MealPlanTrackingController implements Initializable {
 
         double kg = (urgentsSauves + bientotSauves) * 0.2;
         labelImpactEco.setText("~" + String.format("%.1f", kg) + " kg saved");
+        if (nbFaits == total && total > 0) {
+            EthicalPointsManager.updateCompletedPlans(1);
+            EthicalPointsManager.updateTotalPoints();
+        }
     }
 
     @FXML
