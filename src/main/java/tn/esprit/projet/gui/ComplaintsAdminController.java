@@ -64,8 +64,8 @@ public class ComplaintsAdminController {
 
         cmbStatus.setItems(FXCollections.observableArrayList("PENDING", "RESOLVED", "REJECTED"));
 
-        cmbSort.setItems(FXCollections.observableArrayList("Recent First", "Oldest First", "Highest Rating", "Lowest Rating"));
-        cmbSort.setValue("Recent First");
+        cmbSort.setItems(FXCollections.observableArrayList("Priority (Angry First)", "Recent First", "Oldest First", "Highest Rating", "Lowest Rating"));
+        cmbSort.setValue("Priority (Angry First)");
 
         // Listeners
         fldSearch.textProperty().addListener((obs, oldVal, newVal) -> filterData(newVal));
@@ -109,7 +109,16 @@ public class ComplaintsAdminController {
         Label userLbl = new Label("User: " + (c.getUserName() != null ? c.getUserName() : "Unknown"));
         userLbl.setStyle("-fx-text-fill: #475569; -fx-font-size: 13px;");
 
-        card.getChildren().addAll(dateLbl, header, ratingBox, userLbl);
+        String tone = c.getEmotionTone() != null ? c.getEmotionTone() : "Neutre";
+        Label toneLbl = new Label(tone);
+        String toneColor = tone.equalsIgnoreCase("Colère") ? "#EF4444" : tone.equalsIgnoreCase("Frustration") ? "#F59E0B" : tone.equalsIgnoreCase("Satisfaction") ? "#10B981" : "#64748B";
+        toneLbl.setStyle("-fx-background-color: " + toneColor + "15; -fx-text-fill: " + toneColor + "; -fx-padding: 2 6; -fx-background-radius: 4; -fx-font-size: 10px; -fx-font-weight: bold; -fx-border-color: " + toneColor + "; -fx-border-width: 1; -fx-border-radius: 4;");
+        
+        javafx.scene.layout.HBox userToneBox = new javafx.scene.layout.HBox(10, userLbl, new javafx.scene.layout.Region(), toneLbl);
+        javafx.scene.layout.HBox.setHgrow(userToneBox.getChildren().get(1), javafx.scene.layout.Priority.ALWAYS);
+        userToneBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        card.getChildren().addAll(dateLbl, header, ratingBox, userToneBox);
         
         java.util.List<String> imagePaths = c.getImagePathsList();
         if (!imagePaths.isEmpty()) {
@@ -384,6 +393,14 @@ public class ComplaintsAdminController {
         // 2. Sort
         if (sort != null) {
             switch (sort) {
+                case "Priority (Angry First)":
+                    stream = stream.sorted((a, b) -> {
+                        int scoreA = getTonePriorityScore(a.getEmotionTone());
+                        int scoreB = getTonePriorityScore(b.getEmotionTone());
+                        if (scoreA != scoreB) return Integer.compare(scoreB, scoreA);
+                        return b.getDateOfComplaint().compareTo(a.getDateOfComplaint());
+                    });
+                    break;
                 case "Recent First":
                     stream = stream.sorted((a, b) -> b.getDateOfComplaint().compareTo(a.getDateOfComplaint()));
                     break;
@@ -403,6 +420,17 @@ public class ComplaintsAdminController {
         stream.forEach(c -> cardsContainer.getChildren().add(createComplaintCard(c)));
     }
     
+    private int getTonePriorityScore(String tone) {
+        if (tone == null) return 0;
+        switch (tone) {
+            case "Colère": return 3;
+            case "Frustration": return 2;
+            case "Neutre": return 1;
+            case "Satisfaction": return 0;
+            default: return 0;
+        }
+    }
+
     private void clearSelection() {
         selectedComplaint = null;
         lblTitle.setText("-");

@@ -71,4 +71,16 @@ public class GeminiService {
                        "Provide a response that acknowledges the issue, apologizes if appropriate, and offers a solution. Keep it to 3-4 sentences.";
         return generateContent(prompt);
     }
+
+    public static String analyzeSentiment(String text) {
+        String prompt = "Analyze the emotional tone of this customer complaint. Return ONLY one of these four words: Colère, Frustration, Neutre, Satisfaction. \n" +
+                       "Complaint: " + text;
+        String result = generateContent(prompt);
+        if (result == null) return "Neutre";
+        // Ensure we only return one of the allowed words
+        if (result.contains("Colère")) return "Colère";
+        if (result.contains("Frustration")) return "Frustration";
+        if (result.contains("Satisfaction")) return "Satisfaction";
+        return "Neutre";
+    }
 }

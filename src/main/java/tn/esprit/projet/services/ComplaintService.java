@@ -17,8 +17,8 @@ public class ComplaintService implements CRUD<Complaint> {
 
     @Override
     public void ajouter(Complaint c) {
-        String req = "INSERT INTO complaint (user_id, title, description, phone_number, rate, date_of_complaint, status, image_path, incident_date) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT INTO complaint (user_id, title, description, phone_number, rate, date_of_complaint, status, image_path, incident_date, emotion_tone) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, c.getUserId());
             ps.setString(2, c.getTitle());
@@ -33,6 +33,7 @@ public class ComplaintService implements CRUD<Complaint> {
             } else {
                 ps.setNull(9, java.sql.Types.DATE);
             }
+            ps.setString(10, c.getEmotionTone());
             ps.executeUpdate();
             
             ResultSet keys = ps.getGeneratedKeys();
@@ -47,7 +48,7 @@ public class ComplaintService implements CRUD<Complaint> {
 
     @Override
     public void modifier(Complaint c) {
-        String req = "UPDATE complaint SET title=?, description=?, phone_number=?, rate=?, status=?, image_path=?, incident_date=? WHERE id=?";
+        String req = "UPDATE complaint SET title=?, description=?, phone_number=?, rate=?, status=?, image_path=?, incident_date=?, emotion_tone=? WHERE id=?";
         try (PreparedStatement ps = cnx.prepareStatement(req)) {
             ps.setString(1, c.getTitle());
             ps.setString(2, c.getDescription());
@@ -60,7 +61,8 @@ public class ComplaintService implements CRUD<Complaint> {
             } else {
                 ps.setNull(7, java.sql.Types.DATE);
             }
-            ps.setInt(8, c.getId());
+            ps.setString(8, c.getEmotionTone());
+            ps.setInt(9, c.getId());
             ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -180,6 +182,11 @@ public class ComplaintService implements CRUD<Complaint> {
             if (idate != null) {
                 c.setIncidentDate(idate.toLocalDate());
             }
+        } catch (SQLException ignored) {
+        }
+
+        try {
+            c.setEmotionTone(rs.getString("emotion_tone"));
         } catch (SQLException ignored) {
         }
         

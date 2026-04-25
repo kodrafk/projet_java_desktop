@@ -17,6 +17,7 @@ public class Complaint {
     private String userName;
     private String userEmail;
     private String imagePath;
+    private String emotionTone;
 
     public Complaint() {
         this.status = "PENDING";
@@ -48,6 +49,7 @@ public class Complaint {
     public String getUserName() { return userName; }
     public String getUserEmail() { return userEmail; }
     public String getImagePath() { return imagePath; }
+    public String getEmotionTone() { return emotionTone; }
 
     public java.util.List<String> getImagePathsList() {
         if (imagePath == null || imagePath.trim().isEmpty()) {
@@ -83,4 +85,5 @@ public class Complaint {
     public void setUserName(String userName) { this.userName = userName; }
     public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+    public void setEmotionTone(String emotionTone) { this.emotionTone = emotionTone; }
 }

@@ -103,7 +103,12 @@ public class ComplaintsUserController {
         descLbl.setWrapText(true);
         descLbl.setStyle("-fx-text-fill: #475569; -fx-font-size: 13px;");
 
-        javafx.scene.layout.VBox contentBox = new javafx.scene.layout.VBox(5, descLbl, responseLbl);
+        String tone = c.getEmotionTone() != null ? c.getEmotionTone() : "Neutre";
+        Label toneLbl = new Label("AI Tone: " + tone);
+        String toneColor = tone.equalsIgnoreCase("Colère") ? "#EF4444" : tone.equalsIgnoreCase("Frustration") ? "#F59E0B" : tone.equalsIgnoreCase("Satisfaction") ? "#10B981" : "#64748B";
+        toneLbl.setStyle("-fx-text-fill: " + toneColor + "; -fx-font-size: 11px; -fx-font-style: italic; -fx-padding: 2 0;");
+
+        javafx.scene.layout.VBox contentBox = new javafx.scene.layout.VBox(5, descLbl, toneLbl, responseLbl);
 
         List<String> imagePaths = c.getImagePathsList();
         if (!imagePaths.isEmpty()) {
@@ -304,6 +309,10 @@ public class ComplaintsUserController {
             if (selectedImagePath != null) {
                 editTarget.setImagePath(selectedImagePath);
             }
+            // Analyze sentiment asynchronously before updating
+            String sentiment = tn.esprit.projet.utils.GeminiService.analyzeSentiment(description);
+            editTarget.setEmotionTone(sentiment);
+
             service.modifier(editTarget);
             Toast.show((javafx.stage.Stage)fldTitle.getScene().getWindow(), "Complaint updated successfully!", Toast.Type.SUCCESS);
             editTarget = null;
@@ -319,6 +328,10 @@ public class ComplaintsUserController {
             complaint.setDateOfComplaint(LocalDateTime.now());
             complaint.setIncidentDate(date);
             complaint.setImagePath(selectedImagePath);
+
+            // Analyze sentiment asynchronously before saving
+            String sentiment = tn.esprit.projet.utils.GeminiService.analyzeSentiment(description);
+            complaint.setEmotionTone(sentiment);
 
             service.ajouter(complaint);
             Toast.show((javafx.stage.Stage)fldTitle.getScene().getWindow(), "Complaint submitted successfully!", Toast.Type.SUCCESS);

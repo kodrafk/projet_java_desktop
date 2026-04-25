@@ -49,5 +49,29 @@ CREATE TABLE IF NOT EXISTS `ingredient` (
   `unit`     VARCHAR(50) DEFAULT 'g'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `user_badge` (
+  `id` int(11) AUTO_INCREMENT PRIMARY KEY,
+  `unlocked` tinyint(4) NOT NULL DEFAULT 0,
+  `unlocked_at` datetime DEFAULT NULL,
+  `current_value` int(11) NOT NULL DEFAULT 0,
+  `is_vitrine` tinyint(4) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL,
+  `badge_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `complaint` (
+  `id` int(11) AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
+  `rate` int(11) DEFAULT 0,
+  `date_of_complaint` datetime DEFAULT CURRENT_TIMESTAMP,
+  `incident_date` date DEFAULT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'PENDING',
+  `emotion_tone` varchar(50) DEFAULT NULL,
+  `image_path` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 SELECT 'Tables recreated successfully' AS status;
 SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'nutrilife_db';
