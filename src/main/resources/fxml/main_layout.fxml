@@ -65,11 +65,11 @@
                     <Button fx:id="btnEvents" onAction="#handleEvents"
                             prefHeight="36" text="Events"
                             style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
-                    <Button fx:id="btnWellness" onAction="#handleWellness"
-                            prefHeight="36" text="Wellness"
-                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
                     <Button fx:id="btnBlog" onAction="#handleBlog"
                             prefHeight="36" text="Blog"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnComplaints" onAction="#handleComplaints"
+                            prefHeight="36" text="Complaints"
                             style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
                 </HBox>
 
@@ -96,8 +96,6 @@
                     <Button fx:id="btnRecipes" onAction="#handleRecipes"
                             prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
                     <Button fx:id="btnDailyFood" onAction="#handleDailyFood"
-                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
-                    <Button fx:id="btnComplaints" onAction="#handleComplaints"
                             prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
                 </VBox>
             </HBox>

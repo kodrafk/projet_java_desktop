@@ -42,9 +42,9 @@ public class AdminLayoutController {
     @FXML private Button btnSponsors;
     @FXML private Button btnSMS;
     @FXML private Button btnNutrition;
-    @FXML private Button btnWellness;
     @FXML private Button btnBlogs;
     @FXML private Button btnObjectives;
+    @FXML private Button btnComplaints;
     @FXML private Button btnLogout;
 
     @FXML private Label lblTotalUsers;
@@ -206,13 +206,6 @@ public class AdminLayoutController {
     }
 
     @FXML
-    private void handleWellness(ActionEvent event) {
-        resetSidebarStyles();
-        if (btnWellness != null) btnWellness.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Wellness Module");
-    }
-
-    @FXML
     private void handleBlogs(ActionEvent event) {
         resetSidebarStyles();
         if (btnBlogs != null) btnBlogs.setStyle(ACTIVE_BUTTON_STYLE);
@@ -224,6 +217,13 @@ public class AdminLayoutController {
         resetSidebarStyles();
         if (btnObjectives != null) btnObjectives.setStyle(ACTIVE_BUTTON_STYLE);
         loadPage("/fxml/admin_objectives.fxml");
+    }
+
+    @FXML
+    private void handleComplaints(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnComplaints != null) btnComplaints.setStyle(ACTIVE_BUTTON_STYLE);
+        loadPage("/fxml/complaints_admin.fxml");
     }
 
     @FXML
@@ -284,9 +284,9 @@ public class AdminLayoutController {
         if (btnSponsors != null) btnSponsors.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnSMS != null) btnSMS.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnNutrition != null) btnNutrition.setStyle(DEFAULT_BUTTON_STYLE);
-        if (btnWellness != null) btnWellness.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnBlogs != null) btnBlogs.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnObjectives != null) btnObjectives.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnComplaints != null) btnComplaints.setStyle(DEFAULT_BUTTON_STYLE);
     }
 
     private void showHomePage() {

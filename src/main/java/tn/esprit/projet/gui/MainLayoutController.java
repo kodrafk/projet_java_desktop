@@ -44,7 +44,6 @@ public class MainLayoutController {
     @FXML private Button btnComplaints;
     @FXML private Button btnEvents;
     @FXML private Button btnNutrition;
-    @FXML private Button btnWellness;
 
     // ═══════════════════════════════════
     // STATS CARDS
@@ -204,13 +203,6 @@ public class MainLayoutController {
         resetButtonStyles();
         if (btnEvents != null) btnEvents.setStyle(ACTIVE_BUTTON_STYLE);
         showPlaceholder("Events Page");
-    }
-
-    @FXML
-    private void handleWellness(ActionEvent event) {
-        resetButtonStyles();
-        if (btnWellness != null) btnWellness.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Wellness Page");
     }
 
     @FXML
@@ -391,6 +383,14 @@ public class MainLayoutController {
     // ═══════════════════════════════════
     // HELPERS
     // ═══════════════════════════════════
+    @FXML
+    private void closeBadgeOverlay() {
+        if (badgeOverlay != null) {
+            badgeOverlay.setVisible(false);
+            badgeOverlay.setManaged(false);
+        }
+    }
+
     private void showHomePage() {
         if (contentArea != null && homeContent != null) {
             contentArea.getChildren().setAll(homeContent);
@@ -432,7 +432,7 @@ public class MainLayoutController {
     }
 
     private void resetButtonStyles() {
-        Button[] buttons = {btnHome, btnAbout, btnIngredients, btnRecipes, btnDailyFood, btnBlog, btnComplaints, btnEvents, btnNutrition, btnWellness};
+        Button[] buttons = {btnHome, btnAbout, btnIngredients, btnRecipes, btnDailyFood, btnBlog, btnComplaints, btnEvents, btnNutrition, };
         for (Button b : buttons) {
             if (b != null) b.setStyle(DEFAULT_BUTTON_STYLE);
         }
