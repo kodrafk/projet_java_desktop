@@ -17,11 +17,19 @@ public class Complaint {
     private String userName;
     private String userEmail;
     private String imagePath;
-    private String emotionTone;
+    
+    // Emotion Analysis Fields
+    private String detectedEmotion;     // ANGER, FRUSTRATION, DISAPPOINTMENT, NEUTRAL, SATISFACTION
+    private double emotionScore;        // 0-100
+    private int urgencyLevel;           // 1-5
+    private String emotionRecommendation;
 
     public Complaint() {
         this.status = "PENDING";
         this.dateOfComplaint = LocalDateTime.now();
+        this.urgencyLevel = 1;
+        this.emotionScore = 0;
+        this.detectedEmotion = "NEUTRAL";
     }
 
     public Complaint(int userId, String title, String description, String phoneNumber, int rate) {
@@ -32,6 +40,9 @@ public class Complaint {
         this.rate = rate;
         this.status = "PENDING";
         this.dateOfComplaint = LocalDateTime.now();
+        this.urgencyLevel = 1;
+        this.emotionScore = 0;
+        this.detectedEmotion = "NEUTRAL";
     }
 
     // Getters
@@ -49,7 +60,12 @@ public class Complaint {
     public String getUserName() { return userName; }
     public String getUserEmail() { return userEmail; }
     public String getImagePath() { return imagePath; }
-    public String getEmotionTone() { return emotionTone; }
+    
+    // Emotion Analysis Getters
+    public String getDetectedEmotion() { return detectedEmotion; }
+    public double getEmotionScore() { return emotionScore; }
+    public int getUrgencyLevel() { return urgencyLevel; }
+    public String getEmotionRecommendation() { return emotionRecommendation; }
 
     public java.util.List<String> getImagePathsList() {
         if (imagePath == null || imagePath.trim().isEmpty()) {
@@ -85,5 +101,10 @@ public class Complaint {
     public void setUserName(String userName) { this.userName = userName; }
     public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }
-    public void setEmotionTone(String emotionTone) { this.emotionTone = emotionTone; }
+    
+    // Emotion Analysis Setters
+    public void setDetectedEmotion(String detectedEmotion) { this.detectedEmotion = detectedEmotion; }
+    public void setEmotionScore(double emotionScore) { this.emotionScore = emotionScore; }
+    public void setUrgencyLevel(int urgencyLevel) { this.urgencyLevel = urgencyLevel; }
+    public void setEmotionRecommendation(String emotionRecommendation) { this.emotionRecommendation = emotionRecommendation; }
 }

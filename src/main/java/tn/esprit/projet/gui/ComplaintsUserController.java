@@ -1,23 +1,37 @@
 package tn.esprit.projet.gui;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import org.controlsfx.control.Rating;
 import tn.esprit.projet.models.Complaint;
-import tn.esprit.projet.models.User;
 import tn.esprit.projet.services.ComplaintService;
 import tn.esprit.projet.utils.SessionManager;
 import tn.esprit.projet.utils.Toast;
+import tn.esprit.projet.utils.GeminiService;
 
-import javafx.stage.FileChooser;
 import java.io.File;
-import org.controlsfx.control.Rating;
-
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import tn.esprit.projet.utils.SpeechToTextService;
+import java.util.concurrent.CompletableFuture;
 
 public class ComplaintsUserController {
 
@@ -26,230 +40,123 @@ public class ComplaintsUserController {
     @FXML private Rating ratingControl;
     @FXML private DatePicker dpDate;
     @FXML private TextArea fldDescription;
-    @FXML private Label lblError;
     @FXML private Label lblImageName;
-    @FXML private javafx.scene.layout.FlowPane imagePreviewContainer;
+    @FXML private FlowPane imagePreviewContainer;
+    @FXML private Label lblError;
     @FXML private Button btnSubmit;
 
-    private String selectedImagePath;
-    private Complaint editTarget = null;
-
-    @FXML private javafx.scene.layout.FlowPane cardsContainer;
     @FXML private TextField fldSearchUser;
     @FXML private ComboBox<String> cmbSortUser;
-
-    private List<Complaint> masterData = new java.util.ArrayList<>();
+    @FXML private FlowPane cardsContainer;
 
     private ComplaintService service;
-    private User currentUser;
+    private List<String> selectedImagePaths = new ArrayList<>();
+    private ObservableList<Complaint> myComplaints = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         service = new ComplaintService();
-        currentUser = SessionManager.getCurrentUser();
-
-        ratingControl.setRating(1);
         
-        // Default date to today
+        // Initialize UI components
         dpDate.setValue(LocalDate.now());
-
         cmbSortUser.setItems(FXCollections.observableArrayList("Recent First", "Oldest First", "Highest Rating", "Lowest Rating"));
         cmbSortUser.setValue("Recent First");
 
-        // Listeners for live filtering/sorting
-        fldSearchUser.textProperty().addListener((obs, oldVal, newVal) -> refreshCards());
-        cmbSortUser.valueProperty().addListener((obs, oldVal, newVal) -> refreshCards());
+        // Search and Sort listeners
+        fldSearchUser.textProperty().addListener((obs, oldVal, newVal) -> filterAndDisplay());
+        cmbSortUser.valueProperty().addListener((obs, oldVal, newVal) -> filterAndDisplay());
 
-        refreshCards();
-    }
-
-    private javafx.scene.layout.VBox createComplaintCard(Complaint c) {
-        javafx.scene.layout.VBox card = new javafx.scene.layout.VBox(10);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);");
-        card.setPrefWidth(320);
-
-        String repDate = c.getDateOfComplaint().toLocalDate().toString();
-        String incDate = c.getIncidentDate() != null ? c.getIncidentDate().toString() : repDate;
-        Label dateLbl = new Label("Reported: " + repDate + " | Incident: " + incDate);
-        dateLbl.setStyle("-fx-text-fill: #64748B; -fx-font-size: 12px;");
-
-        Label titleLbl = new Label(c.getTitle());
-        titleLbl.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1E293B;");
-
-        Label statusLbl = new Label(c.getStatus());
-        String statusColor = c.getStatus().equalsIgnoreCase("RESOLVED") ? "#10B981" : c.getStatus().equalsIgnoreCase("REJECTED") ? "#EF4444" : "#F59E0B";
-        statusLbl.setStyle("-fx-background-color: " + statusColor + "20; -fx-text-fill: " + statusColor + "; -fx-padding: 3 8; -fx-background-radius: 12; -fx-font-size: 11px; -fx-font-weight: bold;");
-
-        javafx.scene.layout.HBox header = new javafx.scene.layout.HBox(10, titleLbl, new javafx.scene.layout.Region(), statusLbl);
-        javafx.scene.layout.HBox.setHgrow(header.getChildren().get(1), javafx.scene.layout.Priority.ALWAYS);
-        header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
-        Rating cardRating = new Rating(5, c.getRate());
-        cardRating.setPartialRating(false);
-        cardRating.setMouseTransparent(true);
-        cardRating.setScaleX(0.7);
-        cardRating.setScaleY(0.7);
-        cardRating.setTranslateX(-25); // Adjust for scale offset
-        
-        javafx.scene.layout.HBox ratingBox = new javafx.scene.layout.HBox(cardRating);
-        ratingBox.setPrefHeight(20);
-        ratingBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
-        Label responseLbl = new Label("Admin Response:\n" + (c.getAdminResponse() != null ? c.getAdminResponse() : "Pending"));
-        responseLbl.setWrapText(true);
-        responseLbl.setStyle("-fx-text-fill: #475569; -fx-font-size: 13px; -fx-background-color: #F8FAFC; -fx-padding: 8; -fx-background-radius: 6;");
-        
-        Label descLbl = new Label(c.getDescription());
-        descLbl.setWrapText(true);
-        descLbl.setStyle("-fx-text-fill: #475569; -fx-font-size: 13px;");
-
-        String tone = c.getEmotionTone() != null ? c.getEmotionTone() : "Neutre";
-        Label toneLbl = new Label("AI Tone: " + tone);
-        String toneColor = tone.equalsIgnoreCase("Colère") ? "#EF4444" : tone.equalsIgnoreCase("Frustration") ? "#F59E0B" : tone.equalsIgnoreCase("Satisfaction") ? "#10B981" : "#64748B";
-        toneLbl.setStyle("-fx-text-fill: " + toneColor + "; -fx-font-size: 11px; -fx-font-style: italic; -fx-padding: 2 0;");
-
-        javafx.scene.layout.VBox contentBox = new javafx.scene.layout.VBox(5, descLbl, toneLbl, responseLbl);
-
-        List<String> imagePaths = c.getImagePathsList();
-        if (!imagePaths.isEmpty()) {
-            javafx.scene.layout.FlowPane imagesBox = new javafx.scene.layout.FlowPane(5, 5);
-            for (String path : imagePaths) {
-                java.io.File file = new java.io.File(path);
-                if (file.exists()) {
-                    javafx.scene.image.ImageView imgView = new javafx.scene.image.ImageView(new javafx.scene.image.Image(file.toURI().toString()));
-                    imgView.setFitWidth(120);
-                    imgView.setFitHeight(80);
-                    imgView.setPreserveRatio(true);
-
-                    javafx.scene.layout.VBox imgContainer = new javafx.scene.layout.VBox(imgView);
-                    imgContainer.setAlignment(javafx.geometry.Pos.CENTER);
-                    imgContainer.setStyle("-fx-background-color: #F1F5F9; -fx-padding: 5; -fx-border-color: #E2E8F0; -fx-border-radius: 6;");
-                    
-                    imagesBox.getChildren().add(imgContainer);
-                }
-            }
-            if (!imagesBox.getChildren().isEmpty()) {
-                contentBox.getChildren().add(0, imagesBox);
-            }
-        }
-
-        javafx.scene.layout.HBox actions = new javafx.scene.layout.HBox(10);
-        if (currentUser != null && c.getUserId() == currentUser.getId()) {
-            Button btnEdit = new Button("Edit");
-            btnEdit.setStyle("-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 12px; -fx-background-radius: 6;");
-            btnEdit.setOnAction(e -> populateEditForm(c));
-
-            Button btnDelete = new Button("Delete");
-            btnDelete.setStyle("-fx-background-color: #EF4444; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 12px; -fx-background-radius: 6;");
-            btnDelete.setOnAction(e -> {
-                service.supprimer(c.getId());
-                refreshCards();
-            });
-            actions.getChildren().addAll(btnEdit, btnDelete);
-        }
-
-        card.getChildren().addAll(dateLbl, header, ratingBox, contentBox, actions);
-        return card;
+        refreshData();
     }
 
     @FXML
     private void handleGenerateTitleAI() {
-        String description = fldDescription.getText();
-        if (description == null || description.trim().isEmpty()) {
-            showError("Please write a description first so the AI can suggest a title.");
+        String description = fldDescription.getText().trim();
+        if (description.isEmpty()) {
+            Toast.show((javafx.stage.Stage)fldTitle.getScene().getWindow(), "Please write a description first.", Toast.Type.ERROR);
             return;
         }
 
-        fldTitle.setPromptText("Thinking...");
-        java.util.concurrent.CompletableFuture.supplyAsync(() -> tn.esprit.projet.utils.GeminiService.suggestTitle(description))
-            .thenAccept(title -> {
-                javafx.application.Platform.runLater(() -> {
-                    if (title != null && !title.isEmpty()) {
-                        fldTitle.setText(title);
-                    } else {
-                        showError("AI could not generate a title. Check your internet.");
-                    }
-                });
+        fldTitle.setPromptText("AI is thinking...");
+        fldTitle.setDisable(true);
+
+        CompletableFuture.supplyAsync(() -> GeminiService.suggestTitle(description))
+            .thenAccept(title -> Platform.runLater(() -> {
+                fldTitle.setDisable(false);
+                if (title != null && !title.isEmpty()) {
+                    fldTitle.setText(title.replace("\"", ""));
+                }
+            }))
+            .exceptionally(ex -> {
+                Platform.runLater(() -> fldTitle.setDisable(false));
+                return null;
             });
     }
 
-    private void populateEditForm(Complaint c) {
-        editTarget = c;
-        fldTitle.setText(c.getTitle());
-        fldDescription.setText(c.getDescription());
-        fldPhone.setText(c.getPhoneNumber());
-        ratingControl.setRating(c.getRate());
-        dpDate.setValue(c.getIncidentDate() != null ? c.getIncidentDate() : c.getDateOfComplaint().toLocalDate());
-        btnSubmit.setText("Update Complaint");
-        
-        List<String> imagePaths = c.getImagePathsList();
-        if (!imagePaths.isEmpty()) {
-            lblImageName.setText(imagePaths.size() + " files attached");
-            lblImageName.setVisible(true);
-            lblImageName.setManaged(true);
-            
-            imagePreviewContainer.getChildren().clear();
-            for (String path : imagePaths) {
-                File f = new File(path);
-                if (f.exists()) {
-                    javafx.scene.image.ImageView imgView = new javafx.scene.image.ImageView(new javafx.scene.image.Image(f.toURI().toString()));
-                    imgView.setFitWidth(100);
-                    imgView.setFitHeight(60);
-                    imgView.setPreserveRatio(true);
-                    imagePreviewContainer.getChildren().add(imgView);
-                }
+    @FXML
+    private void handleVoiceToText() {
+        fldDescription.setPromptText("🎙️ Listening for 5 seconds...");
+        fldDescription.setDisable(true);
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                byte[] audio = SpeechToTextService.recordAudio(5);
+                String text = SpeechToTextService.convertAudioToText(audio);
+                
+                Platform.runLater(() -> {
+                    fldDescription.setDisable(false);
+                    fldDescription.setPromptText("Describe the issue in detail...");
+                    if (text != null && !text.isEmpty()) {
+                        String currentText = fldDescription.getText();
+                        fldDescription.setText(currentText.isEmpty() ? text : currentText + " " + text);
+                    }
+                });
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    fldDescription.setDisable(false);
+                    Toast.show((javafx.stage.Stage)fldDescription.getScene().getWindow(), "Voice Error: " + e.getMessage(), Toast.Type.ERROR);
+                });
             }
-            if (!imagePreviewContainer.getChildren().isEmpty()) {
-                imagePreviewContainer.setVisible(true);
-                imagePreviewContainer.setManaged(true);
-            } else {
-                imagePreviewContainer.setVisible(false);
-                imagePreviewContainer.setManaged(false);
-            }
-        } else {
-            lblImageName.setText("");
-            lblImageName.setVisible(false);
-            lblImageName.setManaged(false);
-            
-            imagePreviewContainer.getChildren().clear();
-            imagePreviewContainer.setVisible(false);
-            imagePreviewContainer.setManaged(false);
-        }
-        selectedImagePath = c.getImagePath();
+        });
     }
 
     @FXML
     private void handleSelectImage() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Images");
+        fileChooser.setTitle("Select Complaint Images");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
         );
         List<File> selectedFiles = fileChooser.showOpenMultipleDialog(fldTitle.getScene().getWindow());
-        if (selectedFiles != null && !selectedFiles.isEmpty()) {
-            StringBuilder paths = new StringBuilder();
-            imagePreviewContainer.getChildren().clear();
-            
-            for (File f : selectedFiles) {
-                if (paths.length() > 0) paths.append(";");
-                paths.append(f.getAbsolutePath());
-                
-                if (f.exists()) {
-                    javafx.scene.image.ImageView imgView = new javafx.scene.image.ImageView(new javafx.scene.image.Image(f.toURI().toString()));
-                    imgView.setFitWidth(100);
-                    imgView.setFitHeight(60);
-                    imgView.setPreserveRatio(true);
-                    imagePreviewContainer.getChildren().add(imgView);
-                }
-            }
-            selectedImagePath = paths.toString();
-            lblImageName.setText(selectedFiles.size() + " files selected");
-            lblImageName.setVisible(true);
-            lblImageName.setManaged(true);
 
-            if (!imagePreviewContainer.getChildren().isEmpty()) {
-                imagePreviewContainer.setVisible(true);
-                imagePreviewContainer.setManaged(true);
+        if (selectedFiles != null) {
+            imagePreviewContainer.getChildren().clear();
+            selectedImagePaths.clear();
+            imagePreviewContainer.setVisible(true);
+            imagePreviewContainer.setManaged(true);
+
+            for (File file : selectedFiles) {
+                try {
+                    // Create local storage if doesn't exist
+                    File uploadDir = new File("uploads/complaints");
+                    if (!uploadDir.exists()) uploadDir.mkdirs();
+
+                    String fileName = UUID.randomUUID().toString() + "_" + file.getName();
+                    File destFile = new File(uploadDir, fileName);
+                    Files.copy(file.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    
+                    selectedImagePaths.add(destFile.getAbsolutePath());
+                    
+                    // Show preview
+                    ImageView preview = new ImageView(new Image(destFile.toURI().toString()));
+                    preview.setFitWidth(60);
+                    preview.setFitHeight(60);
+                    preview.setPreserveRatio(true);
+                    imagePreviewContainer.getChildren().add(preview);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -262,152 +169,154 @@ public class ComplaintsUserController {
         String title = fldTitle.getText().trim();
         String description = fldDescription.getText().trim();
         String phone = fldPhone.getText().trim();
-        Integer rate = (int) ratingControl.getRating();
-        LocalDate date = dpDate.getValue();
+        int rate = (int) ratingControl.getRating();
+        LocalDate incidentDate = dpDate.getValue();
 
-        if (title.isEmpty() || description.isEmpty() || date == null) {
-            showError("Please fill out all required fields marked with *.");
+        // Simple validation
+        if (title.isEmpty() || description.isEmpty() || incidentDate == null || rate == 0) {
+            showError("Please fill in all required fields (*)");
             return;
         }
 
-        if (title.length() < 2) {
-            showError("The title must be at least 2 characters long.");
+        if (!phone.isEmpty() && !phone.matches("\\+?[0-9\\s-]{8,15}")) {
+            showError("Invalid phone number format");
             return;
         }
 
-        if (!phone.isEmpty() && !phone.matches("\\d{8}")) {
-            showError("The phone number must be exactly 8 digits.");
-            return;
-        }
+        Complaint c = new Complaint();
+        c.setUserId(SessionManager.getCurrentUser().getId());
+        c.setTitle(title);
+        c.setDescription(description);
+        c.setPhoneNumber(phone);
+        c.setRate(rate);
+        c.setIncidentDate(incidentDate);
+        c.setDateOfComplaint(LocalDateTime.now());
+        c.setStatus("PENDING");
+        c.setImagePath(String.join(";", selectedImagePaths));
 
-        if (date.isAfter(LocalDate.now())) {
-            showError("The incident date cannot be in the future.");
-            return;
-        }
-
-        if (currentUser == null) {
-            showError("No user logged in. Cannot submit complaint.");
-            return;
-        }
-
-        // --- NEW: PROFANITY CHECK ---
-        btnSubmit.setDisable(true); // Prevent double click
-        if (tn.esprit.projet.utils.BadWordAPI.hasProfanity(title) || tn.esprit.projet.utils.BadWordAPI.hasProfanity(description)) {
-            showError("Your complaint contains inappropriate language. Please revise it.");
-            btnSubmit.setDisable(false);
-            return;
-        }
-        btnSubmit.setDisable(false);
-        // ----------------------------
-
-        if (editTarget != null) {
-            editTarget.setTitle(title);
-            editTarget.setDescription(description);
-            editTarget.setPhoneNumber(phone);
-            editTarget.setRate(rate);
-            editTarget.setIncidentDate(date);
-            if (selectedImagePath != null) {
-                editTarget.setImagePath(selectedImagePath);
-            }
-            // Analyze sentiment asynchronously before updating
-            String sentiment = tn.esprit.projet.utils.GeminiService.analyzeSentiment(description);
-            editTarget.setEmotionTone(sentiment);
-
-            service.modifier(editTarget);
-            Toast.show((javafx.stage.Stage)fldTitle.getScene().getWindow(), "Complaint updated successfully!", Toast.Type.SUCCESS);
-            editTarget = null;
-            btnSubmit.setText("Submit Complaint");
-        } else {
-            Complaint complaint = new Complaint(
-                    currentUser.getId(),
-                    title,
-                    description,
-                    phone,
-                    rate
-            );
-            complaint.setDateOfComplaint(LocalDateTime.now());
-            complaint.setIncidentDate(date);
-            complaint.setImagePath(selectedImagePath);
-
-            // Analyze sentiment asynchronously before saving
-            String sentiment = tn.esprit.projet.utils.GeminiService.analyzeSentiment(description);
-            complaint.setEmotionTone(sentiment);
-
-            service.ajouter(complaint);
-            Toast.show((javafx.stage.Stage)fldTitle.getScene().getWindow(), "Complaint submitted successfully!", Toast.Type.SUCCESS);
-        }
-
-        // Clear fields
-        fldTitle.clear();
-        fldDescription.clear();
-        fldPhone.clear();
-        ratingControl.setRating(1);
-        dpDate.setValue(LocalDate.now());
-        selectedImagePath = null;
-        if (lblImageName != null) {
-            lblImageName.setText("");
-            lblImageName.setVisible(false);
-            lblImageName.setManaged(false);
-        }
-        if (imagePreviewContainer != null) {
-            imagePreviewContainer.getChildren().clear();
-            imagePreviewContainer.setVisible(false);
-            imagePreviewContainer.setManaged(false);
-        }
-
-        refreshCards();
+        service.ajouter(c);
+        
+        Toast.show((javafx.stage.Stage)fldTitle.getScene().getWindow(), "Complaint submitted successfully!", Toast.Type.SUCCESS);
+        clearForm();
+        refreshData();
     }
 
     @FXML
     private void handleRefresh() {
-        refreshCards();
+        refreshData();
     }
 
-    private void refreshCards() {
-        if (currentUser != null && cardsContainer != null) {
-            cardsContainer.getChildren().clear();
-            
-            // Reload from DB only if needed or just use cached masterData
-            masterData = service.getAll(); 
-            
-            String search = fldSearchUser.getText();
-            String sort = cmbSortUser.getValue();
+    private void refreshData() {
+        int userId = SessionManager.getCurrentUser().getId();
+        myComplaints.setAll(service.getByUserId(userId));
+        filterAndDisplay();
+    }
 
-            java.util.stream.Stream<Complaint> stream = masterData.stream();
+    private void filterAndDisplay() {
+        String search = fldSearchUser.getText().toLowerCase();
+        String sort = cmbSortUser.getValue();
 
-            // 1. Filter
-            if (search != null && !search.isEmpty()) {
-                String lowerSearch = search.toLowerCase();
-                stream = stream.filter(c -> c.getTitle().toLowerCase().contains(lowerSearch) 
-                                         || c.getDescription().toLowerCase().contains(lowerSearch)
-                                         || c.getStatus().toLowerCase().contains(lowerSearch));
-            }
+        java.util.stream.Stream<Complaint> stream = myComplaints.stream();
 
-            // 2. Sort
-            if (sort != null) {
-                switch (sort) {
-                    case "Recent First":
-                        stream = stream.sorted((a, b) -> b.getDateOfComplaint().compareTo(a.getDateOfComplaint()));
-                        break;
-                    case "Oldest First":
-                        stream = stream.sorted((a, b) -> a.getDateOfComplaint().compareTo(b.getDateOfComplaint()));
-                        break;
-                    case "Highest Rating":
-                        stream = stream.sorted((a, b) -> Integer.compare(b.getRate(), a.getRate()));
-                        break;
-                    case "Lowest Rating":
-                        stream = stream.sorted((a, b) -> Integer.compare(a.getRate(), b.getRate()));
-                        break;
-                }
-            }
-
-            stream.forEach(c -> cardsContainer.getChildren().add(createComplaintCard(c)));
+        if (!search.isEmpty()) {
+            stream = stream.filter(c -> c.getTitle().toLowerCase().contains(search) 
+                                     || c.getDescription().toLowerCase().contains(search));
         }
+
+        if (sort != null) {
+            switch (sort) {
+                case "Recent First": stream = stream.sorted((a, b) -> b.getDateOfComplaint().compareTo(a.getDateOfComplaint())); break;
+                case "Oldest First": stream = stream.sorted((a, b) -> a.getDateOfComplaint().compareTo(b.getDateOfComplaint())); break;
+                case "Highest Rating": stream = stream.sorted((a, b) -> Integer.compare(b.getRate(), a.getRate())); break;
+                case "Lowest Rating": stream = stream.sorted((a, b) -> Integer.compare(a.getRate(), b.getRate())); break;
+            }
+        }
+
+        cardsContainer.getChildren().clear();
+        stream.forEach(c -> cardsContainer.getChildren().add(createCard(c)));
+    }
+
+    private VBox createCard(Complaint c) {
+        VBox card = new VBox(10);
+        card.setStyle("-fx-background-color: #F8FAFC; -fx-background-radius: 8; -fx-padding: 15; -fx-border-color: #E2E8F0; -fx-border-radius: 8;");
+        card.setPrefWidth(260);
+
+        Label dateLbl = new Label(c.getDateOfComplaint().toLocalDate().toString());
+        dateLbl.setStyle("-fx-text-fill: #94A3B8; -fx-font-size: 11px;");
+
+        Label titleLbl = new Label(c.getTitle());
+        titleLbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-font-size: 14px;");
+
+        Label statusLbl = new Label(c.getStatus());
+        String statusColor = c.getStatus().equalsIgnoreCase("RESOLVED") ? "#10B981" : c.getStatus().equalsIgnoreCase("REJECTED") ? "#EF4444" : "#F59E0B";
+        statusLbl.setStyle("-fx-text-fill: " + statusColor + "; -fx-font-size: 11px; -fx-font-weight: bold;");
+
+        HBox header = new HBox(titleLbl, new Region(), statusLbl);
+        HBox.setHgrow(header.getChildren().get(1), Priority.ALWAYS);
+
+        Rating r = new Rating(5, c.getRate());
+        r.setPartialRating(false);
+        r.setMouseTransparent(true);
+        r.setScaleX(0.6);
+        r.setScaleY(0.6);
+        r.setTranslateX(-20);
+
+        card.getChildren().addAll(dateLbl, header, r);
+
+        // --- NEW: Description ---
+        Label descLbl = new Label(c.getDescription());
+        descLbl.setWrapText(true);
+        descLbl.setMaxHeight(60);
+        descLbl.setStyle("-fx-text-fill: #475569; -fx-font-size: 12px;");
+        card.getChildren().add(descLbl);
+
+        // --- NEW: Image Preview ---
+        if (c.getImagePath() != null && !c.getImagePath().isEmpty()) {
+            try {
+                String firstPath = c.getImagePathsList().get(0);
+                File imgFile = new File(firstPath);
+                if (imgFile.exists()) {
+                    ImageView imgView = new ImageView(new Image(imgFile.toURI().toString()));
+                    imgView.setFitWidth(230);
+                    imgView.setFitHeight(120);
+                    imgView.setPreserveRatio(true);
+                    imgView.setStyle("-fx-background-radius: 5;");
+                    
+                    VBox imgContainer = new VBox(imgView);
+                    imgContainer.setAlignment(Pos.CENTER);
+                    imgContainer.setStyle("-fx-background-color: #F1F5F9; -fx-background-radius: 5; -fx-padding: 5;");
+                    card.getChildren().add(imgContainer);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        if (c.getAdminResponse() != null) {
+            Label respTitle = new Label("Response:");
+            respTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 11px; -fx-text-fill: #475569;");
+            Label respContent = new Label(c.getAdminResponse());
+            respContent.setWrapText(true);
+            respContent.setStyle("-fx-text-fill: #64748B; -fx-font-size: 11px; -fx-font-style: italic;");
+            card.getChildren().addAll(new Separator(), respTitle, respContent);
+        }
+
+        return card;
     }
 
     private void showError(String msg) {
         lblError.setText(msg);
         lblError.setVisible(true);
         lblError.setManaged(true);
+    }
+
+    private void clearForm() {
+        fldTitle.clear();
+        fldPhone.clear();
+        fldDescription.clear();
+        ratingControl.setRating(0);
+        dpDate.setValue(LocalDate.now());
+        selectedImagePaths.clear();
+        imagePreviewContainer.getChildren().clear();
+        imagePreviewContainer.setVisible(false);
+        imagePreviewContainer.setManaged(false);
     }
 }

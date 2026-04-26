@@ -45,6 +45,7 @@ public class AdminLayoutController {
     @FXML private Button btnBlogs;
     @FXML private Button btnObjectives;
     @FXML private Button btnComplaints;
+    @FXML private Button btnEmotionAnalysis;
     @FXML private Button btnLogout;
 
     @FXML private Label lblTotalUsers;
@@ -227,6 +228,13 @@ public class AdminLayoutController {
     }
 
     @FXML
+    private void handleEmotionAnalysis(ActionEvent event) {
+        resetSidebarStyles();
+        if (btnEmotionAnalysis != null) btnEmotionAnalysis.setStyle(ACTIVE_BUTTON_STYLE);
+        loadPage("/fxml/complaints_emotion_analysis.fxml");
+    }
+
+    @FXML
     private void handleAddUser(ActionEvent event) {
         loadPage("/fxml/user_form.fxml");
     }
@@ -287,6 +295,7 @@ public class AdminLayoutController {
         if (btnBlogs != null) btnBlogs.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnObjectives != null) btnObjectives.setStyle(DEFAULT_BUTTON_STYLE);
         if (btnComplaints != null) btnComplaints.setStyle(DEFAULT_BUTTON_STYLE);
+        if (btnEmotionAnalysis != null) btnEmotionAnalysis.setStyle(DEFAULT_BUTTON_STYLE);
     }
 
     private void showHomePage() {

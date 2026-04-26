@@ -120,11 +120,11 @@
             <version>11.1.2</version>
         </dependency>
 
-        <!-- Email APIs (javax and jakarta) -->
+        <!-- Email API (Jakarta) -->
         <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.6.2</version>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>2.1.2</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
@@ -137,6 +137,13 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- Vosk: Offline Speech Recognition (no API key needed) -->
+        <dependency>
+            <groupId>com.alphacephei</groupId>
+            <artifactId>vosk</artifactId>
+            <version>0.3.45</version>
         </dependency>
 
     </dependencies>

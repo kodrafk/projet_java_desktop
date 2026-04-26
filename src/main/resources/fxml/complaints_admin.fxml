@@ -25,77 +25,91 @@
                 style="-fx-background-color: #E2E8F0; -fx-text-fill: #475569; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 16;"/>
     </HBox>
 
-    <HBox spacing="20" VBox.vgrow="ALWAYS">
+    <!-- Tab Pane for Complaints and Emotion Analysis -->
+    <TabPane VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 12;">
         
-        <!-- Table List (Left side) -->
-        <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);">
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="Search:" style="-fx-font-size: 12px; -fx-text-fill: #475569; font-weight: bold;"/>
-                <TextField fx:id="fldSearch" promptText="Search by title, status..." 
-                           style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;" />
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label text="Sort:" style="-fx-font-size: 12px; -fx-text-fill: #475569; font-weight: bold;"/>
-                <ComboBox fx:id="cmbSort" promptText="Sort By" style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6;"/>
-            </HBox>
+        <!-- Tab 1: Complaints Management -->
+        <Tab text="📋 Complaints" closable="false" style="-fx-font-size: 13px; -fx-font-weight: bold;">
+            <VBox spacing="20" style="-fx-padding: 20; -fx-background-color: #F0F4F8;">
+                <HBox spacing="20" VBox.vgrow="ALWAYS">
+                    
+                    <!-- Table List (Left side) -->
+                    <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);">
+                        
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Search:" style="-fx-font-size: 12px; -fx-text-fill: #475569; font-weight: bold;"/>
+                            <TextField fx:id="fldSearch" promptText="Search by title, status..." 
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;" />
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="Sort:" style="-fx-font-size: 12px; -fx-text-fill: #475569; font-weight: bold;"/>
+                            <ComboBox fx:id="cmbSort" promptText="Sort By" style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                        </HBox>
 
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0;">
-                <content>
-                    <FlowPane fx:id="cardsContainer" hgap="15" vgap="15" style="-fx-padding: 5;"/>
-                </content>
-            </ScrollPane>
-        </VBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0;">
+                            <content>
+                                <FlowPane fx:id="cardsContainer" hgap="15" vgap="15" style="-fx-padding: 5;"/>
+                            </content>
+                        </ScrollPane>
+                    </VBox>
 
-        <!-- Response Panel (Right side) -->
-        <VBox spacing="15" prefWidth="380" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);">
-            <Label text="Complaint Details" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-            
-            <VBox spacing="5" style="-fx-background-color: #F8FAFC; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
-                <HBox>
-                    <Label text="Title: " style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
-                    <Label fx:id="lblTitle" text="-" style="-fx-font-size: 12px; -fx-text-fill: #1E293B;"/>
-                </HBox>
-                <HBox>
-                    <Label text="Phone: " style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
-                    <Label fx:id="lblPhone" text="-" style="-fx-font-size: 12px; -fx-text-fill: #1E293B;"/>
-                </HBox>
-                <HBox>
-                    <Label text="Rate (1-5): " style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
-                    <Label fx:id="lblRate" text="-" style="-fx-font-size: 12px; -fx-text-fill: #1E293B;"/>
+                    <!-- Response Panel (Right side) -->
+                    <VBox spacing="15" prefWidth="380" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);">
+                        <Label text="Complaint Details" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        
+                        <VBox spacing="5" style="-fx-background-color: #F8FAFC; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                            <HBox>
+                                <Label text="Title: " style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                                <Label fx:id="lblTitle" text="-" style="-fx-font-size: 12px; -fx-text-fill: #1E293B;"/>
+                            </HBox>
+                            <HBox>
+                                <Label text="Phone: " style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                                <Label fx:id="lblPhone" text="-" style="-fx-font-size: 12px; -fx-text-fill: #1E293B;"/>
+                            </HBox>
+                            <HBox>
+                                <Label text="Rate (1-5): " style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                                <Label fx:id="lblRate" text="-" style="-fx-font-size: 12px; -fx-text-fill: #1E293B;"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox spacing="5" VBox.vgrow="ALWAYS">
+                            <Label text="User Description" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                            <TextArea fx:id="lblDescription" editable="false" wrapText="true" VBox.vgrow="ALWAYS" 
+                                      style="-fx-control-inner-background: #F1F5F9; -fx-border-color: #CBD5E1; -fx-border-radius: 6;"/>
+                        </VBox>
+
+                        <Separator style="-fx-background-color: #E2E8F0;"/>
+                        
+                        <Label text="Admin Action" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+                        <VBox spacing="5">
+                            <Label text="Change Status *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                            <ComboBox fx:id="cmbStatus" maxWidth="Infinity" style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                        </VBox>
+
+                        <VBox spacing="5" VBox.vgrow="ALWAYS">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Response *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="✨ AI Suggest" onAction="#handleSuggestResponseAI" style="-fx-background-color: #F0FDF4; -fx-text-fill: #166534; -fx-font-size: 10px; -fx-padding: 3 8; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                            </HBox>
+                            <TextArea fx:id="fldResponse" promptText="Type the resolution/response here..." wrapText="true" VBox.vgrow="ALWAYS" 
+                                      style="-fx-control-inner-background: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6;"/>
+                        </VBox>
+
+                        <HBox spacing="10">
+                            <Button onAction="#handleSave" text="Save Response" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                                    style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 10; -fx-cursor: hand;"/>
+                            <Button onAction="#handleDeleteResponse" text="Delete Response" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                                    style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 10; -fx-cursor: hand;"/>
+                        </HBox>
+                    </VBox>
                 </HBox>
             </VBox>
+        </Tab>
 
-            <VBox spacing="5" VBox.vgrow="ALWAYS">
-                <Label text="User Description" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
-                <TextArea fx:id="lblDescription" editable="false" wrapText="true" VBox.vgrow="ALWAYS" 
-                          style="-fx-control-inner-background: #F1F5F9; -fx-border-color: #CBD5E1; -fx-border-radius: 6;"/>
-            </VBox>
-
-            <Separator style="-fx-background-color: #E2E8F0;"/>
-            
-            <Label text="Admin Action" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-
-            <VBox spacing="5">
-                <Label text="Change Status *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
-                <ComboBox fx:id="cmbStatus" maxWidth="Infinity" style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6;"/>
-            </VBox>
-
-            <VBox spacing="5" VBox.vgrow="ALWAYS">
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Response *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="✨ AI Suggest" onAction="#handleSuggestResponseAI" style="-fx-background-color: #F0FDF4; -fx-text-fill: #166534; -fx-font-size: 10px; -fx-padding: 3 8; -fx-background-radius: 4; -fx-cursor: hand;"/>
-                </HBox>
-                <TextArea fx:id="fldResponse" promptText="Type the resolution/response here..." wrapText="true" VBox.vgrow="ALWAYS" 
-                          style="-fx-control-inner-background: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6;"/>
-            </VBox>
-
-            <HBox spacing="10">
-                <Button onAction="#handleSave" text="Save Response" maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                        style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 10; -fx-cursor: hand;"/>
-                <Button onAction="#handleDeleteResponse" text="Delete Response" maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                        style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 10; -fx-cursor: hand;"/>
-            </HBox>
-        </VBox>
-    </HBox>
+        <!-- Tab 2: Emotion Analysis -->
+        <Tab text="📊 Emotion Analysis" closable="false" style="-fx-font-size: 13px; -fx-font-weight: bold;">
+            <fx:include source="complaints_emotion_analysis.fxml"/>
+        </Tab>
+    </TabPane>
 </VBox>

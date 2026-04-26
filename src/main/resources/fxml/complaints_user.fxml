@@ -48,7 +48,11 @@
             </HBox>
 
             <VBox spacing="5">
-                <Label text="Description *" style="-fx-font-size: 12px; -fx-text-fill: #475569; -fx-font-weight: bold;"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Description *" style="-fx-font-size: 12px; -fx-text-fill: #475569; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="🎙️ Voice" onAction="#handleVoiceToText" style="-fx-background-color: #F0FDF4; -fx-text-fill: #166534; -fx-font-size: 10px; -fx-padding: 3 8; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                </HBox>
                 <TextArea fx:id="fldDescription" prefHeight="100" promptText="Describe the issue in detail..." wrapText="true" style="-fx-control-inner-background: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6;"/>
             </VBox>
 

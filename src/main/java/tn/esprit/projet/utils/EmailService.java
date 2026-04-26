@@ -1,8 +1,8 @@
 package tn.esprit.projet.utils;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
@@ -27,7 +27,10 @@ public class EmailService {
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
-        properties.put("mail.smtp.ssl.protocols", "TLSv1.2"); // Enforce TLS 1.2 for Gmail security
+        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        properties.put("mail.smtp.connectiontimeout", "10000");
+        properties.put("mail.smtp.timeout", "10000");
 
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override

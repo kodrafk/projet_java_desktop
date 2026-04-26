@@ -1877,11 +1877,40 @@ ALTER TABLE `weight_log`
   ADD CONSTRAINT `FK_6BBB9E9CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-- -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
- - -   C O M P L A I N T   T A B L E S   ( A d d e d   b a c k )  
- C R E A T E   T A B L E   I F   N O T   E X I S T S   c o m p l a i n t   ( i d   I N T   A U T O _ I N C R E M E N T   P R I M A R Y   K E Y ,   u s e r _ i d   I N T   N O T   N U L L ,   t i t l e   V A R C H A R ( 1 5 0 )   N O T   N U L L ,   d e s c r i p t i o n   T E X T   N O T   N U L L ,   p h o n e _ n u m b e r   V A R C H A R ( 2 0 ) ,   r a t e   I N T   D E F A U L T   0 ,   d a t e _ o f _ c o m p l a i n t   D A T E T I M E   N O T   N U L L   D E F A U L T   C U R R E N T _ T I M E S T A M P ,   s t a t u s   V A R C H A R ( 5 0 )   N O T   N U L L   D E F A U L T   ' P E N D I N G ' ,   i m a g e _ p a t h   T E X T ,   i n c i d e n t _ d a t e   D A T E ,   F O R E I G N   K E Y   ( u s e r _ i d )   R E F E R E N C E S   u s e r ( i d )   O N   D E L E T E   C A S C A D E )   E N G I N E = I n n o D B   D E F A U L T   C H A R S E T = u t f 8 m b 4 ;  
- C R E A T E   T A B L E   I F   N O T   E X I S T S   c o m p l a i n t _ r e s p o n s e   ( i d   I N T   A U T O _ I N C R E M E N T   P R I M A R Y   K E Y ,   c o m p l a i n t _ i d   I N T   N O T   N U L L ,   r e s p o n s e _ c o n t e n t   T E X T   N O T   N U L L ,   r e s p o n s e _ d a t e   D A T E T I M E   N O T   N U L L   D E F A U L T   C U R R E N T _ T I M E S T A M P ,   F O R E I G N   K E Y   ( c o m p l a i n t _ i d )   R E F E R E N C E S   c o m p l a i n t ( i d )   O N   D E L E T E   C A S C A D E )   E N G I N E = I n n o D B   D E F A U L T   C H A R S E T = u t f 8 m b 4 ;  
- 
+--
+-- COMPLAINT MODULE TABLES (Integrated)
+--
+CREATE TABLE IF NOT EXISTS `complaint` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `title` VARCHAR(150) NOT NULL,
+  `description` TEXT NOT NULL,
+  `phone_number` VARCHAR(20),
+  
+ate INT DEFAULT 0,
+  `date_of_complaint` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+  `image_path` TEXT,
+  `incident_date` DATE,
+  `detected_emotion` VARCHAR(50) DEFAULT 'NEUTRAL',
+  `emotion_score` DOUBLE DEFAULT 0,
+  `urgency_level` INT DEFAULT 1,
+  `emotion_recommendation` TEXT,
+  CONSTRAINT `FK_complaint_user_final` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `complaint_response` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `complaint_id` INT NOT NULL,
+  `response_content` TEXT NOT NULL,
+  `response_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT `FK_resp_complaint_final` FOREIGN KEY (`complaint_id`) REFERENCES `complaint` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- MISSING COLUMNS PATCH
+--
+ALTER TABLE `user_badge` ADD COLUMN IF NOT EXISTS `unlocked` TINYINT(1) DEFAULT 1;
+ALTER TABLE `user_badge` ADD COLUMN IF NOT EXISTS `unlocked_at` DATETIME DEFAULT CURRENT_TIMESTAMP;
+
+COMMIT;

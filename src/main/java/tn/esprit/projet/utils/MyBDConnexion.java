@@ -18,6 +18,7 @@ public class MyBDConnexion {
             System.out.println("Connexion DB établie");
             initTable();
             initComplaintsTable();
+            initComplaintResponseTable();
         } catch (SQLException e) {
             System.err.println("Erreur de connexion: " + e.getMessage());
         }
@@ -140,6 +141,22 @@ public class MyBDConnexion {
             
         } catch (SQLException e) {
             System.err.println("[initComplaintsTable] error : " + e.getMessage());
+        }
+    }
+
+    private void initComplaintResponseTable() {
+        String create = "CREATE TABLE IF NOT EXISTS `complaint_response` (" +
+                "`id`               INT AUTO_INCREMENT PRIMARY KEY," +
+                "`complaint_id`     INT NOT NULL," +
+                "`response_content` TEXT NOT NULL," +
+                "`response_date`    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+                "FOREIGN KEY (`complaint_id`) REFERENCES `complaint`(`id`) ON DELETE CASCADE" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        try (java.sql.Statement st = cnx.createStatement()) {
+            st.executeUpdate(create);
+            System.out.println("[initComplaintResponseTable] Complaint Response Table ready.");
+        } catch (SQLException e) {
+            System.err.println("[initComplaintResponseTable] error : " + e.getMessage());
         }
     }
 
