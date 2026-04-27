@@ -92,21 +92,11 @@ public class RegisterController {
     }
 
     private void loadRecaptcha() {
-        if (recaptchaView == null) return;
-        try {
-            String url = getClass().getResource("/html/recaptcha.html").toExternalForm();
-            recaptchaView.getEngine().load(url);
-        } catch (Exception e) {
-            System.err.println("[reCAPTCHA] Could not load: " + e.getMessage());
-        }
+        tn.esprit.projet.utils.RecaptchaLoader.load(recaptchaView, errCaptcha);
     }
 
     private String getRecaptchaToken() {
-        if (recaptchaView == null) return null;
-        try {
-            Object result = recaptchaView.getEngine().executeScript("getToken()");
-            return result != null ? result.toString() : null;
-        } catch (Exception e) { return null; }
+        return tn.esprit.projet.utils.RecaptchaLoader.getToken(recaptchaView);
     }
 
     /** Pre-fill fields if coming from Google OAuth */
@@ -176,6 +166,7 @@ public class RegisterController {
                 errCaptcha.setText("reCAPTCHA failed. Please try again.");
                 errCaptcha.setStyle("-fx-text-fill:#DC2626;-fx-font-size:11px;");
             }
+            tn.esprit.projet.utils.RecaptchaLoader.reset(recaptchaView);
             loadRecaptcha();
             ok = false;
         } else {

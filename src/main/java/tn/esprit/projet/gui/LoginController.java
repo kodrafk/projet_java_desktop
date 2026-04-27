@@ -35,44 +35,25 @@ public class LoginController {
     @FXML
     public void initialize() {
         if (errorLabel != null) errorLabel.setVisible(false);
-        
-        // reCAPTCHA disabled
+
+        // Enable reCAPTCHA
         if (recaptchaView != null) {
-            recaptchaView.setVisible(false);
-            recaptchaView.setManaged(false);
+            recaptchaView.setVisible(true);
+            recaptchaView.setManaged(true);
+            loadRecaptcha();
         }
         if (captchaLabel != null) {
-            captchaLabel.setVisible(false);
-            captchaLabel.setManaged(false);
+            captchaLabel.setVisible(true);
+            captchaLabel.setManaged(true);
         }
     }
 
     private void loadRecaptcha() {
-        if (recaptchaView == null) return;
-        try {
-            String url = getClass().getResource("/html/recaptcha.html").toExternalForm();
-            recaptchaView.getEngine().load(url);
-            recaptchaView.getEngine().locationProperty().addListener((obs, old, newLoc) -> {
-                if (newLoc != null && newLoc.contains("#verified:")) {
-                    if (captchaLabel != null) {
-                        captchaLabel.setText("✅ Verified!");
-                        captchaLabel.setStyle("-fx-font-size:10px;-fx-text-fill:#16A34A;-fx-font-weight:bold;");
-                    }
-                }
-            });
-        } catch (Exception e) {
-            System.err.println("[reCAPTCHA] Could not load: " + e.getMessage());
-        }
+        tn.esprit.projet.utils.RecaptchaLoader.load(recaptchaView, captchaLabel);
     }
 
     private String getRecaptchaToken() {
-        if (recaptchaView == null) return null;
-        try {
-            Object result = recaptchaView.getEngine().executeScript("getToken()");
-            return result != null ? result.toString() : null;
-        } catch (Exception e) {
-            return null;
-        }
+        return tn.esprit.projet.utils.RecaptchaLoader.getToken(recaptchaView);
     }
 
     // ── Face ID login ──────────────────────────────────────────────────────────
@@ -169,6 +150,18 @@ public class LoginController {
 
         if (email.isEmpty())    { showError("Please enter your email.");    return; }
         if (password.isEmpty()) { showError("Please enter your password."); return; }
+
+        // reCAPTCHA verification
+        String token = getRecaptchaToken();
+        if (token == null || token.isBlank()) {
+            showError("Please complete the Security Verification (reCAPTCHA).");
+            return;
+        }
+        if (!recaptchaService.verify(token)) {
+            showError("Security verification failed. Please try again.");
+            loadRecaptcha();
+            return;
+        }
 
         User user = repo.findByEmail(email);
         if (user == null) { showError("Invalid email or password."); return; }
