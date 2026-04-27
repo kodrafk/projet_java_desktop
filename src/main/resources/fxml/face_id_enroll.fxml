@@ -6,19 +6,15 @@
 
 <StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="tn.esprit.projet.gui.FaceIdEnrollController"
-           prefWidth="580" prefHeight="680">
+           prefWidth="580" prefHeight="660">
 
-    <!-- Gradient background matching the app template -->
     <Pane style="-fx-background-color:linear-gradient(to bottom right,#e8f5e9,#fffde7,#fce4ec);"/>
-
-    <!-- Decorative shapes -->
     <Circle radius="22" fill="#66BB6A" opacity="0.5" StackPane.alignment="TOP_RIGHT" translateX="-30" translateY="40"/>
     <Circle radius="14" fill="#EF5350" opacity="0.4" StackPane.alignment="BOTTOM_LEFT" translateX="40" translateY="-40"/>
-    <Ellipse radiusX="18" radiusY="12" fill="#FFEE58" opacity="0.5" StackPane.alignment="TOP_LEFT" translateX="50" translateY="80"/>
 
     <VBox spacing="0" StackPane.alignment="TOP_CENTER" maxWidth="Infinity">
 
-        <!-- Header bar -->
+        <!-- Header -->
         <HBox prefHeight="56" alignment="CENTER_LEFT" spacing="12"
               style="-fx-background-color:rgba(255,255,255,0.92);
                      -fx-border-color:transparent transparent #E8EDE8 transparent;
@@ -32,18 +28,17 @@
             </VBox>
         </HBox>
 
-        <!-- Progress bar -->
         <ProgressBar fx:id="captureProgress" progress="0" maxWidth="Infinity" prefHeight="4"
                      style="-fx-accent:#2E7D32;-fx-background-color:#E8F5E9;"/>
 
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
                     style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
-            <VBox alignment="TOP_CENTER" spacing="16"
-                  style="-fx-background-color:transparent;-fx-padding:20 24 24 24;">
+            <VBox alignment="TOP_CENTER" spacing="14"
+                  style="-fx-background-color:transparent;-fx-padding:16 24 24 24;">
 
-                <!-- Step instruction card -->
+                <!-- Step instruction -->
                 <VBox spacing="4"
-                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:14 18;
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:12 18;
                              -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.07),12,0,0,3);
                              -fx-border-color:#E8F5E9;-fx-border-radius:14;-fx-border-width:1;">
                     <Label fx:id="stepTitleLabel" text="Step 1 of 3 — Look Straight Ahead"
@@ -52,24 +47,15 @@
                            style="-fx-font-size:12px;-fx-text-fill:#6B7280;"/>
                 </VBox>
 
-                <!-- Camera view card -->
-                <StackPane style="-fx-background-color:white;-fx-background-radius:16;
-                                  -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.10),16,0,0,4);">
+                <!-- Live camera feed -->
+                <StackPane style="-fx-background-color:#111827;-fx-background-radius:16;
+                                  -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.15),16,0,0,4);">
                     <ImageView fx:id="cameraView" fitWidth="532" fitHeight="360"
-                               preserveRatio="true" smooth="true"
-                               style="-fx-background-radius:16;"/>
-
-                    <!-- Green oval guide overlay drawn by controller -->
-
+                               preserveRatio="true" smooth="true"/>
                     <!-- Countdown overlay -->
-                    <VBox fx:id="countdownBox" alignment="CENTER"
-                          style="-fx-background-color:rgba(46,125,50,0.75);-fx-background-radius:16;">
-                        <Label fx:id="countdownLabel" text="5"
-                               style="-fx-font-size:80px;-fx-font-weight:bold;-fx-text-fill:white;
-                                      -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.4),8,0,0,2);"/>
-                        <Label text="Get ready..."
-                               style="-fx-font-size:14px;-fx-text-fill:rgba(255,255,255,0.85);"/>
-                    </VBox>
+                    <Label fx:id="countdownLabel" text=""
+                           style="-fx-font-size:80px;-fx-font-weight:bold;-fx-text-fill:#4CAF50;
+                                  -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.6),10,0,0,2);"/>
                 </StackPane>
 
                 <!-- Step dots -->
@@ -79,18 +65,18 @@
                     <Circle fx:id="dot3" radius="6" fill="#C8E6C9"/>
                 </HBox>
 
-                <!-- Status label -->
-                <Label fx:id="statusLabel" text="Click Start to begin enrollment"
+                <!-- Status -->
+                <Label fx:id="statusLabel" text="Opening camera..."
                        wrapText="true" maxWidth="532" alignment="CENTER"
                        style="-fx-font-size:12px;-fx-text-fill:#6B7280;-fx-alignment:center;"/>
 
-                <!-- Action buttons -->
+                <!-- Buttons -->
                 <HBox spacing="12">
-                    <Button fx:id="startButton" text="▶  Start Enrollment" onAction="#handleStart"
+                    <Button fx:id="startButton" text="▶  Capture" onAction="#handleCapture"
                             HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="46"
+                            disable="true"
                             style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:14px;
-                                   -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;
-                                   -fx-border-color:transparent;"/>
+                                   -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;"/>
                     <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
                             prefHeight="46" prefWidth="110"
                             style="-fx-background-color:white;-fx-text-fill:#6B7280;-fx-font-size:13px;
@@ -98,13 +84,13 @@
                                    -fx-border-color:#E2E8F0;-fx-border-width:1;-fx-border-radius:12;"/>
                 </HBox>
 
-                <!-- Info box -->
+                <!-- Info -->
                 <VBox spacing="4"
                       style="-fx-background-color:#F0FDF4;-fx-background-radius:10;-fx-padding:12 16;
                              -fx-border-color:#BBF7D0;-fx-border-radius:10;-fx-border-width:1;">
-                    <Label text="ℹ️  3 positions required"
+                    <Label text="🤖  Powered by DeepFace ArcFace AI"
                            style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#166534;"/>
-                    <Label text="We'll capture your face straight, left, and right for better accuracy."
+                    <Label text="State-of-the-art face recognition. 3 captures for maximum accuracy."
                            wrapText="true"
                            style="-fx-font-size:11px;-fx-text-fill:#166534;"/>
                 </VBox>

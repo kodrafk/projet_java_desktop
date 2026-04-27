@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.AdminAnomalyDashboardController"
+            fitToWidth="true" hbarPolicy="NEVER"
+            style="-fx-background-color: #F1F5F9; -fx-background: #F1F5F9;">
+
+    <VBox spacing="20" style="-fx-background-color: #F1F5F9; -fx-padding: 24;">
+
+        <!-- ── Header ─────────────────────────────────────────────────────── -->
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <VBox spacing="3">
+                <Label text="Health Monitoring &amp; Risk Analysis"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                <Label text="Real-time user health surveillance — automated alerts and intervention recommendations"
+                       style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <VBox spacing="6" alignment="CENTER_RIGHT">
+                <HBox spacing="8">
+                    <Button fx:id="btnRunDetection" text="▶  Run Analysis"
+                            onAction="#handleRunDetection"
+                            style="-fx-background-color: #1D4ED8; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 9 18; -fx-background-radius: 7; -fx-cursor: hand;"/>
+                    <Button fx:id="btnRefresh" text="↺  Refresh"
+                            onAction="#handleRefresh"
+                            style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 9 18; -fx-background-radius: 7; -fx-cursor: hand;"/>
+                    <Button fx:id="btnExport" text="↓  Export CSV"
+                            onAction="#handleExport"
+                            style="-fx-background-color: #7C3AED; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 9 18; -fx-background-radius: 7; -fx-cursor: hand;"/>
+                </HBox>
+                <HBox spacing="8" alignment="CENTER_RIGHT">
+                    <ProgressIndicator fx:id="progressIndicator" visible="false" prefWidth="16" prefHeight="16"/>
+                    <Label fx:id="lblLastUpdate" text="Last update: --"
+                           style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    <Label fx:id="lblSystemStatus" text="● Operational"
+                           style="-fx-font-size: 11px; -fx-text-fill: #16A34A; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <!-- ── KPI Cards ──────────────────────────────────────────────────── -->
+        <GridPane hgap="14" vgap="14">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+            </columnConstraints>
+
+            <!-- Card 1 -->
+            <VBox GridPane.columnIndex="0" spacing="6"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-border-width: 1; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),8,0,0,2);">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="⚠" style="-fx-font-size: 18px; -fx-text-fill: #DC2626;"/>
+                    <Label text="Total Anomalies" style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                </HBox>
+                <Label fx:id="lblTotalAnomalies" text="—"
+                       style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
+                <Label fx:id="lblAnomalySubtitle" text="detected this period"
+                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+            </VBox>
+
+            <!-- Card 2 -->
+            <VBox GridPane.columnIndex="1" spacing="6"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-border-width: 1; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),8,0,0,2);">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔴" style="-fx-font-size: 18px;"/>
+                    <Label text="Critical Cases" style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                </HBox>
+                <Label fx:id="lblHighRiskUsers" text="—"
+                       style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #EA580C;"/>
+                <Label fx:id="lblRiskSubtitle" text="require immediate action"
+                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+            </VBox>
+
+            <!-- Card 3 -->
+            <VBox GridPane.columnIndex="2" spacing="6"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-border-width: 1; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),8,0,0,2);">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔔" style="-fx-font-size: 18px;"/>
+                    <Label text="Pending Alerts" style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                </HBox>
+                <Label fx:id="lblActiveAlerts" text="—"
+                       style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+                <Label fx:id="lblAlertSubtitle" text="awaiting admin review"
+                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+            </VBox>
+
+            <!-- Card 4 -->
+            <VBox GridPane.columnIndex="3" spacing="6"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-border-width: 1; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),8,0,0,2);">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="📊" style="-fx-font-size: 18px;"/>
+                    <Label text="Avg. Risk Score" style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                </HBox>
+                <Label fx:id="lblAccuracy" text="—"
+                       style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #7C3AED;"/>
+                <Label fx:id="lblAccuracySubtitle" text="across monitored users"
+                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+            </VBox>
+        </GridPane>
+
+        <!-- ── Anomalies Table ────────────────────────────────────────────── -->
+        <VBox spacing="10"
+              style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-border-width: 1; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),8,0,0,2);">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="⚠" style="-fx-font-size: 16px; -fx-text-fill: #DC2626;"/>
+                <VBox spacing="1">
+                    <Label text="Detected Anomalies"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    <Label text="Health deviations flagged by the monitoring system"
+                           style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblAnomalyCount" text=""
+                       style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-background-color: #F1F5F9; -fx-padding: 3 8; -fx-background-radius: 12;"/>
+            </HBox>
+
+            <TableView fx:id="tableAnomalies" prefHeight="280"
+                       style="-fx-background-color: transparent; -fx-border-color: #E2E8F0; -fx-border-radius: 6;">
+                <columns>
+                    <TableColumn fx:id="colUserName"    text="User"          prefWidth="160"/>
+                    <TableColumn fx:id="colUserEmail"   text="Email"         prefWidth="200"/>
+                    <TableColumn fx:id="colAnomalyType" text="Issue Detected" prefWidth="200"/>
+                    <TableColumn fx:id="colSeverity"    text="Level"         prefWidth="90"/>
+                    <TableColumn fx:id="colValue"       text="Score"         prefWidth="80"/>
+                    <TableColumn fx:id="colDetectedAt"  text="Detected"      prefWidth="140"/>
+                    <TableColumn fx:id="colStatus"      text="Status"        prefWidth="110"/>
+                    <TableColumn fx:id="colAction"      text="Action"        prefWidth="130"/>
+                </columns>
+                <placeholder>
+                    <Label text="No anomalies detected — system is healthy"
+                           style="-fx-text-fill: #94A3B8; -fx-font-size: 13px;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- ── High Risk Users Table ──────────────────────────────────────── -->
+        <VBox spacing="10"
+              style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-border-width: 1; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),8,0,0,2);">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🔴" style="-fx-font-size: 16px;"/>
+                <VBox spacing="1">
+                    <Label text="Users Requiring Attention"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    <Label text="Ranked by dropout risk score — prioritize outreach accordingly"
+                           style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblRiskCount" text=""
+                       style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-background-color: #F1F5F9; -fx-padding: 3 8; -fx-background-radius: 12;"/>
+            </HBox>
+
+            <TableView fx:id="tableHighRisk" prefHeight="260"
+                       style="-fx-background-color: transparent; -fx-border-color: #E2E8F0; -fx-border-radius: 6;">
+                <columns>
+                    <TableColumn fx:id="colRiskUserName"    text="User"              prefWidth="150"/>
+                    <TableColumn fx:id="colRiskUserEmail"   text="Email"             prefWidth="200"/>
+                    <TableColumn fx:id="colRiskScore"       text="Dropout Risk"      prefWidth="110"/>
+                    <TableColumn fx:id="colInactivityDays"  text="Days Inactive"     prefWidth="110"/>
+                    <TableColumn fx:id="colLastActive"      text="Last Activity"     prefWidth="130"/>
+                    <TableColumn fx:id="colWeightTrend"     text="Weight Trend"      prefWidth="120"/>
+                    <TableColumn fx:id="colPrediction"      text="Priority"          prefWidth="130"/>
+                </columns>
+                <placeholder>
+                    <Label text="No high-risk users identified"
+                           style="-fx-text-fill: #94A3B8; -fx-font-size: 13px;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- ── Pending Alerts Table ───────────────────────────────────────── -->
+        <VBox spacing="10"
+              style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-border-width: 1; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),8,0,0,2);">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🔔" style="-fx-font-size: 16px;"/>
+                <VBox spacing="1">
+                    <Label text="Pending Alerts"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    <Label text="Unacknowledged alerts — review and take action"
+                           style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblAlertCount" text=""
+                       style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-background-color: #F1F5F9; -fx-padding: 3 8; -fx-background-radius: 12;"/>
+            </HBox>
+
+            <TableView fx:id="tableAlerts" prefHeight="220"
+                       style="-fx-background-color: transparent; -fx-border-color: #E2E8F0; -fx-border-radius: 6;">
+                <columns>
+                    <TableColumn fx:id="colAlertUser"       text="User"              prefWidth="150"/>
+                    <TableColumn fx:id="colAlertTitle"      text="Alert"             prefWidth="200"/>
+                    <TableColumn fx:id="colAlertPriority"   text="Priority"          prefWidth="100"/>
+                    <TableColumn fx:id="colAlertRisk"       text="Risk Score"        prefWidth="100"/>
+                    <TableColumn fx:id="colAlertRec"        text="Recommended Action" prefWidth="280"/>
+                    <TableColumn fx:id="colAlertDate"       text="Raised"            prefWidth="130"/>
+                </columns>
+                <placeholder>
+                    <Label text="No pending alerts"
+                           style="-fx-text-fill: #94A3B8; -fx-font-size: 13px;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- ── Toast / Status Bar ─────────────────────────────────────────── -->
+        <HBox fx:id="toastBar" visible="false" managed="false"
+              alignment="CENTER_LEFT" spacing="10"
+              style="-fx-background-color: #1E293B; -fx-background-radius: 8; -fx-padding: 12 20;">
+            <Label fx:id="toastIcon" text="✓" style="-fx-font-size: 16px; -fx-text-fill: #4ADE80;"/>
+            <Label fx:id="toastMessage" text=""
+                   style="-fx-font-size: 13px; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="toastDetail" text=""
+                   style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+        </HBox>
+
+        <!-- ── Footer ─────────────────────────────────────────────────────── -->
+        <HBox spacing="16" alignment="CENTER" style="-fx-padding: 4 0 4 0;">
+            <Label text="Automated health monitoring  ·  7 detection rules  ·  Daily scheduled scans"
+                   style="-fx-font-size: 10px; -fx-text-fill: #CBD5E1;"/>
+        </HBox>
+
+    </VBox>
+</ScrollPane>

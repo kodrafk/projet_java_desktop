@@ -9,6 +9,14 @@ public class DatabaseConfig {
 
     public static String getUrl() {
         return "jdbc:mysql://" + HOST + ":" + PORT + "/" + DB_NAME
-                + "?useSSL=false&serverTimezone=UTC";
+                + "?useSSL=false"
+                + "&serverTimezone=UTC"
+                + "&autoReconnect=true"
+                + "&failOverReadOnly=false"
+                + "&maxReconnects=10"
+                + "&connectTimeout=5000"
+                + "&socketTimeout=30000"
+                + "&useUnicode=true"
+                + "&characterEncoding=UTF-8";
     }
 }

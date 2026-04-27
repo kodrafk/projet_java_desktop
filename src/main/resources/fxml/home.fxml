@@ -1,39 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="tn.esprit.projet.gui.HomeController"
             prefWidth="1280" prefHeight="760"
-            style="-fx-background-color:#F0F4F8;">
+            style="-fx-background-color:#D4EDDA;">
 
-    <!-- Top navbar -->
+    <!-- ── Top Navbar ── -->
     <top>
-        <HBox prefHeight="60" alignment="CENTER_LEFT" spacing="16"
-              style="-fx-background-color:white;-fx-border-color:transparent transparent #E2E8F0 transparent;-fx-border-width:0 0 1 0;-fx-padding:0 32;">
-            <Label text="🥗 NutriLife" style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+        <HBox prefHeight="56" alignment="CENTER_LEFT" spacing="0"
+              style="-fx-background-color:white;
+                     -fx-border-color:transparent transparent #E2E8F0 transparent;
+                     -fx-border-width:0 0 1 0;-fx-padding:0 40;">
+
+            <!-- Logo -->
+            <Label text="Nutri Coach Pro"
+                   style="-fx-font-size:17px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;
+                          -fx-font-family:Georgia;"/>
+
+            <!-- Nav links -->
+            <HBox spacing="32" alignment="CENTER" style="-fx-padding:0 0 0 48;">
+                <Label text="Home"
+                       style="-fx-font-size:13px;-fx-text-fill:#1a2e1a;-fx-font-weight:bold;-fx-cursor:hand;"/>
+                <Label text="About"
+                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
+                <Label text="My Kitchen"
+                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
+                <Label text="Nutrition Objectives"
+                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
+                <Label text="Events"
+                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
+                <Label text="Wellness"
+                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
+                <Label text="Blog"
+                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
+            </HBox>
+
             <Region HBox.hgrow="ALWAYS"/>
-            <MenuButton fx:id="menuAccount" text="My Account"
-                        style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;">
+
+            <!-- Messages button with unread badge -->
+            <StackPane style="-fx-padding:0 8 0 0;">
+                <Button fx:id="btnMessages" text="💬 Messages" onAction="#handleOpenChat"
+                        style="-fx-background-color:#EFF6FF;-fx-text-fill:#1D4ED8;-fx-font-size:13px;
+                               -fx-font-weight:bold;-fx-background-radius:20;-fx-padding:8 16;
+                               -fx-cursor:hand;-fx-border-color:#BFDBFE;-fx-border-radius:20;-fx-border-width:1;"/>
+                <Label fx:id="lblUnreadBadge" text="0"
+                       style="-fx-background-color:#EF4444;-fx-text-fill:white;-fx-font-size:9px;
+                              -fx-font-weight:bold;-fx-background-radius:10;-fx-padding:2 6;"
+                       StackPane.alignment="TOP_RIGHT" translateX="4" translateY="-4"
+                       visible="false" managed="false"/>
+            </StackPane>
+
+            <!-- Assistant button -->
+            <Button text="⚡ Challenges" onAction="#handleWeeklyChallenges"
+                    style="-fx-background-color:#7C3AED;-fx-text-fill:white;-fx-font-size:13px;
+                           -fx-font-weight:bold;-fx-background-radius:20;-fx-padding:8 18;
+                           -fx-cursor:hand;-fx-border-color:transparent;-fx-margin:0 8 0 0;"/>
+            <!-- Account dropdown -->
+            <MenuButton fx:id="menuAccount" text="Account  ▾"
+                        style="-fx-background-color:transparent;-fx-text-fill:#374151;
+                               -fx-font-size:13px;-fx-cursor:hand;-fx-border-color:transparent;
+                               -fx-padding:8 16;">
                 <items>
-                    <MenuItem text="My Profile"       onAction="#handleMyProfile"/>
-                    <MenuItem text="Change Password"  onAction="#handleChangePassword"/>
-                    <MenuItem text="My Badges 🏆"     onAction="#handleMyBadges"/>
+                    <MenuItem text="My Profile"      onAction="#handleMyProfile"/>
+                    <MenuItem text="Change Password" onAction="#handleChangePassword"/>
+                    <MenuItem text="My Badges 🏆"    onAction="#handleMyBadges"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Logout"           onAction="#handleLogout"/>
+                    <MenuItem text="Logout"          onAction="#handleLogout"/>
                 </items>
             </MenuButton>
         </HBox>
     </top>
 
+    <!-- ── Hero Section ── -->
     <center>
-        <StackPane fx:id="contentArea">
-            <VBox alignment="CENTER" spacing="16" style="-fx-padding:60;">
-                <Label fx:id="lblWelcome" text="Welcome!"
-                       style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
-                <Label text="Use the menu above to access your profile, badges, and more."
-                       style="-fx-font-size:14px;-fx-text-fill:#64748B;"/>
+        <StackPane fx:id="contentArea"
+                   style="-fx-background-color:#D4EDDA;">
+
+            <!-- Scattered leaf decorations -->
+            <Ellipse radiusX="6" radiusY="14" fill="#5A9E6F" opacity="0.7"
+                     StackPane.alignment="CENTER_LEFT" translateX="120" translateY="-60"
+                     rotate="30"/>
+            <Ellipse radiusX="5" radiusY="12" fill="#5A9E6F" opacity="0.6"
+                     StackPane.alignment="CENTER_LEFT" translateX="200" translateY="120"
+                     rotate="-20"/>
+            <Ellipse radiusX="5" radiusY="12" fill="#5A9E6F" opacity="0.6"
+                     StackPane.alignment="CENTER_RIGHT" translateX="-160" translateY="-80"
+                     rotate="15"/>
+            <Ellipse radiusX="5" radiusY="12" fill="#5A9E6F" opacity="0.6"
+                     StackPane.alignment="CENTER_RIGHT" translateX="-80" translateY="140"
+                     rotate="-35"/>
+            <Ellipse radiusX="4" radiusY="10" fill="#5A9E6F" opacity="0.5"
+                     StackPane.alignment="TOP_LEFT" translateX="340" translateY="200"
+                     rotate="50"/>
+            <Ellipse radiusX="4" radiusY="10" fill="#5A9E6F" opacity="0.5"
+                     StackPane.alignment="BOTTOM_RIGHT" translateX="-300" translateY="-180"
+                     rotate="-10"/>
+
+            <!-- Food shapes — orange circle (large) -->
+            <Circle radius="130" fill="#F4A261" opacity="0.85"
+                    StackPane.alignment="CENTER" translateX="80" translateY="30"/>
+            <!-- Inner orange ring -->
+            <Circle radius="100" fill="#E76F51" opacity="0.6"
+                    StackPane.alignment="CENTER" translateX="80" translateY="30"/>
+            <!-- Red tomato/apple -->
+            <Circle radius="90" fill="#E63946" opacity="0.90"
+                    StackPane.alignment="CENTER" translateX="-10" translateY="20"/>
+            <!-- Green stem on tomato -->
+            <Ellipse radiusX="8" radiusY="14" fill="#2D6A4F" opacity="0.95"
+                     StackPane.alignment="CENTER" translateX="-10" translateY="-68"
+                     rotate="-15"/>
+            <Ellipse radiusX="6" radiusY="12" fill="#40916C" opacity="0.9"
+                     StackPane.alignment="CENTER" translateX="4" translateY="-72"
+                     rotate="20"/>
+
+            <!-- Hero text — centered, on top of shapes -->
+            <VBox alignment="CENTER" spacing="16"
+                  style="-fx-padding:0 0 40 0;">
+
+                <Label text="Fuel Your Life With..."
+                       style="-fx-font-size:46px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;
+                              -fx-font-family:Georgia;"/>
+
+                <Label text="Nutrition"
+                       style="-fx-font-size:52px;-fx-font-weight:bold;-fx-text-fill:#2D6A4F;
+                              -fx-font-family:Georgia;-fx-font-style:italic;"/>
+
+                <Label text="Our nutrition counseling helps you make lasting, healthy changes. Boost&#10;energy, manage weight, and feel better with our expert guidance."
+                       wrapText="true" maxWidth="520" alignment="CENTER"
+                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-text-alignment:center;
+                              -fx-alignment:center;"/>
+
+                <Button text="Book Appointment" onAction="#handleBookAppointment"
+                        style="-fx-background-color:#F4A261;-fx-text-fill:white;
+                               -fx-font-size:14px;-fx-font-weight:bold;
+                               -fx-background-radius:24;-fx-padding:12 32;
+                               -fx-cursor:hand;-fx-border-color:transparent;
+                               -fx-effect:dropshadow(gaussian,rgba(244,162,97,0.4),12,0,0,4);"/>
             </VBox>
+
         </StackPane>
     </center>
 </BorderPane>

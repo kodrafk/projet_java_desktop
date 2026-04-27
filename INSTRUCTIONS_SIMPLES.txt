@@ -1,0 +1,117 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                    🚀 INSTRUCTIONS SIMPLES - 3 ÉTAPES                     ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+PROBLÈME : Vous voyez "No users found" dans l'interface Personalized Messages
+
+CAUSE : Votre table "user" n'a que des admins (ou est vide)
+
+SOLUTION : Ajouter des utilisateurs normaux (ROLE_USER)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 ÉTAPE 1 : VÉRIFIER VOS UTILISATEURS ACTUELS
+
+Double-cliquez sur :
+    CHECK_DATABASE_USERS.bat
+
+Cela affichera tous vos utilisateurs et leurs rôles.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+➕ ÉTAPE 2 : AJOUTER DES UTILISATEURS DE TEST
+
+Double-cliquez sur :
+    ADD_TEST_USERS_TO_EXISTING_DB.bat
+
+Cela ajoutera 5 utilisateurs de test à votre base existante :
+    ✅ john.doe@nutrilife.com
+    ✅ jane.smith@nutrilife.com
+    ✅ bob.johnson@nutrilife.com
+    ✅ alice.williams@nutrilife.com
+    ✅ charlie.brown@nutrilife.com
+
+Mot de passe pour tous : password123
+
+⚠️  IMPORTANT : Cela N'EFFACE PAS vos données existantes !
+              Cela AJOUTE seulement de nouveaux utilisateurs.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 ÉTAPE 3 : RELANCER L'APPLICATION
+
+Dans le terminal :
+
+    mvn clean compile
+    mvn javafx:run
+
+Puis dans l'application :
+    1. Connexion : admin@nutrilife.com / admin123
+    2. Menu → Personalized Messages
+    3. ✅ Vous devriez voir 5 utilisateurs !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 CE QUI SE PASSE
+
+Votre interface filtre les utilisateurs pour afficher seulement :
+    - roles = 'ROLE_USER' (pas les admins)
+    - is_active = 1 (actifs)
+
+Si vous n'avez que des admins, l'interface affiche "No users found".
+
+En ajoutant ces utilisateurs avec roles = 'ROLE_USER', ils apparaîtront !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 VÉRIFICATION
+
+Quand vous lancez l'application, regardez la console :
+
+    [DEBUG] Total users from DB: 8
+    [DEBUG] Filtered users (non-admin): 5
+
+Si vous voyez "Filtered users: 5" → ✅ Tout fonctionne !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ ALTERNATIVE : AJOUTER VIA PHPMYADMIN
+
+Si les fichiers .bat ne fonctionnent pas :
+
+1. Ouvrir http://localhost/phpmyadmin
+2. Cliquer sur "nutrilife"
+3. Cliquer sur l'onglet "SQL"
+4. Ouvrir le fichier : ADD_TEST_USERS_TO_EXISTING_DB.sql
+5. Copier tout le contenu
+6. Coller dans phpMyAdmin
+7. Cliquer "Exécuter"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ RÉSUMÉ
+
+1. CHECK_DATABASE_USERS.bat          → Voir vos utilisateurs actuels
+2. ADD_TEST_USERS_TO_EXISTING_DB.bat → Ajouter 5 utilisateurs de test
+3. mvn javafx:run                    → Relancer l'application
+4. Menu → Personalized Messages      → ✅ Voir les utilisateurs !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎉 C'EST TOUT !
+
+Après avoir exécuté ces 3 étapes, votre interface affichera les utilisateurs.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 FICHIERS CRÉÉS POUR VOUS
+
+✅ CHECK_DATABASE_USERS.bat              - Vérifier les utilisateurs
+✅ ADD_TEST_USERS_TO_EXISTING_DB.sql     - Script SQL
+✅ ADD_TEST_USERS_TO_EXISTING_DB.bat     - Exécuter le script
+✅ GUIDE_RESOLUTION_FINALE.md            - Guide complet
+✅ INSTRUCTIONS_SIMPLES.txt              - Ce fichier
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

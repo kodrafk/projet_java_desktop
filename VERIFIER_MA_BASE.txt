@@ -1,0 +1,99 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║              VÉRIFIER VOTRE BASE DE DONNÉES EXISTANTE                     ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Pour comprendre pourquoi "No users found" s'affiche, vérifions votre base :
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 1 : Ouvrir phpMyAdmin
+
+1. Ouvrir http://localhost/phpmyadmin
+2. Cliquer sur votre base "nutrilife" à gauche
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 2 : Vérifier la table "user"
+
+Cliquer sur l'onglet "SQL" et exécuter :
+
+SELECT id, email, roles, first_name, last_name, is_active FROM user;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RÉSULTATS POSSIBLES :
+
+CAS 1 : Table vide (0 lignes)
+→ Vous n'avez aucun utilisateur
+→ Solution : Ajouter des utilisateurs (voir ci-dessous)
+
+CAS 2 : Seulement des admins
+→ Tous vos utilisateurs ont roles = 'ROLE_ADMIN'
+→ Solution : Ajouter des utilisateurs normaux (voir ci-dessous)
+
+CAS 3 : Vous avez des utilisateurs normaux
+→ Le problème vient du code
+→ Vérifier que le code a été recompilé
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SOLUTION : Ajouter des utilisateurs à VOTRE table existante
+
+Exécutez ce SQL dans phpMyAdmin (onglet SQL) :
+
+-- Ajouter 5 utilisateurs normaux à votre table user existante
+INSERT INTO user (email, password, roles, first_name, last_name, is_active, created_at)
+VALUES 
+('john.doe@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'John', 'Doe', 1, NOW()),
+('jane.smith@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'Jane', 'Smith', 1, NOW()),
+('bob.johnson@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'Bob', 'Johnson', 1, NOW()),
+('alice.williams@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'Alice', 'Williams', 1, NOW()),
+('charlie.brown@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'Charlie', 'Brown', 1, NOW());
+
+Cela va AJOUTER 5 utilisateurs à votre table existante.
+Cela ne supprime RIEN, cela ajoute seulement.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VÉRIFICATION
+
+Après avoir exécuté le SQL, vérifiez :
+
+SELECT COUNT(*) as total, 
+       SUM(CASE WHEN roles = 'ROLE_ADMIN' THEN 1 ELSE 0 END) as admins,
+       SUM(CASE WHEN roles = 'ROLE_USER' THEN 1 ELSE 0 END) as users
+FROM user;
+
+Vous devriez voir :
+- total : 6 (ou plus si vous aviez déjà des utilisateurs)
+- admins : 1 (votre admin existant)
+- users : 5 (les nouveaux utilisateurs)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IMPORTANT :
+
+✅ Cela utilise VOTRE base de données existante "nutrilife"
+✅ Cela utilise VOTRE table "user" existante
+✅ Cela AJOUTE seulement des utilisateurs
+✅ Cela ne supprime RIEN
+✅ Vos données existantes restent intactes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+APRÈS AVOIR AJOUTÉ LES UTILISATEURS :
+
+1. Relancer l'application : mvn javafx:run
+2. Connexion admin
+3. Menu → Personalized Messages
+4. Vous verrez 5 utilisateurs !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SI VOUS VOULEZ SUPPRIMER CES UTILISATEURS DE TEST PLUS TARD :
+
+DELETE FROM user WHERE email LIKE '%@nutrilife.com' AND roles = 'ROLE_USER';
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

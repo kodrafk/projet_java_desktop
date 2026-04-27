@@ -1,0 +1,92 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║           🔐 IDENTIFIANTS CORRECTS POUR VOUS CONNECTER                   ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+D'après votre capture d'écran, vous êtes déjà connecté avec un compte admin!
+
+Je vois dans votre interface que vous êtes connecté en tant que:
+    📧 admin@nutrilife.com
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ SOLUTION: VOUS ÊTES DÉJÀ CONNECTÉ!
+═══════════════════════════════════════════════════════════════════════════
+
+Vous n'avez PAS besoin de vous reconnecter!
+
+Vous êtes déjà dans le backoffice admin.
+
+
+═══════════════════════════════════════════════════════════════════════════
+📍 POUR ACCÉDER AU SYSTÈME AI
+═══════════════════════════════════════════════════════════════════════════
+
+Regardez le MENU LATÉRAL GAUCHE (la barre verte foncée).
+
+Vous devriez voir ces options:
+
+    📗 NutriLife
+    
+    ⬛ Dashboard
+    
+    👤 User Management      ← VOUS ÊTES ICI
+    
+    📊 Statistics
+    
+    🔍 Anomaly Detection    ← CLIQUEZ ICI!
+    
+    🍎 Ingredients
+    
+    📖 Recipes
+
+
+═══════════════════════════════════════════════════════════════════════════
+❓ SI VOUS NE VOYEZ PAS "ANOMALY DETECTION"
+═══════════════════════════════════════════════════════════════════════════
+
+Le bouton peut être organisé sous une section "HEALTH AI".
+
+Faites défiler le menu latéral gauche vers le BAS pour voir tous les boutons.
+
+Ou cherchez une section intitulée:
+    - "HEALTH AI"
+    - "AI"
+    - "INTELLIGENCE"
+
+
+═══════════════════════════════════════════════════════════════════════════
+🔧 SI LE BOUTON N'EXISTE PAS
+═══════════════════════════════════════════════════════════════════════════
+
+Cela signifie que l'application a été lancée AVANT que j'ajoute le bouton.
+
+Solution:
+1. Fermez l'application (cliquez sur X)
+2. Relancez avec: LAUNCH_ANOMALY_SYSTEM.bat
+3. Le bouton apparaîtra dans le menu
+
+
+═══════════════════════════════════════════════════════════════════════════
+📧 AUTRES IDENTIFIANTS DISPONIBLES (si besoin)
+═══════════════════════════════════════════════════════════════════════════
+
+Si vous voulez créer d'autres comptes admin:
+
+Double-cliquez sur: FIX_ADMIN_ACCOUNT.bat
+
+Cela créera 3 comptes admin:
+    1. admin.test@nutrilife.com / admin123
+    2. admin@nutrilife.com / admin123
+    3. superadmin@nutrilife.com / admin123
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   ✅ VOUS ÊTES DÉJÀ CONNECTÉ EN TANT QU'ADMIN!                          ║
+║                                                                           ║
+║   Cherchez le bouton "🔍 Anomaly Detection" dans le menu latéral        ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝

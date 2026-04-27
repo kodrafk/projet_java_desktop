@@ -11,6 +11,52 @@ public class FaceEmbeddingRepository {
         return DatabaseConnection.getInstance().getConnection();
     }
 
+    /** Ensure face_embeddings table exists — called once at startup. */
+    public void ensureTableExists() {
+        // Create without FOREIGN KEY to avoid issues with table name differences
+        String sql = "CREATE TABLE IF NOT EXISTS `face_embeddings` (" +
+                "`id` INT AUTO_INCREMENT PRIMARY KEY," +
+                "`user_id` INT NOT NULL UNIQUE," +
+                "`embedding_encrypted` MEDIUMTEXT NOT NULL," +
+                "`encryption_iv` VARCHAR(255) NOT NULL," +
+                "`encryption_tag` VARCHAR(255) NOT NULL," +
+                "`is_active` TINYINT(1) NOT NULL DEFAULT 1," +
+                "`consent_given_at` DATETIME DEFAULT NULL," +
+                "`consent_ip` VARCHAR(45) DEFAULT NULL," +
+                "`created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+                "`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
+                "`last_used_at` DATETIME DEFAULT NULL" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        try (Statement st = conn().createStatement()) {
+            st.executeUpdate(sql);
+            System.out.println("[FaceDB] ✅ face_embeddings table ready");
+        } catch (SQLException e) {
+            if (!e.getMessage().contains("already exists")) {
+                System.err.println("[FaceDB] ❌ Could not create face_embeddings: " + e.getMessage());
+            } else {
+                System.out.println("[FaceDB] ✅ face_embeddings already exists");
+            }
+        }
+
+        String sql2 = "CREATE TABLE IF NOT EXISTS `face_verification_attempts` (" +
+                "`id` INT AUTO_INCREMENT PRIMARY KEY," +
+                "`user_id` INT DEFAULT NULL," +
+                "`email` VARCHAR(255) DEFAULT NULL," +
+                "`ip_address` VARCHAR(45) NOT NULL DEFAULT '127.0.0.1'," +
+                "`success` TINYINT(1) NOT NULL DEFAULT 0," +
+                "`similarity_score` DOUBLE DEFAULT NULL," +
+                "`attempted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        try (Statement st = conn().createStatement()) {
+            st.executeUpdate(sql2);
+            System.out.println("[FaceDB] ✅ face_verification_attempts table ready");
+        } catch (SQLException e) {
+            if (!e.getMessage().contains("already exists")) {
+                System.err.println("[FaceDB] ❌ Could not create face_verification_attempts: " + e.getMessage());
+            }
+        }
+    }
+
     // ── Save or update embedding ───────────────────────────────────────────────
 
     public void saveEmbedding(int userId, String encryptedB64, String ivB64, String tagB64) {
@@ -62,6 +108,33 @@ public class FaceEmbeddingRepository {
             while (rs.next()) list.add(new int[]{rs.getInt("user_id")});
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
+    }
+    
+    // ── Get all active embeddings with user info (for duplicate detection) ─────
+    
+    public java.util.List<UserEmbedding> findAllActiveEmbeddings() {
+        java.util.List<UserEmbedding> list = new java.util.ArrayList<>();
+        try (PreparedStatement ps = conn().prepareStatement(
+                "SELECT user_id, embedding_encrypted, encryption_iv, encryption_tag FROM face_embeddings WHERE is_active=1");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                UserEmbedding ue = new UserEmbedding();
+                ue.userId = rs.getInt("user_id");
+                ue.encryptedB64 = rs.getString("embedding_encrypted");
+                ue.ivB64 = rs.getString("encryption_iv");
+                ue.tagB64 = rs.getString("encryption_tag");
+                list.add(ue);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
+    
+    // Inner class for user embedding data
+    public static class UserEmbedding {
+        public int userId;
+        public String encryptedB64;
+        public String ivB64;
+        public String tagB64;
     }
 
     // ── Remove embedding ───────────────────────────────────────────────────────

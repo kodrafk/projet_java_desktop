@@ -1,0 +1,92 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    🚀 QUICK FIX - AI SYSTEM                                  ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+PROBLEM: Dashboard shows 0 data because database tables are empty!
+
+SOLUTION: Run the setup script to create tables and generate sample data.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  STEP 1: RUN SETUP SCRIPT
+═══════════════════════════════════════════════════════════════════════════════
+
+  Double-click this file:
+  
+  ► SETUP_AI_SYSTEM.bat
+  
+  This will:
+  • Create all database tables
+  • Generate 10 sample anomalies
+  • Generate 5 sample alerts
+  • Generate 8 user health metrics
+  • Create detection history
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  STEP 2: REFRESH THE DASHBOARD
+═══════════════════════════════════════════════════════════════════════════════
+
+  In the AI Dashboard:
+  
+  1. Click the green button: 🔄 Actualiser
+  2. You will see:
+     • Total Anomalies: 10
+     • Utilisateurs à Risque: 3
+     • Alertes Actives: 5
+     • Précision ML: 0.0%
+  
+  3. Tables will show real data!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  WHAT YOU'LL SEE
+═══════════════════════════════════════════════════════════════════════════════
+
+  Anomalies Table:
+  • Perte de poids rapide: -3.5 kg en 7 jours (CRITIQUE)
+  • Inactivité prolongée: 15 jours (ÉLEVÉ)
+  • Pattern yo-yo: 5 cycles (MOYEN)
+  • Gain de poids rapide: +4.2 kg (CRITIQUE)
+  • Risque d'abandon: 87.5% (CRITIQUE)
+  • And more...
+
+  High Risk Users Table:
+  • User #1: 87.5% risk (🔴 Très Élevé)
+  • User #8: 82.1% risk (🔴 Très Élevé)
+  • User #2: 72.3% risk (🟠 Élevé)
+  • And more...
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  ALTERNATIVE: MANUAL SQL
+═══════════════════════════════════════════════════════════════════════════════
+
+  If the batch file doesn't work, run these commands manually:
+
+  1. Open MySQL:
+     mysql -u root nutrilife_db
+
+  2. Run:
+     source CREATE_ANOMALY_DETECTION_TABLES.sql
+     source GENERATE_SAMPLE_DATA.sql
+
+  3. Exit:
+     exit
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  THAT'S IT!
+═══════════════════════════════════════════════════════════════════════════════
+
+  After running the setup:
+  ✅ Dashboard will show real data
+  ✅ Tables will be populated
+  ✅ ML predictions visible
+  ✅ Professional and working!
+
+
+═══════════════════════════════════════════════════════════════════════════════

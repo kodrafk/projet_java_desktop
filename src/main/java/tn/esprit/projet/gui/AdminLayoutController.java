@@ -33,7 +33,9 @@ public class AdminLayoutController {
 
     @FXML private Button btnDashboard;
     @FXML private Button btnUsers;
+    @FXML private Button btnUserProfiles;
     @FXML private Button btnStatistics;
+    @FXML private Button btnAnomalyDetection;
     @FXML private Button btnIngredients;
     @FXML private Button btnRecipes;
     @FXML private Button btnComplaints;
@@ -80,9 +82,19 @@ public class AdminLayoutController {
         loadPage("/fxml/user_list.fxml");
     }
 
+    @FXML private void handleUserProfiles(ActionEvent e) {
+        activate(btnUserProfiles, "User Profiles Gallery", "View user profiles, badges, and progression");
+        loadPage("/fxml/admin_user_profiles.fxml");
+    }
+
     @FXML private void handleStatistics(ActionEvent e) {
         activate(btnStatistics, "Statistics", "Platform statistics overview");
         loadPage("/fxml/statistics.fxml");
+    }
+
+    @FXML private void handleAnomalyDetection(ActionEvent e) {
+        activate(btnAnomalyDetection, "🔍 Anomaly Detection & Predictive Alerts", "AI-powered health monitoring system");
+        loadPage("/fxml/admin_anomaly_dashboard.fxml");
     }
 
     @FXML private void handleAddUser(ActionEvent e) {
@@ -127,9 +139,24 @@ public class AdminLayoutController {
         } catch (IOException ex) { ex.printStackTrace(); }
     }
 
+    @FXML private void handleAdminProfile() {
+        User admin = SessionManager.getCurrentUser();
+        if (admin == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profile.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("My Profile — " + admin.getFullName());
+            stage.setScene(new Scene(root, 640, 720));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (IOException ex) { ex.printStackTrace(); }
+    }
+
     // ── Helpers ────────────────────────────────────────────────────────────────
     private void activate(Button active, String title, String sub) {
-        for (Button b : new Button[]{btnDashboard, btnUsers, btnStatistics, btnIngredients,
+        for (Button b : new Button[]{btnDashboard, btnUsers, btnUserProfiles, btnStatistics, btnAnomalyDetection, btnIngredients,
                 btnRecipes, btnComplaints, btnEvents, btnBlogs})
             if (b != null) b.setStyle(DEFAULT_BTN);
         if (active != null) active.setStyle(ACTIVE_BTN);

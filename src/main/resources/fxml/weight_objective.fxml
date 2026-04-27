@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.WeightObjectiveController"
+           prefWidth="700" prefHeight="750"
+           stylesheets="@../css/chart.css">
+
+    <Pane mouseTransparent="true" style="-fx-background-color:linear-gradient(to bottom right,#e8f5e9,#fffde7,#fce4ec);"/>
+    <Circle radius="20" fill="#66BB6A" opacity="0.4" mouseTransparent="true" StackPane.alignment="TOP_RIGHT" translateX="-30" translateY="50"/>
+
+    <VBox StackPane.alignment="TOP_CENTER" maxWidth="Infinity" prefWidth="700" prefHeight="750">
+
+        <HBox prefHeight="56" alignment="CENTER_LEFT"
+              style="-fx-background-color:rgba(255,255,255,0.92);-fx-border-color:transparent transparent #E8EDE8 transparent;-fx-border-width:0 0 1 0;-fx-padding:0 24;">
+            <Label text="⚖️  My Goal &amp; Progress" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblCurrentWeight" text="" style="-fx-font-size:12px;-fx-text-fill:#2E7D32;-fx-font-weight:bold;"/>
+            <Button text="✕" onAction="#handleClose"
+                    style="-fx-background-color:transparent;-fx-text-fill:#94A3B8;-fx-font-size:16px;-fx-font-weight:bold;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:0 0 0 16;"
+                    onMouseEntered="#handleCloseHover" onMouseExited="#handleCloseUnhover"/>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS" prefHeight="694"
+                    style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
+            <VBox spacing="14" style="-fx-padding:16 24 28 24;">
+
+                <!-- CHAT WITH COACH - BIDIRECTIONAL -->
+                <VBox fx:id="messagesSection" spacing="0"
+                      style="-fx-background-color:white;-fx-background-radius:12;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);-fx-border-color:#DBEAFE;-fx-border-radius:12;-fx-border-width:2;">
+
+                    <!-- Chat header -->
+                    <HBox alignment="CENTER_LEFT" spacing="8"
+                          style="-fx-padding:10 14;-fx-border-color:transparent transparent #EFF6FF transparent;-fx-border-width:0 0 1 0;">
+                        <Label text="💬" style="-fx-font-size:14px;"/>
+                        <Label text="Chat with Coach" style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1E40AF;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblMessageCount" text=""
+                               style="-fx-font-size:10px;-fx-text-fill:white;-fx-background-color:#EF4444;-fx-background-radius:10;-fx-padding:3 8;-fx-font-weight:bold;"
+                               managed="false" visible="false"/>
+                    </HBox>
+
+                    <!-- Messages scroll area -->
+                    <ScrollPane fx:id="chatScrollPane" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                                prefHeight="220" maxHeight="220"
+                                style="-fx-background-color:#F8FAFC;-fx-background:#F8FAFC;-fx-border-color:transparent;">
+                        <VBox fx:id="messagesContainer" spacing="6" style="-fx-padding:10 12;">
+                            <Label fx:id="lblNoMessages"
+                                   text="📭 No messages yet. Your coach will send you messages here!"
+                                   wrapText="true"
+                                   style="-fx-font-size:11px;-fx-text-fill:#94A3B8;-fx-font-style:italic;-fx-padding:8;"/>
+                        </VBox>
+                    </ScrollPane>
+
+                    <!-- Reply compose area -->
+                    <VBox spacing="8" style="-fx-padding:10 12 12 12;-fx-border-color:#EFF6FF transparent transparent transparent;-fx-border-width:1 0 0 0;">
+                        <!-- Image preview -->
+                        <HBox fx:id="userImagePreviewBox" spacing="8" alignment="CENTER_LEFT"
+                              visible="false" managed="false">
+                            <ImageView fx:id="userImgPreview" fitWidth="48" fitHeight="48" preserveRatio="true"/>
+                            <Button text="✕" onAction="#handleUserRemoveImage"
+                                    style="-fx-background-color:#FEE2E2;-fx-text-fill:#DC2626;-fx-font-size:10px;-fx-background-radius:5;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:2 7;"/>
+                            <Label fx:id="lblUserImageName" text=""
+                                   style="-fx-font-size:10px;-fx-text-fill:#64748B;"/>
+                        </HBox>
+
+                        <HBox spacing="6" alignment="BOTTOM_CENTER">
+                            <Button text="🖼" onAction="#handleUserAttachImage"
+                                    prefWidth="32" prefHeight="32"
+                                    style="-fx-background-color:#EFF6FF;-fx-text-fill:#3B82F6;-fx-font-size:14px;-fx-background-radius:7;-fx-cursor:hand;-fx-border-color:#BFDBFE;-fx-border-radius:7;-fx-border-width:1;">
+                                <tooltip><Tooltip text="Attach image"/></tooltip>
+                            </Button>
+                            <TextArea fx:id="txtUserReply" promptText="Reply to your coach…"
+                                      prefRowCount="2" wrapText="true" HBox.hgrow="ALWAYS"
+                                      style="-fx-background-color:#F8FAFC;-fx-border-color:#BFDBFE;-fx-border-radius:8;-fx-background-radius:8;-fx-padding:7 10;-fx-font-size:12px;"/>
+                            <Button fx:id="btnUserSend" text="Send ➤" onAction="#handleUserSend"
+                                    prefWidth="72" prefHeight="32"
+                                    style="-fx-background-color:#3B82F6;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:transparent;"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- PROGRESS -->
+                <VBox fx:id="progressSection" spacing="10"
+                      style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:14 16;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);-fx-border-color:#E8F5E9;-fx-border-radius:12;-fx-border-width:1;">
+                    <Label fx:id="lblProgressTitle" text="" style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <Label fx:id="lblProgressDetail" text="" wrapText="true" style="-fx-font-size:10px;-fx-text-fill:#64748B;"/>
+                    <ProgressBar fx:id="progressBar" progress="0" maxWidth="Infinity" prefHeight="12"
+                                 style="-fx-accent:#2E7D32;-fx-background-color:#E8F5E9;-fx-background-radius:6;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="16">
+                        <Label fx:id="lblProgressPct" text="" style="-fx-font-size:11px;-fx-font-weight:bold;-fx-text-fill:#2E7D32;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblDaysLeft" text="" style="-fx-font-size:11px;-fx-text-fill:#D97706;-fx-font-weight:bold;"/>
+                    </HBox>
+                    <Label fx:id="lblMotivation" text="" wrapText="true"
+                           style="-fx-font-size:11px;-fx-text-fill:#374151;-fx-background-color:#F0FDF4;-fx-background-radius:6;-fx-padding:8 10;-fx-border-color:#BBF7D0;-fx-border-radius:6;-fx-border-width:1;"/>
+                </VBox>
+
+                <!-- CHART - REDUCED SIZE -->
+                <VBox spacing="6"
+                      style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:12 14;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);-fx-border-color:#E8F5E9;-fx-border-radius:12;-fx-border-width:1;">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="📈  Progress Chart" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    </HBox>
+                    <LineChart fx:id="weightLineChart" prefHeight="160" maxWidth="Infinity"
+                               animated="true" legendVisible="true"
+                               style="-fx-background-color:transparent;-fx-padding:2 0 0 0;">
+                        <xAxis>
+                            <CategoryAxis fx:id="chartXAxis" label="Date"
+                                          style="-fx-tick-label-font-size:9px;-fx-text-fill:#64748B;"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="chartYAxis" label="Weight (kg)" autoRanging="true"
+                                        style="-fx-tick-label-font-size:9px;-fx-text-fill:#64748B;"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <!-- PHOTO GALLERY -->
+                <VBox spacing="10"
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:16 18;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);-fx-border-color:#E8F5E9;-fx-border-radius:14;-fx-border-width:1;">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="📸  My Transformation Gallery" style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                        <Label text="Click on a photo to enlarge" style="-fx-font-size:10px;-fx-text-fill:#94A3B8;"/>
+                    </HBox>
+
+                    <!-- Admin gallery access toggle -->
+                    <HBox alignment="CENTER_LEFT" spacing="10"
+                          style="-fx-background-color:#F8FAFC;-fx-background-radius:10;-fx-padding:10 14;-fx-border-color:#E2E8F0;-fx-border-radius:10;-fx-border-width:1;">
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="Gallery visibility" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                            <Label fx:id="lblGalleryAccessStatus" text="PRIVATE — only you can see your photos"
+                                   style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                        </VBox>
+                        <Button fx:id="btnGalleryToggle" text="PRIVATE" onAction="#handleGalleryAccessToggle"
+                                style="-fx-background-color:#E2E8F0;-fx-text-fill:#475569;-fx-font-size:11px;-fx-font-weight:bold;-fx-background-radius:6;-fx-cursor:hand;-fx-border-color:#CBD5E1;-fx-border-radius:6;-fx-border-width:1;-fx-padding:7 16;"/>
+                    </HBox>
+
+                    <Label fx:id="lblGalleryEmpty" text="📷 No photos yet. Add photos with your weight entries!"
+                           wrapText="true" style="-fx-font-size:12px;-fx-text-fill:#94A3B8;-fx-font-style:italic;"/>
+                    <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER" fitToHeight="true"
+                                style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
+                        <HBox fx:id="photoGallery" spacing="10" style="-fx-padding:4 0;"/>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- LOG WEIGHT -->
+                <VBox spacing="10"
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:16 18;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);-fx-border-color:#C8E6C9;-fx-border-radius:14;-fx-border-width:1;">
+                    <Label text="📊  Log my weight today" style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <HBox spacing="10">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Weight (kg) *" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#374151;"/>
+                            <TextField fx:id="logWeightField" promptText="ex: 72.5"
+                                       style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:10 12;-fx-font-size:15px;-fx-font-weight:bold;"/>
+                        </VBox>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Note (optional)" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#374151;"/>
+                            <TextField fx:id="logNoteField" promptText="e.g. After workout 🏃"
+                                       style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:10 12;-fx-font-size:13px;"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <StackPane prefWidth="64" prefHeight="64"
+                                   style="-fx-background-color:#F0F7F0;-fx-background-radius:10;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-border-width:1;">
+                            <ImageView fx:id="logPhotoPreview" fitWidth="64" fitHeight="64" preserveRatio="true"/>
+                            <Label text="📷" style="-fx-font-size:22px;-fx-opacity:0.4;"/>
+                        </StackPane>
+                        <VBox spacing="4">
+                            <Button text="📸  Add a photo" onAction="#handleChooseLogPhoto"
+                                    style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:8;-fx-background-radius:8;-fx-font-size:12px;-fx-cursor:hand;-fx-padding:7 14;"/>
+                            <Label fx:id="lblLogPhotoStatus" text="Optional — take a photo to see your transformation"
+                                   wrapText="true" maxWidth="300" style="-fx-font-size:10px;-fx-text-fill:#94A3B8;"/>
+                        </VBox>
+                    </HBox>
+                    <Button text="✅  Save this weight" onAction="#handleLogWeight"
+                            maxWidth="Infinity" prefHeight="46"
+                            style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:14px;-fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;-fx-border-color:transparent;"/>
+                </VBox>
+
+                <!-- HISTORY -->
+                <VBox spacing="8">
+                    <Label text="📋  Weight History" style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <VBox fx:id="logList" spacing="6"/>
+                </VBox>
+
+                <!-- SET OBJECTIVE -->
+                <VBox spacing="12"
+                      style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:18 20;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),16,0,0,4);-fx-border-color:#FDE68A;-fx-border-radius:16;-fx-border-width:2;">
+
+                    <Label text="🎯  Set my goal" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <Label text="Choose your target weight and duration — like MyFitnessPal!"
+                           wrapText="true" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+
+                    <!-- Target weight -->
+                    <VBox spacing="4">
+                        <Label text="Target weight (kg)" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#374151;"/>
+                        <TextField fx:id="targetWeightField" promptText="e.g. 75"
+                                   style="-fx-background-color:#FFFBEB;-fx-border-color:#FDE68A;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:11 14;-fx-font-size:15px;-fx-font-weight:bold;"/>
+                    </VBox>
+
+                    <!-- Duration selector — like MyFitnessPal -->
+                    <VBox spacing="8">
+                        <Label text="Goal duration" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#374151;"/>
+                        <HBox spacing="8">
+                            <Button fx:id="btnDur1W" text="1 week" onAction="#handleDuration1W"
+                                    HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="40"
+                                    style="-fx-background-color:#F0F7F0;-fx-text-fill:#2E7D32;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:#C8E6C9;-fx-border-width:1;-fx-padding:8 14;"/>
+                            <Button fx:id="btnDur2W" text="2 weeks" onAction="#handleDuration2W"
+                                    HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="40"
+                                    style="-fx-background-color:#F0F7F0;-fx-text-fill:#2E7D32;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:#C8E6C9;-fx-border-width:1;-fx-padding:8 14;"/>
+                            <Button fx:id="btnDur1M" text="1 month" onAction="#handleDuration1M"
+                                    HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="40"
+                                    style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:8 14;"/>
+                            <Button fx:id="btnDur3M" text="3 months" onAction="#handleDuration3M"
+                                    HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="40"
+                                    style="-fx-background-color:#F0F7F0;-fx-text-fill:#2E7D32;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:#C8E6C9;-fx-border-width:1;-fx-padding:8 14;"/>
+                            <Button fx:id="btnDur6M" text="6 months" onAction="#handleDuration6M"
+                                    HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="40"
+                                    style="-fx-background-color:#F0F7F0;-fx-text-fill:#2E7D32;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:#C8E6C9;-fx-border-width:1;-fx-padding:8 14;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Smart preview -->
+                    <Label fx:id="lblObjectivePreview" text="Enter your target weight"
+                           wrapText="true"
+                           style="-fx-font-size:12px;-fx-text-fill:#94A3B8;-fx-background-color:#F8FAFC;-fx-background-radius:8;-fx-padding:8 12;"/>
+
+                    <!-- Start photo -->
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <StackPane prefWidth="64" prefHeight="64"
+                                   style="-fx-background-color:#FFFBEB;-fx-background-radius:10;-fx-border-color:#FDE68A;-fx-border-radius:10;-fx-border-width:1;">
+                            <ImageView fx:id="startPhotoView" fitWidth="64" fitHeight="64" preserveRatio="true"/>
+                            <Label text="📸" style="-fx-font-size:22px;-fx-opacity:0.5;"/>
+                        </StackPane>
+                        <VBox spacing="4">
+                            <Button text="📸  Start photo (recommended)" onAction="#handleChooseStartPhoto"
+                                    style="-fx-background-color:#FFFBEB;-fx-border-color:#FDE68A;-fx-border-radius:8;-fx-background-radius:8;-fx-font-size:12px;-fx-cursor:hand;-fx-padding:7 14;"/>
+                            <Label fx:id="lblPhotoStatus" text="Take a photo now to compare later!"
+                                   wrapText="true" maxWidth="300" style="-fx-font-size:10px;-fx-text-fill:#94A3B8;"/>
+                        </VBox>
+                    </HBox>
+
+                    <Button text="🚀  Launch goal" onAction="#handleSetObjective"
+                            maxWidth="Infinity" prefHeight="48"
+                            style="-fx-background-color:#D97706;-fx-text-fill:white;-fx-font-size:14px;-fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;-fx-border-color:transparent;-fx-effect:dropshadow(gaussian,rgba(217,119,6,0.35),10,0,0,3);"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</StackPane>

@@ -1,0 +1,131 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║                    🚨 URGENT - LISEZ CECI! 🚨                        ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+
+PROBLÈME:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Vous avez testé l'application et:
+  ❌ Vous ajoutez une photo, un poids, un objectif
+  ❌ Vous fermez la fenêtre
+  ❌ Vous rouvrez la fenêtre
+  ❌ TOUT A DISPARU!
+
+
+CAUSE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Vous n'avez PAS ENCORE EXÉCUTÉ le script de correction de la base de 
+données!
+
+La structure de votre base de données est INCORRECTE, c'est pour ça 
+que les données ne sont pas sauvegardées correctement.
+
+
+SOLUTION (2 ÉTAPES SIMPLES):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+╔═══════════════════════════════════════════════════════════════════╗
+║  ÉTAPE 1: FERMEZ L'APPLICATION                                    ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+Si l'application est en cours d'exécution, fermez-la complètement.
+
+
+╔═══════════════════════════════════════════════════════════════════╗
+║  ÉTAPE 2: EXÉCUTEZ LE SCRIPT DE CORRECTION                        ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+Double-cliquez sur ce fichier:
+
+    📄 FORCE_FIX_DATABASE.bat
+
+Ce script va corriger la structure de la base de données.
+
+⚠️  IMPORTANT: 
+    - Assurez-vous que MySQL est démarré
+    - Le script va supprimer les anciennes données (qui ne fonctionnent 
+      pas de toute façon)
+    - Appuyez sur une touche pour confirmer quand demandé
+
+
+╔═══════════════════════════════════════════════════════════════════╗
+║  ÉTAPE 3: RELANCEZ L'APPLICATION                                  ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+Ouvrez un terminal dans le dossier projetJAV et exécutez:
+
+    mvn javafx:run
+
+
+╔═══════════════════════════════════════════════════════════════════╗
+║  ÉTAPE 4: TESTEZ À NOUVEAU                                        ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+1. Connectez-vous: test@user.com / user123
+2. Allez dans "Weight Goal"
+3. Ajoutez un objectif avec une photo
+4. Fermez la fenêtre
+5. Rouvrez la fenêtre
+6. ✅ L'objectif et la photo sont TOUJOURS LÀ!
+
+
+POURQUOI ÇA VA FONCTIONNER:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le code Java est CORRECT et essaie de sauvegarder les données.
+
+MAIS la base de données a les MAUVAISES COLONNES:
+
+❌ ACTUELLEMENT:
+   weight_log: log_date, notes (INCORRECT)
+   weight_objective: pas de start_weight, start_photo, is_active
+
+✅ APRÈS LE SCRIPT:
+   weight_log: photo, note, logged_at (CORRECT)
+   weight_objective: start_weight, start_photo, is_active (CORRECT)
+
+Une fois la base de données corrigée, les données seront sauvegardées 
+correctement et ne disparaîtront plus!
+
+
+SI LE SCRIPT NE FONCTIONNE PAS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Si FORCE_FIX_DATABASE.bat affiche une erreur:
+
+1. Ouvrez MySQL Workbench ou phpMyAdmin
+2. Connectez-vous à MySQL
+3. Sélectionnez la base de données "nutrilife_db"
+4. Ouvrez le fichier FORCE_FIX_DATABASE.sql dans un éditeur de texte
+5. Copiez TOUT le contenu
+6. Collez-le dans MySQL Workbench/phpMyAdmin
+7. Exécutez le script
+8. Vous devriez voir: "✅ Base de données corrigée avec succès!"
+
+
+VÉRIFICATION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pour vérifier que la correction a fonctionné, double-cliquez sur:
+
+    📄 VERIFY_DATABASE.bat
+
+Si vous voyez des ✅, c'est bon!
+Si vous voyez des ❌, le script n'a pas fonctionné.
+
+
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║              🚀 EXÉCUTEZ FORCE_FIX_DATABASE.bat MAINTENANT ! 🚀      ║
+║                                                                      ║
+║                  C'est la SEULE solution au problème!                ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+
+Date: 25 Avril 2026
+Status: ⚠️  BASE DE DONNÉES NON CORRIGÉE - ACTION REQUISE!

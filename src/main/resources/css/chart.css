@@ -1,0 +1,70 @@
+.chart {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.chart-plot-background {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 8;
+}
+
+.chart-content {
+    -fx-padding: 8 8 8 8;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #E2E8F0;
+    -fx-stroke-width: 1;
+    -fx-stroke-dash-array: 4 4;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.chart-series-line {
+    -fx-stroke-width: 3px;
+}
+
+/* Weight series — green */
+.default-color0.chart-series-line {
+    -fx-stroke: #2E7D32;
+}
+.default-color0.chart-line-symbol {
+    -fx-background-color: #2E7D32, white;
+    -fx-background-insets: 0, 2.5;
+    -fx-background-radius: 6px;
+    -fx-padding: 6px;
+}
+
+/* Target series — red dashed */
+.default-color1.chart-series-line {
+    -fx-stroke: #EF4444;
+    -fx-stroke-width: 2px;
+    -fx-stroke-dash-array: 8 5;
+}
+.default-color1.chart-line-symbol {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.axis-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748B;
+    -fx-font-weight: bold;
+}
+
+.axis {
+    -fx-tick-label-font-size: 10px;
+    -fx-tick-label-fill: #64748B;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 4 0 0 0;
+}
+
+.chart-legend-item {
+    -fx-font-size: 11px;
+    -fx-text-fill: #374151;
+}

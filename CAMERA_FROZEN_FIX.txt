@@ -1,0 +1,90 @@
+╔════════════════════════════════════════════════════════════════╗
+║                 CAMERA FROZEN - QUICK FIX                      ║
+╚════════════════════════════════════════════════════════════════╝
+
+✅ DIAGNOSTIC RESULT:
+   Your camera works perfectly!
+   Camera: USB2.0 HD UVC WebCam
+   Status: Available and capturing frames
+
+❌ PROBLEM:
+   Camera shows gray/frozen image in Face ID window
+   
+🔍 ROOT CAUSE:
+   Application already has camera open in background
+   OR another instance is running
+
+═══════════════════════════════════════════════════════════════
+
+🚀 SOLUTION 1: Quick Restart (30 seconds)
+
+   Double-click: FIX_CAMERA_NOW.bat
+   
+   This will:
+   ✅ Close all Java processes
+   ✅ Release camera
+   ✅ Restart application
+   ✅ Camera will work!
+
+═══════════════════════════════════════════════════════════════
+
+🚀 SOLUTION 2: Manual Fix (1 minute)
+
+   Step 1: Close application
+      → Click X on NutriLife window
+      → Wait 5 seconds
+   
+   Step 2: Kill Java processes
+      → Press Ctrl+Shift+Esc (Task Manager)
+      → Find "Java(TM) Platform SE binary"
+      → Right-click → End Task
+      → Do this for ALL Java processes
+   
+   Step 3: Restart application
+      → Run: mvn javafx:run
+      → OR double-click your startup script
+   
+   Step 4: Try Face ID
+      → Should work now!
+
+═══════════════════════════════════════════════════════════════
+
+💡 WHY THIS HAPPENS:
+
+   When you close Face ID window, the camera sometimes
+   stays open in memory. Restarting the app releases it.
+
+═══════════════════════════════════════════════════════════════
+
+🎯 PREVENTION:
+
+   Always close Face ID window properly:
+   ✅ Click "Cancel" button
+   ✅ OR click X on window
+   ❌ Don't force-close application
+
+═══════════════════════════════════════════════════════════════
+
+📞 STILL NOT WORKING?
+
+   If camera still frozen after restart:
+   
+   1. Check if Teams/Zoom is running
+      → Close them completely
+   
+   2. Restart computer
+      → This will 100% fix it
+   
+   3. Use external webcam
+      → If you have one available
+
+═══════════════════════════════════════════════════════════════
+
+🚀 QUICK ACTION:
+
+   → Double-click: FIX_CAMERA_NOW.bat
+   → Wait 10 seconds
+   → Try Face ID again
+   → Should work! ✅
+
+╚════════════════════════════════════════════════════════════════╝

@@ -8,12 +8,13 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.projet.models.User;
+import tn.esprit.projet.repository.FaceEmbeddingRepository;
 import tn.esprit.projet.repository.UserRepository;
+import tn.esprit.projet.utils.AlertUtil;
 import tn.esprit.projet.utils.Session;
 import tn.esprit.projet.utils.Toasts;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 public class FaceIdManagementController {
 
@@ -22,7 +23,8 @@ public class FaceIdManagementController {
     @FXML private Button enrollButton;
     @FXML private Button removeButton;
 
-    private final UserRepository repo = new UserRepository();
+    private final UserRepository          repo          = new UserRepository();
+    private final FaceEmbeddingRepository embeddingRepo = new FaceEmbeddingRepository();
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @FXML
@@ -61,16 +63,12 @@ public class FaceIdManagementController {
 
     @FXML
     private void handleRemove() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Remove Face ID");
-        alert.setContentText("Are you sure you want to remove your Face ID? You will need to re-enroll to use it again.");
-        ButtonType yes    = new ButtonType("Yes, Remove", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancel = new ButtonType("Cancel",      ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(yes, cancel);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == yes) {
+        boolean confirmed = AlertUtil.confirm("Remove Face ID",
+            "Are you sure you want to remove your Face ID?\n\nYou will need to re-enroll to use it again.");
+        if (confirmed) {
             User u = Session.getCurrentUser();
             repo.removeFaceDescriptor(u.getId());
+            embeddingRepo.removeByUserId(u.getId());
             u.setFaceDescriptor(null);
             u.setFaceIdEnrolledAt(null);
             Session.login(u);

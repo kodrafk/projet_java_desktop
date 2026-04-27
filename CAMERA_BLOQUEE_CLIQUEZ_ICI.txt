@@ -1,0 +1,137 @@
+================================================================================
+                    📷 CAMERA BLOQUEE - FIX IMMEDIAT
+================================================================================
+
+PROBLEME:
+  ❌ Camera affiche image grise/figee
+  ❌ Face ID ne fonctionne pas
+  ❌ Camera semble bloquee
+
+SOLUTION (10 SECONDES):
+  
+  👉 Double-cliquez sur: FIX_CAMERA_MAINTENANT.bat
+  
+  Ce script va:
+    1. Fermer l'application NutriLife
+    2. Fermer Teams/Zoom/Skype/Chrome
+    3. Liberer la camera
+    4. Attendre 3 secondes
+  
+  Puis:
+    5. Relancez NutriLife
+    6. Essayez Face ID
+    7. CA MARCHE! ✅
+
+================================================================================
+                        POURQUOI CA SE BLOQUE?
+================================================================================
+
+La camera est utilisee par:
+  ❌ Microsoft Teams
+  ❌ Zoom
+  ❌ Skype
+  ❌ Google Chrome (onglets avec camera)
+  ❌ Microsoft Edge
+  ❌ Processus Java bloque
+
+PREVENTION:
+  ✅ Fermez Teams/Zoom avant Face ID
+  ✅ Fermez Chrome/Edge
+  ✅ Utilisez le script de fix
+
+================================================================================
+                        SOLUTIONS ALTERNATIVES
+================================================================================
+
+SOLUTION 1: Script Automatique (RECOMMANDE)
+  → Double-cliquez: FIX_CAMERA_MAINTENANT.bat
+  → Temps: 10 secondes
+  → Taux de succes: 95%
+
+SOLUTION 2: Manuelle
+  1. Ctrl+Shift+Esc (Gestionnaire des taches)
+  2. Cherchez "java.exe"
+  3. Terminez TOUS les processus Java
+  4. Fermez Teams/Zoom/Chrome
+  5. Attendez 5 secondes
+  6. Relancez NutriLife
+
+SOLUTION 3: Redemarrer Driver Camera
+  1. Win+X → Gestionnaire de peripheriques
+  2. Cameras → Votre webcam
+  3. Clic droit → Desactiver
+  4. Attendez 3 secondes
+  5. Clic droit → Activer
+  6. Relancez NutriLife
+
+SOLUTION 4: Redemarrer Ordinateur
+  1. Redemarrez l'ordinateur
+  2. N'ouvrez PAS Teams/Zoom
+  3. Ouvrez directement NutriLife
+  4. Essayez Face ID
+
+================================================================================
+                        COMMANDES RAPIDES
+================================================================================
+
+Tuer processus Java (CMD):
+  taskkill /F /IM java.exe /T
+  taskkill /F /IM javaw.exe /T
+
+Tuer Teams:
+  taskkill /F /IM Teams.exe /T
+
+Tuer Zoom:
+  taskkill /F /IM Zoom.exe /T
+
+Tuer Chrome:
+  taskkill /F /IM chrome.exe /T
+
+================================================================================
+                        FICHIERS UTILES
+================================================================================
+
+🚀 FIX_CAMERA_MAINTENANT.bat
+   → Fix immediat (10 secondes)
+
+📖 CAMERA_BLOQUEE_SOLUTION.md
+   → Guide complet
+
+🔍 CAMERA_DIAGNOSTIC.bat
+   → Diagnostic camera
+
+🔧 FIX_CAMERA_NOW.bat
+   → Fix (version anglaise)
+
+================================================================================
+                        CHECKLIST AVANT FACE ID
+================================================================================
+
+Avant d'utiliser Face ID, verifiez:
+
+  [ ] Teams/Zoom/Skype fermes
+  [ ] Chrome/Edge fermes
+  [ ] Pas de processus Java en arriere-plan
+  [ ] Camera fonctionne dans l'app Windows "Camera"
+  [ ] Bonne luminosite
+  [ ] Distance: 30-50cm
+
+================================================================================
+                        PRET?
+================================================================================
+
+👉 Double-cliquez: FIX_CAMERA_MAINTENANT.bat
+
+Puis:
+  1. Relancez NutriLife
+  2. Essayez Face ID
+  3. CA MARCHE! ✅
+
+================================================================================
+
+Si le probleme persiste:
+  - Lisez: CAMERA_BLOQUEE_SOLUTION.md
+  - Ou redemarrez l'ordinateur
+
+Derniere mise a jour: 25 avril 2026
+

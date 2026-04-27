@@ -1,0 +1,97 @@
+========================================
+  GUIDE DE REINSTALLATION XAMPP
+========================================
+
+ETAPE 1: DESINSTALLER XAMPP
+----------------------------
+1. Ouvrez le Panneau de configuration
+2. Programmes > Desinstaller un programme
+3. Trouvez "XAMPP"
+4. Clic droit > Desinstaller
+5. Suivez l'assistant de desinstallation
+
+ETAPE 2: SUPPRIMER LES FICHIERS RESTANTS
+-----------------------------------------
+1. Ouvrez l'Explorateur de fichiers
+2. Allez dans C:\
+3. Supprimez le dossier "xampp" (s'il existe encore)
+4. Videz la Corbeille
+
+ETAPE 3: REDEMARRER L'ORDINATEUR
+---------------------------------
+1. Redemarrez votre ordinateur
+2. Cela va nettoyer tous les processus MySQL bloques
+
+ETAPE 4: TELECHARGER XAMPP
+---------------------------
+1. Allez sur: https://www.apachefriends.org/download.html
+2. Telechargez la derniere version pour Windows
+3. Choisissez la version avec PHP 8.x
+
+ETAPE 5: INSTALLER XAMPP
+-------------------------
+1. Executez le fichier telecharge
+2. Choisissez les composants:
+   [X] Apache
+   [X] MySQL
+   [X] PHP
+   [X] phpMyAdmin
+3. Dossier d'installation: C:\xampp
+4. Cliquez sur "Next" jusqu'a la fin
+5. NE lancez PAS XAMPP tout de suite
+
+ETAPE 6: CONFIGURER XAMPP
+--------------------------
+1. Ouvrez XAMPP Control Panel
+2. Cliquez sur "Config" (en haut a droite)
+3. Cochez "Autostart of modules: Apache, MySQL"
+4. Cliquez sur "Save"
+
+ETAPE 7: DEMARRER MYSQL
+------------------------
+1. Dans XAMPP Control Panel
+2. Cliquez sur "Start" a cote de Apache
+3. Attendez qu'Apache demarre (vert)
+4. Cliquez sur "Start" a cote de MySQL
+5. Attendez que MySQL demarre (vert)
+
+ETAPE 8: VERIFIER PHPMYADMIN
+-----------------------------
+1. Ouvrez votre navigateur
+2. Allez sur: http://localhost/phpmyadmin
+3. Si ca s'ouvre, MySQL fonctionne !
+
+ETAPE 9: CREER LA BASE DE DONNEES
+----------------------------------
+1. Dans phpMyAdmin, cliquez sur "Nouvelle base de donnees"
+2. Nom: nutrilife_db
+3. Encodage: utf8mb4_unicode_ci
+4. Cliquez sur "Creer"
+
+ETAPE 10: IMPORTER LE SCRIPT SQL
+---------------------------------
+1. Selectionnez la base "nutrilife_db"
+2. Onglet "SQL"
+3. Ouvrez le fichier: projetJAV/CREATE_ADMIN_ACCOUNT.sql
+4. Copiez tout le contenu
+5. Collez dans phpMyAdmin
+6. Cliquez sur "Executer"
+
+ETAPE 11: LANCER L'APPLICATION
+-------------------------------
+1. Ouvrez votre IDE
+2. Lancez l'application Java
+3. Connectez-vous avec:
+   Email: admin@nutrilife.com
+   Password: admin123
+
+========================================
+  TEMPS TOTAL: 20-30 MINUTES
+========================================
+
+Si vous avez des problemes, verifiez:
+- Antivirus (peut bloquer MySQL)
+- Pare-feu Windows (peut bloquer le port 3306)
+- Autres logiciels utilisant le port 3306
+
+========================================

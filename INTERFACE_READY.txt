@@ -1,0 +1,280 @@
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║        🎨 INTERFACE DASHBOARD - PRÊTE À ÊTRE LANCÉE !                   ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════════
+🚀 LANCEMENT RAPIDE (3 MÉTHODES)
+═══════════════════════════════════════════════════════════════════════════
+
+MÉTHODE 1 : Script Automatique (Le plus simple)
+┌───────────────────────────────────────────────────────────────────────┐
+│ Double-cliquez sur : LAUNCH_APP.bat                                  │
+│ ⏱️  Durée : 2 minutes                                                 │
+└───────────────────────────────────────────────────────────────────────┘
+
+MÉTHODE 2 : Via IDE (Recommandé pour développement)
+┌───────────────────────────────────────────────────────────────────────┐
+│ 1. Ouvrir IntelliJ IDEA ou Eclipse                                   │
+│ 2. Ouvrir le projet projetJAV                                         │
+│ 3. Localiser : src/main/java/tn/esprit/projet/MainApp.java          │
+│ 4. Clic droit → Run                                                   │
+│ ⏱️  Durée : 1 minute                                                  │
+└───────────────────────────────────────────────────────────────────────┘
+
+MÉTHODE 3 : Via Maven (Terminal)
+┌───────────────────────────────────────────────────────────────────────┐
+│ cd projetJAV                                                          │
+│ mvn clean compile                                                     │
+│ mvn javafx:run                                                        │
+│ ⏱️  Durée : 2 minutes                                                 │
+└───────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎯 ACCÈS AU DASHBOARD (3 ÉTAPES)
+═══════════════════════════════════════════════════════════════════════════
+
+ÉTAPE 1 : Connexion
+┌───────────────────────────────────────────────────────────────────────┐
+│ Email : admin@nutrilife.com (ou votre admin)                         │
+│ Password : votre mot de passe admin                                  │
+│ Cliquez : [Login]                                                     │
+└───────────────────────────────────────────────────────────────────────┘
+
+ÉTAPE 2 : Navigation
+┌───────────────────────────────────────────────────────────────────────┐
+│ Menu latéral gauche :                                                 │
+│                                                                       │
+│ ┌─────────────────────┐                                              │
+│ │ HEALTH AI           │  ← Nouvelle section                          │
+│ │ 🔍 Anomaly Detection│  ← CLIQUEZ ICI                               │
+│ └─────────────────────┘                                              │
+└───────────────────────────────────────────────────────────────────────┘
+
+ÉTAPE 3 : Détection
+┌───────────────────────────────────────────────────────────────────────┐
+│ Dans le dashboard :                                                   │
+│ Cliquez sur : [🚀 Lancer Détection]                                  │
+│ Attendez : 5-10 secondes                                              │
+│ Observez : Les résultats s'affichent                                  │
+└───────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+📊 CE QUE VOUS VERREZ
+═══════════════════════════════════════════════════════════════════════════
+
+SECTION 1 : Cartes Statistiques (En haut)
+┌─────────────────────────────────────────────────────────────────────┐
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐              │
+│ │📊 42     │ │🚨 8      │ │⚠️ 15     │ │👥 12     │              │
+│ │Non       │ │Critiques │ │Alertes   │ │À Risque  │              │
+│ │Résolues  │ │          │ │Attente   │ │          │              │
+│ └──────────┘ └──────────┘ └──────────┘ └──────────┘              │
+└─────────────────────────────────────────────────────────────────────┘
+
+SECTION 2 : Graphiques Interactifs (Milieu)
+┌─────────────────────────────────────────────────────────────────────┐
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐                  │
+│ │  PieChart   │ │  BarChart   │ │   ListView  │                  │
+│ │             │ │             │ │             │                  │
+│ │ Répartition │ │ Distribution│ │ Top Risques │                  │
+│ │  par type   │ │  sévérité   │ │ utilisateurs│                  │
+│ └─────────────┘ └─────────────┘ └─────────────┘                  │
+└─────────────────────────────────────────────────────────────────────┘
+
+SECTION 3 : Table des Anomalies (Bas)
+┌─────────────────────────────────────────────────────────────────────┐
+│ 📋 Anomalies Détectées                                              │
+│ ┌───────────────────────────────────────────────────────────────┐  │
+│ │ User │ Type │ Description │ Sévérité │ Date │ Actions │      │  │
+│ ├───────────────────────────────────────────────────────────────┤  │
+│ │ John │ Loss │ -3.5kg/7j   │   87%    │ 25/04│[Détails]│      │  │
+│ │      │      │             │          │      │[Résoudre]│     │  │
+│ └───────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+
+SECTION 4 : Table des Alertes (Bas)
+┌─────────────────────────────────────────────────────────────────────┐
+│ 🔔 Alertes Prédictives en Attente                                   │
+│ ┌───────────────────────────────────────────────────────────────┐  │
+│ │ User │ Titre │ Priorité │ Risque │ Âge │ Actions │          │  │
+│ ├───────────────────────────────────────────────────────────────┤  │
+│ │ Jane │ Perte │ CRITIQUE │  87%   │ 2h  │[Prendre en charge]│  │
+│ └───────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎨 ÉLÉMENTS VISUELS
+═══════════════════════════════════════════════════════════════════════════
+
+Couleurs des Cartes :
+├── 📊 Non Résolues : Bleu (#007bff)
+├── 🚨 Critiques : Rouge (#dc3545)
+├── ⚠️ Alertes : Jaune (#ffc107)
+└── 👥 À Risque : Orange (#fd7e14)
+
+Couleurs de Sévérité :
+├── Faible (< 40%) : Bleu
+├── Moyen (40-59%) : Jaune
+├── Élevé (60-79%) : Orange
+└── Critique (≥ 80%) : Rouge
+
+Couleurs de Priorité :
+├── LOW : Bleu
+├── MEDIUM : Jaune
+├── HIGH : Orange
+└── CRITICAL : Rouge
+
+
+═══════════════════════════════════════════════════════════════════════════
+🧪 ACTIONS DISPONIBLES
+═══════════════════════════════════════════════════════════════════════════
+
+Boutons Principaux :
+├── 🚀 Lancer Détection : Analyse tous les utilisateurs
+├── 🔄 Actualiser : Rafraîchit les données
+└── Auto-refresh : Toutes les 5 minutes
+
+Actions sur Anomalies :
+├── [Détails] : Voir informations complètes
+└── [Résoudre] : Marquer comme résolu avec note
+
+Actions sur Alertes :
+└── [Prendre en charge] : Marquer comme traité
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ TESTS À EFFECTUER
+═══════════════════════════════════════════════════════════════════════════
+
+Test 1 : Lancement
+□ Application démarre
+□ Écran de connexion s'affiche
+□ Connexion fonctionne
+□ Menu principal s'affiche
+
+Test 2 : Navigation
+□ Section "HEALTH AI" visible
+□ Bouton "Anomaly Detection" visible
+□ Clic fonctionne
+□ Dashboard s'affiche
+
+Test 3 : Dashboard
+□ 4 cartes visibles
+□ 3 graphiques visibles
+□ 2 tables visibles
+□ Boutons visibles
+
+Test 4 : Détection
+□ Bouton "Lancer Détection" fonctionne
+□ Traitement s'exécute
+□ Données se chargent
+□ Résultats s'affichent
+
+Test 5 : Actions
+□ Bouton "Détails" fonctionne
+□ Popup s'affiche
+□ Bouton "Résoudre" fonctionne
+□ Dialog s'affiche
+□ Résolution fonctionne
+□ Bouton "Prendre en charge" fonctionne
+
+Test 6 : Actualisation
+□ Bouton "Actualiser" fonctionne
+□ Données se rechargent
+□ Graphiques se mettent à jour
+
+
+═══════════════════════════════════════════════════════════════════════════
+🐛 DÉPANNAGE RAPIDE
+═══════════════════════════════════════════════════════════════════════════
+
+Problème : Application ne démarre pas
+→ Vérifier Java : java -version
+→ Nettoyer : mvn clean compile
+→ Relancer : mvn javafx:run
+
+Problème : Menu "HEALTH AI" invisible
+→ Vérifier admin_layout.fxml modifié
+→ Vérifier AdminLayoutController.java modifié
+→ Recompiler : mvn clean compile
+
+Problème : Dashboard vide
+→ Cliquer "Lancer Détection"
+→ Vérifier base de données : SHOW TABLES LIKE 'health%';
+→ Insérer données test : TEST_ANOMALY_DETECTION.bat
+
+Problème : Erreur de compilation
+→ Vérifier tous les fichiers Java présents
+→ Vérifier pom.xml
+→ Nettoyer : mvn clean
+
+
+═══════════════════════════════════════════════════════════════════════════
+📚 DOCUMENTATION
+═══════════════════════════════════════════════════════════════════════════
+
+Pour plus de détails :
+├── LAUNCH_INTERFACE_GUIDE.md : Guide complet de lancement
+├── TEST_MANUAL_STEPS.md : Tests détaillés
+├── ANOMALY_DETECTION_GUIDE.md : Documentation technique
+└── RUN_THIS_FIRST.txt : Point de départ
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎬 DÉMONSTRATION (5 MINUTES)
+═══════════════════════════════════════════════════════════════════════════
+
+Minute 1 : Lancement
+├── Lancer l'application
+├── Se connecter en admin
+└── Naviguer vers le dashboard
+
+Minute 2 : Vue d'ensemble
+├── Montrer les 4 cartes
+├── Montrer les 3 graphiques
+└── Montrer les 2 tables
+
+Minute 3 : Détection
+├── Cliquer "Lancer Détection"
+├── Montrer le traitement
+└── Montrer les résultats
+
+Minute 4 : Actions
+├── Voir détails d'une anomalie
+├── Résoudre une anomalie
+└── Prendre en charge une alerte
+
+Minute 5 : Actualisation
+├── Cliquer "Actualiser"
+└── Montrer la mise à jour
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   🎉 INTERFACE PRÊTE À ÊTRE LANCÉE !                                     ║
+║                                                                           ║
+║   📖 Lisez : LAUNCH_INTERFACE_GUIDE.md                                  ║
+║   🚀 Lancez : LAUNCH_APP.bat                                            ║
+║   🎯 Testez : Menu HEALTH AI → Anomaly Detection                        ║
+║                                                                           ║
+║   Votre dashboard est professionnel et fonctionnel ! 🌟                 ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+Version : 1.0.0
+Date : 25 Avril 2026
+Statut : ✅ INTERFACE READY
+
+🎯 Bon courage pour votre démonstration !
+
+═══════════════════════════════════════════════════════════════════════════

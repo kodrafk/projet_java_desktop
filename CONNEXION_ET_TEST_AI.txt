@@ -1,0 +1,197 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                  ✅ BOUTON AI CORRECTEMENT INTÉGRÉ! ✅                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PROBLÈME RÉSOLU!
+═══════════════════════════════════════════════════════════════════════════════
+
+  ❌ AVANT: Le bouton était dans le mauvais fichier (admin_layout.fxml)
+  ✅ APRÈS: Le bouton est maintenant dans le bon fichier (admin_dashboard.fxml)
+
+  Le LoginController utilise admin_dashboard.fxml, pas admin_layout.fxml!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  L'APPLICATION EST LANCÉE!
+═══════════════════════════════════════════════════════════════════════════════
+
+  ✅ Application running
+  ✅ Database connected
+  ✅ Bouton AI intégré
+  ✅ Prêt à tester!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  COMMENT SE CONNECTER ET VOIR LE BOUTON AI
+═══════════════════════════════════════════════════════════════════════════════
+
+  ÉTAPE 1: Regardez la fenêtre de login
+  ────────────────────────────────────────
+  Vous devriez voir la fenêtre NutriLife avec le formulaire de connexion.
+
+
+  ÉTAPE 2: Connectez-vous avec email/password
+  ────────────────────────────────────────────────
+  
+  ┌─────────────────────────────────────────────┐
+  │  Email:    kiro.admin@nutrilife.com         │
+  │  Password: kiro2026                         │
+  │                                             │
+  │  [ Login ]                                  │
+  └─────────────────────────────────────────────┘
+
+  ⚠️ IMPORTANT: Utilisez EMAIL/PASSWORD, pas Face ID!
+     (Face ID a un bug de navigation pré-existant)
+
+
+  ÉTAPE 3: Après connexion, regardez la sidebar
+  ──────────────────────────────────────────────
+
+  Vous verrez le panneau admin avec la sidebar à gauche:
+
+  ┌─────────────────────────┐
+  │  🥗 NutriLife           │
+  ├─────────────────────────┤
+  │                         │
+  │  [Photo Admin]          │
+  │  Hello, Admin 👋        │
+  │  kiro.admin@...         │
+  │                         │
+  ├─────────────────────────┤
+  │                         │
+  │  📊  Dashboard          │  ← Actif par défaut
+  │                         │
+  │  👥  User Management    │
+  │                         │
+  │  📈  Statistics         │
+  │                         │
+  │  🤖  AI Anomaly         │  ◄──── LE VOICI!
+  │      Detection          │       CLIQUEZ ICI!
+  │                         │
+  ├─────────────────────────┤
+  │                         │
+  │  🚪  Logout             │
+  │                         │
+  └─────────────────────────┘
+
+
+  ÉTAPE 4: Cliquez sur "🤖 AI Anomaly Detection"
+  ───────────────────────────────────────────────
+
+  Quand vous cliquez:
+  • Le bouton devient VERT (actif)
+  • Le dashboard AI se charge à droite
+  • Vous voyez les statistiques et graphiques
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  CE QUE VOUS VERREZ APRÈS AVOIR CLIQUÉ
+═══════════════════════════════════════════════════════════════════════════════
+
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │  🔍 Anomaly Detection & Predictive Alerts                               │
+  │  AI-powered health monitoring system                                    │
+  ├─────────────────────────────────────────────────────────────────────────┤
+  │                                                                         │
+  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐              │
+  │  │ Total    │  │ High     │  │ Active   │  │ Detection│              │
+  │  │ Anomalies│  │ Risk     │  │ Alerts   │  │ Accuracy │              │
+  │  │    0     │  │ Users: 0 │  │    0     │  │   0.0%   │              │
+  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘              │
+  │                                                                         │
+  │  📊 Graphiques Interactifs                                             │
+  │  📋 Tables de Données                                                  │
+  │  🔘 Boutons d'Action                                                   │
+  │                                                                         │
+  │  [🔄 Run Manual Detection]  [📥 Export Report]                        │
+  │                                                                         │
+  └─────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  RÉSUMÉ DE LA CORRECTION
+═══════════════════════════════════════════════════════════════════════════════
+
+  ✅ Fichier corrigé: admin_dashboard.fxml (pas admin_layout.fxml)
+  ✅ Contrôleur corrigé: AdminDashboardController.java
+  ✅ Bouton ajouté: 🤖 AI Anomaly Detection
+  ✅ Handler implémenté: handleAnomalyDetection()
+  ✅ Compilation: SUCCESS
+  ✅ Application: RUNNING
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  CREDENTIALS ADMIN
+═══════════════════════════════════════════════════════════════════════════════
+
+  Email:    kiro.admin@nutrilife.com
+  Password: kiro2026
+  Role:     ROLE_ADMIN
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+  ❌ Problème: Je ne vois pas le bouton AI
+
+  ✅ Solution:
+     1. Vérifiez que vous êtes connecté en tant qu'ADMIN
+     2. Utilisez: kiro.admin@nutrilife.com / kiro2026
+     3. N'utilisez PAS Face ID (bug de navigation)
+     4. Regardez bien la sidebar à gauche
+     5. Le bouton est après "Statistics"
+
+
+  ❌ Problème: Face ID ne fonctionne pas
+
+  ✅ Solution:
+     C'est un bug pré-existant (pas lié à l'AI).
+     Utilisez simplement email/password à la place.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  FICHIERS MODIFIÉS
+═══════════════════════════════════════════════════════════════════════════════
+
+  1. src/main/resources/fxml/admin_dashboard.fxml
+     → Bouton AI ajouté dans la sidebar
+
+  2. src/main/java/tn/esprit/projet/gui/AdminDashboardController.java
+     → Handler handleAnomalyDetection() ajouté
+     → Bouton btnAnomalyDetection déclaré
+     → Activation du bouton dans la méthode activate()
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PROCHAINES ÉTAPES
+═══════════════════════════════════════════════════════════════════════════════
+
+  1. ✅ L'application est déjà lancée (fenêtre visible)
+  
+  2. Connectez-vous:
+     • Email: kiro.admin@nutrilife.com
+     • Password: kiro2026
+  
+  3. Regardez la sidebar à gauche
+  
+  4. Trouvez "🤖 AI Anomaly Detection"
+  
+  5. Cliquez dessus!
+  
+  6. Explorez le dashboard AI
+  
+  7. Cliquez "Run Manual Detection" pour générer des données
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                    🎉 LE BOUTON AI EST MAINTENANT VISIBLE! 🎉
+
+                Connectez-vous et testez-le immédiatement!
+
+═══════════════════════════════════════════════════════════════════════════════

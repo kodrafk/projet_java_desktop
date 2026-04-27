@@ -5,11 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 import tn.esprit.projet.models.User;
 import tn.esprit.projet.repository.UserRepository;
+import tn.esprit.projet.services.RecaptchaService;
 import tn.esprit.projet.utils.Nav;
 import tn.esprit.projet.utils.Session;
 import tn.esprit.projet.utils.Validator;
@@ -27,9 +29,14 @@ public class RegisterController {
     @FXML private DatePicker    birthdayPicker;
     @FXML private TextField     weightField;
     @FXML private TextField     heightField;
+    @FXML private WebView       recaptchaView;
+    @FXML private Button        registerButton;
+
+    // Captcha fields
     @FXML private Label         captchaLabel;
     @FXML private TextField     captchaField;
-    @FXML private Button        registerButton;
+    private int captchaA;
+    private int captchaB;
 
     // Inline error labels
     @FXML private Label errEmail;
@@ -43,15 +50,17 @@ public class RegisterController {
     @FXML private Label errCaptcha;
     @FXML private Label errorLabel;
 
-    private int captchaA, captchaB;
-    private final UserRepository repo = new UserRepository();
+    private final UserRepository   repo             = new UserRepository();
+    private final RecaptchaService recaptchaService = new RecaptchaService();
 
     @FXML
     public void initialize() {
         if (errorLabel != null) errorLabel.setVisible(false);
-        generateCaptcha();
-
-        // Pre-fill from Google if data is available
+        // reCAPTCHA temporarily disabled
+        if (recaptchaView != null) { recaptchaView.setVisible(false); recaptchaView.setManaged(false); }
+        if (captchaLabel != null) { captchaLabel.setVisible(false); captchaLabel.setManaged(false); }
+        if (captchaField != null) { captchaField.setVisible(false); captchaField.setManaged(false); }
+        if (errCaptcha   != null) { errCaptcha.setVisible(false);   errCaptcha.setManaged(false); }
         prefillFromGoogle();
 
         // Real-time inline validation
@@ -76,6 +85,24 @@ public class RegisterController {
         heightField.focusedProperty().addListener((o, was, now) -> {
             if (!now) Validator.apply(heightField, errHeight, Validator.height(heightField.getText()));
         });
+    }
+
+    private void loadRecaptcha() {
+        if (recaptchaView == null) return;
+        try {
+            String url = getClass().getResource("/html/recaptcha.html").toExternalForm();
+            recaptchaView.getEngine().load(url);
+        } catch (Exception e) {
+            System.err.println("[reCAPTCHA] Could not load: " + e.getMessage());
+        }
+    }
+
+    private String getRecaptchaToken() {
+        if (recaptchaView == null) return null;
+        try {
+            Object result = recaptchaView.getEngine().executeScript("getToken()");
+            return result != null ? result.toString() : null;
+        } catch (Exception e) { return null; }
     }
 
     /** Pre-fill fields if coming from Google OAuth */
@@ -132,20 +159,18 @@ public class RegisterController {
         ok &= Validator.apply(weightField, errWeight, Validator.weight(weightField.getText()));
         ok &= Validator.apply(heightField, errHeight, Validator.height(heightField.getText()));
 
-        // Captcha
-        try {
-            if (Integer.parseInt(captchaField.getText().trim()) != captchaA + captchaB) {
-                if (errCaptcha != null) errCaptcha.setText("Incorrect captcha answer.");
-                generateCaptcha();
-                ok = false;
-            } else {
-                if (errCaptcha != null) errCaptcha.setText("");
-            }
-        } catch (NumberFormatException e) {
-            if (errCaptcha != null) errCaptcha.setText("Incorrect captcha answer.");
-            generateCaptcha();
-            ok = false;
-        }
+        // reCAPTCHA temporarily disabled
+        // String token = getRecaptchaToken();
+        // if (token == null || token.isBlank()) {
+        //     if (errCaptcha != null) errCaptcha.setText("Please complete the reCAPTCHA verification.");
+        //     ok = false;
+        // } else if (!recaptchaService.verify(token)) {
+        //     if (errCaptcha != null) errCaptcha.setText("reCAPTCHA failed. Please try again.");
+        //     loadRecaptcha();
+        //     ok = false;
+        // } else {
+        //     if (errCaptcha != null) errCaptcha.setText("");
+        // }
 
         if (!ok) return;
 
@@ -204,8 +229,7 @@ public class RegisterController {
 
     @FXML
     private void handleFaceIdSignUp() {
-        // Face ID during registration: user must first fill in their details,
-        // then enroll their face. We save the account first, then open camera.
+        // Validate all fields first
         boolean ok = true;
         ok &= validateEmail();
         ok &= Validator.apply(passwordField, errPassword, Validator.password(passwordField.getText()));
@@ -222,7 +246,7 @@ public class RegisterController {
             return;
         }
 
-        // Create the user first
+        // Prepare user data (but DON'T save yet!)
         User u = new User();
         u.setEmail(emailField.getText().trim());
         u.setPassword(BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt(10)));
@@ -233,26 +257,22 @@ public class RegisterController {
         u.setHeight(Double.parseDouble(heightField.getText().trim()));
         u.setRole("ROLE_USER");
         u.setActive(true);
-        repo.save(u);
 
-        // Set session so FaceIdEnrollController can save the descriptor
-        Session.login(u);
-
-        // Open camera for enrollment
+        // Open Face ID registration (will verify uniqueness BEFORE creating account)
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_enroll.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_register.fxml"));
             Parent root = loader.load();
-            FaceIdEnrollController ctrl = loader.getController();
-            ctrl.setTargetUser(u);
-            ctrl.setOnEnrolled(() -> {
-                Stage stage = (Stage) emailField.getScene().getWindow();
-                Nav.go(stage, "login.fxml", "NutriLife - Login");
+            FaceIdRegisterController ctrl = loader.getController();
+            ctrl.setPendingUser(u);
+            ctrl.setOnSuccess(() -> {
+                System.out.println("[Register] Account created with Face ID");
             });
+            
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner((Stage) emailField.getScene().getWindow());
-            stage.setTitle("Face ID — Enroll");
-            stage.setScene(new Scene(root, 560, 620));
+            stage.setTitle("Face ID Registration — Verify Uniqueness");
+            stage.setScene(new Scene(root, 520, 520));
             stage.setResizable(false);
             stage.showAndWait();
         } catch (Exception e) {

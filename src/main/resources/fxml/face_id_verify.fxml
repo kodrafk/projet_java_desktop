@@ -6,12 +6,9 @@
 
 <StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="tn.esprit.projet.gui.FaceIdVerifyController"
-           prefWidth="560" prefHeight="580">
+           prefWidth="560" prefHeight="560">
 
-    <!-- Gradient background -->
     <Pane style="-fx-background-color:linear-gradient(to bottom right,#e8f5e9,#fffde7,#fce4ec);"/>
-
-    <!-- Decorative shapes -->
     <Circle radius="20" fill="#66BB6A" opacity="0.5" StackPane.alignment="TOP_RIGHT" translateX="-30" translateY="50"/>
     <Circle radius="12" fill="#7E57C2" opacity="0.4" StackPane.alignment="BOTTOM_LEFT" translateX="50" translateY="-50"/>
 
@@ -27,18 +24,17 @@
                    style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
         </HBox>
 
-        <!-- Progress bar -->
         <ProgressBar fx:id="verifyProgress" progress="0" maxWidth="Infinity" prefHeight="4"
                      style="-fx-accent:#2E7D32;-fx-background-color:#E8F5E9;"/>
 
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
                     style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
-            <VBox alignment="TOP_CENTER" spacing="16"
-                  style="-fx-background-color:transparent;-fx-padding:20 24 24 24;">
+            <VBox alignment="TOP_CENTER" spacing="14"
+                  style="-fx-background-color:transparent;-fx-padding:16 24 24 24;">
 
-                <!-- Instruction card -->
+                <!-- Instruction -->
                 <VBox spacing="4"
-                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:14 18;
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:12 18;
                              -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.07),12,0,0,3);
                              -fx-border-color:#E8F5E9;-fx-border-radius:14;-fx-border-width:1;">
                     <Label text="Look directly at the camera"
@@ -49,30 +45,25 @@
                            style="-fx-font-size:12px;-fx-text-fill:#6B7280;"/>
                 </VBox>
 
-                <!-- Camera view card -->
-                <StackPane style="-fx-background-color:white;-fx-background-radius:16;
-                                  -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.10),16,0,0,4);">
+                <!-- Camera -->
+                <StackPane style="-fx-background-color:#111827;-fx-background-radius:16;
+                                  -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.15),16,0,0,4);">
                     <ImageView fx:id="cameraView" fitWidth="512" fitHeight="340"
                                preserveRatio="true" smooth="true"/>
-
-                    <!-- Countdown overlay -->
-                    <Label fx:id="countdownLabel" text=""
-                           style="-fx-font-size:72px;-fx-font-weight:bold;-fx-text-fill:#2E7D32;
-                                  -fx-effect:dropshadow(gaussian,rgba(255,255,255,0.9),12,0,0,0);"/>
                 </StackPane>
 
-                <!-- Status label -->
+                <!-- Status -->
                 <Label fx:id="statusLabel" text=""
                        wrapText="true" maxWidth="512" alignment="CENTER"
                        style="-fx-font-size:12px;-fx-text-fill:#6B7280;-fx-alignment:center;"/>
 
-                <!-- Action buttons -->
+                <!-- Buttons -->
                 <HBox spacing="12">
                     <Button fx:id="captureButton" text="🔍  Verify Face" onAction="#handleCapture"
                             HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="46"
+                            disable="true"
                             style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:14px;
-                                   -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;
-                                   -fx-border-color:transparent;"/>
+                                   -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;"/>
                     <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
                             prefHeight="46" prefWidth="110"
                             style="-fx-background-color:white;-fx-text-fill:#6B7280;-fx-font-size:13px;
@@ -80,13 +71,13 @@
                                    -fx-border-color:#E2E8F0;-fx-border-width:1;-fx-border-radius:12;"/>
                 </HBox>
 
-                <!-- Security note -->
+                <!-- Info -->
                 <VBox spacing="4"
                       style="-fx-background-color:#F0FDF4;-fx-background-radius:10;-fx-padding:12 16;
                              -fx-border-color:#BBF7D0;-fx-border-radius:10;-fx-border-width:1;">
-                    <Label text="🔒  Secure &amp; Private"
+                    <Label text="🔒  DeepFace ArcFace — State-of-the-art AI"
                            style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#166534;"/>
-                    <Label text="Your face data is encrypted with AES-256-GCM and never leaves your device."
+                    <Label text="512-D face embeddings, AES-256-GCM encrypted."
                            wrapText="true"
                            style="-fx-font-size:11px;-fx-text-fill:#166534;"/>
                 </VBox>

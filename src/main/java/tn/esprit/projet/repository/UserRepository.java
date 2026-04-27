@@ -70,10 +70,15 @@ public class UserRepository {
 
     public List<User> findAll() {
         List<User> list = new ArrayList<>();
-        try (PreparedStatement ps = conn().prepareStatement("SELECT * FROM user ORDER BY id DESC");
+        String sql = "SELECT * FROM user ORDER BY id DESC";
+        try (PreparedStatement ps = conn().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) list.add(map(rs));
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            System.err.println("[UserRepository] ERROR loading users: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("[UserRepository] findAll → " + list.size() + " users");
         return list;
     }
 
@@ -93,11 +98,16 @@ public class UserRepository {
         if (!SORTABLE_COLUMNS.contains(column)) column = "id";
         if (!"ASC".equalsIgnoreCase(direction) && !"DESC".equalsIgnoreCase(direction)) direction = "ASC";
         List<User> list = new ArrayList<>();
-        try (PreparedStatement ps = conn().prepareStatement(
-                "SELECT * FROM user ORDER BY `" + column + "` " + direction);
+        String sql = "SELECT * FROM user ORDER BY `" + column + "` " + direction;
+        System.out.println("[UserRepository] findAllSortedBy: " + sql);
+        try (PreparedStatement ps = conn().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) list.add(map(rs));
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            System.err.println("[UserRepository] ERROR in findAllSortedBy: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("[UserRepository] findAllSortedBy → " + list.size() + " users");
         return list;
     }
 
@@ -140,7 +150,8 @@ public class UserRepository {
 
     public void update(User u) {
         String sql = "UPDATE user SET email=?,roles=?,is_active=?,first_name=?,last_name=?," +
-                "birthday=?,weight=?,height=?,welcome_message=?,photo_filename=?,google_id=? WHERE id=?";
+                "birthday=?,weight=?,height=?,welcome_message=?,photo_filename=?,google_id=?," +
+                "gallery_access_enabled=? WHERE id=?";
         try (PreparedStatement ps = conn().prepareStatement(sql)) {
             ps.setString(1, u.getEmail());
             ps.setString(2, nvlRole(u.getRole()));
@@ -153,7 +164,8 @@ public class UserRepository {
             ps.setString(9, u.getWelcomeMessage());
             ps.setString(10, u.getPhotoFilename());
             ps.setString(11, u.getGoogleId());
-            ps.setInt(12, u.getId());
+            ps.setBoolean(12, u.isGalleryAccessEnabled());
+            ps.setInt(13, u.getId());
             ps.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
     }
@@ -164,6 +176,10 @@ public class UserRepository {
 
     public void updatePhoto(int userId, String filename) {
         exec("UPDATE user SET photo_filename=? WHERE id=?", filename, userId);
+    }
+
+    public void setGalleryAccess(int userId, boolean enabled) {
+        exec("UPDATE user SET gallery_access_enabled=? WHERE id=?", enabled, userId);
     }
 
     public void updateWelcomeMessage(int userId, String message) {
@@ -181,7 +197,10 @@ public class UserRepository {
     }
 
     public void removeFaceDescriptor(int userId) {
+        // Clear from user table
         exec("UPDATE user SET face_descriptor=NULL,face_id_enrolled_at=NULL WHERE id=?", userId);
+        // Also deactivate from face_embeddings table so it can never match again
+        exec("UPDATE face_embeddings SET is_active=0 WHERE user_id=?", userId);
     }
 
     public void setActive(int userId, boolean active) {
@@ -248,6 +267,19 @@ public class UserRepository {
         return false;
     }
 
+    /** Returns login count from face_verification_attempts (successful logins) */
+    public int countLogins(int userId) {
+        try (PreparedStatement ps = conn().prepareStatement(
+                "SELECT COUNT(*) FROM face_verification_attempts WHERE user_id=? AND success=1")) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            // Table may not exist yet — return 0
+        }
+        return 0;
+    }
+
     // ── Helpers ────────────────────────────────────────────────────────────────
 
     private void exec(String sql, Object... params) {
@@ -308,6 +340,8 @@ public class UserRepository {
 
         u.setWeight(rs.getDouble("weight"));
         u.setHeight(rs.getDouble("height"));
+        try { u.setGalleryAccessEnabled(rs.getBoolean("gallery_access_enabled")); } catch (SQLException ignored) {}
+        try { u.setPhone(rs.getString("phone")); } catch (SQLException ignored) {}
         return u;
     }
 

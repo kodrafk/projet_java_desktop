@@ -1,0 +1,91 @@
+========================================
+  GUIDE D'INSTALLATION WAMP
+========================================
+
+WAMP est une alternative a XAMPP, souvent plus stable
+pour MySQL sur Windows.
+
+ETAPE 1: DESINSTALLER XAMPP
+----------------------------
+1. Panneau de configuration > Desinstaller XAMPP
+2. Supprimez C:\xampp
+3. Redemarrez l'ordinateur
+
+ETAPE 2: TELECHARGER WAMP
+--------------------------
+1. Allez sur: https://www.wampserver.com/en/
+2. Cliquez sur "WAMPSERVER 64 BITS" (ou 32 bits)
+3. Telechargez la derniere version
+
+ETAPE 3: INSTALLER LES PREREQUIS
+---------------------------------
+WAMP necessite Visual C++ Redistributable:
+1. Telechargez: https://aka.ms/vs/17/release/vc_redist.x64.exe
+2. Installez-le
+3. Redemarrez si demande
+
+ETAPE 4: INSTALLER WAMP
+------------------------
+1. Executez le fichier WAMP telecharge
+2. Acceptez la licence
+3. Dossier d'installation: C:\wamp64
+4. Choisissez votre navigateur par defaut
+5. Choisissez votre editeur de texte
+6. Terminez l'installation
+
+ETAPE 5: DEMARRER WAMP
+-----------------------
+1. Lancez WAMP (icone dans la barre des taches)
+2. L'icone WAMP doit devenir VERTE
+3. Si elle est ORANGE ou ROUGE:
+   - Clic droit sur l'icone
+   - "Restart All Services"
+
+ETAPE 6: VERIFIER MYSQL
+------------------------
+1. Clic gauche sur l'icone WAMP
+2. MySQL > MySQL Console
+3. Appuyez sur Entree (pas de mot de passe)
+4. Si vous voyez "mysql>", MySQL fonctionne !
+
+ETAPE 7: OUVRIR PHPMYADMIN
+---------------------------
+1. Clic gauche sur l'icone WAMP
+2. Cliquez sur "phpMyAdmin"
+3. Ou allez sur: http://localhost/phpmyadmin
+
+ETAPE 8: CREER LA BASE DE DONNEES
+----------------------------------
+1. Dans phpMyAdmin: "Nouvelle base de donnees"
+2. Nom: nutrilife_db
+3. Encodage: utf8mb4_unicode_ci
+4. Cliquez sur "Creer"
+
+ETAPE 9: IMPORTER LE SCRIPT SQL
+--------------------------------
+1. Selectionnez "nutrilife_db"
+2. Onglet "SQL"
+3. Copiez le contenu de: CREATE_ADMIN_ACCOUNT.sql
+4. Collez et executez
+
+ETAPE 10: LANCER L'APPLICATION
+-------------------------------
+1. Lancez votre application Java
+2. MySQL devrait se connecter automatiquement
+3. Connectez-vous avec:
+   Email: admin@nutrilife.com
+   Password: admin123
+
+========================================
+  AVANTAGES DE WAMP
+========================================
+
++ Plus stable que XAMPP sur Windows
++ Interface plus simple
++ Meilleure gestion de MySQL
++ Moins de problemes de demarrage
++ Support de plusieurs versions PHP/MySQL
+
+========================================
+  TEMPS TOTAL: 15-20 MINUTES
+========================================

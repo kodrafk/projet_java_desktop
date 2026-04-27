@@ -1,0 +1,279 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                    🧪 GUIDE DE TEST COMPLET                               ║
+║                                                                            ║
+║              Testez TOUTES les fonctionnalités du backoffice              ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          📋 PRÉPARATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Ajouter des utilisateurs à la base de données :
+
+   a) Ouvrir http://localhost/phpmyadmin
+   b) Cliquer sur "nutrilife"
+   c) Onglet "SQL"
+   d) Copier le contenu de : INSERT_USERS_DIRECT.sql
+   e) Coller et cliquer "Exécuter"
+   f) Vérifier : "SUCCESS: 5 users added!"
+
+
+2. Lancer l'application :
+
+   mvn javafx:run
+
+
+3. Se connecter :
+
+   Email: admin@nutrilife.com
+   Password: admin123
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    TEST 1 : USER MANAGEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Cliquer sur "User Management" dans le menu
+
+2. ✅ Vérifier :
+   - Vous voyez "X user(s)" en haut (X > 0)
+   - Le tableau affiche tous les utilisateurs
+   - Colonnes : Email, Full Name, Role, Status, Created At, Actions
+
+3. Tester la recherche :
+   - Taper "john" dans la barre de recherche
+   - ✅ Seuls les utilisateurs avec "john" s'affichent
+
+4. Tester le tri :
+   - Cliquer sur l'en-tête "Email"
+   - ✅ Les utilisateurs sont triés par email
+
+5. Tester les boutons d'action :
+
+   a) Bouton "View" (bleu clair)
+      - Cliquer sur "View" pour un utilisateur
+      - ✅ Une fenêtre s'ouvre avec les détails
+      - Fermer la fenêtre
+
+   b) Bouton "Edit" (bleu)
+      - Cliquer sur "Edit" pour un utilisateur
+      - ✅ Formulaire d'édition s'ouvre
+      - Modifier le prénom
+      - Cliquer "Save"
+      - ✅ Modification enregistrée
+
+   c) Bouton "Message" (orange)
+      - Cliquer sur "Message" pour un utilisateur
+      - ✅ Interface de messages s'ouvre
+      - Écrire un message de test
+      - Cliquer "Send"
+      - ✅ Message envoyé
+
+6. Tester "+ Add New User" :
+   - Cliquer sur le bouton vert en haut à droite
+   - ✅ Formulaire de création s'ouvre
+   - Remplir les champs
+   - Cliquer "Create"
+   - ✅ Nouvel utilisateur créé
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    TEST 2 : PERSONALIZED MESSAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Cliquer sur "Personalized Messages" dans le menu
+
+2. ✅ Vérifier :
+   - Liste des utilisateurs à gauche
+   - Badge "👑 Admin" pour les administrateurs
+   - Compteur "X users" en haut
+
+3. Sélectionner un utilisateur :
+   - Cliquer sur un utilisateur dans la liste
+   - ✅ La carte devient verte
+   - ✅ "Sending to: [nom]" s'affiche en haut
+
+4. Écrire un message :
+   - Taper : "Bonjour, ceci est un message de test."
+   - ✅ Compteur de caractères s'affiche
+   - Cliquer "Send Message"
+   - ✅ Toast de succès
+   - ✅ Message apparaît dans l'historique à droite
+
+5. Tester la recherche :
+   - Taper un nom dans la barre de recherche
+   - ✅ Filtrage en temps réel
+
+6. Tester l'option SMS :
+   - Cocher "Send via SMS"
+   - Envoyer un message
+   - ✅ Badge SMS dans l'historique
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    TEST 3 : USER ALERTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Cliquer sur "User Alerts" dans le menu
+
+2. ✅ Vérifier :
+   - Liste des utilisateurs à gauche
+   - Formulaire de création d'alerte au centre
+   - Historique des alertes à droite
+
+3. Créer une alerte :
+   - Sélectionner un utilisateur
+   - Titre : "Test Alert"
+   - Message : "Ceci est une alerte de test"
+   - Type : WARNING
+   - Catégorie : HEALTH
+   - Cliquer "Send Alert"
+   - ✅ Toast de succès
+   - ✅ Alerte dans l'historique
+
+4. Tester l'expiration :
+   - Cocher "Has Expiry"
+   - Sélectionner une date future
+   - Entrer une heure (ex: 18:00)
+   - Envoyer l'alerte
+   - ✅ Alerte créée avec expiration
+
+5. Tester le bouton d'action :
+   - Cocher "Has Action Button"
+   - URL : "https://example.com"
+   - Label : "View Details"
+   - Envoyer l'alerte
+   - ✅ Alerte avec bouton d'action
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    TEST 4 : AI ANOMALY DETECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Cliquer sur "AI Anomaly Detection" dans le menu
+
+2. ✅ Vérifier :
+   - Interface de détection d'anomalies
+   - Tableau des anomalies détectées
+   - Filtres et options
+
+3. Lancer une détection :
+   - Cliquer sur "Run Detection" (si disponible)
+   - ✅ Anomalies détectées et affichées
+
+4. Voir les détails :
+   - Cliquer sur une anomalie
+   - ✅ Détails complets affichés
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    TEST 5 : DASHBOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Cliquer sur "Dashboard" dans le menu
+
+2. ✅ Vérifier :
+   - Statistiques générales
+   - Graphiques
+   - Résumé des activités
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    TEST 6 : STATISTICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Cliquer sur "Statistics" dans le menu
+
+2. ✅ Vérifier :
+   - Statistiques détaillées
+   - Graphiques avancés
+   - Options d'export
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    🔍 VÉRIFICATION DES LOGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pendant les tests, regardez la console. Vous devriez voir :
+
+User Management :
+    [DEBUG UserManagement] Loading users with sort: id DESC
+    [DEBUG UserManagement] Loaded 5 users from database
+    [DEBUG UserManagement] User: john.doe@nutrilife.com | Role: ROLE_USER | Active: true
+    [DEBUG UserManagement] Table updated with 5 users
+
+Personalized Messages :
+    [DEBUG] Total users from DB: 5
+    [DEBUG] User: john.doe@nutrilife.com | Role: ROLE_USER | FullName: John Doe
+    [DEBUG] Filtered users (excluding current admin): 5
+
+User Alerts :
+    [DEBUG AdminAlerts] Total users from DB: 5
+    [DEBUG AdminAlerts] Filtered users (excluding current admin): 5
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    ✅ CHECKLIST FINALE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cochez chaque fonctionnalité testée :
+
+User Management :
+    [ ] Affichage de la liste des utilisateurs
+    [ ] Recherche d'utilisateurs
+    [ ] Tri par colonne
+    [ ] Bouton "View" fonctionne
+    [ ] Bouton "Edit" fonctionne
+    [ ] Bouton "Message" fonctionne
+    [ ] Bouton "+ Add New User" fonctionne
+
+Personalized Messages :
+    [ ] Affichage de la liste des utilisateurs
+    [ ] Badge "👑 Admin" visible
+    [ ] Sélection d'un utilisateur
+    [ ] Envoi d'un message
+    [ ] Historique des messages
+    [ ] Option SMS
+
+User Alerts :
+    [ ] Affichage de la liste des utilisateurs
+    [ ] Création d'une alerte simple
+    [ ] Création d'une alerte avec expiration
+    [ ] Création d'une alerte avec bouton d'action
+    [ ] Historique des alertes
+
+AI Anomaly Detection :
+    [ ] Interface accessible
+    [ ] Détection d'anomalies fonctionne
+
+Dashboard :
+    [ ] Statistiques affichées
+    [ ] Graphiques visibles
+
+Statistics :
+    [ ] Statistiques détaillées affichées
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    📝 RAPPORT DE TEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Si un test échoue, notez :
+
+1. Quelle fonctionnalité ?
+2. Quel message d'erreur ?
+3. Que disent les logs dans la console ?
+
+Envoyez ces informations pour obtenir de l'aide.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                    🎉 TOUS LES TESTS RÉUSSIS ?
+
+                    Votre backoffice est 100% fonctionnel !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

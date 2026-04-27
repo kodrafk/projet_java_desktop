@@ -1,0 +1,173 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║              🚀 GUIDE RAPIDE : Afficher les Utilisateurs                  ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Suivez ces 4 étapes simples pour afficher les utilisateurs dans l'interface :
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 1 : CRÉER LES UTILISATEURS DE TEST (30 secondes)
+
+1. Ouvrir un terminal dans le dossier projetJAV
+
+2. Exécuter :
+   > CHECK_AND_CREATE_TEST_USERS.bat
+
+3. Entrer le mot de passe MySQL root quand demandé
+
+4. Vérifier le message "SUCCESS! Users checked/created!"
+
+✅ Résultat : 5 utilisateurs de test créés dans la base de données
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 2 : COMPILER LE PROJET (1 minute)
+
+1. Dans le même terminal :
+   > mvn clean compile
+
+2. Attendre la fin de la compilation
+
+3. Vérifier "BUILD SUCCESS"
+
+✅ Résultat : Code modifié compilé avec succès
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 3 : LANCER L'APPLICATION (30 secondes)
+
+1. Exécuter :
+   > mvn javafx:run
+
+2. Attendre l'ouverture de l'application
+
+3. Connexion admin :
+   Email    : admin@nutrilife.com
+   Password : admin123
+
+✅ Résultat : Application lancée et connecté en tant qu'admin
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 4 : VÉRIFIER L'AFFICHAGE (10 secondes)
+
+1. Cliquer sur le menu : 💬 Personalized Messages
+
+2. Vérifier le panneau gauche :
+   ┌─────────────────────┐
+   │ 👥 Users            │
+   │ 5 users             │  ← Devrait afficher "5 users"
+   │                     │
+   │ 🔍 Search users...  │
+   │                     │
+   │ ┌─────────────────┐ │
+   │ │ 👤 John Doe     │ │  ← Devrait afficher les utilisateurs
+   │ │ john.doe@...    │ │
+   │ │ 📱 +3361234...  │ │
+   │ └─────────────────┘ │
+   │                     │
+   │ ... (4 more)        │
+   └─────────────────────┘
+
+3. Vérifier les logs console :
+   [DEBUG] Total users from DB: 6
+   [DEBUG] Filtered users (non-admin): 5
+
+✅ Résultat : 5 utilisateurs affichés correctement !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎉 SUCCÈS !
+
+Vous devriez maintenant voir :
+✅ 5 utilisateurs dans le panneau gauche
+✅ Compteur "5 users"
+✅ Possibilité de sélectionner un utilisateur
+✅ Possibilité d'envoyer un message
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 TEST RAPIDE
+
+1. Cliquer sur "John Doe"
+2. Écrire un message : "Bienvenue John !"
+3. Cliquer "Send Message"
+4. Vérifier le message dans l'historique
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ PROBLÈME ?
+
+Si vous voyez toujours "No users found" :
+
+1. Vérifier les logs console pour :
+   [DEBUG] Total users from DB: X
+   
+   Si X = 0 :
+   - MySQL n'est pas démarré
+   - Base de données vide
+   - Problème de connexion
+   
+   Solution : Redémarrer MySQL et réexécuter ÉTAPE 1
+
+2. Vérifier dans MySQL :
+   > mysql -u root -p
+   > USE nutrilife;
+   > SELECT COUNT(*) FROM user WHERE roles != 'ROLE_ADMIN';
+   
+   Devrait retourner : 5
+
+3. Consulter la documentation complète :
+   - FIX_NO_USERS_FOUND.md
+   - MODIFICATIONS_FINALES.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 CHECKLIST COMPLÈTE
+
+□ MySQL démarré (XAMPP/WAMP)
+□ Script CHECK_AND_CREATE_TEST_USERS.bat exécuté
+□ Message "SUCCESS!" affiché
+□ Compilation réussie (mvn clean compile)
+□ Application lancée (mvn javafx:run)
+□ Connexion admin OK
+□ Menu "Personalized Messages" ouvert
+□ Panneau gauche affiche "5 users"
+□ 5 cartes utilisateurs visibles
+□ Logs console affichent [DEBUG] messages
+□ Sélection d'utilisateur fonctionne
+□ Envoi de message fonctionne
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 ASTUCES
+
+1. Recherche : Tapez dans "Search users..." pour filtrer
+2. Téléphone : Les utilisateurs avec 📱 ont un numéro de téléphone
+3. SMS : Cochez "Send via SMS" pour envoyer par SMS
+4. Historique : Cliquez 🔄 pour rafraîchir l'historique
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 BESOIN D'AIDE ?
+
+1. Consulter LISEZ_MOI_IMPORTANT_USERS.txt
+2. Consulter FIX_NO_USERS_FOUND.md
+3. Consulter MODIFICATIONS_FINALES.md
+4. Vérifier les logs console
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 RÉSUMÉ EN 1 LIGNE
+
+> CHECK_AND_CREATE_TEST_USERS.bat && mvn clean compile && mvn javafx:run
+
+Puis : Connexion admin → Menu "Personalized Messages" → Voir 5 utilisateurs !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Version : 1.0.1
+Date : 26 Avril 2026
+Temps total : ~2 minutes

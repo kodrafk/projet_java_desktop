@@ -30,7 +30,17 @@
                     style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:12.5px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
             <Button fx:id="btnUsers"      text="👥  User Management"  onAction="#handleUsers"      prefHeight="44" maxWidth="Infinity"
                     style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
+            <Button fx:id="btnGroups"     text="🫂  My Groups"         onAction="#handleGroups"     prefHeight="44" maxWidth="Infinity"
+                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
+            <!-- Hidden: Personalized Messages -->
+            <!-- <Button fx:id="btnPersonalizedMessages" text="💬  Personalized Messages" onAction="#handlePersonalizedMessages" prefHeight="44" maxWidth="Infinity"
+                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/> -->
+            <!-- Hidden: User Alerts -->
+            <!-- <Button fx:id="btnAlerts" text="🔔  User Alerts" onAction="#handleAlerts" prefHeight="44" maxWidth="Infinity"
+                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/> -->
             <Button fx:id="btnStatistics" text="📈  Statistics"       onAction="#handleStatistics" prefHeight="44" maxWidth="Infinity"
+                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
+            <Button fx:id="btnAnomalyDetection" text="🤖  AI Anomaly Detection" onAction="#handleAnomalyDetection" prefHeight="44" maxWidth="Infinity"
                     style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
 
             <Region VBox.vgrow="ALWAYS"/>
@@ -70,6 +80,27 @@
                             <Label fx:id="lblAdmins" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#7C3AED;"/>
                         </VBox>
                     </HBox>
+
+                    <!-- My Groups quick-access widget -->
+                    <VBox spacing="12"
+                          style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20 24;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="🫂  My Groups" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                            <Label fx:id="lblDashGroupCount" text=""
+                                   style="-fx-font-size:11px;-fx-text-fill:#64748B;-fx-background-color:#F1F5F9;-fx-background-radius:10;-fx-padding:2 10;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="+ New Group" onAction="#handleCreateGroupFromDash"
+                                    style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:6 14;"/>
+                            <Button text="See all →" onAction="#handleGroups"
+                                    style="-fx-background-color:transparent;-fx-text-fill:#2E7D5A;-fx-font-size:12px;-fx-font-weight:bold;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:6 10;"/>
+                        </HBox>
+                        <!-- Group cards row — filled dynamically -->
+                        <HBox fx:id="dashGroupCards" spacing="12" alignment="CENTER_LEFT" style="-fx-padding:4 0 0 0;">
+                            <Label fx:id="lblDashNoGroups"
+                                   text="No groups yet. Click '+ New Group' to create your first group."
+                                   style="-fx-font-size:12px;-fx-text-fill:#94A3B8;-fx-font-style:italic;"/>
+                        </HBox>
+                    </VBox>
                 </VBox>
             </ScrollPane>
         </StackPane>

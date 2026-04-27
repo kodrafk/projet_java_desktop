@@ -1,0 +1,87 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║           🔐 COMPTE QUI FONCTIONNE DÉJÀ                                  ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+D'après votre capture d'écran précédente, vous étiez DÉJÀ connecté avec:
+
+    📧 Email: admin@nutrilife.com
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ SOLUTION 1: UTILISEZ LE COMPTE QUI MARCHE DÉJÀ
+═══════════════════════════════════════════════════════════════════════════
+
+Vous avez déjà un compte qui fonctionne!
+
+Essayez de vous connecter avec:
+    📧 Email: admin@nutrilife.com
+    🔐 Password: [VOTRE MOT DE PASSE HABITUEL]
+
+C'est le compte avec lequel vous étiez connecté avant!
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ SOLUTION 2: RÉINITIALISER TOUS LES MOTS DE PASSE
+═══════════════════════════════════════════════════════════════════════════
+
+Si vous ne vous souvenez plus du mot de passe:
+
+1. Double-cliquez sur: RESET_PASSWORD.bat
+2. Cela mettra TOUS les mots de passe admin à: admin123
+3. Reconnectez-vous avec n'importe quel email admin
+
+
+═══════════════════════════════════════════════════════════════════════════
+📧 EMAILS ADMIN POSSIBLES
+═══════════════════════════════════════════════════════════════════════════
+
+D'après votre base de données, ces emails existent probablement:
+
+1. admin@nutrilife.com          ← CELUI QUI MARCHAIT AVANT
+2. superadmin@nutrilife.com
+3. admin.test@nutrilife.com
+4. admin123@nutrilife.com
+
+
+═══════════════════════════════════════════════════════════════════════════
+🔧 ÉTAPES À SUIVRE
+═══════════════════════════════════════════════════════════════════════════
+
+OPTION A - Si vous connaissez votre mot de passe:
+    1. Utilisez: admin@nutrilife.com
+    2. Avec votre mot de passe habituel
+    3. C'est le compte qui marchait avant!
+
+OPTION B - Si vous ne connaissez pas le mot de passe:
+    1. Double-cliquez sur: RESET_PASSWORD.bat
+    2. Attendez que ça se termine
+    3. Utilisez: admin@nutrilife.com / admin123
+
+
+═══════════════════════════════════════════════════════════════════════════
+💡 POURQUOI ÇA NE MARCHE PAS?
+═══════════════════════════════════════════════════════════════════════════
+
+Le mot de passe "admin123" que je vous ai donné est pour les NOUVEAUX comptes
+que j'ai essayé de créer.
+
+Mais vous avez DÉJÀ des comptes admin dans votre base de données avec
+leurs propres mots de passe!
+
+Utilisez le mot de passe que VOUS avez créé pour admin@nutrilife.com
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   📧 ESSAYEZ: admin@nutrilife.com                                        ║
+║   🔐 AVEC: Votre mot de passe habituel                                   ║
+║                                                                           ║
+║   OU                                                                     ║
+║                                                                           ║
+║   🔧 LANCEZ: RESET_PASSWORD.bat                                          ║
+║   📧 PUIS: admin@nutrilife.com / admin123                                ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝

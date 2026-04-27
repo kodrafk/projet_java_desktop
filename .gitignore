@@ -17,8 +17,8 @@ target/
 .classpath
 .factorypath
 .project
-.settings
-.springBeans
+.²
+.springBeans  
 .sts4-cache
 
 ### NetBeans ###
@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Sensitive credentials - NEVER push these ###
+src/main/resources/twilio.properties
+src/main/resources/recaptcha.properties

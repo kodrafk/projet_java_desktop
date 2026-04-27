@@ -5,26 +5,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Singleton JDBC connection to nutrilife_db.
+ * Provides fresh JDBC connections to nutrilife_db.
+ * Each call to getConnection() returns a validated, live connection.
+ * If the shared connection is stale, it reconnects automatically.
  */
 public class DatabaseConnection {
 
-    private static final String URL      = "jdbc:mysql://127.0.0.1:3306/nutrilife_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String USER     = "root";
-    private static final String PASSWORD = "";
-
     private static DatabaseConnection instance;
-    private Connection connection;
 
     private DatabaseConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("[DB] Connected to nutrilife_db");
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("[DB] Connection failed: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        // Force MyBDConnexion initialization (schema creation)
+        MyBDConnexion.getInstance();
+        System.out.println("[DB] DatabaseConnection initialized");
     }
 
     public static DatabaseConnection getInstance() {
@@ -34,14 +26,26 @@ public class DatabaseConnection {
         return instance;
     }
 
+    /**
+     * Returns a validated, live connection.
+     * Delegates to MyBDConnexion which handles auto-reconnect.
+     */
     public Connection getConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            }
-        } catch (SQLException e) {
-            System.err.println("[DB] Reconnect failed: " + e.getMessage());
+        return MyBDConnexion.getInstance().getCnx();
+    }
+
+    /**
+     * Returns a brand-new independent JDBC connection.
+     * Use this when you need isolation from the shared connection.
+     * IMPORTANT: caller must close this connection after use.
+     */
+    public Connection getFreshConnection() throws SQLException {
+        if (MyBDConnexion.getInstance().isUsingSQLite()) {
+            return DriverManager.getConnection("jdbc:sqlite:nutrilife.db");
         }
-        return connection;
+        return DriverManager.getConnection(
+                DatabaseConfig.getUrl(),
+                DatabaseConfig.USER,
+                DatabaseConfig.PASSWORD);
     }
 }

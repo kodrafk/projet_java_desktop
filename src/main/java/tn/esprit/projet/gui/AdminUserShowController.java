@@ -66,9 +66,13 @@ public class AdminUserShowController {
         set(lblWelcomeMessage, u.getWelcomeMessage() != null ? u.getWelcomeMessage() : "—");
 
         if (lblFaceId != null) {
-            if (u.hasFaceId() && u.getFaceIdEnrolledAt() != null)
-                lblFaceId.setText("Enrolled on " + u.getFaceIdEnrolledAt().format(DT_FMT));
-            else lblFaceId.setText("Not enrolled");
+            if (u.hasFaceId() && u.getFaceIdEnrolledAt() != null) {
+                lblFaceId.setText("✅ Enrolled — " + u.getFaceIdEnrolledAt().format(DT_FMT));
+                lblFaceId.setStyle("-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#16A34A;");
+            } else {
+                lblFaceId.setText("❌ Not enrolled");
+                lblFaceId.setStyle("-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#DC2626;");
+            }
         }
 
         set(lblGoogleId, u.getGoogleId() != null ? "Connected" : "Not connected");
@@ -86,6 +90,66 @@ public class AdminUserShowController {
         }
     }
 
+    @FXML private void handleGallery() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_gallery.fxml"));
+            Parent root = loader.load();
+            AdminUserGalleryController ctrl = loader.getController();
+            ctrl.setUser(user);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Gallery — " + user.getFullName());
+            stage.setScene(new Scene(root, 800, 600));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML private void handleProgress() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_progress.fxml"));
+            Parent root = loader.load();
+            AdminUserProgressController ctrl = loader.getController();
+            ctrl.setUser(user);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Progress — " + user.getFullName());
+            stage.setScene(new Scene(root, 900, 700));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML private void handleBadges() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_badges.fxml"));
+            Parent root = loader.load();
+            AdminUserBadgesController ctrl = loader.getController();
+            ctrl.setUser(user);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Badges — " + user.getFullName());
+            stage.setScene(new Scene(root, 900, 700));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML private void handleMessage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_messages.fxml"));
+            Parent root = loader.load();
+            AdminUserMessagesController ctrl = loader.getController();
+            ctrl.setUser(user);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Messages — " + user.getFullName());
+            stage.setScene(new Scene(root, 700, 600));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
     @FXML private void handleEdit() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_edit.fxml"));
@@ -96,6 +160,27 @@ public class AdminUserShowController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Edit — " + user.getFullName());
             stage.setScene(new Scene(root, 620, 680));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML private void handleFaceId() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_face_id.fxml"));
+            Parent root = loader.load();
+            AdminFaceIdController ctrl = loader.getController();
+            ctrl.setTargetUser(user);
+            ctrl.setOnChanged(() -> {
+                // Reload user and refresh the detail view
+                user = new tn.esprit.projet.repository.UserRepository().findById(user.getId());
+                if (user != null) populate();
+            });
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(lblFullName.getScene().getWindow());
+            stage.setTitle("Face ID — " + user.getFullName());
+            stage.setScene(new Scene(root, 480, 420));
             stage.setResizable(false);
             stage.showAndWait();
         } catch (Exception e) { e.printStackTrace(); }

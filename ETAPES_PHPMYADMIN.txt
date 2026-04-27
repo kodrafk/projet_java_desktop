@@ -1,0 +1,147 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║              📋 ÉTAPES POUR AJOUTER LES UTILISATEURS                      ║
+║                      VIA PHPMYADMIN                                       ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Suivez ces étapes EXACTEMENT :
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 1 : OUVRIR PHPMYADMIN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Ouvrir votre navigateur
+2. Aller à : http://localhost/phpmyadmin
+3. Vous devriez voir l'interface phpMyAdmin
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 2 : SÉLECTIONNER LA BASE DE DONNÉES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Dans la colonne de gauche, cherchez "nutrilife"
+2. Cliquez sur "nutrilife"
+3. La base de données devrait s'ouvrir
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 3 : OUVRIR L'ONGLET SQL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. En haut de la page, vous verrez plusieurs onglets
+2. Cliquez sur l'onglet "SQL"
+3. Une grande zone de texte devrait apparaître
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 4 : OUVRIR LE FICHIER SQL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Ouvrir le fichier : INSERT_USERS_DIRECT.sql
+   (Il est dans le dossier projetJAV)
+
+2. Sélectionner TOUT le contenu du fichier (Ctrl+A)
+
+3. Copier (Ctrl+C)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 5 : COLLER ET EXÉCUTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Retourner dans phpMyAdmin (onglet SQL)
+
+2. Coller le contenu dans la grande zone de texte (Ctrl+V)
+
+3. Cliquer sur le bouton "Exécuter" en bas à droite
+   (ou "Go" en anglais)
+
+4. Vous devriez voir un message vert : "SUCCESS: 5 users added!"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 6 : VÉRIFIER LES UTILISATEURS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Dans la colonne de gauche, sous "nutrilife", cliquez sur "user"
+
+2. Cliquez sur l'onglet "Afficher" ou "Browse"
+
+3. Vous devriez voir vos utilisateurs, incluant :
+   - john.doe@nutrilife.com
+   - jane.smith@nutrilife.com
+   - bob.johnson@nutrilife.com
+   - alice.williams@nutrilife.com
+   - charlie.brown@nutrilife.com
+
+4. Vérifiez que la colonne "roles" contient "ROLE_USER" pour ces 5 utilisateurs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 7 : RELANCER L'APPLICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Ouvrir un terminal dans le dossier projetJAV
+
+2. Taper :
+   mvn clean compile
+
+3. Attendre "BUILD SUCCESS"
+
+4. Taper :
+   mvn javafx:run
+
+5. Se connecter avec :
+   Email: admin@nutrilife.com
+   Password: admin123
+
+6. Cliquer sur "Personalized Messages" dans le menu
+
+7. ✅ Vous devriez voir 5 utilisateurs !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 VÉRIFICATION DES LOGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Quand vous ouvrez "Personalized Messages", regardez la console.
+
+Vous devriez voir :
+    [DEBUG] Total users from DB: 8
+    [DEBUG] User: john.doe@nutrilife.com | Role: ROLE_USER | FullName: John Doe
+    [DEBUG] User: jane.smith@nutrilife.com | Role: ROLE_USER | FullName: Jane Smith
+    [DEBUG] User: bob.johnson@nutrilife.com | Role: ROLE_USER | FullName: Bob Johnson
+    [DEBUG] User: alice.williams@nutrilife.com | Role: ROLE_USER | FullName: Alice Williams
+    [DEBUG] User: charlie.brown@nutrilife.com | Role: ROLE_USER | FullName: Charlie Brown
+    [DEBUG] Filtered users (non-admin): 5
+
+Si vous voyez "Filtered users: 5" → ✅ Tout fonctionne !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❌ SI ÇA NE FONCTIONNE PAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cas 1 : Vous ne voyez PAS les logs [DEBUG]
+→ Le code n'a pas été recompilé
+→ Solution : mvn clean compile puis mvn javafx:run
+
+Cas 2 : Vous voyez [DEBUG] Total users from DB: 0
+→ La base de données est vide ou la connexion échoue
+→ Solution : Vérifier que XAMPP est lancé et que les utilisateurs sont dans la base
+
+Cas 3 : Vous voyez [DEBUG] Filtered users (non-admin): 0
+→ Tous les utilisateurs sont admin
+→ Solution : Vérifier que les 5 utilisateurs ont bien roles = 'ROLE_USER'
+
+Cas 4 : Vous voyez [DEBUG] Filtered users (non-admin): 5 mais l'interface est vide
+→ Problème d'affichage JavaFX
+→ Contactez-moi avec les logs complets
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 RÉSUMÉ RAPIDE
+
+1. http://localhost/phpmyadmin
+2. Cliquer "nutrilife"
+3. Onglet "SQL"
+4. Copier INSERT_USERS_DIRECT.sql
+5. Coller et "Exécuter"
+6. mvn clean compile
+7. mvn javafx:run
+8. Menu → Personalized Messages → ✅ 5 utilisateurs !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

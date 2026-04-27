@@ -1,0 +1,94 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                    ⚠️  LISEZ CECI MAINTENANT ⚠️                           ║
+║                                                                            ║
+║              Vous voyez "No users found" dans l'interface                 ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          🎯 SOLUTION EN 2 MINUTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le problème : Votre base de données n'a pas d'utilisateurs avec ROLE_USER
+
+La solution : Ajouter 5 utilisateurs de test
+
+
+┌───────────────────────────────────────────────────────────────────────────┐
+│                                                                            │
+│  📋 SUIVEZ CE FICHIER ÉTAPE PAR ÉTAPE :                                  │
+│                                                                            │
+│      ETAPES_PHPMYADMIN.txt                                                │
+│                                                                            │
+│  Il contient des instructions détaillées avec captures d'écran.          │
+│                                                                            │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                              📝 RÉSUMÉ RAPIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Ouvrir http://localhost/phpmyadmin
+
+2. Cliquer sur "nutrilife" à gauche
+
+3. Cliquer sur l'onglet "SQL"
+
+4. Ouvrir le fichier : INSERT_USERS_DIRECT.sql
+
+5. Copier TOUT le contenu (Ctrl+A puis Ctrl+C)
+
+6. Coller dans phpMyAdmin (Ctrl+V)
+
+7. Cliquer "Exécuter"
+
+8. Vous devriez voir : "SUCCESS: 5 users added!"
+
+9. Dans le terminal :
+   mvn clean compile
+   mvn javafx:run
+
+10. Menu → Personalized Messages → ✅ 5 utilisateurs visibles !
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          📁 FICHIERS IMPORTANTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ ETAPES_PHPMYADMIN.txt         → Instructions détaillées (LISEZ CECI)
+✅ INSERT_USERS_DIRECT.sql       → Script SQL à exécuter
+✅ DIAGNOSTIC_USERS.md           → Si vous avez des problèmes
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          🔍 VÉRIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Après avoir ajouté les utilisateurs et relancé l'application,
+regardez la console. Vous devriez voir :
+
+    [DEBUG] Total users from DB: 8
+    [DEBUG] Filtered users (non-admin): 5
+
+Si vous voyez ces lignes → ✅ Tout fonctionne !
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                          ❓ BESOIN D'AIDE ?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Si ça ne fonctionne toujours pas :
+
+1. Ouvrez : DIAGNOSTIC_USERS.md
+2. Suivez les étapes de diagnostic
+3. Envoyez-moi les logs de la console
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                    🎉 COMMENCEZ PAR ETAPES_PHPMYADMIN.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,137 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║           📍 OÙ EST LE BOUTON AI? - EXPLICATION                          ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════════
+❓ PROBLÈME
+═══════════════════════════════════════════════════════════════════════════
+
+Vous ne voyez pas le bouton "HEALTH AI" ou "Anomaly Detection" dans le menu
+latéral gauche de votre backoffice.
+
+
+═══════════════════════════════════════════════════════════════════════════
+🔍 CAUSE
+═══════════════════════════════════════════════════════════════════════════
+
+L'application que vous avez ouverte utilise une ANCIENNE VERSION du code
+qui ne contient PAS encore le bouton AI.
+
+Le bouton AI a été ajouté dans le code source, mais l'application doit être
+FERMÉE et RELANCÉE pour voir les changements.
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ SOLUTION SIMPLE
+═══════════════════════════════════════════════════════════════════════════
+
+ÉTAPE 1: FERMER L'APPLICATION ACTUELLE
+    1. Cliquez sur le X en haut à droite de la fenêtre NutriLife
+    2. Ou cliquez sur "Logout" dans le menu
+
+ÉTAPE 2: RELANCER L'APPLICATION
+    Double-cliquez sur: LANCER_TOUT.bat
+    
+    OU
+    
+    Depuis votre IDE (IntelliJ/Eclipse):
+    - Clic droit sur MainApp.java
+    - Run
+
+ÉTAPE 3: SE RECONNECTER
+    📧 Email:    kiro.admin@nutrilife.com
+    🔐 Password: kiro2026
+
+ÉTAPE 4: VÉRIFIER LE MENU
+    Le bouton "HEALTH AI" devrait maintenant être visible!
+
+
+═══════════════════════════════════════════════════════════════════════════
+📋 VÉRIFICATION QUE LE BOUTON EXISTE DANS LE CODE
+═══════════════════════════════════════════════════════════════════════════
+
+✅ Le bouton est bien dans le fichier:
+    src/main/resources/fxml/admin_layout.fxml
+    
+✅ Le contrôleur est configuré:
+    src/main/java/tn/esprit/projet/gui/AdminLayoutController.java
+    
+✅ Le dashboard existe:
+    src/main/resources/fxml/admin_anomaly_dashboard.fxml
+    
+✅ Le code est compilé:
+    target/classes/ contient les fichiers compilés
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎯 CE QUE VOUS DEVRIEZ VOIR APRÈS LE RELANCEMENT
+═══════════════════════════════════════════════════════════════════════════
+
+Menu Latéral (Gauche):
+
+    📗 NutriLife
+    
+    MAIN
+      Dashboard
+    
+    MANAGEMENT
+      User Management
+      User Profiles
+      Statistics
+    
+    HEALTH AI              ← CETTE SECTION APPARAÎTRA
+      🔍 Anomaly Detection  ← CE BOUTON APPARAÎTRA
+    
+    CONTENT
+      Ingredients
+      Recipes
+      Events
+
+
+═══════════════════════════════════════════════════════════════════════════
+🔧 ALTERNATIVE: LANCEMENT MANUEL
+═══════════════════════════════════════════════════════════════════════════
+
+Si le script BAT ne marche pas:
+
+1. Ouvrez un terminal dans le dossier projetJAV
+
+2. Tapez: mvn clean javafx:run
+
+3. Attendez que l'application se lance
+
+4. Connectez-vous avec: kiro.admin@nutrilife.com / kiro2026
+
+
+═══════════════════════════════════════════════════════════════════════════
+💡 POURQUOI ÇA ARRIVE?
+═══════════════════════════════════════════════════════════════════════════
+
+JavaFX charge les fichiers FXML au démarrage de l'application.
+
+Si vous modifiez le code pendant que l'application tourne, les changements
+ne sont PAS appliqués automatiquement.
+
+Il faut TOUJOURS:
+1. Fermer l'application
+2. Recompiler (mvn clean compile)
+3. Relancer l'application
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   🔧 SOLUTION:                                                           ║
+║                                                                           ║
+║   1. FERMEZ l'application actuelle (cliquez sur X)                       ║
+║   2. Double-cliquez sur: LANCER_TOUT.bat                                 ║
+║   3. Reconnectez-vous: kiro.admin@nutrilife.com / kiro2026               ║
+║   4. Le bouton "HEALTH AI" sera visible!                                 ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+Date: 25 Avril 2026
+Heure: 19:30

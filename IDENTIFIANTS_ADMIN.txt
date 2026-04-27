@@ -1,0 +1,103 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║           🔐 IDENTIFIANTS ADMIN POUR VOUS CONNECTER                      ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════════
+📧 OPTION 1: COMPTE SIMPLE (RECOMMANDÉ)
+═══════════════════════════════════════════════════════════════════════════
+
+Email:    admin123@nutrilife.com
+Password: admin123
+
+
+═══════════════════════════════════════════════════════════════════════════
+📧 OPTION 2: COMPTE STANDARD
+═══════════════════════════════════════════════════════════════════════════
+
+Email:    admin@nutrilife.com
+Password: admin123
+
+
+═══════════════════════════════════════════════════════════════════════════
+📧 OPTION 3: COMPTE TEST
+═══════════════════════════════════════════════════════════════════════════
+
+Email:    admin.test@nutrilife.com
+Password: admin123
+
+
+═══════════════════════════════════════════════════════════════════════════
+🔧 CRÉER LE COMPTE (SI NÉCESSAIRE)
+═══════════════════════════════════════════════════════════════════════════
+
+Si aucun de ces identifiants ne fonctionne:
+
+1. Double-cliquez sur: CREER_ADMIN_SIMPLE.bat
+2. Entrez le mot de passe MySQL root (ou appuyez sur Entrée si vide)
+3. Le compte sera créé automatiquement
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ POUR VOUS CONNECTER
+═══════════════════════════════════════════════════════════════════════════
+
+1. Ouvrez votre application NutriLife
+2. Sur l'écran de connexion, entrez:
+   
+   Email:    admin123@nutrilife.com
+   Password: admin123
+
+3. Cliquez sur "Sign In"
+4. Vous serez connecté au backoffice admin
+
+
+═══════════════════════════════════════════════════════════════════════════
+🔍 ACCÉDER AU SYSTÈME AI
+═══════════════════════════════════════════════════════════════════════════
+
+Une fois connecté:
+
+1. Regardez le menu latéral GAUCHE (barre verte)
+2. Cherchez "HEALTH AI" ou "Anomaly Detection"
+3. Cliquez sur "🔍 Anomaly Detection"
+4. Le dashboard AI s'affichera
+
+
+═══════════════════════════════════════════════════════════════════════════
+❓ SI LES IDENTIFIANTS NE MARCHENT PAS
+═══════════════════════════════════════════════════════════════════════════
+
+Essayez dans cet ordre:
+
+1. admin123@nutrilife.com / admin123
+2. admin@nutrilife.com / admin123
+3. admin.test@nutrilife.com / admin123
+4. superadmin@nutrilife.com / admin123
+
+Si AUCUN ne fonctionne:
+→ Double-cliquez sur: CREER_ADMIN_SIMPLE.bat
+
+
+═══════════════════════════════════════════════════════════════════════════
+💡 NOTES IMPORTANTES
+═══════════════════════════════════════════════════════════════════════════
+
+- Le mot de passe est TOUJOURS: admin123
+- L'email peut varier selon ce qui existe dans votre base
+- Si vous voyez "Invalid email or password", créez un nouveau compte
+- Tous les comptes admin ont accès au système AI
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   📧 ESSAYEZ: admin123@nutrilife.com                                     ║
+║   🔐 PASSWORD: admin123                                                  ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+Date: 25 Avril 2026
+Heure: 19:05

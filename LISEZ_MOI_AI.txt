@@ -1,0 +1,60 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║           ✅ SYSTÈME AI INTÉGRÉ - GUIDE RAPIDE                           ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════════
+🔐 CONNECTEZ-VOUS
+═══════════════════════════════════════════════════════════════════════════
+
+    📧 Email:    kiro.admin@nutrilife.com
+    🔐 Password: kiro2026
+
+
+═══════════════════════════════════════════════════════════════════════════
+📍 TROUVEZ LE BOUTON AI
+═══════════════════════════════════════════════════════════════════════════
+
+Après connexion, regardez le MENU LATÉRAL GAUCHE (barre verte foncée).
+
+Faites défiler vers le BAS jusqu'à voir:
+
+    ┌─────────────────────┐
+    │ HEALTH AI           │  ← CETTE SECTION
+    │ 🔍 Anomaly Detection│  ← CLIQUEZ ICI
+    └─────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+❓ SI VOUS NE VOYEZ PAS LE BOUTON
+═══════════════════════════════════════════════════════════════════════════
+
+1. FERMEZ l'application (cliquez sur X)
+2. ATTENDEZ 5 secondes
+3. RELANCEZ l'application
+4. RECONNECTEZ-VOUS
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ VÉRIFICATION
+═══════════════════════════════════════════════════════════════════════════
+
+J'ai vérifié que:
+✅ Le code source contient le bouton
+✅ Le fichier compilé contient le bouton
+✅ Le contrôleur est configuré
+✅ L'application est compilée
+✅ L'application est lancée
+
+Le bouton DOIT être là!
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   🎯 CHERCHEZ "HEALTH AI" DANS LE MENU LATÉRAL GAUCHE                    ║
+║                                                                           ║
+║   Si vous ne le voyez pas: FERMEZ et RELANCEZ l'application              ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝

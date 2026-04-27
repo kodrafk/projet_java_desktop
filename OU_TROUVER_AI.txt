@@ -1,0 +1,97 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║           📍 OÙ TROUVER LE SYSTÈME AI DANS VOTRE APPLICATION            ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+Vous êtes actuellement sur la page "User Management".
+
+Pour accéder au système AI:
+
+
+═══════════════════════════════════════════════════════════════════════════
+ÉTAPE 1: REGARDEZ LE MENU LATÉRAL GAUCHE (barre verte foncée)
+═══════════════════════════════════════════════════════════════════════════
+
+Dans la barre latérale GAUCHE, vous devriez voir:
+
+    📗 NutriLife
+    ┌─────────────────────┐
+    │ A                   │  ← Votre avatar admin
+    │ admin@nutrilife.com │
+    └─────────────────────┘
+    
+    ⬛ Dashboard
+    
+    👤 User Management      ← VOUS ÊTES ICI ACTUELLEMENT
+    
+    📊 Statistics
+    
+    🔍 Anomaly Detection    ← CHERCHEZ CE BOUTON!
+    
+    🍎 Ingredients
+    
+    📖 Recipes
+    
+    📅 Events
+    
+    📝 Nutrition
+
+
+═══════════════════════════════════════════════════════════════════════════
+ÉTAPE 2: CLIQUEZ SUR "🔍 Anomaly Detection"
+═══════════════════════════════════════════════════════════════════════════
+
+Cherchez dans le menu latéral gauche un bouton qui dit:
+
+    🔍 Anomaly Detection
+
+OU
+
+    HEALTH AI
+    🔍 Anomaly Detection
+
+
+═══════════════════════════════════════════════════════════════════════════
+SI VOUS NE VOYEZ PAS LE BOUTON
+═══════════════════════════════════════════════════════════════════════════
+
+Le menu peut être organisé en sections. Cherchez:
+
+Section "HEALTH AI" ou "AI" dans le menu latéral
+
+Ou faites défiler le menu vers le bas pour voir tous les boutons.
+
+
+═══════════════════════════════════════════════════════════════════════════
+ÉTAPE 3: UNE FOIS CLIQUÉ
+═══════════════════════════════════════════════════════════════════════════
+
+Le dashboard d'anomalies s'affichera avec:
+
+✅ 4 cartes statistiques en haut
+✅ 3 graphiques au milieu
+✅ 2 tables en bas
+✅ Bouton "🚀 Lancer Détection"
+
+
+═══════════════════════════════════════════════════════════════════════════
+ALTERNATIVE: VÉRIFIER SI LE BOUTON EXISTE
+═══════════════════════════════════════════════════════════════════════════
+
+Si vous ne trouvez pas le bouton dans le menu:
+
+1. Fermez l'application
+2. Relancez avec: LAUNCH_ANOMALY_SYSTEM.bat
+3. Reconnectez-vous
+4. Le bouton devrait apparaître
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   📍 CHERCHEZ DANS LE MENU LATÉRAL GAUCHE (barre verte)                 ║
+║                                                                           ║
+║   Le bouton "🔍 Anomaly Detection" devrait être visible                 ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝

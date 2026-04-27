@@ -1,0 +1,116 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    🤖 WHERE TO FIND THE AI BUTTON                            ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+After logging in as admin (kiro.admin@nutrilife.com / kiro2026), you will see
+the left sidebar menu. The AI button is in the MANAGEMENT section:
+
+
+┌─────────────────────────┐
+│  📗 Nutri Admin         │
+├─────────────────────────┤
+│                         │
+│  MAIN                   │
+│  ├─ 📊 Dashboard        │
+│                         │
+│  MANAGEMENT             │
+│  ├─ 👥 Users            │
+│  ├─ 👤 User Profiles    │
+│  ├─ 📈 Statistics       │
+│  ├─ 🤖 AI Anomaly       │  ◄─────── HERE! CLICK THIS!
+│  │     Detection        │
+│                         │
+│  CONTENT                │
+│  ├─ 🥗 Ingredients      │
+│  ├─ 🍽️ Recipes          │
+│  ├─ 📅 Events           │
+│  └─ 💼 Sponsors         │
+│                         │
+│  MODULES                │
+│  ├─ 📱 SMS              │
+│  ├─ 🥗 Nutrition        │
+│  └─ 💪 Wellness         │
+│                         │
+│  ─────────────────      │
+│  ← Back to Site         │
+│  🚪 Logout              │
+└─────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+WHAT HAPPENS WHEN YOU CLICK IT?
+
+The AI Anomaly Detection Dashboard will load with:
+
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │  🔍 Anomaly Detection & Predictive Alerts                               │
+  │  AI-powered health monitoring system                                    │
+  ├─────────────────────────────────────────────────────────────────────────┤
+  │                                                                         │
+  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐              │
+  │  │ Total    │  │ High     │  │ Active   │  │ Detection│              │
+  │  │ Anomalies│  │ Risk     │  │ Alerts   │  │ Accuracy │              │
+  │  │    42    │  │ Users: 8 │  │    15    │  │   94.2%  │              │
+  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘              │
+  │                                                                         │
+  │  📊 Anomaly Trend (7 Days)        📊 Risk Distribution                │
+  │  [Interactive Chart]               [Pie Chart]                         │
+  │                                                                         │
+  │  📋 Recent Anomalies Detected                                          │
+  │  ┌─────────────────────────────────────────────────────────────────┐  │
+  │  │ User          │ Type              │ Severity │ Date       │ ... │  │
+  │  ├─────────────────────────────────────────────────────────────────┤  │
+  │  │ John Doe      │ Rapid Weight Loss │ HIGH     │ 2026-04-25 │     │  │
+  │  │ Jane Smith    │ Inactivity        │ MEDIUM   │ 2026-04-24 │     │  │
+  │  │ ...           │ ...               │ ...      │ ...        │     │  │
+  │  └─────────────────────────────────────────────────────────────────┘  │
+  │                                                                         │
+  │  🚨 High-Risk Users                                                    │
+  │  [Table with users predicted to abandon the platform]                 │
+  │                                                                         │
+  │  [🔄 Run Manual Detection]  [📥 Export Report]                        │
+  │                                                                         │
+  └─────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+BUTTON APPEARANCE:
+
+  Normal State:
+  ┌─────────────────────────────────┐
+  │ 🤖 AI Anomaly Detection         │  ← Light green text on dark background
+  └─────────────────────────────────┘
+
+  When Clicked (Active):
+  ┌─────────────────────────────────┐
+  │ 🤖 AI Anomaly Detection         │  ← White text on green background
+  └─────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+TROUBLESHOOTING:
+
+❌ If you don't see the button:
+
+  1. Make sure you ran: mvn clean compile
+  2. Completely close and restart the application
+  3. Clear any JavaFX cache
+  4. Check the console for errors
+  5. Verify you're logged in as ADMIN (not regular user)
+
+✅ The button should be visible immediately after login!
+
+═══════════════════════════════════════════════════════════════════════════════
+
+QUICK START:
+
+  1. Run: LAUNCH_AND_TEST_AI.bat
+  2. Login with: kiro.admin@nutrilife.com / kiro2026
+  3. Look at left sidebar → MANAGEMENT section
+  4. Click: 🤖 AI Anomaly Detection
+  5. Enjoy the AI-powered dashboard!
+
+═══════════════════════════════════════════════════════════════════════════════

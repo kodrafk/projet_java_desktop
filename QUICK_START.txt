@@ -1,0 +1,141 @@
+
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║          🔧 CORRECTION ERREUR MYSQL - NUTRILIFE 🔧            ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌────────────────────────────────────────────────────────────────┐
+│  ⚡ SOLUTION RAPIDE (1 CLIC)                                   │
+└────────────────────────────────────────────────────────────────┘
+
+   Double-cliquez sur:  MYSQL_MANAGER.bat
+   
+   Puis choisissez l'option [1]
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  📊 VOTRE PROBLÈME                                             │
+└────────────────────────────────────────────────────────────────┘
+
+   ❌ MySQL s'arrête immédiatement dans XAMPP
+   ❌ phpMyAdmin affiche une erreur de connexion
+   ❌ Message: "MySQL shutdown unexpectedly"
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  ✅ CE QUE LE SCRIPT VA FAIRE                                  │
+└────────────────────────────────────────────────────────────────┘
+
+   1. Arrêter MySQL
+   2. Sauvegarder vos données existantes
+   3. Supprimer les fichiers corrompus
+   4. Redémarrer MySQL
+   5. Créer la base de données nutrilife_db
+   6. Créer toutes les tables
+   7. Créer le compte admin
+
+   ⏱️  Durée: ~30 secondes
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  🎯 APRÈS LA RÉPARATION                                        │
+└────────────────────────────────────────────────────────────────┘
+
+   1. Ouvrez phpMyAdmin: http://localhost/phpmyadmin
+   
+   2. Vérifiez que la base nutrilife_db existe
+   
+   3. Lancez votre application Java
+   
+   4. Connectez-vous avec:
+      📧 Email    : admin@nutrilife.com
+      🔑 Password : admin123
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  🔧 AUTRES OUTILS DISPONIBLES                                  │
+└────────────────────────────────────────────────────────────────┘
+
+   MYSQL_MANAGER.bat          → Menu principal (RECOMMANDÉ)
+   FIX_MYSQL_COMPLETE.bat     → Réparation automatique
+   CHANGE_MYSQL_PORT.bat      → Changer le port 3306 → 3307
+   BACKUP_DATABASE.bat        → Sauvegarder la base
+   RESTORE_DATABASE.bat       → Restaurer une sauvegarde
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  💡 ASTUCE                                                     │
+└────────────────────────────────────────────────────────────────┘
+
+   Votre application utilise déjà SQLite comme fallback !
+   
+   Si MySQL ne fonctionne pas:
+   ✅ L'application basculera automatiquement sur SQLite
+   ✅ Fichier: nutrilife.db
+   ✅ Toutes les fonctionnalités marchent
+   
+   Vous pouvez utiliser l'application IMMÉDIATEMENT
+   sans réparer MySQL !
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  📚 DOCUMENTATION                                              │
+└────────────────────────────────────────────────────────────────┘
+
+   README_MYSQL_FIX.md           → Guide de démarrage rapide
+   SOLUTION_MYSQL_COMPLETE.md    → Guide complet et détaillé
+   MYSQL_REPAIR_GUIDE.txt        → Solutions alternatives
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  🆘 SI ÇA NE FONCTIONNE PAS                                    │
+└────────────────────────────────────────────────────────────────┘
+
+   Option 1: Changer le port MySQL
+   → Exécutez: CHANGE_MYSQL_PORT.bat
+   
+   Option 2: Utiliser SQLite (déjà configuré)
+   → Lancez directement votre application
+   
+   Option 3: Lire le guide complet
+   → Ouvrez: SOLUTION_MYSQL_COMPLETE.md
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  📊 STRUCTURE DE LA BASE DE DONNÉES                            │
+└────────────────────────────────────────────────────────────────┘
+
+   Base: nutrilife_db
+   
+   Tables:
+   ├── user              (utilisateurs)
+   ├── badge             (badges)
+   ├── user_badge        (badges des utilisateurs)
+   ├── weight_log        (historique de poids)
+   └── weight_objective  (objectifs de poids)
+   
+   Comptes créés:
+   ├── admin@nutrilife.com (ROLE_ADMIN) - admin123
+   └── user@test.com       (ROLE_USER)  - admin123
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  🚀 COMMENCER MAINTENANT                                       │
+└────────────────────────────────────────────────────────────────┘
+
+   1. Double-cliquez sur: MYSQL_MANAGER.bat
+   
+   2. Choisissez l'option [1]
+   
+   3. Attendez 30 secondes
+   
+   4. Lancez votre application !
+
+
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║                    Bonne chance ! 🎉                          ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+

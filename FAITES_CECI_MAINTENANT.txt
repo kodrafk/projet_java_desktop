@@ -1,0 +1,97 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                    ✅ FAITES CECI MAINTENANT                              ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Le code a été compilé avec succès ! ✅
+
+Il ne reste plus qu'à créer des utilisateurs dans la base de données.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 1 : Ouvrir phpMyAdmin
+
+1. Ouvrir votre navigateur
+2. Aller sur : http://localhost/phpmyadmin
+3. Cliquer sur "nutrilife" dans la liste à gauche
+4. Cliquer sur l'onglet "SQL" en haut
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 2 : Copier-coller ce code SQL
+
+INSERT INTO user (email, password, roles, first_name, last_name, is_active, created_at)
+VALUES 
+('john.doe@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'John', 'Doe', 1, NOW()),
+('jane.smith@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'Jane', 'Smith', 1, NOW()),
+('bob.johnson@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'Bob', 'Johnson', 1, NOW()),
+('alice.williams@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'Alice', 'Williams', 1, NOW()),
+('charlie.brown@nutrilife.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ROLE_USER', 'Charlie', 'Brown', 1, NOW());
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 3 : Cliquer sur "Exécuter"
+
+Vous devriez voir : "5 lignes insérées"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 4 : Vérifier
+
+Exécutez cette requête :
+
+SELECT id, email, roles, first_name, last_name FROM user;
+
+Vous devriez voir 6 utilisateurs (1 admin + 5 users)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 5 : Lancer l'application
+
+Dans le terminal :
+
+mvn javafx:run
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 6 : Tester
+
+1. Connexion admin :
+   Email: admin@nutrilife.com
+   Password: admin123
+
+2. Menu → 💬 Personalized Messages
+
+3. Vous devriez voir 5 utilisateurs dans le panneau gauche !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ RÉSULTAT ATTENDU :
+
+┌─────────────────────┐
+│ 👥 Users            │
+│ 5 users             │  ← Devrait afficher "5 users"
+│                     │
+│ 🔍 Search users...  │
+│                     │
+│ ┌─────────────────┐ │
+│ │ 👤 John Doe     │ │
+│ │ john.doe@...    │ │
+│ └─────────────────┘ │
+│                     │
+│ ┌─────────────────┐ │
+│ │ 👤 Jane Smith   │ │
+│ │ jane.smith@...  │ │
+│ └─────────────────┘ │
+│                     │
+│ ... (3 more)        │
+└─────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+C'EST TOUT ! 🎉
+
+Si vous suivez ces étapes, les utilisateurs s'afficheront correctement.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

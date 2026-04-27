@@ -26,6 +26,8 @@ public class User {
     private LocalDate     birthday;
     private double        weight;
     private double        height;
+    private boolean       galleryAccessEnabled = false;
+    private String        phone;
 
     public User() {}
 
@@ -94,6 +96,12 @@ public class User {
 
     public double getHeight() { return height; }
     public void setHeight(double height) { this.height = height; }
+
+    public boolean isGalleryAccessEnabled() { return galleryAccessEnabled; }
+    public void setGalleryAccessEnabled(boolean galleryAccessEnabled) { this.galleryAccessEnabled = galleryAccessEnabled; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     // ── Computed ───────────────────────────────────────────────────────────────
 

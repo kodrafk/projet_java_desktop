@@ -163,16 +163,19 @@ public class UserListController {
 
         // ── Actions column: icon buttons matching the design ──────────────────
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button btnStats  = iconBtn("📊", "#F59E0B", "Stats");
-            private final Button btnPhoto  = iconBtn("🖼", "#EC4899", "Photo");
-            private final Button btnPwd    = iconBtn("👤", "#6366F1", "Password");
+            private final Button btnGallery = iconBtn("🖼", "#EC4899", "Gallery");
+            private final Button btnProgress = iconBtn("📊", "#F59E0B", "Progress");
+            private final Button btnMessage = iconBtn("💬", "#6366F1", "Message");
             private final Button btnView   = iconBtn("👁",  "#06B6D4", "View");
             private final Button btnEdit   = iconBtn("✏",  "#10B981", "Edit");
             private final Button btnToggle = iconBtn("⚙",  "#8B5CF6", "Toggle");
             private final Button btnDelete = iconBtn("🗑", "#EF4444", "Delete");
-            private final HBox   box       = new HBox(4, btnStats, btnPhoto, btnPwd, btnView, btnEdit, btnToggle, btnDelete);
+            private final HBox   box       = new HBox(4, btnGallery, btnProgress, btnMessage, btnView, btnEdit, btnToggle, btnDelete);
             {
                 box.setAlignment(Pos.CENTER_LEFT);
+                btnGallery.setOnAction(e -> handleGallery(getTableRow().getItem()));
+                btnProgress.setOnAction(e -> handleProgress(getTableRow().getItem()));
+                btnMessage.setOnAction(e -> handleMessage(getTableRow().getItem()));
                 btnView.setOnAction(e   -> handleView(getTableRow().getItem()));
                 btnEdit.setOnAction(e   -> handleEdit(getTableRow().getItem()));
                 btnToggle.setOnAction(e -> handleToggle(getTableRow().getItem()));
@@ -220,6 +223,63 @@ public class UserListController {
             stage.setResizable(false);
             stage.showAndWait();
         } catch (Exception ex) { ex.printStackTrace(); }
+    }
+
+    private void handleGallery(User u) {
+        if (u == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_gallery.fxml"));
+            Parent root = loader.load();
+            AdminUserGalleryController ctrl = loader.getController();
+            ctrl.setUser(u);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Gallery — " + u.getFullName());
+            stage.setScene(new Scene(root, 800, 600));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception ex) { 
+            ex.printStackTrace();
+            AlertUtil.show(AlertUtil.Type.INFO, "Gallery", "Gallery feature for " + u.getFullName());
+        }
+    }
+
+    private void handleProgress(User u) {
+        if (u == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_progress.fxml"));
+            Parent root = loader.load();
+            AdminUserProgressController ctrl = loader.getController();
+            ctrl.setUser(u);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Progress & Goals — " + u.getFullName());
+            stage.setScene(new Scene(root, 900, 700));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception ex) { 
+            ex.printStackTrace();
+            AlertUtil.show(AlertUtil.Type.INFO, "Progress", "Progress tracking for " + u.getFullName());
+        }
+    }
+
+    private void handleMessage(User u) {
+        if (u == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_messages.fxml"));
+            Parent root = loader.load();
+            AdminUserMessagesController ctrl = loader.getController();
+            ctrl.setUser(u);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Messages — " + u.getFullName());
+            stage.setScene(new Scene(root, 700, 600));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception ex) { 
+            ex.printStackTrace();
+            AlertUtil.show(AlertUtil.Type.INFO, "Messages", "Messaging feature for " + u.getFullName());
+        }
     }
 
     private void handleEdit(User u) { if (u != null) openForm(u); }

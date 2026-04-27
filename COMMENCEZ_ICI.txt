@@ -1,0 +1,121 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                         🎯 COMMENCEZ ICI                                  ║
+║                                                                            ║
+║              Solution pour "No users found" dans l'interface              ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                              🚀 SOLUTION RAPIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Votre interface "Personalized Messages" est vide car votre table "user" 
+n'a que des admins (ou est vide).
+
+Voici comment ajouter des utilisateurs de test en 2 minutes :
+
+
+┌───────────────────────────────────────────────────────────────────────────┐
+│                                                                            │
+│  ÉTAPE 1 : Double-cliquez sur ce fichier                                 │
+│                                                                            │
+│      📁 ADD_TEST_USERS_TO_EXISTING_DB.bat                                │
+│                                                                            │
+│  Cela ajoutera 5 utilisateurs de test à votre base existante.            │
+│                                                                            │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+┌───────────────────────────────────────────────────────────────────────────┐
+│                                                                            │
+│  ÉTAPE 2 : Dans le terminal, tapez                                       │
+│                                                                            │
+│      mvn javafx:run                                                       │
+│                                                                            │
+│  Puis : Menu → Personalized Messages                                     │
+│                                                                            │
+│  ✅ Vous verrez 5 utilisateurs !                                         │
+│                                                                            │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                           📚 DOCUMENTATION COMPLÈTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Si vous voulez plus de détails, consultez ces fichiers :
+
+📄 INSTRUCTIONS_SIMPLES.txt       → Instructions visuelles en 3 étapes
+📄 GUIDE_RESOLUTION_FINALE.md     → Guide complet avec dépannage
+📄 RESOLUTION_COMPLETE.md         → Documentation technique détaillée
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                              🔧 SCRIPTS UTILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ CHECK_DATABASE_USERS.bat              → Voir vos utilisateurs actuels
+✅ ADD_TEST_USERS_TO_EXISTING_DB.bat     → Ajouter 5 utilisateurs de test
+✅ ADD_TEST_USERS_TO_EXISTING_DB.sql     → Script SQL (si vous préférez phpMyAdmin)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                           👥 UTILISATEURS AJOUTÉS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le script ajoutera ces 5 utilisateurs :
+
+    📧 john.doe@nutrilife.com         → John Doe
+    📧 jane.smith@nutrilife.com       → Jane Smith
+    📧 bob.johnson@nutrilife.com      → Bob Johnson
+    📧 alice.williams@nutrilife.com   → Alice Williams
+    📧 charlie.brown@nutrilife.com    → Charlie Brown
+
+    🔑 Mot de passe pour tous : password123
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                              ⚠️  IMPORTANT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Utilise VOTRE base de données "nutrilife" existante
+✅ Utilise VOTRE table "user" existante
+✅ AJOUTE seulement de nouveaux utilisateurs
+✅ Ne supprime RIEN
+✅ Ne modifie PAS vos données existantes
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                           ❓ BESOIN D'AIDE ?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Si le fichier .bat ne fonctionne pas :
+
+1. Ouvrir http://localhost/phpmyadmin
+2. Cliquer sur "nutrilife"
+3. Onglet "SQL"
+4. Copier le contenu de : ADD_TEST_USERS_TO_EXISTING_DB.sql
+5. Coller et exécuter
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                              ✅ VÉRIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Après avoir lancé l'application, regardez la console :
+
+    [DEBUG] Total users from DB: 8
+    [DEBUG] Filtered users (non-admin): 5
+
+Si vous voyez "Filtered users: 5" → ✅ Tout fonctionne !
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                         🎉 C'EST TOUT !
+
+        Exécutez ADD_TEST_USERS_TO_EXISTING_DB.bat et relancez l'app
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -42,18 +42,38 @@
                 <HBox><Label text="Height:"     prefWidth="130" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/><Label fx:id="lblHeight"         text="—" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/></HBox>
                 <HBox><Label text="BMI:"        prefWidth="130" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/><Label fx:id="lblBmi"            text="—" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/></HBox>
                 <HBox><Label text="Created At:" prefWidth="130" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/><Label fx:id="lblCreatedAt"      text="—" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/></HBox>
-                <HBox><Label text="Face ID:"    prefWidth="130" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/><Label fx:id="lblFaceId"         text="—" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/></HBox>
+                <HBox alignment="CENTER_LEFT"><Label text="Face ID:"    prefWidth="130" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/><Label fx:id="lblFaceId" text="—" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/></HBox>
                 <HBox><Label text="Google:"     prefWidth="130" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/><Label fx:id="lblGoogleId"       text="—" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/></HBox>
                 <HBox><Label text="Message:"    prefWidth="130" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/><Label fx:id="lblWelcomeMessage" text="—" wrapText="true" maxWidth="300" style="-fx-font-size:12px;-fx-text-fill:#475569;-fx-font-style:italic;"/></HBox>
             </VBox>
 
-            <HBox spacing="10">
-                <Button text="Edit" onAction="#handleEdit"
-                        HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="40"
-                        style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:transparent;"/>
-                <Button text="Back to List" onAction="#handleBack" prefHeight="40" prefWidth="120"
-                        style="-fx-background-color:#F1F5F9;-fx-border-color:#CBD5E1;-fx-border-radius:10;-fx-background-radius:10;-fx-font-size:13px;-fx-cursor:hand;"/>
-            </HBox>
+            <!-- Action Buttons -->
+            <VBox spacing="8">
+                <HBox spacing="8">
+                    <Button text="🖼 Gallery" onAction="#handleGallery"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="38"
+                            style="-fx-background-color:#EC4899;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;"/>
+                    <Button text="📊 Progress" onAction="#handleProgress"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="38"
+                            style="-fx-background-color:#F59E0B;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;"/>
+                    <Button text="🏆 Badges" onAction="#handleBadges"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="38"
+                            style="-fx-background-color:#7C3AED;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;"/>
+                </HBox>
+                <HBox spacing="8">
+                    <Button text="💬 Message" onAction="#handleMessage"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="38"
+                            style="-fx-background-color:#6366F1;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;"/>
+                    <Button text="✏ Edit" onAction="#handleEdit"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="38"
+                            style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;"/>
+                    <Button text="&#128065; Face ID" onAction="#handleFaceId"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="38"
+                            style="-fx-background-color:#0F2820;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;"/>
+                </HBox>
+                <Button text="← Back to List" onAction="#handleBack" prefHeight="38" maxWidth="Infinity"
+                        style="-fx-background-color:#F1F5F9;-fx-border-color:#CBD5E1;-fx-border-radius:8;-fx-background-radius:8;-fx-font-size:12px;-fx-cursor:hand;"/>
+            </VBox>
         </VBox>
     </ScrollPane>
 </VBox>

@@ -2,13 +2,19 @@ package tn.esprit.projet.gui;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.projet.models.User;
+import tn.esprit.projet.repository.FaceEmbeddingRepository;
 import tn.esprit.projet.repository.UserRepository;
+import tn.esprit.projet.utils.AlertUtil;
 import tn.esprit.projet.utils.Toasts;
 import tn.esprit.projet.utils.Validator;
 
@@ -28,6 +34,11 @@ public class AdminUserEditController {
     @FXML private ComboBox<String> roleCombo;
     @FXML private CheckBox      activeCheckbox;
     @FXML private ImageView     photoView;
+    @FXML private Button        enrollFaceButton;
+    @FXML private Button        deleteFaceButton;
+    @FXML private Button        testFaceButton;
+    @FXML private Label         faceStatusLabel;
+    @FXML private Label         faceInfoLabel;
     @FXML private Label         errEmail;
     @FXML private Label         errFirstName;
     @FXML private Label         errLastName;
@@ -39,6 +50,7 @@ public class AdminUserEditController {
     private User user;
     private File newPhotoFile;
     private final UserRepository repo = new UserRepository();
+    private final FaceEmbeddingRepository faceRepo = new FaceEmbeddingRepository();
 
     public void setUser(User u) {
         this.user = u;
@@ -65,6 +77,32 @@ public class AdminUserEditController {
             File f = new File("uploads/profiles/" + user.getPhotoFilename());
             if (f.exists()) photoView.setImage(new Image(f.toURI().toString()));
         }
+        
+        // Check Face ID enrollment status
+        updateFaceIdStatus();
+    }
+    
+    private void updateFaceIdStatus() {
+        if (faceStatusLabel == null) return;
+        boolean enrolled = faceRepo.findByUserId(user.getId()) != null;
+        
+        if (enrolled) {
+            faceStatusLabel.setText("✅ Face ID enrolled and active");
+            faceStatusLabel.setStyle("-fx-text-fill:#16A34A;-fx-font-size:12px;-fx-font-weight:bold;");
+            
+            if (enrollFaceButton != null) enrollFaceButton.setText("🔄 Re-enroll Face ID");
+            if (deleteFaceButton != null) deleteFaceButton.setVisible(true);
+            if (testFaceButton != null) testFaceButton.setVisible(true);
+            if (faceInfoLabel != null) faceInfoLabel.setText("Face ID is active. You can test, re-enroll, or delete it.");
+        } else {
+            faceStatusLabel.setText("❌ Face ID not enrolled");
+            faceStatusLabel.setStyle("-fx-text-fill:#DC2626;-fx-font-size:12px;-fx-font-weight:bold;");
+            
+            if (enrollFaceButton != null) enrollFaceButton.setText("📷 Enroll Face ID");
+            if (deleteFaceButton != null) deleteFaceButton.setVisible(false);
+            if (testFaceButton != null) testFaceButton.setVisible(false);
+            if (faceInfoLabel != null) faceInfoLabel.setText("Face ID allows secure biometric authentication. Click 'Enroll Face ID' to set it up.");
+        }
     }
 
     @FXML
@@ -80,6 +118,88 @@ public class AdminUserEditController {
         if (errPhoto != null) errPhoto.setText("");
         newPhotoFile = file;
         if (photoView != null) photoView.setImage(new Image(file.toURI().toString()));
+    }
+    
+    @FXML
+    private void handleEnrollFace() {
+        if (user == null) return;
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_enroll.fxml"));
+            Parent root = loader.load();
+            FaceIdEnrollController ctrl = loader.getController();
+            ctrl.setTargetUser(user);
+            ctrl.setOnEnrolled(() -> {
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                Toasts.show(stage, "Face ID enrolled successfully!", Toasts.Type.SUCCESS);
+                updateFaceIdStatus();
+            });
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner((Stage) emailField.getScene().getWindow());
+            stage.setTitle("Enroll Face ID — " + user.getFirstName() + " " + user.getLastName());
+            stage.setScene(new Scene(root, 520, 520));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            Toasts.show(stage, "Could not open camera: " + e.getMessage(), Toasts.Type.ERROR);
+        }
+    }
+    
+    @FXML
+    private void handleDeleteFace() {
+        if (user == null) return;
+        
+        boolean confirmed = AlertUtil.confirm("Delete Face ID",
+            "Delete Face ID for " + user.getFirstName() + " " + user.getLastName() + "?\n\n" +
+            "This will remove all facial recognition data. The user will need to re-enroll to use Face ID login.");
+        if (confirmed) {
+            try {
+                faceRepo.removeByUserId(user.getId());
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                Toasts.show(stage, "Face ID deleted successfully!", Toasts.Type.SUCCESS);
+                updateFaceIdStatus();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                Toasts.show(stage, "Failed to delete Face ID: " + e.getMessage(), Toasts.Type.ERROR);
+            }
+        }
+    }
+    
+    @FXML
+    private void handleTestFace() {
+        if (user == null) return;
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_verify.fxml"));
+            Parent root = loader.load();
+            FaceIdVerifyController ctrl = loader.getController();
+            ctrl.setTargetUser(user);
+            ctrl.setOnSuccess(() -> {
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                Toasts.show(stage, "✅ Face ID verification successful!", Toasts.Type.SUCCESS);
+            });
+            ctrl.setOnFailure(() -> {
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                Toasts.show(stage, "❌ Face ID verification failed!", Toasts.Type.ERROR);
+            });
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner((Stage) emailField.getScene().getWindow());
+            stage.setTitle("Test Face ID — " + user.getFirstName() + " " + user.getLastName());
+            stage.setScene(new Scene(root, 520, 520));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            Toasts.show(stage, "Could not open camera: " + e.getMessage(), Toasts.Type.ERROR);
+        }
     }
 
     @FXML

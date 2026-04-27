@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.canvas.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.WeeklyChallengesController"
+           prefWidth="560" prefHeight="680">
+
+    <!-- Confetti canvas (on top, mouse transparent) -->
+    <Canvas fx:id="confettiCanvas" width="560" height="680" mouseTransparent="true"
+            StackPane.alignment="TOP_LEFT"/>
+
+    <VBox StackPane.alignment="TOP_CENTER" maxWidth="Infinity" prefWidth="560">
+
+        <!-- HEADER -->
+        <HBox prefHeight="60" alignment="CENTER_LEFT"
+              style="-fx-background-color:#0F2820;-fx-padding:0 24;">
+            <VBox spacing="2">
+                <Label text="⚡  Weekly Challenges"
+                       style="-fx-font-size:17px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+                <Label fx:id="lblWeekLabel" text=""
+                       style="-fx-font-size:10px;-fx-text-fill:#86EFAC;"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblDaysLeft" text=""
+                   style="-fx-font-size:12px;-fx-text-fill:#FDE68A;-fx-font-weight:bold;"/>
+            <Button text="✕" onAction="#handleClose"
+                    style="-fx-background-color:transparent;-fx-text-fill:#94A3B8;-fx-font-size:16px;
+                           -fx-font-weight:bold;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:0 0 0 20;"/>
+        </HBox>
+
+        <!-- XP THIS WEEK -->
+        <HBox style="-fx-background-color:#1A3A2A;-fx-padding:12 24;" alignment="CENTER_LEFT" spacing="16">
+            <Label text="🏆" style="-fx-font-size:20px;"/>
+            <VBox spacing="2">
+                <Label fx:id="lblWeeklyXP" text="0 XP earned this week"
+                       style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+                <Label fx:id="lblPerfectWeek" text=""
+                       style="-fx-font-size:11px;-fx-text-fill:#86EFAC;"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblCompletedCount" text="0/3"
+                   style="-fx-font-size:22px;-fx-font-weight:bold;-fx-text-fill:#FDE68A;"/>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
+            <VBox spacing="14" style="-fx-padding:20 20 28 20;-fx-background-color:#F8FAFC;">
+
+                <!-- CHALLENGE CARDS — built dynamically -->
+                <VBox fx:id="challengeContainer" spacing="14"/>
+
+                <!-- PERFECT WEEK CARD -->
+                <VBox fx:id="perfectWeekCard" spacing="10" alignment="CENTER"
+                      style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
+                             -fx-border-color:#FDE68A;-fx-border-radius:16;-fx-border-width:2;
+                             -fx-effect:dropshadow(gaussian,rgba(217,119,6,0.15),12,0,0,3);">
+                    <Label text="🏆  Perfect Week Bonus" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#92400E;"/>
+                    <Label text="Complete ALL 3 challenges to earn the Perfect Week badge + 50 bonus XP!"
+                           wrapText="true" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-text-alignment:center;"
+                           maxWidth="460"/>
+                    <HBox spacing="8" alignment="CENTER">
+                        <Label text="+50 XP" style="-fx-background-color:#FEF3C7;-fx-text-fill:#D97706;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:8;-fx-padding:4 12;"/>
+                        <Label text="🏆 Perfect Week Badge" style="-fx-background-color:#FEF3C7;-fx-text-fill:#D97706;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:8;-fx-padding:4 12;"/>
+                    </HBox>
+                    <ProgressBar fx:id="perfectWeekBar" progress="0" maxWidth="Infinity" prefHeight="10"
+                                 style="-fx-accent:#D97706;-fx-background-color:#FEF3C7;-fx-background-radius:5;"/>
+                    <Label fx:id="lblPerfectWeekProgress" text="0 / 3 challenges completed"
+                           style="-fx-font-size:11px;-fx-text-fill:#94A3B8;"/>
+                </VBox>
+
+                <!-- HOW IT WORKS -->
+                <VBox spacing="8"
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:16;
+                             -fx-border-color:#E2E8F0;-fx-border-radius:14;-fx-border-width:1;">
+                    <Label text="💡  How it works" style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                    <Label text="• Challenges reset every Monday" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                    <Label text="• Complete challenges to earn XP and level up your rank" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                    <Label text="• Some challenges unlock special badges" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                    <Label text="• Complete all 3 for the Perfect Week bonus!" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</StackPane>

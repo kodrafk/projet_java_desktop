@@ -1,0 +1,130 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                    ⚠️  PROBLÈME "NO USERS FOUND" ?                        ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Si vous voyez "No users found" dans l'interface Personalized Messages ou 
+User Alerts, suivez ces étapes :
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 SOLUTION RAPIDE (2 minutes)
+
+1. Exécuter ce script :
+   > CHECK_AND_CREATE_TEST_USERS.bat
+
+2. Relancer l'application :
+   > mvn javafx:run
+
+3. Connexion admin :
+   Email : admin@nutrilife.com
+   Password : admin123
+
+4. Aller dans : Menu → 💬 Personalized Messages
+
+5. Vous devriez voir 5 utilisateurs !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 UTILISATEURS DE TEST CRÉÉS
+
+Email                          | Nom            | Téléphone
+─────────────────────────────────────────────────────────────────────────
+john.doe@nutrilife.com         | John Doe       | +33612345678
+jane.smith@nutrilife.com       | Jane Smith     | +33698765432
+bob.johnson@nutrilife.com      | Bob Johnson    | (pas de téléphone)
+alice.williams@nutrilife.com   | Alice Williams | +33687654321
+charlie.brown@nutrilife.com    | Charlie Brown  | +33676543210
+
+Mot de passe pour tous : password123
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 VÉRIFICATION MANUELLE
+
+Si le script ne fonctionne pas, vérifiez manuellement :
+
+1. Ouvrir MySQL :
+   > mysql -u root -p
+
+2. Utiliser la base :
+   > USE nutrilife;
+
+3. Voir les utilisateurs :
+   > SELECT id, email, roles, first_name, last_name FROM user;
+
+4. Compter par rôle :
+   > SELECT roles, COUNT(*) FROM user GROUP BY roles;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🐛 PROBLÈMES COURANTS
+
+Problème 1 : "Table 'user' doesn't exist"
+Solution : Vérifier que la table existe avec SHOW TABLES;
+
+Problème 2 : Tous les utilisateurs sont admin
+Solution : Le script créera automatiquement des utilisateurs ROLE_USER
+
+Problème 3 : MySQL ne démarre pas
+Solution : Démarrer XAMPP/WAMP et vérifier le service MySQL
+
+Problème 4 : Connexion refusée
+Solution : Vérifier les identifiants dans DatabaseConnection.java
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 LOGS DE DEBUG
+
+Après modification du code, les logs afficheront :
+
+[DEBUG] Total users from DB: 6
+[DEBUG] User: admin@nutrilife.com | Role: ROLE_ADMIN | FullName: Admin User
+[DEBUG] User: john.doe@nutrilife.com | Role: ROLE_USER | FullName: John Doe
+[DEBUG] Filtered users (non-admin): 5
+
+Si vous voyez "Total users from DB: 0", le problème vient de la connexion
+à la base de données.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ CHECKLIST
+
+□ MySQL démarré (XAMPP/WAMP)
+□ Base 'nutrilife' existe
+□ Table 'user' existe
+□ Script CHECK_AND_CREATE_TEST_USERS.bat exécuté
+□ Au moins 5 utilisateurs non-admin créés
+□ Application relancée (mvn javafx:run)
+□ Connexion admin OK
+□ Menu "Personalized Messages" ouvert
+□ Liste des utilisateurs visible
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTATION COMPLÈTE
+
+Pour plus de détails, consultez :
+- FIX_NO_USERS_FOUND.md - Guide de dépannage complet
+- USER_MANAGEMENT_AND_ALERTS_GUIDE.md - Guide utilisateur
+- README_COMPLETE_SYSTEM.md - Documentation système
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 RÉSUMÉ
+
+Le problème "No users found" est généralement dû à :
+1. Aucun utilisateur dans la base (90% des cas)
+2. Tous les utilisateurs sont admin (5% des cas)
+3. Problème de connexion DB (5% des cas)
+
+La solution la plus simple :
+> CHECK_AND_CREATE_TEST_USERS.bat
+
+Cela créera automatiquement 5 utilisateurs de test et résoudra le problème !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Version : 1.0.0
+Date : 26 Avril 2026

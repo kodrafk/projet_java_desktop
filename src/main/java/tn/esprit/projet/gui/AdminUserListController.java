@@ -14,12 +14,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.projet.models.User;
 import tn.esprit.projet.repository.UserRepository;
+import tn.esprit.projet.utils.AlertUtil;
 import tn.esprit.projet.utils.Session;
 import tn.esprit.projet.utils.Toasts;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 public class AdminUserListController {
 
@@ -33,6 +33,7 @@ public class AdminUserListController {
     @FXML private TableColumn<User, String> colCreatedAt;
     @FXML private TableColumn<User, Void>   colActions;
     @FXML private Label                     lblCount;
+    @FXML private Button                    btnAdminProfile;
 
     private final UserRepository repo = new UserRepository();
     private final ObservableList<User> data = FXCollections.observableArrayList();
@@ -47,6 +48,12 @@ public class AdminUserListController {
         setupColumns();
         userTable.setItems(data);
         loadAll();
+        
+        // Setup admin profile button tooltip
+        if (btnAdminProfile != null) {
+            Tooltip tooltip = new Tooltip("View/Edit Admin Profile");
+            Tooltip.install(btnAdminProfile, tooltip);
+        }
 
         // Live search on each keystroke
         searchField.textProperty().addListener((o, a, b) -> {
@@ -102,17 +109,27 @@ public class AdminUserListController {
                 c.getValue().getCreatedAt() != null ? c.getValue().getCreatedAt().format(FMT) : "—"));
 
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button btnView   = btn("View",          "#06B6D4");
-            private final Button btnEdit   = btn("Edit",          "#10B981");
-            private final Button btnToggle = btn("Toggle Active", "#8B5CF6");
-            private final Button btnDelete = btn("Delete",        "#EF4444");
-            private final HBox   box       = new HBox(6, btnView, btnEdit, btnToggle, btnDelete);
+            private final Button btnView     = btn("View",     "#06B6D4");
+            private final Button btnBadges   = btn("Badges",   "#7C3AED");
+            private final Button btnMessage  = btn("Message",  "#F59E0B");
+            private final Button btnProgress = btn("Progress", "#10B981");
+            private final Button btnGallery  = btn("Gallery",  "#EC4899");
+            private final Button btnFaceId   = btn("FaceID",   "#0F2820");
+            private final Button btnEdit     = btn("Edit",     "#3B82F6");
+            private final Button btnToggle   = btn("Toggle",   "#8B5CF6");
+            private final Button btnDelete   = btn("Delete",   "#EF4444");
+            private final HBox   box         = new HBox(4, btnView, btnBadges, btnMessage, btnProgress, btnGallery, btnFaceId, btnEdit, btnToggle, btnDelete);
             {
                 box.setAlignment(Pos.CENTER_LEFT);
-                btnView.setOnAction(e   -> handleView(getTableRow().getItem()));
-                btnEdit.setOnAction(e   -> handleEdit(getTableRow().getItem()));
-                btnToggle.setOnAction(e -> handleToggle(getTableRow().getItem()));
-                btnDelete.setOnAction(e -> handleDelete(getTableRow().getItem()));
+                btnView.setOnAction(e     -> handleView(getTableRow().getItem()));
+                btnBadges.setOnAction(e   -> handleViewBadges(getTableRow().getItem()));
+                btnMessage.setOnAction(e  -> handleSendMessage(getTableRow().getItem()));
+                btnProgress.setOnAction(e -> handleViewProgress(getTableRow().getItem()));
+                btnGallery.setOnAction(e  -> handleViewGallery(getTableRow().getItem()));
+                btnFaceId.setOnAction(e   -> handleFaceId(getTableRow().getItem()));
+                btnEdit.setOnAction(e     -> handleEdit(getTableRow().getItem()));
+                btnToggle.setOnAction(e   -> handleToggle(getTableRow().getItem()));
+                btnDelete.setOnAction(e   -> handleDelete(getTableRow().getItem()));
             }
             @Override protected void updateItem(Void v, boolean empty) {
                 super.updateItem(v, empty);
@@ -133,8 +150,71 @@ public class AdminUserListController {
     }
 
     private void loadAll() {
-        data.setAll(repo.findAllSortedBy(sortCol, sortDir));
+        List<User> users = null;
+
+        // Attempt 1: UserRepository (uses validated connection)
+        try {
+            users = repo.findAllSortedBy(sortCol, sortDir);
+        } catch (Exception e) {
+            System.err.println("[UserManagement] Attempt 1 failed: " + e.getMessage());
+        }
+
+        // Attempt 2: fallback via UserDAO if repo returned empty or threw
+        if (users == null || users.isEmpty()) {
+            try {
+                users = new tn.esprit.projet.dao.UserDAO().findAll();
+                System.out.println("[UserManagement] Fallback UserDAO → " + (users != null ? users.size() : 0) + " users");
+            } catch (Exception e) {
+                System.err.println("[UserManagement] Attempt 2 failed: " + e.getMessage());
+            }
+        }
+
+        // Attempt 3: direct JDBC as last resort
+        if (users == null || users.isEmpty()) {
+            try {
+                users = loadUsersDirectJdbc();
+                System.out.println("[UserManagement] Direct JDBC → " + (users != null ? users.size() : 0) + " users");
+            } catch (Exception e) {
+                System.err.println("[UserManagement] Attempt 3 failed: " + e.getMessage());
+                users = new java.util.ArrayList<>();
+            }
+        }
+
+        System.out.println("[UserManagement] Final user count: " + users.size());
+        data.setAll(users);
         updateCount();
+    }
+
+    /** Last-resort: open a fresh JDBC connection and query directly */
+    private List<User> loadUsersDirectJdbc() throws Exception {
+        List<User> list = new java.util.ArrayList<>();
+        String url = tn.esprit.projet.utils.DatabaseConfig.getUrl();
+        try (java.sql.Connection c = java.sql.DriverManager.getConnection(
+                url,
+                tn.esprit.projet.utils.DatabaseConfig.USER,
+                tn.esprit.projet.utils.DatabaseConfig.PASSWORD);
+             java.sql.PreparedStatement ps = c.prepareStatement("SELECT * FROM user ORDER BY id DESC");
+             java.sql.ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                tn.esprit.projet.models.User u = new tn.esprit.projet.models.User();
+                u.setId(rs.getInt("id"));
+                u.setEmail(rs.getString("email"));
+                u.setFirstName(rs.getString("first_name"));
+                u.setLastName(rs.getString("last_name"));
+                String role = rs.getString("roles");
+                if (role != null && role.startsWith("[")) role = role.replaceAll("[\\[\\]\"\\s]", "");
+                u.setRole(role != null ? role : "ROLE_USER");
+                u.setActive(rs.getBoolean("is_active"));
+                java.sql.Timestamp ca = rs.getTimestamp("created_at");
+                if (ca != null) u.setCreatedAt(ca.toLocalDateTime());
+                u.setPhotoFilename(rs.getString("photo_filename"));
+                u.setWeight(rs.getDouble("weight"));
+                u.setHeight(rs.getDouble("height"));
+                try { u.setPhone(rs.getString("phone")); } catch (Exception ignored) {}
+                list.add(u);
+            }
+        }
+        return list;
     }
 
     private void updateCount() {
@@ -142,6 +222,32 @@ public class AdminUserListController {
     }
 
     @FXML private void handleAddUser() { openForm(null); }
+    
+    @FXML
+    private void handleAdminProfile() {
+        User currentAdmin = Session.getCurrentUser();
+        if (currentAdmin == null) {
+            AlertUtil.show(AlertUtil.Type.ERROR, "Error", "No admin session found. Please log in again.");
+            return;
+        }
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_edit.fxml"));
+            Parent root = loader.load();
+            AdminUserEditController ctrl = loader.getController();
+            ctrl.setUser(currentAdmin);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("My Profile — " + currentAdmin.getFullName());
+            stage.setScene(new Scene(root, 620, 680));
+            stage.setResizable(false);
+            stage.showAndWait();
+            loadAll();
+        } catch (Exception e) { 
+            e.printStackTrace();
+            AlertUtil.show(AlertUtil.Type.ERROR, "Error", "Could not open profile editor: " + e.getMessage());
+        }
+    }
 
     private void handleView(User u) {
         if (u == null) return;
@@ -159,17 +265,100 @@ public class AdminUserListController {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
+    private void handleViewBadges(User u) {
+        if (u == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_badges.fxml"));
+            Parent root = loader.load();
+            AdminUserBadgesController ctrl = loader.getController();
+            ctrl.setUser(u);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Badges — " + u.getFullName());
+            stage.setScene(new Scene(root, 900, 700));
+            stage.setResizable(true);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void handleSendMessage(User u) {
+        if (u == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_messages.fxml"));
+            Parent root = loader.load();
+            AdminUserMessagesController ctrl = loader.getController();
+            ctrl.setUser(u);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Messages — " + u.getFullName());
+            stage.setScene(new Scene(root, 800, 650));
+            stage.setResizable(true);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void handleViewProgress(User u) {
+        if (u == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_progress.fxml"));
+            Parent root = loader.load();
+            AdminUserProgressController ctrl = loader.getController();
+            ctrl.setUser(u);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Progress — " + u.getFullName());
+            stage.setScene(new Scene(root, 900, 700));
+            stage.setResizable(true);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void handleViewGallery(User u) {
+        if (u == null) return;
+        try {
+            // Always fetch fresh from DB so gallery_access_enabled is current
+            User fresh = new tn.esprit.projet.repository.UserRepository().findById(u.getId());
+            if (fresh == null) fresh = u;
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_user_gallery.fxml"));
+            Parent root = loader.load();
+            AdminUserGalleryController ctrl = loader.getController();
+            ctrl.setUser(fresh);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Gallery — " + fresh.getFullName());
+            stage.setScene(new Scene(root, 1000, 700));
+            stage.setResizable(true);
+            stage.showAndWait();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void handleFaceId(User u) {
+        if (u == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_face_id.fxml"));
+            Parent root = loader.load();
+            AdminFaceIdController ctrl = loader.getController();
+            ctrl.setTargetUser(u);
+            ctrl.setOnChanged(this::loadAll);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(userTable.getScene().getWindow());
+            stage.setTitle("Face ID — " + u.getFullName());
+            stage.setScene(new Scene(root, 480, 420));
+            stage.setResizable(false);
+            stage.showAndWait();
+            loadAll();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
     private void handleEdit(User u) { if (u != null) openForm(u); }
 
     private void handleToggle(User u) {
         if (u == null) return;
         boolean newState = !u.isActive();
-        String msg = (newState ? "Activate" : "Deactivate") + " this user?";
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(newState ? "Activate User" : "Deactivate User");
-        alert.setContentText(msg);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        String msg = (newState ? "Activate" : "Deactivate") + " " + u.getFullName() + "?";
+        boolean confirmed = AlertUtil.confirm(newState ? "Activate User" : "Deactivate User", msg);
+        if (confirmed) {
             repo.setActive(u.getId(), newState);
             loadAll();
             Stage owner = (Stage) userTable.getScene().getWindow();
@@ -181,17 +370,12 @@ public class AdminUserListController {
     private void handleDelete(User u) {
         if (u == null) return;
         if (Session.getCurrentUser() != null && Session.getCurrentUser().getId() == u.getId()) {
-            Alert err = new Alert(Alert.AlertType.ERROR);
-            err.setTitle("Not Allowed");
-            err.setContentText("You cannot delete your own account!");
-            err.showAndWait();
+            AlertUtil.show(AlertUtil.Type.ERROR, "Not Allowed", "You cannot delete your own account!");
             return;
         }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete User");
-        alert.setContentText("Are you sure you want to delete " + u.getFullName() + "? This action cannot be undone.");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        boolean confirmed = AlertUtil.confirm("Delete User",
+                "Are you sure you want to delete " + u.getFullName() + "? This action cannot be undone.");
+        if (confirmed) {
             repo.delete(u.getId());
             loadAll();
             Stage owner = (Stage) userTable.getScene().getWindow();
