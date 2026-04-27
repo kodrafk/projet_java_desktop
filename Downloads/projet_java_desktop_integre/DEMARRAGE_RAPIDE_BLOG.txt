@@ -1,0 +1,222 @@
+═══════════════════════════════════════════════════════════════════
+   🚀 DÉMARRAGE RAPIDE - BLOG CORRIGÉ
+═══════════════════════════════════════════════════════════════════
+
+✅ LE PROBLÈME "PAGE NOT FOUND" EST RÉSOLU !
+
+Les fichiers FXML manquants ont été ajoutés et le blog est maintenant 
+fonctionnel.
+
+═══════════════════════════════════════════════════════════════════
+📋 ÉTAPES POUR DÉMARRER
+═══════════════════════════════════════════════════════════════════
+
+ÉTAPE 1: CRÉER LES TABLES DE BASE DE DONNÉES
+─────────────────────────────────────────────────────────────────
+
+Ouvrez votre client MySQL (phpMyAdmin, MySQL Workbench, etc.) et 
+exécutez ce SQL:
+
+CREATE TABLE publication (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titre VARCHAR(100) NOT NULL,
+    contenu TEXT NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    author_name VARCHAR(100),
+    author_avatar VARCHAR(255),
+    is_admin BOOLEAN DEFAULT FALSE,
+    image VARCHAR(255),
+    view_count INT DEFAULT 0,
+    share_count INT DEFAULT 0,
+    visibility VARCHAR(20) DEFAULT 'public',
+    scheduled_at TIMESTAMP NULL,
+    shared_from_id INT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
+CREATE TABLE publication_comment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    contenu TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    author_name VARCHAR(100),
+    author_avatar VARCHAR(255),
+    is_admin BOOLEAN DEFAULT FALSE,
+    publication_id INT NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
+CREATE TABLE publication_like (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    publication_id INT NOT NULL,
+    user_id INT NOT NULL,
+    is_like BOOLEAN NOT NULL,
+    FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_publication (publication_id, user_id)
+);
+
+CREATE TABLE publication_report (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    publication_id INT NOT NULL,
+    user_id INT NOT NULL,
+    reason VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_report (publication_id, user_id)
+);
+
+ÉTAPE 2: RECOMPILER L'APPLICATION
+─────────────────────────────────────────────────────────────────
+
+Option A - Avec le script (RECOMMANDÉ):
+  Double-cliquez sur: REBUILD_AND_RUN.bat
+
+Option B - Depuis votre IDE:
+  1. Ouvrez le projet dans IntelliJ IDEA ou Eclipse
+  2. Cliquez sur "Build" > "Rebuild Project"
+  3. Lancez l'application (Run)
+
+ÉTAPE 3: TESTER LE BLOG
+─────────────────────────────────────────────────────────────────
+
+1. Lancez l'application
+2. Connectez-vous avec votre compte
+3. Cliquez sur "Blog" dans le menu de navigation
+4. Vous verrez l'interface du blog!
+
+═══════════════════════════════════════════════════════════════════
+🎯 UTILISATION DU BLOG
+═══════════════════════════════════════════════════════════════════
+
+CRÉER UNE PUBLICATION:
+  1. Remplissez le titre (5-100 caractères)
+  2. Écrivez le contenu (minimum 10 caractères)
+  3. Cliquez sur "🤖" pour générer un titre automatique (optionnel)
+  4. Cliquez sur "✨ Générer Hashtags" pour des hashtags (optionnel)
+  5. Ajoutez une image (optionnel)
+  6. Cliquez sur "Publier"
+
+INTERAGIR:
+  • Liker/Disliker: Cliquez sur "J'aime" ou "Je n'aime pas"
+  • Commenter: Écrivez dans le champ et cliquez "Envoyer"
+  • Modifier: Cliquez sur "Modifier" (vos publications uniquement)
+  • Supprimer: Cliquez sur "Supprimer" (vos publications uniquement)
+  • Signaler: Cliquez sur "🚩 Signaler" pour signaler un contenu
+
+RECHERCHER ET TRIER:
+  • Recherche: Tapez dans la barre de recherche
+  • Tri: Sélectionnez "Plus récentes", "Plus anciennes" ou "Plus populaires"
+
+═══════════════════════════════════════════════════════════════════
+🤖 FONCTIONNALITÉS IA
+═══════════════════════════════════════════════════════════════════
+
+GÉNÉRATION DE TITRES:
+  • Écrivez votre contenu
+  • Cliquez sur le bouton "🤖"
+  • Un titre accrocheur sera généré automatiquement
+
+GÉNÉRATION DE HASHTAGS:
+  • Écrivez votre contenu
+  • Cliquez sur "✨ Générer Hashtags"
+  • 5 hashtags pertinents seront ajoutés automatiquement
+
+═══════════════════════════════════════════════════════════════════
+🔒 SÉCURITÉ
+═══════════════════════════════════════════════════════════════════
+
+FILTRAGE AUTOMATIQUE:
+  • Détection de contenu inapproprié automatique
+  • Bloque les publications avec des mots inappropriés
+  • Utilise l'API profanity.dev (gratuite)
+
+SYSTÈME DE SIGNALEMENT:
+  • Les utilisateurs peuvent signaler les publications
+  • Masquage automatique après 2 signalements
+  • Les admins reçoivent des notifications
+  • Les admins peuvent approuver ou supprimer
+
+═══════════════════════════════════════════════════════════════════
+👨‍💼 POUR LES ADMINISTRATEURS
+═══════════════════════════════════════════════════════════════════
+
+ACCÈS AU PANEL ADMIN:
+  1. Connectez-vous avec un compte admin
+  2. Cliquez sur "📝 Blogs" dans le panel admin
+  3. Vous verrez toutes les publications et commentaires
+
+MODÉRATION:
+  • Supprimer des publications
+  • Supprimer des commentaires
+  • Approuver des publications signalées
+  • Vue d'ensemble complète
+
+═══════════════════════════════════════════════════════════════════
+❓ PROBLÈMES COURANTS
+═══════════════════════════════════════════════════════════════════
+
+PROBLÈME: "Page not found"
+SOLUTION: Recompilez l'application avec REBUILD_AND_RUN.bat
+
+PROBLÈME: Erreur de base de données
+SOLUTION: Vérifiez que les tables sont créées (voir ÉTAPE 1)
+
+PROBLÈME: Erreur de compilation
+SOLUTION: Vérifiez que les dépendances sont installées:
+  - ControlsFX 11.1.2
+  - Jackson Databind 2.15.2
+
+PROBLÈME: L'IA ne fonctionne pas
+SOLUTION: La clé API est déjà configurée, vérifiez votre connexion Internet
+
+═══════════════════════════════════════════════════════════════════
+📦 FICHIERS IMPORTANTS
+═══════════════════════════════════════════════════════════════════
+
+✓ src/main/resources/fxml/blog_front.fxml - Interface utilisateur
+✓ src/main/resources/fxml/blog_admin.fxml - Interface admin
+✓ src/main/java/tn/esprit/projet/gui/BlogFrontController.java
+✓ src/main/java/tn/esprit/projet/gui/BlogAdminController.java
+✓ src/main/java/tn/esprit/projet/services/PublicationService.java
+✓ src/main/java/tn/esprit/projet/utils/AIService.java
+✓ src/main/java/tn/esprit/projet/utils/BadWordsFilter.java
+
+═══════════════════════════════════════════════════════════════════
+✅ VÉRIFICATION FINALE
+═══════════════════════════════════════════════════════════════════
+
+Avant de lancer l'application, vérifiez:
+  ☐ Les tables de base de données sont créées
+  ☐ L'application est recompilée
+  ☐ Vous avez un compte utilisateur pour vous connecter
+
+═══════════════════════════════════════════════════════════════════
+🎉 TOUT EST PRÊT !
+═══════════════════════════════════════════════════════════════════
+
+Le blog est maintenant complètement fonctionnel avec:
+  ✓ Interface moderne et professionnelle
+  ✓ Intelligence artificielle intégrée
+  ✓ Système de modération complet
+  ✓ Filtrage de contenu automatique
+  ✓ Notifications en temps réel
+  ✓ Recherche et tri avancés
+
+Bon blogging! 🚀
+
+═══════════════════════════════════════════════════════════════════
+📞 BESOIN D'AIDE ?
+═══════════════════════════════════════════════════════════════════
+
+Consultez les fichiers de documentation:
+  • INTEGRATION_BLOG_COMPLETE.md - Documentation complète
+  • GUIDE_BLOG_RAPIDE.txt - Guide rapide
+  • FIX_BLOG_PAGE_NOT_FOUND.md - Guide de résolution
+
+═══════════════════════════════════════════════════════════════════
