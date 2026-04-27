@@ -189,7 +189,7 @@ public class MainLayoutController {
     private void handleBlog(ActionEvent event) {
         resetButtonStyles();
         if (btnBlog != null) btnBlog.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Blog Page");
+        loadPage("/fxml/blog_front.fxml");
     }
 
     @FXML

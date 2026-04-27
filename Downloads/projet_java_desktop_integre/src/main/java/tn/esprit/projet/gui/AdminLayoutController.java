@@ -216,7 +216,7 @@ public class AdminLayoutController {
     private void handleBlogs(ActionEvent event) {
         resetSidebarStyles();
         if (btnBlogs != null) btnBlogs.setStyle(ACTIVE_BUTTON_STYLE);
-        showPlaceholder("Blogs Management");
+        loadPage("/fxml/blog_admin.fxml");
     }
 
     @FXML
