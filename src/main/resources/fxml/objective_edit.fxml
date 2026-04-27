@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ObjectiveEditController"
+      style="-fx-background-color: #F6FBF7;" spacing="0">
+
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label text="Edit Objective"
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label fx:id="lblHeaderTitle" text=""
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Back" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px; -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <VBox spacing="20" style="-fx-background-color: #F6FBF7;">
+            <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
+
+            <!-- Current Plan Card -->
+            <VBox style="-fx-background-color: #163A2E; -fx-background-radius: 14; -fx-padding: 24;" spacing="12">
+                <Label text="Current Plan" style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8;"/>
+                <Label fx:id="lblCurrentTitle" text=""
+                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <HBox spacing="12">
+                    <Label fx:id="lblCurrentCal" text=""
+                           style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 6 12; -fx-font-size: 12px;"/>
+                    <Label fx:id="lblCurrentProtein" text=""
+                           style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 6 12; -fx-font-size: 12px;"/>
+                    <Label fx:id="lblCurrentCarbs" text=""
+                           style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 6 12; -fx-font-size: 12px;"/>
+                    <Label fx:id="lblCurrentFats" text=""
+                           style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 6 12; -fx-font-size: 12px;"/>
+                </HBox>
+            </VBox>
+
+            <!-- Edit Options -->
+            <Label text="What do you want to change?"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+            <HBox spacing="16">
+                <VBox prefWidth="300" spacing="12" onMouseClicked="#handleChangeGoal"
+                      style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 24; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-cursor: hand;">
+                    <Label text="🔄 Change Goal &amp; Plan"
+                           style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Switch to a different goal or change the intensity level"
+                           style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-wrap-text: true;"/>
+                    <Label text="→" style="-fx-font-size: 18px; -fx-text-fill: #2E7D5A;"/>
+                </VBox>
+                <VBox prefWidth="300" spacing="12" onMouseClicked="#handleChangeSettings"
+                      style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 24; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-cursor: hand;">
+                    <Label text="📅 Change Date &amp; Settings"
+                           style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Change the start date or toggle auto-activation"
+                           style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-wrap-text: true;"/>
+                    <Label text="→" style="-fx-font-size: 18px; -fx-text-fill: #2E7D5A;"/>
+                </VBox>
+                <VBox prefWidth="300" spacing="12" onMouseClicked="#handleCustomPlan"
+                      style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 24; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-cursor: hand;">
+                    <Label text="🛠 Custom Plan"
+                           style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Set your own calories, protein, carbs, and fats manually"
+                           style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-wrap-text: true;"/>
+                    <Label text="→" style="-fx-font-size: 18px; -fx-text-fill: #2E7D5A;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Goals Grid (shown when Change Goal is clicked) -->
+            <VBox fx:id="goalsSection" managed="false" visible="false" spacing="16">
+                <Label text="Pick a new goal"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <GridPane fx:id="goalsGrid" hgap="14" vgap="14"/>
+            </VBox>
+
+            <!-- Plans Grid (shown after goal selected) -->
+            <VBox fx:id="plansSection" managed="false" visible="false" spacing="16">
+                <Label fx:id="lblSelectedGoal" text=""
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <HBox fx:id="plansContainer" spacing="14"/>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

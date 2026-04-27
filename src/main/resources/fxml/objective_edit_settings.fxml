@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ObjectiveEditSettingsController"
+      style="-fx-background-color: #F6FBF7;" spacing="0">
+
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label text="Edit Settings"
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label text="Change when this objective starts"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Back" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px; -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <StackPane style="-fx-background-color: #F6FBF7;">
+        <VBox spacing="20" maxWidth="620" style="-fx-background-color: #F6FBF7;" alignment="CENTER">
+            <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
+
+            <!-- Plan Tag -->
+            <Label fx:id="lblPlanTag" text=""
+                   style="-fx-background-color: #E8F5E9; -fx-text-fill: #2E7D5A; -fx-background-radius: 8; -fx-padding: 8 16; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+
+            <!-- Settings Card -->
+            <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 32; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="20">
+
+                <!-- Start Date -->
+                <VBox spacing="8">
+                    <Label text="Start Date"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                    <DatePicker fx:id="startDatePicker" prefWidth="300"
+                                style="-fx-font-size: 13px;"/>
+                    <Label fx:id="errDate" text="" visible="false" managed="false"
+                           style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                    <Label text="The 7-day plan starts from this date."
+                           style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                </VBox>
+
+                <!-- Quick Date Buttons -->
+                <HBox spacing="10">
+                    <Button text="Today" onAction="#setToday"
+                            style="-fx-background-color: #F1F5F9; -fx-text-fill: #374151; -fx-background-radius: 8; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 8 14;"/>
+                    <Button text="Tomorrow" onAction="#setTomorrow"
+                            style="-fx-background-color: #F1F5F9; -fx-text-fill: #374151; -fx-background-radius: 8; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 8 14;"/>
+                    <Button text="Next Monday" onAction="#setNextMonday"
+                            style="-fx-background-color: #F1F5F9; -fx-text-fill: #374151; -fx-background-radius: 8; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 8 14;"/>
+                    <Button text="In 1 Week" onAction="#setNextWeek"
+                            style="-fx-background-color: #F1F5F9; -fx-text-fill: #374151; -fx-background-radius: 8; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 8 14;"/>
+                </HBox>
+
+                <!-- Auto-activate -->
+                <HBox alignment="CENTER_LEFT" spacing="12"
+                      style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 16; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+                    <CheckBox fx:id="autoActivateCheck"/>
+                    <VBox spacing="2">
+                        <Label text="⚡ Auto-activate on start date"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        <Label text="Automatically starts when the date arrives"
+                               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Save Button -->
+                <Button text="💾 Save Settings" onAction="#handleSave"
+                        prefWidth="9999" prefHeight="48"
+                        style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+            </VBox>
+
+        </VBox>
+        </StackPane>
+    </ScrollPane>
+</VBox>

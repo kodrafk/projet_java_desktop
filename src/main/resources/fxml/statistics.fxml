@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+            style="-fx-background-color: #F8FAFB; -fx-background: #F8FAFB; -fx-border-color: transparent;"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.StatisticsController">
+
+    <VBox spacing="20" style="-fx-background-color: #F8FAFB; -fx-padding: 24;">
+
+        <!-- ── KPI Cards Row ── -->
+        <HBox spacing="16">
+            <!-- Total Users -->
+            <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E8EEF2; -fx-border-radius: 14; -fx-padding: 18;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <StackPane prefWidth="36" prefHeight="36"
+                               style="-fx-background-color: #DCFCE7; -fx-background-radius: 10;">
+                        <Label text="👥" style="-fx-font-size: 16px;"/>
+                    </StackPane>
+                    <Label text="Total Users" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                </HBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Label fx:id="kpiTotal" text="0"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            </VBox>
+
+            <!-- Active -->
+            <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E8EEF2; -fx-border-radius: 14; -fx-padding: 18;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <StackPane prefWidth="36" prefHeight="36"
+                               style="-fx-background-color: #DCFCE7; -fx-background-radius: 10;">
+                        <Label text="✅" style="-fx-font-size: 16px;"/>
+                    </StackPane>
+                    <Label text="Active Users" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                </HBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Label fx:id="kpiActive" text="0"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #16A34A;"/>
+            </VBox>
+
+            <!-- Inactive -->
+            <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E8EEF2; -fx-border-radius: 14; -fx-padding: 18;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <StackPane prefWidth="36" prefHeight="36"
+                               style="-fx-background-color: #FEE2E2; -fx-background-radius: 10;">
+                        <Label text="🚫" style="-fx-font-size: 16px;"/>
+                    </StackPane>
+                    <Label text="Inactive Users" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                </HBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Label fx:id="kpiInactive" text="0"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
+            </VBox>
+
+            <!-- Admins -->
+            <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E8EEF2; -fx-border-radius: 14; -fx-padding: 18;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <StackPane prefWidth="36" prefHeight="36"
+                               style="-fx-background-color: #EDE9FE; -fx-background-radius: 10;">
+                        <Label text="🛡" style="-fx-font-size: 16px;"/>
+                    </StackPane>
+                    <Label text="Admins" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                </HBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Label fx:id="kpiAdmins" text="0"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #7C3AED;"/>
+            </VBox>
+
+            <!-- New this month -->
+            <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E8EEF2; -fx-border-radius: 14; -fx-padding: 18;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <StackPane prefWidth="36" prefHeight="36"
+                               style="-fx-background-color: #DBEAFE; -fx-background-radius: 10;">
+                        <Label text="📅" style="-fx-font-size: 16px;"/>
+                    </StackPane>
+                    <Label text="New This Month" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                </HBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Label fx:id="kpiNewMonth" text="0"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #0284C7;"/>
+            </VBox>
+        </HBox>
+
+        <!-- ── Charts Row ── -->
+        <HBox spacing="16">
+
+            <!-- Role Distribution (bar chart) -->
+            <VBox spacing="14" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E8EEF2; -fx-border-radius: 14; -fx-padding: 20;">
+                <Label text="Role Distribution"
+                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Label text="Users vs Admins"
+                       style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+
+                <!-- ROLE_USER bar -->
+                <VBox spacing="4">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="ROLE_USER" prefWidth="90"
+                               style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                        <StackPane HBox.hgrow="ALWAYS" prefHeight="28">
+                            <StackPane fx:id="barUser" prefHeight="28"
+                                       style="-fx-background-color: #16A34A; -fx-background-radius: 6;"
+                                       StackPane.alignment="CENTER_LEFT"/>
+                        </StackPane>
+                        <Label fx:id="lblBarUser" text="0"
+                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-min-width: 30;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- ROLE_ADMIN bar -->
+                <VBox spacing="4">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="ROLE_ADMIN" prefWidth="90"
+                               style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                        <StackPane HBox.hgrow="ALWAYS" prefHeight="28">
+                            <StackPane fx:id="barAdmin" prefHeight="28"
+                                       style="-fx-background-color: #7C3AED; -fx-background-radius: 6;"
+                                       StackPane.alignment="CENTER_LEFT"/>
+                        </StackPane>
+                        <Label fx:id="lblBarAdmin" text="0"
+                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-min-width: 30;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Active/Inactive bar -->
+                <VBox spacing="4">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="Active" prefWidth="90"
+                               style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                        <StackPane HBox.hgrow="ALWAYS" prefHeight="28">
+                            <StackPane fx:id="barActive" prefHeight="28"
+                                       style="-fx-background-color: #0284C7; -fx-background-radius: 6;"
+                                       StackPane.alignment="CENTER_LEFT"/>
+                        </StackPane>
+                        <Label fx:id="lblBarActive" text="0"
+                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-min-width: 30;"/>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="4">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="Inactive" prefWidth="90"
+                               style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                        <StackPane HBox.hgrow="ALWAYS" prefHeight="28">
+                            <StackPane fx:id="barInactive" prefHeight="28"
+                                       style="-fx-background-color: #EF4444; -fx-background-radius: 6;"
+                                       StackPane.alignment="CENTER_LEFT"/>
+                        </StackPane>
+                        <Label fx:id="lblBarInactive" text="0"
+                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-min-width: 30;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- Recent Registrations -->
+            <VBox spacing="12" prefWidth="340"
+                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E8EEF2; -fx-border-radius: 14; -fx-padding: 20;">
+                <Label text="Recent Registrations"
+                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Label text="Last 5 users registered"
+                       style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                <VBox fx:id="recentList" spacing="8"/>
+            </VBox>
+        </HBox>
+
+        <!-- ── Account Status Summary ── -->
+        <VBox spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E8EEF2; -fx-border-radius: 14; -fx-padding: 20;">
+            <Label text="Account Status Overview"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+            <HBox spacing="0" prefHeight="32" style="-fx-background-radius: 8; -fx-border-radius: 8;">
+                <StackPane fx:id="progressActive" prefHeight="32"
+                           style="-fx-background-color: #16A34A; -fx-background-radius: 8 0 0 8;">
+                    <Label fx:id="lblProgressActive" text=""
+                           style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                </StackPane>
+                <StackPane fx:id="progressInactive" prefHeight="32"
+                           style="-fx-background-color: #EF4444; -fx-background-radius: 0 8 8 0;">
+                    <Label fx:id="lblProgressInactive" text=""
+                           style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                </StackPane>
+            </HBox>
+
+            <HBox spacing="20">
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <StackPane prefWidth="12" prefHeight="12"
+                               style="-fx-background-color: #16A34A; -fx-background-radius: 3;"/>
+                    <Label fx:id="lblLegendActive" text="Active (0%)"
+                           style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                </HBox>
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <StackPane prefWidth="12" prefHeight="12"
+                               style="-fx-background-color: #EF4444; -fx-background-radius: 3;"/>
+                    <Label fx:id="lblLegendInactive" text="Inactive (0%)"
+                           style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                </HBox>
+            </HBox>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

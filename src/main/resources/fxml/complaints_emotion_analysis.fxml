@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" style="-fx-background-color: #F0F4F8; -fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ComplaintsEmotionAnalysisController">
+
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <VBox spacing="5">
+            <Label text="Emotion-Based Complaint Prioritization" 
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            <Label text="Analyze and prioritize complaints based on customer emotion" 
+                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleAnalyzeAllComplaints" text="🤖 Analyze All" 
+                style="-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 16; -fx-font-weight: bold;"/>
+        <Button onAction="#handleRefresh" text="Refresh" 
+                style="-fx-background-color: #E2E8F0; -fx-text-fill: #475569; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <!-- Status Label -->
+    <Label fx:id="lblAnalysisStatus" text="Loading complaints..." 
+            style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+
+    <!-- Filter and Sort Section -->
+    <HBox spacing="15" alignment="CENTER_LEFT" 
+          style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);">
+        
+        <Label text="Search:" style="-fx-font-size: 12px; -fx-text-fill: #475569; -fx-font-weight: bold;"/>
+        <TextField fx:id="fldSearch" promptText="Search by title, emotion..." 
+                   style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;" 
+                   prefWidth="250"/>
+        
+        <Label text="Filter Urgency:" style="-fx-font-size: 12px; -fx-text-fill: #475569; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="cmbFilterUrgency" 
+                  style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6;"
+                  prefWidth="200"/>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <Label text="Sort By:" style="-fx-font-size: 12px; -fx-text-fill: #475569; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="cmbSortBy" 
+                  style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6;"
+                  prefWidth="200"/>
+    </HBox>
+
+    <!-- Complaints Cards Container -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" 
+                style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0;">
+        <content>
+            <FlowPane fx:id="cardsContainer" hgap="15" vgap="15" 
+                      style="-fx-padding: 5; -fx-background-color: transparent;"/>
+        </content>
+    </ScrollPane>
+
+    <!-- Legend -->
+    <HBox spacing="20" alignment="CENTER_LEFT"
+          style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);">
+        
+        <Label text="Urgency Levels:" style="-fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+        
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="🔴 CRITICAL (5)" style="-fx-text-fill: #EF4444; -fx-font-weight: bold;"/>
+            <Label text="Immediate attention required" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </HBox>
+        
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="🔴 URGENT (4)" style="-fx-text-fill: #EF4444; -fx-font-weight: bold;"/>
+            <Label text="High priority" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </HBox>
+        
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="🟠 HIGH (3)" style="-fx-text-fill: #F97316; -fx-font-weight: bold;"/>
+            <Label text="Should be addressed soon" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </HBox>
+        
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="🟡 MEDIUM (2)" style="-fx-text-fill: #EAB308; -fx-font-weight: bold;"/>
+            <Label text="Standard priority" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </HBox>
+        
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="🟢 LOW (1)" style="-fx-text-fill: #10B981; -fx-font-weight: bold;"/>
+            <Label text="Can wait" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </HBox>
+    </HBox>
+
+</VBox>

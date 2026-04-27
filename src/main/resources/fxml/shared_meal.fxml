@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.SharedMealController"
+      style="-fx-background-color: #F6FBF7;" spacing="0" alignment="CENTER">
+
+    <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+    <VBox maxWidth="480" spacing="0"
+          style="-fx-background-color: white; -fx-background-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 32, 0, 0, 8);">
+
+        <!-- Accent bar -->
+        <Region fx:id="accentBar" prefHeight="6" prefWidth="9999"
+                style="-fx-background-color: #eb7147; -fx-background-radius: 16 16 0 0;"/>
+
+        <VBox spacing="20" style="-fx-padding: 32;">
+
+            <!-- Badge -->
+            <Label text="🍽 Meal Log"
+                   style="-fx-background-color: #E8F5E9; -fx-text-fill: #2E7D5A; -fx-background-radius: 20; -fx-padding: 4 12; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+
+            <!-- Title & Date -->
+            <VBox spacing="4">
+                <Label fx:id="lblMealTitle" text=""
+                       style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;"/>
+                <Label fx:id="lblMealDate" text=""
+                       style="-fx-font-size: 13px; -fx-text-fill: #888;"/>
+            </VBox>
+
+            <!-- Macros -->
+            <HBox spacing="12">
+                <VBox alignment="CENTER" spacing="4" prefWidth="100"
+                      style="-fx-background-color: #F5F5F5; -fx-background-radius: 12; -fx-padding: 14 8;">
+                    <Label fx:id="lblCalories" text="—"
+                           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #eb7147;"/>
+                    <Label text="Calories" style="-fx-font-size: 10px; -fx-text-fill: #888; -fx-font-weight: bold;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4" prefWidth="100"
+                      style="-fx-background-color: #F5F5F5; -fx-background-radius: 12; -fx-padding: 14 8;">
+                    <Label fx:id="lblProtein" text="—"
+                           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2E7D5A;"/>
+                    <Label text="Protein" style="-fx-font-size: 10px; -fx-text-fill: #888; -fx-font-weight: bold;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4" prefWidth="100"
+                      style="-fx-background-color: #F5F5F5; -fx-background-radius: 12; -fx-padding: 14 8;">
+                    <Label fx:id="lblCarbs" text="—"
+                           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Carbs" style="-fx-font-size: 10px; -fx-text-fill: #888; -fx-font-weight: bold;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4" prefWidth="100"
+                      style="-fx-background-color: #F5F5F5; -fx-background-radius: 12; -fx-padding: 14 8;">
+                    <Label fx:id="lblFats" text="—"
+                           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Fats" style="-fx-font-size: 10px; -fx-text-fill: #888; -fx-font-weight: bold;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Foods -->
+            <VBox fx:id="foodsSection" spacing="8">
+                <Label text="WHAT I ATE"
+                       style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #888;"/>
+                <FlowPane fx:id="foodTagsContainer" hgap="8" vgap="8"/>
+            </VBox>
+
+            <!-- CTA -->
+            <Button text="Start tracking with Nutrizen →" onAction="#handleBack"
+                    prefWidth="9999" prefHeight="44"
+                    style="-fx-background-color: #eb7147; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        </VBox>
+
+        <!-- Branding -->
+        <HBox alignment="CENTER" style="-fx-padding: 14 32; -fx-border-color: #E0E0E0 transparent transparent transparent; -fx-border-width: 1 0 0 0;">
+            <Label text="Tracked with Nutrizen"
+                   style="-fx-font-size: 12px; -fx-text-fill: #888;"/>
+        </HBox>
+    </VBox>
+</VBox>
