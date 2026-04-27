@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="24" style="-fx-background-color: #F6FBF7;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.KitchenRankController">
+
+    <padding>
+        <Insets top="28" right="32" bottom="30" left="32"/>
+    </padding>
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <VBox spacing="4">
+            <Label text="🏅 Kitchen Rank"
+                   style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            <Label text="Track your progress and unlock badges by leveling up"
+                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+        </VBox>
+    </HBox>
+
+    <!-- CURRENT LEVEL CARD -->
+    <VBox spacing="14"
+          style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #2ECC71; -fx-border-radius: 14; -fx-border-width: 2; -fx-padding: 24;">
+
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <StackPane prefWidth="64" prefHeight="64"
+                       style="-fx-background-color: #E8F5EE; -fx-background-radius: 32;">
+                <Label fx:id="lblLevelIcon" text="🌱"
+                       style="-fx-font-size: 32px;"/>
+            </StackPane>
+
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblCurrentLevel" text="Level 1 — Beginner"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Label fx:id="lblLevelDescription" text="You're just getting started!"
+                       style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="2">
+                <Label fx:id="lblTotalPoints" text="0 pts"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #27AE60;"/>
+                <Label text="Total Points"
+                       style="-fx-font-size: 10px; -fx-text-fill: #94A3B8;"/>
+            </VBox>
+        </HBox>
+
+        <Separator/>
+
+        <!-- PROGRESS TO NEXT LEVEL -->
+        <VBox spacing="6"
+              style="-fx-background-color: #F0FFF4; -fx-background-radius: 12; -fx-padding: 14; -fx-border-color: #A7F3D0; -fx-border-radius: 12;">
+            <HBox alignment="CENTER_LEFT">
+                <Label fx:id="lblProgressLabel" text="Progress to next level"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblProgressPoints" text="0 / 100 pts"
+                       style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+            </HBox>
+            <ProgressBar fx:id="progressLevel"
+                         progress="0"
+                         maxWidth="Infinity"
+                         prefHeight="14"
+                         style="-fx-accent: #2ECC71;"/>
+            <Label fx:id="lblNextLevel" text="Next: 🌿 Ethical Cook"
+                   style="-fx-font-size: 11px; -fx-text-fill: #27AE60;"/>
+        </VBox>
+    </VBox>
+
+    <!-- ALL LEVELS -->
+    <VBox spacing="16">
+
+        <!-- LEVEL 1 -->
+        <VBox fx:id="level1Box" spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 20;">
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🌱" style="-fx-font-size: 22px;"/>
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Level 1 — Beginner"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="0 - 99 points"
+                           style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                </VBox>
+                <Label fx:id="lblLevel1Status" text="🔓 Current"
+                       style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #27AE60; -fx-background-color: #DCFCE7; -fx-background-radius: 6; -fx-padding: 3 8;"/>
+            </HBox>
+
+            <GridPane fx:id="gridLevel1" hgap="12" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                </columnConstraints>
+            </GridPane>
+        </VBox>
+
+        <!-- LEVEL 2 -->
+        <VBox fx:id="level2Box" spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 20;">
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🌿" style="-fx-font-size: 22px;"/>
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Level 2 — Ethical Cook"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="100 - 499 points"
+                           style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                </VBox>
+                <Label fx:id="lblLevel2Status" text="🔒 Locked"
+                       style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B; -fx-background-color: #F1F5F9; -fx-background-radius: 6; -fx-padding: 3 8;"/>
+            </HBox>
+
+            <GridPane fx:id="gridLevel2" hgap="12" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                </columnConstraints>
+            </GridPane>
+        </VBox>
+
+        <!-- LEVEL 3 -->
+        <VBox fx:id="level3Box" spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 20;">
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="👑" style="-fx-font-size: 22px;"/>
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Level 3 — Ethical Legend"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="500+ points"
+                           style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                </VBox>
+                <Label fx:id="lblLevel3Status" text="🔒 Locked"
+                       style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B; -fx-background-color: #F1F5F9; -fx-background-radius: 6; -fx-padding: 3 8;"/>
+            </HBox>
+
+            <GridPane fx:id="gridLevel3" hgap="12" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                </columnConstraints>
+            </GridPane>
+        </VBox>
+
+    </VBox>
+
+</VBox>

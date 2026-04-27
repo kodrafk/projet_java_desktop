@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.DropShadow?>
+
+<ScrollPane fitToWidth="true"
+            hbarPolicy="NEVER"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.AIRecipeFormController"
+            style="-fx-background-color: #F0F4F8;
+                   -fx-background: #F0F4F8;
+                   -fx-border-color: transparent;">
+
+    <VBox spacing="0" style="-fx-background-color: #F0F4F8;">
+
+        <!-- HEADER -->
+        <VBox alignment="CENTER" spacing="6"
+              style="-fx-background-color: linear-gradient(to bottom right, #1A5C40, #2E7D5A);
+                     -fx-padding: 30 40 25 40;">
+            <effect>
+                <DropShadow color="rgba(26,92,64,0.4)" radius="20" offsetY="8"/>
+            </effect>
+            <Label text="AI Recipe Chef"
+                   style="-fx-font-size: 26px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: white;
+                          -fx-font-family: 'Segoe UI';"/>
+            <Label text="Let Artificial Intelligence create a custom recipe just for you"
+                   style="-fx-font-size: 13px;
+                          -fx-text-fill: rgba(255,255,255,0.85);"/>
+        </VBox>
+
+        <!-- FORM -->
+        <VBox fx:id="vboxForm" spacing="16"
+              style="-fx-padding: 24 28 28 28;
+                     -fx-background-color: #F0F4F8;">
+
+            <!-- SECTION 1 : Dish Type -->
+            <VBox spacing="10"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 14;
+                         -fx-border-color: #E0E8F0;
+                         -fx-border-radius: 14;
+                         -fx-padding: 18 20;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                </effect>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <StackPane prefWidth="28" prefHeight="28"
+                               style="-fx-background-color: #DCFCE7;
+                                      -fx-background-radius: 7;">
+                        <Label text="1"
+                               style="-fx-font-weight: bold;
+                                      -fx-text-fill: #16A34A;
+                                      -fx-font-size: 12px;"/>
+                    </StackPane>
+                    <Label text="Dish Type"
+                           style="-fx-font-size: 14px;
+                                  -fx-font-weight: bold;
+                                  -fx-text-fill: #1E293B;"/>
+                    <Label text="*"
+                           style="-fx-text-fill: #DC2626;
+                                  -fx-font-size: 15px;"/>
+                </HBox>
+                <HBox spacing="10">
+                    <ToggleButton fx:id="btnEntree"
+                                  text="Starter"
+                                  userData="Entrée"
+                                  prefHeight="44" prefWidth="145"/>
+                    <ToggleButton fx:id="btnPlat"
+                                  text="Main Course"
+                                  userData="Plat"
+                                  prefHeight="44" prefWidth="145"/>
+                    <ToggleButton fx:id="btnDessert"
+                                  text="Dessert"
+                                  userData="Dessert"
+                                  prefHeight="44" prefWidth="145"/>
+                    <ToggleButton fx:id="btnDrinks"
+                                  text="Drinks"
+                                  userData="Drinks"
+                                  prefHeight="44" prefWidth="145"/>
+                </HBox>
+            </VBox>
+
+            <!-- SECTION 2 : Difficulty + Details -->
+            <HBox spacing="16">
+
+                <!-- Difficulty -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 14;
+                             -fx-border-color: #E0E8F0;
+                             -fx-border-radius: 14;
+                             -fx-padding: 18 20;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                    </effect>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <StackPane prefWidth="28" prefHeight="28"
+                                   style="-fx-background-color: #DBEAFE;
+                                          -fx-background-radius: 7;">
+                            <Label text="2"
+                                   style="-fx-font-weight: bold;
+                                          -fx-text-fill: #3B82F6;
+                                          -fx-font-size: 12px;"/>
+                        </StackPane>
+                        <Label text="Difficulty"
+                               style="-fx-font-size: 14px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #1E293B;"/>
+                        <Label text="*"
+                               style="-fx-text-fill: #DC2626;
+                                      -fx-font-size: 15px;"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <ToggleButton fx:id="btnEasy"
+                                      text="Easy"
+                                      userData="Easy"
+                                      prefHeight="40"
+                                      HBox.hgrow="ALWAYS"
+                                      maxWidth="Infinity"/>
+                        <ToggleButton fx:id="btnMedium"
+                                      text="Medium"
+                                      userData="Medium"
+                                      prefHeight="40"
+                                      HBox.hgrow="ALWAYS"
+                                      maxWidth="Infinity"/>
+                        <ToggleButton fx:id="btnHard"
+                                      text="Hard"
+                                      userData="Hard"
+                                      prefHeight="40"
+                                      HBox.hgrow="ALWAYS"
+                                      maxWidth="Infinity"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Time + Servings -->
+                <VBox spacing="10"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 14;
+                             -fx-border-color: #E0E8F0;
+                             -fx-border-radius: 14;
+                             -fx-padding: 18 20;
+                             -fx-min-width: 210;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                    </effect>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <StackPane prefWidth="28" prefHeight="28"
+                                   style="-fx-background-color: #FEF3C7;
+                                          -fx-background-radius: 7;">
+                            <Label text="3"
+                                   style="-fx-font-weight: bold;
+                                          -fx-text-fill: #F59E0B;
+                                          -fx-font-size: 12px;"/>
+                        </StackPane>
+                        <Label text="Details"
+                               style="-fx-font-size: 14px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #1E293B;"/>
+                    </HBox>
+                    <VBox spacing="8">
+                        <VBox spacing="4">
+                            <Label text="Max Preparation Time (min)"
+                                   style="-fx-font-size: 11px;
+                                          -fx-font-weight: bold;
+                                          -fx-text-fill: #374151;"/>
+                            <TextField fx:id="txtMaxTime"
+                                       text="30"
+                                       prefHeight="38"
+                                       style="-fx-font-size: 13px;
+                                              -fx-padding: 6 12;
+                                              -fx-background-radius: 8;
+                                              -fx-border-color: #D1D5DB;
+                                              -fx-border-radius: 8;
+                                              -fx-background-color: #FAFAFA;"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Number of Servings"
+                                   style="-fx-font-size: 11px;
+                                          -fx-font-weight: bold;
+                                          -fx-text-fill: #374151;"/>
+                            <TextField fx:id="txtServings"
+                                       text="4"
+                                       prefHeight="38"
+                                       style="-fx-font-size: 13px;
+                                              -fx-padding: 6 12;
+                                              -fx-background-radius: 8;
+                                              -fx-border-color: #D1D5DB;
+                                              -fx-border-radius: 8;
+                                              -fx-background-color: #FAFAFA;"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <!-- SECTION 3 : Cuisine Style -->
+            <VBox spacing="10"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 14;
+                         -fx-border-color: #E0E8F0;
+                         -fx-border-radius: 14;
+                         -fx-padding: 18 20;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                </effect>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <StackPane prefWidth="28" prefHeight="28"
+                               style="-fx-background-color: #FCE7F3;
+                                      -fx-background-radius: 7;">
+                        <Label text="4"
+                               style="-fx-font-weight: bold;
+                                      -fx-text-fill: #EC4899;
+                                      -fx-font-size: 12px;"/>
+                    </StackPane>
+                    <Label text="Cuisine Style"
+                           style="-fx-font-size: 14px;
+                                  -fx-font-weight: bold;
+                                  -fx-text-fill: #1E293B;"/>
+                    <Label text="*"
+                           style="-fx-text-fill: #DC2626;
+                                  -fx-font-size: 15px;"/>
+                </HBox>
+                <FlowPane hgap="10" vgap="10">
+                    <ToggleButton fx:id="btnTunisian"
+                                  text="Tunisian"
+                                  userData="Tunisian"
+                                  prefHeight="40" prefWidth="110"/>
+                    <ToggleButton fx:id="btnItalian"
+                                  text="Italian"
+                                  userData="Italian"
+                                  prefHeight="40" prefWidth="110"/>
+                    <ToggleButton fx:id="btnFrench"
+                                  text="French"
+                                  userData="French"
+                                  prefHeight="40" prefWidth="110"/>
+                    <ToggleButton fx:id="btnAsian"
+                                  text="Asian"
+                                  userData="Asian"
+                                  prefHeight="40" prefWidth="110"/>
+                    <ToggleButton fx:id="btnAmerican"
+                                  text="American"
+                                  userData="American"
+                                  prefHeight="40" prefWidth="110"/>
+                    <ToggleButton fx:id="btnMexican"
+                                  text="Mexican"
+                                  userData="Mexican"
+                                  prefHeight="40" prefWidth="110"/>
+                    <ToggleButton fx:id="btnOther"
+                                  text="Other"
+                                  userData="Other"
+                                  prefHeight="40" prefWidth="110"/>
+                </FlowPane>
+            </VBox>
+
+            <!-- SECTION 4 : Calorie Range + Image Style -->
+            <HBox spacing="16">
+
+                <!-- Calorie Range -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 14;
+                             -fx-border-color: #E0E8F0;
+                             -fx-border-radius: 14;
+                             -fx-padding: 18 20;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                    </effect>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="Calorie Range"
+                               style="-fx-font-size: 14px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #1E293B;"/>
+                    </HBox>
+
+                    <!-- Labels explicatifs -->
+                    <HBox spacing="8">
+                        <VBox alignment="CENTER" spacing="4"
+                              HBox.hgrow="ALWAYS">
+                            <ToggleButton fx:id="btnLight"
+                                          text="Light"
+                                          userData="Light"
+                                          prefHeight="40"
+                                          maxWidth="Infinity"/>
+                            <Label text="Under 300 kcal"
+                                   style="-fx-font-size: 10px;
+                                          -fx-text-fill: #64748B;
+                                          -fx-alignment: center;"
+                                   maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="4"
+                              HBox.hgrow="ALWAYS">
+                            <ToggleButton fx:id="btnModerate"
+                                          text="Moderate"
+                                          userData="Moderate"
+                                          prefHeight="40"
+                                          maxWidth="Infinity"/>
+                            <Label text="300 to 500 kcal"
+                                   style="-fx-font-size: 10px;
+                                          -fx-text-fill: #64748B;
+                                          -fx-alignment: center;"
+                                   maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="4"
+                              HBox.hgrow="ALWAYS">
+                            <ToggleButton fx:id="btnRich"
+                                          text="Rich"
+                                          userData="Rich"
+                                          prefHeight="40"
+                                          maxWidth="Infinity"/>
+                            <Label text="Over 500 kcal"
+                                   style="-fx-font-size: 10px;
+                                          -fx-text-fill: #64748B;
+                                          -fx-alignment: center;"
+                                   maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="4"
+                              HBox.hgrow="ALWAYS">
+                            <ToggleButton fx:id="btnAnyCalorie"
+                                          text="Any"
+                                          userData="Any"
+                                          prefHeight="40"
+                                          maxWidth="Infinity"/>
+                            <Label text="No preference"
+                                   style="-fx-font-size: 10px;
+                                          -fx-text-fill: #64748B;
+                                          -fx-alignment: center;"
+                                   maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Image Style -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 14;
+                             -fx-border-color: #E0E8F0;
+                             -fx-border-radius: 14;
+                             -fx-padding: 18 20;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                    </effect>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="Image Style"
+                               style="-fx-font-size: 14px;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #1E293B;"/>
+                    </HBox>
+
+                    <!-- Labels explicatifs -->
+                    <HBox spacing="8">
+                        <VBox alignment="CENTER" spacing="4"
+                              HBox.hgrow="ALWAYS">
+                            <ToggleButton fx:id="btnProfessional"
+                                          text="Studio"
+                                          userData="Professional"
+                                          prefHeight="40"
+                                          maxWidth="Infinity"/>
+                            <Label text="Clean studio shot"
+                                   style="-fx-font-size: 10px;
+                                          -fx-text-fill: #64748B;
+                                          -fx-alignment: center;"
+                                   maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="4"
+                              HBox.hgrow="ALWAYS">
+                            <ToggleButton fx:id="btnRustic"
+                                          text="Rustic"
+                                          userData="Rustic"
+                                          prefHeight="40"
+                                          maxWidth="Infinity"/>
+                            <Label text="Wood background"
+                                   style="-fx-font-size: 10px;
+                                          -fx-text-fill: #64748B;
+                                          -fx-alignment: center;"
+                                   maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="4"
+                              HBox.hgrow="ALWAYS">
+                            <ToggleButton fx:id="btnMinimalist"
+                                          text="Minimalist"
+                                          userData="Minimalist"
+                                          prefHeight="40"
+                                          maxWidth="Infinity"/>
+                            <Label text="White clean look"
+                                   style="-fx-font-size: 10px;
+                                          -fx-text-fill: #64748B;
+                                          -fx-alignment: center;"
+                                   maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="4"
+                              HBox.hgrow="ALWAYS">
+                            <ToggleButton fx:id="btnColorful"
+                                          text="Colorful"
+                                          userData="Colorful"
+                                          prefHeight="40"
+                                          maxWidth="Infinity"/>
+                            <Label text="Bright and vivid"
+                                   style="-fx-font-size: 10px;
+                                          -fx-text-fill: #64748B;
+                                          -fx-alignment: center;"
+                                   maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <!-- SECTION 5 : Dietary -->
+            <VBox spacing="10"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 14;
+                         -fx-border-color: #E0E8F0;
+                         -fx-border-radius: 14;
+                         -fx-padding: 18 20;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                </effect>
+                <Label text="Dietary Restrictions"
+                       style="-fx-font-size: 14px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #1E293B;"/>
+                <GridPane hgap="24" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="33"/>
+                        <ColumnConstraints percentWidth="33"/>
+                        <ColumnConstraints percentWidth="33"/>
+                    </columnConstraints>
+                    <CheckBox fx:id="checkVegetarian"
+                              text="Vegetarian"
+                              GridPane.columnIndex="0"
+                              style="-fx-font-size: 13px;"/>
+                    <CheckBox fx:id="checkVegan"
+                              text="Vegan"
+                              GridPane.columnIndex="1"
+                              style="-fx-font-size: 13px;"/>
+                    <CheckBox fx:id="checkHalal"
+                              text="Halal"
+                              GridPane.columnIndex="2"
+                              style="-fx-font-size: 13px;"/>
+                    <CheckBox fx:id="checkGlutenFree"
+                              text="Gluten Free"
+                              GridPane.rowIndex="1"
+                              GridPane.columnIndex="0"
+                              style="-fx-font-size: 13px;"/>
+                    <CheckBox fx:id="checkNoLactose"
+                              text="No Lactose"
+                              GridPane.rowIndex="1"
+                              GridPane.columnIndex="1"
+                              style="-fx-font-size: 13px;"/>
+                    <CheckBox fx:id="checkNoNuts"
+                              text="No Nuts"
+                              GridPane.rowIndex="1"
+                              GridPane.columnIndex="2"
+                              style="-fx-font-size: 13px;"/>
+                    <CheckBox fx:id="checkNoEggs"
+                              text="No Eggs"
+                              GridPane.rowIndex="2"
+                              GridPane.columnIndex="0"
+                              style="-fx-font-size: 13px;"/>
+                </GridPane>
+            </VBox>
+
+            <!-- SECTION 6 : Special Instructions -->
+            <VBox spacing="10"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 14;
+                         -fx-border-color: #E0E8F0;
+                         -fx-border-radius: 14;
+                         -fx-padding: 18 20;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.05)" radius="8" offsetY="3"/>
+                </effect>
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <Label text="Special Instructions"
+                           style="-fx-font-size: 14px;
+                                  -fx-font-weight: bold;
+                                  -fx-text-fill: #1E293B;"/>
+                    <Label text="(optional)"
+                           style="-fx-font-size: 12px;
+                                  -fx-text-fill: #94A3B8;"/>
+                </HBox>
+                <TextArea fx:id="txtExtraInstructions"
+                          prefRowCount="3"
+                          promptText="e.g. Make it spicy, for a kids birthday, elegant presentation..."
+                          style="-fx-font-size: 13px;
+                                 -fx-background-radius: 8;
+                                 -fx-border-color: #D1D5DB;
+                                 -fx-border-radius: 8;
+                                 -fx-background-color: #FAFAFA;"/>
+                <Label text="This description helps AI generate a more accurate image"
+                       style="-fx-font-size: 11px;
+                              -fx-text-fill: #64748B;"/>
+            </VBox>
+
+            <!-- ERROR -->
+            <Label fx:id="labelError"
+                   text=""
+                   visible="false" managed="false"
+                   wrapText="true"
+                   maxWidth="Infinity"
+                   style="-fx-text-fill: #DC2626;
+                          -fx-background-color: #FEE2E2;
+                          -fx-padding: 12 20;
+                          -fx-background-radius: 10;
+                          -fx-font-weight: bold;
+                          -fx-font-size: 13px;"/>
+
+            <!-- BUTTONS -->
+            <HBox spacing="16" alignment="CENTER_RIGHT">
+                <Button text="Cancel"
+                        onAction="#onCancel"
+                        prefHeight="48" prefWidth="130"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #475569;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 12;
+                               -fx-border-color: #D1D5DB;
+                               -fx-border-radius: 12;
+                               -fx-cursor: hand;"/>
+
+                <Button text="GENERATE RECIPE"
+                        onAction="#onGenerate"
+                        prefHeight="48" prefWidth="210"
+                        style="-fx-background-color: linear-gradient(to bottom, #2E7D5A, #1A5C40);
+                               -fx-text-fill: white;
+                               -fx-font-size: 15px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 12;
+                               -fx-cursor: hand;">
+                    <effect>
+                        <DropShadow color="rgba(46,125,90,0.5)"
+                                    radius="12" offsetY="4"/>
+                    </effect>
+                </Button>
+            </HBox>
+
+        </VBox>
+
+        <!-- LOADING -->
+        <VBox fx:id="vboxLoading"
+              spacing="20" alignment="CENTER"
+              visible="false" managed="false"
+              style="-fx-background-color: #F0F4F8;
+                     -fx-padding: 80 40;">
+            <Label text="AI Chef is working..."
+                   style="-fx-font-size: 20px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #1F4D3A;"/>
+            <ProgressBar fx:id="progressBar"
+                         progress="0"
+                         prefWidth="400" prefHeight="14"
+                         style="-fx-accent: #1F4D3A;"/>
+            <Label fx:id="labelLoadingStep"
+                   text="Initializing..."
+                   style="-fx-font-size: 13px;
+                          -fx-text-fill: #64748B;"/>
+            <Label text="Powered by Gemini AI and Unsplash"
+                   style="-fx-font-size: 11px;
+                          -fx-text-fill: #94A3B8;"/>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

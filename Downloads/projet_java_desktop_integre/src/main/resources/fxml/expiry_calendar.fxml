@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.effect.DropShadow?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ExpiryCalendarController"
+      spacing="0" prefWidth="600" prefHeight="500"
+      style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-radius: 16; -fx-border-color: #E2E8F0; -fx-border-width: 1;">
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_LEFT" spacing="15" prefHeight="70"
+          style="-fx-background-color: #1A5C40; -fx-padding: 0 25; -fx-background-radius: 15 15 0 0;">
+        <effect><DropShadow color="#00000022" radius="8" offsetY="3"/></effect>
+        
+        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <Label text="Expiry Heatmap" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label text="Track ingredient expiration dates" style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.8);"/>
+        </VBox>
+
+        <HBox alignment="CENTER" spacing="15">
+            <Button onAction="#handlePrevMonth" style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;">
+                <graphic><SVGPath content="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="white"/></graphic>
+            </Button>
+            <Label fx:id="lblMonthYear" text="Month Year" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white; -fx-min-width: 120; -fx-alignment: CENTER;"/>
+            <Button onAction="#handleNextMonth" style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;">
+                <graphic><SVGPath content="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="white"/></graphic>
+            </Button>
+            <Button onAction="#handleRefresh" style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;">
+                <graphic><SVGPath content="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" fill="white"/></graphic>
+            </Button>
+        </HBox>
+
+        <Button onAction="#handleClose" style="-fx-background-color: transparent; -fx-cursor: hand;">
+            <graphic><SVGPath content="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="white"/></graphic>
+        </Button>
+    </HBox>
+
+    <!-- CALENDAR GRID -->
+    <VBox spacing="15" style="-fx-padding: 20; -fx-background-color: #F8FAFC; -fx-background-radius: 0 0 15 15;" VBox.vgrow="ALWAYS">
+        <!-- Day Names -->
+        <GridPane fx:id="gridDays" hgap="5" vgap="5" alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="60" prefWidth="60" halignment="CENTER" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="60" prefWidth="60" halignment="CENTER" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="60" prefWidth="60" halignment="CENTER" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="60" prefWidth="60" halignment="CENTER" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="60" prefWidth="60" halignment="CENTER" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="60" prefWidth="60" halignment="CENTER" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="60" prefWidth="60" halignment="CENTER" />
+            </columnConstraints>
+        </GridPane>
+
+        <!-- Legend -->
+        <HBox alignment="CENTER" spacing="15" style="-fx-padding: 10 0 0 0;">
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #E2E8F0; -fx-background-radius: 2;"/>
+                <Label text="None" style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+            </HBox>
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #BBF7D0; -fx-background-radius: 2;"/>
+                <Label text="1 item" style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+            </HBox>
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #FDE68A; -fx-background-radius: 2;"/>
+                <Label text="2-3 items" style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+            </HBox>
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #EF4444; -fx-background-radius: 2;"/>
+                <Label text="4+ items" style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+            </HBox>
+        </HBox>
+    </VBox>
+</VBox>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ObjectiveChoosePlanController"
+      style="-fx-background-color: #F6FBF7;"
+      spacing="0">
+
+    <!-- ═══ HEADER ═══ -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label text="Your Weekly Journey"
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label text="Weekly Objectives"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Change Goal" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px; -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <VBox spacing="24" style="-fx-background-color: #F6FBF7;">
+            <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
+
+            <!-- ═══ WIZARD STEPS ═══ -->
+            <HBox alignment="CENTER" spacing="8">
+                <VBox alignment="CENTER" spacing="4">
+                    <Label text="✓"
+                           style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 50%; -fx-min-width: 32; -fx-min-height: 32; -fx-alignment: center;"/>
+                    <Label text="Choose Goal" style="-fx-font-size: 11px; -fx-text-fill: #1F4D3A; -fx-font-weight: bold;"/>
+                </VBox>
+                <Label text="────────" style="-fx-text-fill: #2E7D5A;"/>
+                <VBox alignment="CENTER" spacing="4">
+                    <Label text="2"
+                           style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 50%; -fx-min-width: 32; -fx-min-height: 32; -fx-alignment: center;"/>
+                    <Label text="Pick Plan" style="-fx-font-size: 11px; -fx-text-fill: #2E7D5A; -fx-font-weight: bold;"/>
+                </VBox>
+                <Label text="────────" style="-fx-text-fill: #E2E8F0;"/>
+                <VBox alignment="CENTER" spacing="4">
+                    <Label text="3"
+                           style="-fx-background-color: #E2E8F0; -fx-text-fill: #94A3B8; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 50%; -fx-min-width: 32; -fx-min-height: 32; -fx-alignment: center;"/>
+                    <Label text="Confirm" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                </VBox>
+            </HBox>
+
+            <!-- ═══ HEADING ═══ -->
+            <VBox alignment="CENTER" spacing="8">
+                <Label fx:id="lblGoalChosen" text=""
+                       style="-fx-background-color: #E8F5E9; -fx-text-fill: #2E7D5A; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 4 10;"/>
+                <Label text="Step 2"
+                       style="-fx-background-color: #E8F5E9; -fx-text-fill: #2E7D5A; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 4 10;"/>
+                <Label text="Pick Your Intensity"
+                       style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Label text="Choose the plan that fits your lifestyle"
+                       style="-fx-font-size: 14px; -fx-text-fill: #64748B;"/>
+            </VBox>
+
+            <!-- ═══ PLANS GRID ═══ -->
+            <HBox fx:id="plansContainer" spacing="16" alignment="CENTER"/>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

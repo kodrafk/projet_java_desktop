@@ -1,0 +1,15 @@
+# Configuration de l'API météo OpenWeatherMap
+# Copiez ce fichier en "weather.properties" et ajoutez votre clé API
+# Obtenez votre clé API gratuite sur: https://openweathermap.org/api
+
+# Votre clé API (à remplacer par votre vraie clé)
+api.key=votre_cle_api_openweathermap
+
+# Ville par défaut pour le calendrier
+default.city=Tunis
+
+# Langue des descriptions météo (fr, en, ar, etc.)
+language=fr
+
+# Unités de mesure (metric pour Celsius, imperial pour Fahrenheit)
+units=metric

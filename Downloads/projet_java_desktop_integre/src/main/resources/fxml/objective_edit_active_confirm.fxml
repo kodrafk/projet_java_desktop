@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.ObjectiveEditActiveConfirmController"
+      style="-fx-background-color: #F6FBF7;" spacing="0">
+
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #163A2E; -fx-padding: 20 32;">
+        <VBox spacing="4">
+            <Label text="Review Changes"
+                   style="-fx-font-size: 11px; -fx-text-fill: #A7C4B8; -fx-font-weight: bold;"/>
+            <Label text="Confirm Plan Update"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Back to Edit" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #A7C4B8; -fx-font-size: 13px; -fx-cursor: hand; -fx-border-color: #2F5A4A; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <StackPane style="-fx-background-color: #F6FBF7;">
+        <VBox spacing="20" maxWidth="860" style="-fx-background-color: #F6FBF7;" alignment="CENTER">
+            <padding><Insets top="24" right="32" bottom="32" left="32"/></padding>
+
+            <!-- Preserved Info Banner -->
+            <HBox alignment="CENTER_LEFT" spacing="14"
+                  style="-fx-background-color: #DCFCE7; -fx-background-radius: 12; -fx-padding: 16 20; -fx-border-color: #86EFAC; -fx-border-radius: 12;">
+                <Label text="✓"
+                       style="-fx-background-color: #166534; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 50%; -fx-min-width: 32; -fx-min-height: 32; -fx-alignment: center;"/>
+                <VBox spacing="2">
+                    <Label text="Your logged days will be preserved!"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #166534;"/>
+                    <Label text="Only the daily targets change going forward."
+                           style="-fx-font-size: 12px; -fx-text-fill: #166534;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Before / After Comparison -->
+            <HBox spacing="20" alignment="CENTER">
+                <!-- Current Plan -->
+                <VBox prefWidth="360" style="-fx-background-color: #F8FAFC; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 0;" spacing="0">
+                    <HBox style="-fx-background-color: #E2E8F0; -fx-background-radius: 14 14 0 0; -fx-padding: 12 20;">
+                        <Label text="Current Plan"
+                               style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B; -fx-background-color: #CBD5E1; -fx-background-radius: 20; -fx-padding: 4 12;"/>
+                    </HBox>
+                    <VBox spacing="10" style="-fx-padding: 20;">
+                        <Label fx:id="lblOldTitle" text="" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        <VBox spacing="8">
+                            <HBox alignment="CENTER_LEFT"><Label text="🔥 Calories" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblOldCal" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                            <HBox alignment="CENTER_LEFT"><Label text="💪 Protein" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblOldProtein" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                            <HBox alignment="CENTER_LEFT"><Label text="🌾 Carbs" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblOldCarbs" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                            <HBox alignment="CENTER_LEFT"><Label text="🥑 Fats" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblOldFats" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                            <HBox alignment="CENTER_LEFT"><Label text="💧 Water" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblOldWater" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <Label text="→" style="-fx-font-size: 28px; -fx-text-fill: #2E7D5A; -fx-font-weight: bold;"/>
+
+                <!-- New Plan -->
+                <VBox prefWidth="360" style="-fx-background-color: #FDF1ED; -fx-background-radius: 14; -fx-border-color: #eb7147; -fx-border-radius: 14; -fx-border-width: 2; -fx-padding: 0;" spacing="0">
+                    <HBox style="-fx-background-color: #eb7147; -fx-background-radius: 14 14 0 0; -fx-padding: 12 20;">
+                        <Label text="New Plan"
+                               style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 20; -fx-padding: 4 12;"/>
+                    </HBox>
+                    <VBox spacing="10" style="-fx-padding: 20;">
+                        <Label fx:id="lblNewTitle" text="" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        <VBox spacing="8">
+                            <HBox alignment="CENTER_LEFT"><Label text="🔥 Calories" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblNewCal" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                            <HBox alignment="CENTER_LEFT"><Label text="💪 Protein" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblNewProtein" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                            <HBox alignment="CENTER_LEFT"><Label text="🌾 Carbs" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblNewCarbs" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                            <HBox alignment="CENTER_LEFT"><Label text="🥑 Fats" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblNewFats" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                            <HBox alignment="CENTER_LEFT"><Label text="💧 Water" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" prefWidth="120"/><Label fx:id="lblNewWater" text="" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/></HBox>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <!-- 7-Day Progress -->
+            <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 24; -fx-border-color: #E2E8F0; -fx-border-radius: 14;" spacing="14">
+                <Label text="📋 Your 7-Day Progress"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <HBox fx:id="timelineContainer" spacing="10"/>
+            </VBox>
+
+            <!-- Action Buttons -->
+            <HBox spacing="12">
+                <Button text="✓ Apply New Plan" onAction="#handleApply" prefHeight="48"
+                        HBox.hgrow="ALWAYS" maxWidth="9999"
+                        style="-fx-background-color: #eb7147; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                <Button text="Cancel" onAction="#handleBack" prefHeight="48" prefWidth="120"
+                        style="-fx-background-color: #F1F5F9; -fx-text-fill: #374151; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand;"/>
+            </HBox>
+
+        </VBox>
+        </StackPane>
+    </ScrollPane>
+</VBox>

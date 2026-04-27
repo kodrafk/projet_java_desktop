@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.AdminEvenementController">
+    <padding><Insets bottom="25" left="25" right="25" top="25" /></padding>
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <VBox spacing="2">
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" text="Gestion des Événements" />
+            <Label style="-fx-font-size: 11px; -fx-text-fill: #64748B;" text="Planifiez et modifiez vos événements sportifs" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <TextField fx:id="tfRechercheAdmin" onKeyReleased="#handleRechercheAdmin" prefHeight="40" prefWidth="250" promptText="Rechercher..." style="-fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10;" />
+        <Button onAction="#allerPageAjout" prefHeight="40" style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;" text="+ Ajouter un Événement" />
+    </HBox>
+    <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+        <content>
+            <FlowPane fx:id="flowPane" hgap="20" vgap="20" />
+        </content>
+    </ScrollPane>
+</VBox>

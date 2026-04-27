@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.AdminEvenementController">
+    <padding><Insets bottom="25" left="25" right="25" top="25" /></padding>
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <VBox spacing="2">
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" text="Gestion des Sponsors" />
+            <Label style="-fx-font-size: 11px; -fx-text-fill: #64748B;" text="Gérez vos partenaires et sponsors" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button prefHeight="40" style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;" text="+ Ajouter un Sponsor" />
+    </HBox>
+    <Label text="Liste des sponsors (Interface simplifiée)" style="-fx-text-fill: #64748B;" />
+</VBox>

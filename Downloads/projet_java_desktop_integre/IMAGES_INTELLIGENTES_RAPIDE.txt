@@ -1,0 +1,135 @@
+═══════════════════════════════════════════════════════════════
+  🎨 GÉNÉRATION INTELLIGENTE D'IMAGES
+═══════════════════════════════════════════════════════════════
+
+✨ AMÉLIORATION
+---------------
+Les images des événements sont maintenant générées intelligemment
+selon le titre, avec 15+ catégories reconnues et 60+ prompts variés !
+
+📋 CATÉGORIES RECONNUES (15+)
+------------------------------
+
+1. 🏃 COURSE & CARDIO
+   Mots-clés : course, running, marathon, jogging, sprint
+   Exemples : "Marathon du Printemps", "Course 10km"
+
+2. 🧘 YOGA & MÉDITATION
+   Mots-clés : yoga, meditation, zen, relaxation
+   Exemples : "Yoga Sunrise", "Méditation Zen"
+
+3. 💪 MUSCULATION & FITNESS
+   Mots-clés : gym, musculation, fitness, workout
+   Exemples : "Gym Session", "Fitness Training"
+
+4. 🏊 NATATION
+   Mots-clés : natation, swimming, piscine, pool
+   Exemples : "Natation Compétition", "Swimming Training"
+
+5. 🚴 CYCLISME
+   Mots-clés : cyclisme, cycling, vélo, bike, vtt
+   Exemples : "Cyclisme Route", "VTT Adventure"
+
+6. ⚽ SPORTS D'ÉQUIPE
+   Mots-clés : football, basketball, volleyball, team
+   Exemples : "Football Match", "Basketball Game"
+
+7. 🥗 NUTRITION
+   Mots-clés : nutrition, diet, alimentation, healthy
+   Exemples : "Nutrition Workshop", "Healthy Eating"
+
+8. 🥊 BOXE & ARTS MARTIAUX
+   Mots-clés : boxe, boxing, martial, karate
+   Exemples : "Boxing Training", "Karate Class"
+
+9. 💃 DANSE & ZUMBA
+   Mots-clés : danse, dance, zumba, aerobic
+   Exemples : "Zumba Party", "Dance Fitness"
+
+10. 🏔️ RANDONNÉE & OUTDOOR
+    Mots-clés : randonnée, hiking, trekking, montagne
+    Exemples : "Randonnée Montagne", "Hiking Trail"
+
+11. 🏋️ CROSSFIT & HIIT
+    Mots-clés : crossfit, hiit, interval, intense
+    Exemples : "CrossFit WOD", "HIIT Training"
+
+12. 🤸 PILATES & BARRE
+    Mots-clés : pilates, barre, core, posture
+    Exemples : "Pilates Class", "Barre Workout"
+
+13. 🏄 SPORTS AQUATIQUES
+    Mots-clés : surf, diving, plongée, kayak
+    Exemples : "Surf Session", "Diving Adventure"
+
+14. 🧖 WELLNESS & SPA
+    Mots-clés : wellness, spa, massage, détente
+    Exemples : "Wellness Day", "Spa Treatment"
+
+15. 👨‍🏫 COACHING
+    Mots-clés : coach, coaching, motivation, training
+    Exemples : "Personal Training", "Coaching Session"
+
+🎯 FONCTIONNEMENT
+-----------------
+1. Analyse du titre de l'événement
+2. Détection automatique de la catégorie
+3. Sélection d'un prompt parmi 4 variations
+4. Génération d'une image de haute qualité
+5. Même titre = même image (cohérence)
+
+✨ AVANTAGES
+------------
+✓ 15+ catégories reconnues
+✓ 60+ prompts différents
+✓ Images variées et pertinentes
+✓ Haute qualité (4k, professionnelle)
+✓ Cohérence (même titre = même image)
+✓ Détection automatique intelligente
+✓ Pas de configuration nécessaire
+
+📊 EXEMPLES
+-----------
+
+"Marathon du Printemps"
+→ Image de groupe de marathoniens en course
+
+"Yoga Sunrise"
+→ Image de yoga au lever du soleil
+
+"CrossFit Challenge"
+→ Image d'entraînement CrossFit intense
+
+"Nutrition Workshop"
+→ Image de repas sains et colorés
+
+"Boxing Training"
+→ Image d'entraînement de boxe professionnel
+
+🚀 TESTER
+---------
+1. mvn clean compile
+2. mvn javafx:run
+3. Créez des événements avec différents titres
+4. Observez les images générées automatiquement !
+
+💡 ASTUCE
+---------
+Utilisez des mots-clés dans vos titres pour obtenir
+des images plus précises :
+  • "Yoga Matinal" → Image de yoga
+  • "Course 10km" → Image de running
+  • "Gym Training" → Image de musculation
+
+📖 DOCUMENTATION
+----------------
+• GENERATION_IMAGES_INTELLIGENTE.md (détails complets)
+• Liste complète des 60+ prompts disponibles
+
+═══════════════════════════════════════════════════════════════
+Date : 27 avril 2026
+Version : 2.0.0 Intelligent
+Statut : ✅ IMPLÉMENTÉ
+═══════════════════════════════════════════════════════════════
+
+🎉 LES IMAGES SONT MAINTENANT INTELLIGENTES ET VARIÉES ! 🎉
