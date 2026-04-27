@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="0" style="-fx-background-color: #F0F2F5;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.BlogFrontController">
+
+    <!-- Top Header Bar -->
+    <HBox style="-fx-background-color: #FFFFFF; -fx-padding: 14 24; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 6, 0, 0, 2);" alignment="CENTER_LEFT" spacing="16">
+        <Label text="📰  Blog Communauté" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1a7a3d;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <!-- Search -->
+        <HBox alignment="CENTER_LEFT" spacing="8"
+              style="-fx-background-color: #F0F2F5; -fx-background-radius: 24; -fx-padding: 8 14;">
+            <Label text="🔍" style="-fx-font-size: 14px; -fx-text-fill: #606770;"/>
+            <TextField fx:id="searchField" promptText="Rechercher des publications..."
+                       prefWidth="240"
+                       style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13px; -fx-text-fill: #1C1E21;"/>
+        </HBox>
+        <!-- Sort -->
+        <ComboBox fx:id="sortCombo" prefWidth="190"
+                  style="-fx-background-color: #F0F2F5; -fx-background-radius: 24; -fx-border-color: transparent; -fx-font-size: 13px; -fx-padding: 4 8;" />
+    </HBox>
+
+
+    <!-- Main Scroll Content -->
+    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true"
+                style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0;">
+        <VBox spacing="16" style="-fx-background-color: #F0F2F5; -fx-padding: 20 200 20 200;">
+
+            <!-- Create Post Card -->
+            <VBox spacing="12"
+                  style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 16; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                <Label text="✏️  Créer une publication" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1C1E21;" />
+                <Separator style="-fx-opacity: 0.4;" />
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="newPostTitle" HBox.hgrow="ALWAYS"
+                               promptText="Donnez un titre accrocheur à votre post..."
+                               style="-fx-background-color: #F0F2F5; -fx-background-radius: 8; -fx-border-color: transparent; -fx-padding: 10 14; -fx-font-size: 14px; -fx-text-fill: #1C1E21;" />
+                    <Button text="🤖" onAction="#handleGenerateTitle"
+                            style="-fx-background-color: #E8F5E9; -fx-text-fill: #1a7a3d; -fx-padding: 8 12; -fx-background-radius: 8; -fx-font-weight: bold; -fx-cursor: hand;">
+                        <tooltip><Tooltip text="Générer un titre avec l'IA" /></tooltip>
+                    </Button>
+                </HBox>
+                <TextArea fx:id="newPostContent"
+                          promptText="Qu'avez-vous envie de partager aujourd'hui ?"
+                          prefRowCount="4" wrapText="true"
+                          style="-fx-background-color: #F0F2F5; -fx-background-radius: 8; -fx-border-color: transparent; -fx-padding: 10 14; -fx-font-size: 13px;" />
+                <HBox alignment="CENTER_RIGHT">
+                    <Button text="✨ Générer Hashtags" onAction="#handleGenerateHashtags"
+                            style="-fx-background-color: transparent; -fx-text-fill: #1a7a3d; -fx-font-size: 12px; -fx-cursor: hand; -fx-underline: true;" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Button text="📷  Image" onAction="#handleUploadImage"
+                            style="-fx-background-color: #E8F5E9; -fx-text-fill: #1a7a3d; -fx-padding: 8 16; -fx-background-radius: 20; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 13px;" />
+                    <Label fx:id="lblImagePath" text="Aucune image" textFill="#8A8D91" style="-fx-font-size: 12px;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="Publier" onAction="#handleCreatePost"
+                            style="-fx-background-color: #1a7a3d; -fx-text-fill: white; -fx-padding: 9 28; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px; -fx-effect: dropshadow(three-pass-box, rgba(24,119,242,0.4), 6, 0, 0, 2);" />
+                </HBox>
+            </VBox>
+
+            <!-- Feed -->
+            <VBox fx:id="feedContainer" spacing="16" />
+
+        </VBox>
+    </ScrollPane>
+</VBox>
