@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MainLauncher" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="tn.esprit.projet.gui.MainLauncher" />
+    <module name="projetJAV" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

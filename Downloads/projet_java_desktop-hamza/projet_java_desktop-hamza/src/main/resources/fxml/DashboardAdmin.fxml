@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.EvenementController">
+    <left>
+        <VBox prefWidth="280.0" spacing="10" style="-fx-background-color: #0F172A;">
+            <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+            <children>
+                <Label text="🏥 Nutri Coach" textFill="WHITE" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                <Label text="Administration Panel" textFill="#94A3B8" style="-fx-font-size: 13;"/>
+                <Region prefHeight="30"/>
+                <Label text="MANAGEMENT" textFill="#64748B" style="-fx-font-size: 11; -fx-font-weight: bold;"/>
+                <Button text="📅 Événements" maxWidth="Infinity" style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 12; -fx-background-radius: 8;"/>
+                <Button text="🤝 Sponsors" onAction="#allerPageSponsors" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #CBD5E1; -fx-alignment: CENTER_LEFT; -fx-padding: 12;"/>
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox>
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="80.0" style="-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-width: 0 0 1 0;">
+                    <padding><Insets left="30" right="30"/></padding>
+                    <children>
+                        <Label text="Gestion des Événements" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#allerPageAjout" text="+ Nouveau" style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8;"/>
+                    </children>
+                </HBox>
+
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+                    <content>
+                        <FlowPane fx:id="flowPane" hgap="25" vgap="25">
+                            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+                        </FlowPane>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

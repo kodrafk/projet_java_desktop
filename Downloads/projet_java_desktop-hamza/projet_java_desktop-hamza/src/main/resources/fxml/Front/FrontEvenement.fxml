@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+    FrontEvenement.fxml
+    Chargé dans le contentArea de main_layout.fxml
+    Style cohérent avec le dashboard (fond #F6FBF7, cartes blanches)
+-->
+<VBox spacing="0"
+      style="-fx-background-color: #F6FBF7;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.FrontEvenementController">
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <content>
+            <VBox spacing="24" style="-fx-background-color: #F6FBF7;">
+                <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
+
+                <!-- ══ PAGE HEADER ══ -->
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="4">
+                        <Label text="Événements"
+                               style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        <Label text="Découvrez nos prochains événements sportifs et participez !"
+                               style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <!-- Barre de recherche -->
+                    <HBox alignment="CENTER_LEFT" spacing="8" prefHeight="40" prefWidth="300"
+                          style="-fx-background-color: white; -fx-background-radius: 10;
+                                 -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-padding: 0 12;">
+                        <Label text="🔍" style="-fx-text-fill: #94A3B8; -fx-font-size: 14px;"/>
+                        <TextField fx:id="tfRecherche"
+                                   promptText="Rechercher un événement..."
+                                   onAction="#handleRecherche"
+                                   HBox.hgrow="ALWAYS"
+                                   style="-fx-background-color: transparent; -fx-border-color: transparent;
+                                          -fx-font-size: 12px; -fx-text-fill: #475569;
+                                          -fx-prompt-text-fill: #94A3B8;"/>
+                        <Button text="Chercher" onAction="#handleRecherche"
+                                style="-fx-background-color: #1F4D3A; -fx-text-fill: white;
+                                       -fx-font-size: 11px; -fx-background-radius: 7;
+                                       -fx-cursor: hand; -fx-padding: 5 12;"/>
+                    </HBox>
+
+                    <!-- Bouton Assistant IA -->
+                    <Button text="🤖 Assistant IA" onAction="#handleAssistantIA"
+                            style="-fx-background-color: linear-gradient(to right, #6366f1, #8b5cf6);
+                                   -fx-text-fill: white;
+                                   -fx-font-size: 12px; -fx-font-weight: bold;
+                                   -fx-background-radius: 10; -fx-cursor: hand;
+                                   -fx-padding: 10 18;
+                                   -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.4), 8, 0, 0, 2);"/>
+
+                    <!-- Compteur -->
+                    <Label fx:id="lblCompteur" text=""
+                           style="-fx-background-color: white; -fx-border-color: #E2E8F0;
+                                  -fx-border-radius: 10; -fx-background-radius: 10;
+                                  -fx-padding: 8 14; -fx-text-fill: #475569; -fx-font-size: 12px;"/>
+                </HBox>
+
+                <!-- ══ CARDS ÉVÉNEMENTS ══ -->
+                <FlowPane fx:id="flowPane" hgap="22" vgap="22"
+                          style="-fx-background-color: transparent;"/>
+
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="0" style="-fx-background-color: #f0f4f8;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminEvenementController">
+
+    <!-- ══ HEADER ══ -->
+    <HBox alignment="CENTER_LEFT" prefHeight="72"
+          style="-fx-background-color: white;
+                 -fx-border-color: transparent transparent #e2e8f0 transparent;
+                 -fx-border-width: 0 0 1 0;">
+        <padding><Insets left="28" right="28"/></padding>
+        <VBox spacing="3">
+            <Label text="🤝  Gestion des Sponsors" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+            <Label text="Liez des sponsors aux événements et consultez la liste complète"
+                   style="-fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="22" VBox.vgrow="ALWAYS">
+        <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+
+        <!-- ══ FORMULAIRE AJOUT SPONSOR ══ -->
+        <VBox spacing="14" prefWidth="360"
+              style="-fx-background-color: white; -fx-background-radius: 14;
+                     -fx-padding: 24; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+
+            <Label text="Ajouter un Sponsor" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+            <Separator/>
+
+            <Label text="Événement associé *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+            <ComboBox fx:id="cbEvenement" maxWidth="1.7976931348623157E308" prefHeight="40"
+                      promptText="Sélectionner un événement"/>
+
+            <Label text="Nom du sponsor *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+            <TextField fx:id="tfSponsorNom" prefHeight="40" promptText="Ex: Nike, Adidas…"
+                       style="-fx-background-radius: 8;"/>
+
+            <Label text="Type" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+            <TextField fx:id="tfSponsorType" prefHeight="40" promptText="Gold / Silver / Bronze"
+                       style="-fx-background-radius: 8;"/>
+
+            <Label text="Logo (URL)" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+            <TextField fx:id="tfSponsorLogo" prefHeight="40" promptText="https://…"
+                       style="-fx-background-radius: 8;"/>
+
+            <Label text="Description" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+            <TextArea fx:id="taSponsorDesc" prefHeight="80" wrapText="true"
+                      style="-fx-background-radius: 8;"/>
+
+            <Button onAction="#handleAjouterSponsor" maxWidth="1.7976931348623157E308"
+                    prefHeight="44"
+                    style="-fx-background-color: #4f46e5; -fx-text-fill: white;
+                           -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;"
+                    text="➕  Lier le Sponsor"/>
+        </VBox>
+
+        <!-- ══ TABLE SPONSORS ══ -->
+        <VBox spacing="12" HBox.hgrow="ALWAYS"
+              style="-fx-background-color: white; -fx-background-radius: 14;
+                     -fx-padding: 24; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+
+            <Label text="Tous les Sponsors" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+            <Separator/>
+
+            <TableView fx:id="tableSponsors" VBox.vgrow="ALWAYS"
+                       style="-fx-background-radius: 10; -fx-border-color: #e2e8f0; -fx-border-radius: 10;">
+                <columns>
+                    <TableColumn fx:id="colSponsorNom" text="Nom" prefWidth="180"/>
+                    <TableColumn fx:id="colSponsorType" text="Type" prefWidth="120"/>
+                    <TableColumn fx:id="colSponsorStatut" text="Statut" prefWidth="100"/>
+                    <TableColumn fx:id="colSponsorEvenement" text="ID Événement" prefWidth="120"/>
+                </columns>
+                <placeholder>
+                    <Label text="Aucun sponsor enregistré." style="-fx-text-fill: #94a3b8;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </HBox>
+</VBox>

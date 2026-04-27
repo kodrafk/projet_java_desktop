@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="750.0" prefWidth="1250.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.MainLayoutController">
+
+    <!-- ═══════════════════════════════════════════
+         NAVBAR  — fond blanc, texte sombre
+    ════════════════════════════════════════════ -->
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="60" spacing="0"
+              style="-fx-background-color: white;
+                     -fx-border-color: transparent transparent #e8f5e9 transparent;
+                     -fx-border-width: 0 0 1 0;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 2);">
+            <padding><Insets left="36" right="36"/></padding>
+
+            <!-- Logo -->
+            <Label text="Nutri Coach Pro"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1a3a2a; -fx-cursor: hand;">
+                <font><Font name="Georgia Bold" size="20"/></font>
+            </Label>
+
+            <Region prefWidth="50"/>
+
+            <!-- Menu principal -->
+            <HBox alignment="CENTER" spacing="4">
+                <Button fx:id="btnHome" onAction="#handleHome" text="Home"
+                        style="-fx-background-color: transparent; -fx-text-fill: #2d5a3d;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 6;
+                               -fx-font-weight: bold; -fx-padding: 6 14;"/>
+                <Button text="About"
+                        style="-fx-background-color: transparent; -fx-text-fill: #4a7a5a;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 6;
+                               -fx-padding: 6 14;"/>
+                <Button fx:id="btnMyKitchen" onAction="#handleIngredients" text="My Kitchen"
+                        style="-fx-background-color: transparent; -fx-text-fill: #4a7a5a;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 6;
+                               -fx-padding: 6 14;"/>
+                <Button text="Nutrition Objectives"
+                        style="-fx-background-color: transparent; -fx-text-fill: #4a7a5a;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 6;
+                               -fx-padding: 6 14;"/>
+                <Button fx:id="btnEvents" onAction="#handleEvents" text="Events"
+                        style="-fx-background-color: transparent; -fx-text-fill: #4a7a5a;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 6;
+                               -fx-padding: 6 14;"/>
+                <Button fx:id="btnCalendrier" onAction="#handleCalendrier" text="📅 Calendrier"
+                        style="-fx-background-color: transparent; -fx-text-fill: #4a7a5a;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 6;
+                               -fx-padding: 6 14;"/>
+                <Button fx:id="btnComplaints" onAction="#handleComplaints" text="Signalements"
+                        style="-fx-background-color: transparent; -fx-text-fill: #4a7a5a;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 6;
+                               -fx-padding: 6 14;"/>
+                <Button fx:id="btnBlog" onAction="#handleBlog" text="Blog"
+                        style="-fx-background-color: transparent; -fx-text-fill: #4a7a5a;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 6;
+                               -fx-padding: 6 14;"/>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Droite : Sign In + Sign Up + Admin -->
+            <HBox alignment="CENTER" spacing="10">
+                <Button text="Sign In"
+                        style="-fx-background-color: transparent; -fx-text-fill: #2d5a3d;
+                               -fx-font-size: 13px; -fx-cursor: hand; -fx-font-weight: bold;
+                               -fx-padding: 6 16;"/>
+                <Button text="Sign Up"
+                        style="-fx-background-color: #e8734a; -fx-text-fill: white;
+                               -fx-font-size: 13px; -fx-font-weight: bold;
+                               -fx-background-radius: 30; -fx-cursor: hand;
+                               -fx-padding: 8 22;"/>
+                <Separator orientation="VERTICAL" prefHeight="24"
+                           style="-fx-background-color: #d0e8d8;"/>
+                <Button onAction="#allerVersAdmin" text="🔐 Admin"
+                        style="-fx-background-color: #4F46E5; -fx-text-fill: white;
+                               -fx-font-size: 12px; -fx-font-weight: bold;
+                               -fx-background-radius: 20; -fx-cursor: hand;
+                               -fx-padding: 7 18;"/>
+            </HBox>
+
+            <!-- Champs cachés pour submenu (compatibilité contrôleur) -->
+            <VBox fx:id="submenuKitchen" managed="false" visible="false">
+                <Button fx:id="btnIngredients" onAction="#handleIngredients"
+                        prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                <Button fx:id="btnRecipes" onAction="#handleRecipes"
+                        prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                <Button fx:id="btnDailyFood" onAction="#handleDailyFood"
+                        prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+            </VBox>
+        </HBox>
+    </top>
+
+    <!-- ═══════════════════════════════════════════
+         CONTENT AREA  — Hero par défaut
+    ════════════════════════════════════════════ -->
+    <center>
+        <StackPane fx:id="contentArea"
+                   style="-fx-background-color: #c8e6c9;">
+
+            <!-- ── HERO HOME (affiché par défaut) ── -->
+            <VBox fx:id="homeContent" alignment="CENTER" spacing="0"
+                  style="-fx-background-color: linear-gradient(to bottom right, #b2dfdb, #c8e6c9, #dcedc8);">
+
+                <!-- Hero principal -->
+                <HBox alignment="CENTER" prefHeight="560" spacing="0">
+
+                    <!-- Texte gauche -->
+                    <VBox alignment="CENTER_LEFT" spacing="22" HBox.hgrow="ALWAYS"
+                          style="-fx-padding: 0 0 0 100;">
+
+                        <Label text="Fuel Your Life With"
+                               style="-fx-font-size: 52px; -fx-font-weight: bold;
+                                      -fx-text-fill: #1a3a2a; -fx-wrap-text: true;">
+                            <font><Font name="Georgia Bold" size="52"/></font>
+                        </Label>
+                        <Label text="Nutrition"
+                               style="-fx-font-size: 52px; -fx-font-weight: bold;
+                                      -fx-text-fill: #1a3a2a;">
+                            <font><Font name="Georgia Bold Italic" size="52"/></font>
+                        </Label>
+
+                        <Label text="Our nutrition counseling helps you make lasting, healthy&#10;changes. Boost energy, manage weight, and feel better with&#10;our expert guidance."
+                               wrapText="true"
+                               style="-fx-font-size: 14px; -fx-text-fill: #3a5a4a;
+                                      -fx-line-spacing: 4; -fx-max-width: 420px;"/>
+
+                        <HBox spacing="14" style="-fx-padding: 10 0 0 0;">
+                            <Button onAction="#handleEvents"
+                                    text="🎯  Voir les Événements"
+                                    style="-fx-background-color: #e8734a; -fx-text-fill: white;
+                                           -fx-font-size: 14px; -fx-font-weight: bold;
+                                           -fx-background-radius: 30; -fx-cursor: hand;
+                                           -fx-padding: 14 32;
+                                           -fx-effect: dropshadow(gaussian, rgba(232,115,74,0.5), 12, 0, 0, 4);"/>
+                            <Button text="Book Appointment"
+                                    style="-fx-background-color: transparent;
+                                           -fx-text-fill: #2d5a3d; -fx-font-size: 13px;
+                                           -fx-border-color: #2d5a3d; -fx-border-radius: 30;
+                                           -fx-background-radius: 30; -fx-cursor: hand;
+                                           -fx-padding: 13 28;"/>
+                        </HBox>
+
+                        <!-- Stats rapides -->
+                        <HBox spacing="30" style="-fx-padding: 20 0 0 0;">
+                            <VBox spacing="2">
+                                <Label text="500+"
+                                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1a3a2a;"/>
+                                <Label text="Clients satisfaits"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #5a8a6a;"/>
+                            </VBox>
+                            <Separator orientation="VERTICAL" prefHeight="40"
+                                       style="-fx-background-color: #a0c8a8;"/>
+                            <VBox spacing="2">
+                                <Label text="50+"
+                                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1a3a2a;"/>
+                                <Label text="Événements organisés"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #5a8a6a;"/>
+                            </VBox>
+                            <Separator orientation="VERTICAL" prefHeight="40"
+                                       style="-fx-background-color: #a0c8a8;"/>
+                            <VBox spacing="2">
+                                <Label text="20+"
+                                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1a3a2a;"/>
+                                <Label text="Coachs experts"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #5a8a6a;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Décorations droite (cercles colorés simulant les fruits) -->
+                    <StackPane prefWidth="480" prefHeight="480" HBox.hgrow="NEVER">
+
+                        <!-- Cercle fond -->
+                        <StackPane prefWidth="380" prefHeight="380"
+                                   style="-fx-background-color: rgba(255,255,255,0.25);
+                                          -fx-background-radius: 200;">
+                        </StackPane>
+
+                        <!-- Emoji fruits décoratifs -->
+                        <VBox alignment="CENTER" spacing="10">
+                            <Label text="🍊"
+                                   style="-fx-font-size: 100px; -fx-translate-x: -60; -fx-translate-y: -30;"/>
+                            <Label text="🍓"
+                                   style="-fx-font-size: 80px; -fx-translate-x: 60; -fx-translate-y: 10;"/>
+                        </VBox>
+
+                        <!-- Feuilles décoratives -->
+                        <Label text="🌿"
+                               style="-fx-font-size: 30px; -fx-translate-x: -140; -fx-translate-y: -80;"/>
+                        <Label text="🌿"
+                               style="-fx-font-size: 24px; -fx-translate-x: 120; -fx-translate-y: 100;"/>
+                        <Label text="🍃"
+                               style="-fx-font-size: 20px; -fx-translate-x: -80; -fx-translate-y: 120;"/>
+                        <Label text="🍃"
+                               style="-fx-font-size: 18px; -fx-translate-x: 140; -fx-translate-y: -60;"/>
+                    </StackPane>
+                </HBox>
+
+                <!-- ── Bande features ── -->
+                <HBox alignment="CENTER" spacing="0"
+                      style="-fx-background-color: rgba(255,255,255,0.6); -fx-padding: 24 80;">
+                    <VBox alignment="CENTER" spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="🥗" style="-fx-font-size: 28px;"/>
+                        <Label text="Nutrition Personnalisée"
+                               style="-fx-font-weight: bold; -fx-text-fill: #1a3a2a; -fx-font-size: 13px;"/>
+                        <Label text="Plans adaptés à vos besoins"
+                               style="-fx-text-fill: #5a8a6a; -fx-font-size: 11px;"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" prefHeight="60"
+                               style="-fx-background-color: #c8e6c9;"/>
+                    <VBox alignment="CENTER" spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="🏃" style="-fx-font-size: 28px;"/>
+                        <Label text="Événements Sportifs"
+                               style="-fx-font-weight: bold; -fx-text-fill: #1a3a2a; -fx-font-size: 13px;"/>
+                        <Label text="Participez et progressez"
+                               style="-fx-text-fill: #5a8a6a; -fx-font-size: 11px;"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" prefHeight="60"
+                               style="-fx-background-color: #c8e6c9;"/>
+                    <VBox alignment="CENTER" spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="👨‍⚕️" style="-fx-font-size: 28px;"/>
+                        <Label text="Coachs Experts"
+                               style="-fx-font-weight: bold; -fx-text-fill: #1a3a2a; -fx-font-size: 13px;"/>
+                        <Label text="Accompagnement professionnel"
+                               style="-fx-text-fill: #5a8a6a; -fx-font-size: 11px;"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" prefHeight="60"
+                               style="-fx-background-color: #c8e6c9;"/>
+                    <VBox alignment="CENTER" spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="🤝" style="-fx-font-size: 28px;"/>
+                        <Label text="Sponsors Partenaires"
+                               style="-fx-font-weight: bold; -fx-text-fill: #1a3a2a; -fx-font-size: 13px;"/>
+                        <Label text="Des marques de confiance"
+                               style="-fx-text-fill: #5a8a6a; -fx-font-size: 11px;"/>
+                    </VBox>
+                </HBox>
+
+            </VBox>
+            <!-- fin homeContent -->
+
+        </StackPane>
+    </center>
+
+</BorderPane>

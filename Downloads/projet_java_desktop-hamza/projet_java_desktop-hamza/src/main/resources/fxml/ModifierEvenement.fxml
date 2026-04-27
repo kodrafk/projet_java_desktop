@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #0f172a;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.EvenementController">
+    <children>
+        <VBox alignment="CENTER" layoutX="250.0" layoutY="100.0" spacing="20.0" style="-fx-background-color: #1e293b; -fx-padding: 40; -fx-background-radius: 20;">
+            <children>
+                <Label text="MODIFICATION" textFill="WHITE">
+                    <font><Font name="System Bold" size="24.0" /></font>
+                </Label>
+                <TextField fx:id="txtNomModif" prefHeight="40.0" prefWidth="300.0" promptText="Nom de l'événement" style="-fx-background-color: #334155; -fx-text-fill: white;" />
+                <TextField fx:id="txtLieuModif" prefHeight="40.0" prefWidth="300.0" promptText="Lieu" style="-fx-background-color: #334155; -fx-text-fill: white;" />
+                <HBox spacing="15.0">
+                    <children>
+                        <Button onAction="#handleAjouterEtNaviguer" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold;" text="ENREGISTRER" />
+                        <Button onAction="#retourListe" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold;" text="ANNULER" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

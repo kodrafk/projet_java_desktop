@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="750.0" prefWidth="1250.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.AdminEvenementController">
+
+    <Pane prefHeight="750.0" prefWidth="1250.0"
+          style="-fx-background-color: linear-gradient(to bottom right, #1e293b, #1a4d2e);"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+
+    <VBox alignment="CENTER"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                    hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;">
+            <content>
+                <VBox alignment="CENTER" style="-fx-padding: 20 0;">
+                    <VBox maxWidth="580.0" spacing="14"
+                          style="-fx-background-color: #f8fafc; -fx-background-radius: 16;
+                                 -fx-padding: 32; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 18, 0, 0, 0);">
+
+                        <!-- Titre formulaire -->
+                        <Label fx:id="lblFormTitre" text="Nouvel Événement"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                        <Separator/>
+
+                        <!-- Nom -->
+                        <Label text="Nom de l'événement *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                        <TextField fx:id="tfNom" prefHeight="42" promptText="Ex: Marathon de Tunis"
+                                   style="-fx-background-radius: 8;"/>
+
+                        <!-- Date + Heure -->
+                        <HBox spacing="12">
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="Date de début *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                                <DatePicker fx:id="dpDateDebut" maxWidth="1.7976931348623157E308" prefHeight="42"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Heure *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                                <HBox spacing="6">
+                                    <Spinner fx:id="spHeure" prefWidth="70" prefHeight="42" editable="true"/>
+                                    <Label text=":" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #64748b; -fx-padding: 8 0 0 0;"/>
+                                    <Spinner fx:id="spMinute" prefWidth="70" prefHeight="42" editable="true"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Prix + Capacité -->
+                        <Label text="Prix de participation (TND) *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <TextField fx:id="tfPrix" prefHeight="42" prefWidth="150" promptText="0.00"
+                                       style="-fx-background-radius: 8;"/>
+                            <Label text="TND" style="-fx-text-fill: #64748b; -fx-font-weight: bold;"/>
+                            <Label text="(0 = gratuit)" 
+                                   style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-style: italic;"/>
+                        </HBox>
+
+                        <Label text="Capacité maximale (places) *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <TextField fx:id="tfCapacite" prefHeight="42" prefWidth="150" promptText="50"
+                                       style="-fx-background-radius: 8;"/>
+                            <Label text="places" style="-fx-text-fill: #64748b; -fx-font-weight: bold;"/>
+                            <Label text="(0 = illimité)" 
+                                   style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-style: italic;"/>
+                        </HBox>
+
+                        <!-- Lieu -->
+                        <Label text="Lieu *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                        <TextField fx:id="tfLieu" prefHeight="42" promptText="Ex: Stade de Tunis"
+                                   style="-fx-background-radius: 8;"/>
+
+                        <!-- Toggle Plein air -->
+                        <HBox spacing="10" alignment="CENTER_LEFT"
+                              style="-fx-background-color: #f0fdf4; -fx-background-radius: 10; -fx-padding: 10 14;">
+                            <CheckBox fx:id="cbPleinAir" text="🌿 Événement en plein air (météo automatique)"
+                                      style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #166534;"/>
+                        </HBox>
+                        <Label text="⚠️ Cochez si l'événement se déroule en extérieur (stade, parc, plage…) pour afficher la météo automatiquement."
+                               wrapText="true"
+                               style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-style: italic;"/>
+
+                        <!-- Coach -->
+                        <Label text="Coach *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                        <TextField fx:id="tfCoach" prefHeight="42" promptText="Nom du coach"
+                                   style="-fx-background-radius: 8;"/>
+
+                        <!-- Image Upload -->
+                        <Label text="Image de l'événement *" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                        <VBox spacing="8">
+                            <Button onAction="#handleBrowseImage" prefHeight="44" maxWidth="Infinity"
+                                    style="-fx-background-color: #3b82f6; -fx-text-fill: white;
+                                           -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;
+                                           -fx-font-size: 13px;">
+                                <graphic>
+                                    <HBox spacing="8" alignment="CENTER">
+                                        <Label text="📁" style="-fx-font-size: 18px;"/>
+                                        <Label text="PARCOURIR ET SÉLECTIONNER UNE IMAGE" 
+                                               style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                                    </HBox>
+                                </graphic>
+                            </Button>
+                            
+                            <!-- Nom du fichier sélectionné -->
+                            <Label fx:id="lblImageName" text="Aucune image sélectionnée" 
+                                   style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-style: italic;
+                                          -fx-padding: 4 8;"/>
+                        </VBox>
+                        
+                        <!-- Prévisualisation de l'image -->
+                        <VBox alignment="CENTER" spacing="8" 
+                              style="-fx-background-color: #f1f5f9; -fx-background-radius: 8; -fx-padding: 12;">
+                            <Label text="Aperçu de l'image :" style="-fx-text-fill: #64748b; -fx-font-size: 11px;"/>
+                            <javafx.scene.image.ImageView fx:id="imgPreview" fitWidth="200" fitHeight="150" 
+                                                          preserveRatio="true"
+                                                          style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 2);"/>
+                            <Label text="💡 L'image sera copiée automatiquement dans le projet" 
+                                   style="-fx-text-fill: #10b981; -fx-font-size: 10px; -fx-font-style: italic; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <!-- Description -->
+                        <Label text="Description" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                        <TextArea fx:id="taDescription" prefHeight="90" wrapText="true"
+                                  style="-fx-background-radius: 8;"/>
+
+                        <!-- Boutons -->
+                        <HBox alignment="CENTER_RIGHT" spacing="14">
+                            <Button onAction="#retourListe" prefHeight="44" prefWidth="130"
+                                    style="-fx-background-color: #e2e8f0; -fx-text-fill: #475569;
+                                           -fx-background-radius: 10; -fx-cursor: hand;"
+                                    text="ANNULER"/>
+                            <Button onAction="#handleEnregistrer" prefHeight="44" prefWidth="220"
+                                    style="-fx-background-color: #10b981; -fx-text-fill: white;
+                                           -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;"
+                                    text="ENREGISTRER"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </VBox>
+</AnchorPane>

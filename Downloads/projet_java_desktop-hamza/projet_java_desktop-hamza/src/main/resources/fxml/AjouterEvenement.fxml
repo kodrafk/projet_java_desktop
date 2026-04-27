@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="750.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.EvenementController">
+    <children>
+        <Pane prefHeight="750.0" prefWidth="1250.0" style="-fx-background-color: linear-gradient(to bottom, #1e293b, #1a4d2e);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+        <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <VBox maxWidth="550.0" spacing="15.0" style="-fx-background-color: #F8FAFC; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 0);">
+                    <children>
+                        <Label text="Nouvel Événement" textFill="#1e293b">
+                            <font><Font name="System Bold" size="26.0" /></font>
+                        </Label>
+                        <Separator />
+
+                        <VBox spacing="10.0">
+                            <children>
+                                <Label text="Nom de l'événement" textFill="#64748B" />
+                                <TextField fx:id="tfNom" prefHeight="40.0" promptText="Ex: Marathon de Tunis" style="-fx-background-radius: 8;" />
+
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <VBox HBox.hgrow="ALWAYS">
+                                            <Label text="Date Début" textFill="#64748B" />
+                                            <DatePicker fx:id="dpDateDebut" maxWidth="1.7976931348623157E308" prefHeight="40.0" />
+                                        </VBox>
+                                        <VBox>
+                                            <Label text="Heure (HH:mm)" textFill="#64748B" />
+                                            <TextField fx:id="tfHeureDebut" prefHeight="40.0" prefWidth="100.0" promptText="08:00" />
+                                        </VBox>
+                                    </children>
+                                </HBox>
+
+                                <Label text="Lieu" textFill="#64748B" />
+                                <TextField fx:id="tfLieu" prefHeight="40.0" style="-fx-background-radius: 8;" />
+
+                                <Label text="Coach" textFill="#64748B" />
+                                <TextField fx:id="tfCoach" prefHeight="40.0" style="-fx-background-radius: 8;" />
+
+                                <Label text="Description" textFill="#64748B" />
+                                <TextArea fx:id="taDescription" prefHeight="100.0" wrapText="true" />
+                            </children>
+                        </VBox>
+
+                        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                            <children>
+                                <Button onAction="#retourListe" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: #E2E8F0; -fx-text-fill: #475569; -fx-background-radius: 8;" text="ANNULER" />
+                                <Button onAction="#handleAjouterEtNaviguer" prefHeight="45.0" prefWidth="220.0" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" text="ENREGISTRER" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

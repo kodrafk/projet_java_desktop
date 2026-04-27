@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #f8fafc;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminSponsorController">
+
+    <!-- ══ HEADER ══ -->
+    <HBox alignment="CENTER_LEFT" prefHeight="80"
+          style="-fx-background-color: white;
+                 -fx-border-color: transparent transparent #e2e8f0 transparent;
+                 -fx-border-width: 0 0 1 0;">
+        <padding><Insets left="32" right="32"/></padding>
+
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="🏆 Gestion des Sponsors"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+            <Label text="Images générées automatiquement selon le nom de la marque"
+                   style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+        </VBox>
+
+        <!-- Barre de recherche -->
+        <TextField fx:id="tfRecherche" promptText="🔍  Rechercher un sponsor..."
+                   prefWidth="280" prefHeight="42"
+                   style="-fx-background-radius: 12; -fx-border-color: #e2e8f0;
+                          -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 8 16;
+                          -fx-font-size: 13px;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox spacing="24">
+            <padding><Insets top="24" right="32" bottom="24" left="32"/></padding>
+
+            <!-- ══ FORMULAIRE AJOUT ══ -->
+            <VBox spacing="16" maxWidth="960"
+                  style="-fx-background-color: white; -fx-background-radius: 16;
+                         -fx-padding: 28; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 4);">
+
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="➕  Ajouter un Sponsor"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="* champs obligatoires"
+                           style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;"/>
+                </HBox>
+
+                <Separator/>
+
+                <!-- Ligne 1 : Événement + Nom -->
+                <HBox spacing="16">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Événement associé *"
+                               style="-fx-text-fill: #475569; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cbEvenement" maxWidth="Infinity" prefHeight="44"
+                                  promptText="Sélectionner un événement"
+                                  style="-fx-background-radius: 10; -fx-border-color: #e2e8f0;
+                                         -fx-border-radius: 10; -fx-border-width: 1;"/>
+                    </VBox>
+
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Nom du sponsor *"
+                               style="-fx-text-fill: #475569; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                        <TextField fx:id="tfSponsorNom" prefHeight="44"
+                                   promptText="Ex: Nike, Adidas, BMW, Coca-Cola..."
+                                   style="-fx-background-radius: 10; -fx-border-color: #e2e8f0;
+                                          -fx-border-radius: 10; -fx-border-width: 1; -fx-padding: 8 16;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Ligne 2 : Type + Logo -->
+                <HBox spacing="16">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Type de partenariat"
+                               style="-fx-text-fill: #475569; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                        <TextField fx:id="tfSponsorType" prefHeight="44"
+                                   promptText="Gold, Silver, Bronze, Platinum, Standard..."
+                                   style="-fx-background-radius: 10; -fx-border-color: #e2e8f0;
+                                          -fx-border-radius: 10; -fx-border-width: 1; -fx-padding: 8 16;"/>
+                    </VBox>
+
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Logo URL (optionnel — laissez vide pour auto)"
+                               style="-fx-text-fill: #475569; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                        <TextField fx:id="tfSponsorLogo" prefHeight="44"
+                                   promptText="https://... (auto-généré si vide)"
+                                   style="-fx-background-radius: 10; -fx-border-color: #e2e8f0;
+                                          -fx-border-radius: 10; -fx-border-width: 1; -fx-padding: 8 16;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Description -->
+                <VBox spacing="8">
+                    <Label text="Description"
+                           style="-fx-text-fill: #475569; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                    <TextArea fx:id="taSponsorDesc" prefHeight="90" wrapText="true"
+                              promptText="Décrivez le partenariat..."
+                              style="-fx-background-radius: 10; -fx-border-color: #e2e8f0;
+                                     -fx-border-radius: 10; -fx-border-width: 1; -fx-padding: 12;"/>
+                </VBox>
+
+                <!-- Bouton Ajouter -->
+                <HBox alignment="CENTER_RIGHT">
+                    <Button onAction="#handleAjouterSponsor"
+                            prefWidth="220" prefHeight="48"
+                            style="-fx-background-color: linear-gradient(to right, #6366f1, #8b5cf6);
+                                   -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;
+                                   -fx-background-radius: 12; -fx-cursor: hand;
+                                   -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.35), 10, 0, 0, 4);"
+                            text="✅  Ajouter le Sponsor"/>
+                </HBox>
+            </VBox>
+
+            <!-- ══ GRILLE DE CARDS ══ -->
+            <VBox spacing="16">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Tous les Sponsors"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblCompteur" text="0 sponsors"
+                           style="-fx-font-size: 12px; -fx-text-fill: #64748b;
+                                  -fx-background-color: #f1f5f9; -fx-background-radius: 8;
+                                  -fx-padding: 4 12;"/>
+                </HBox>
+
+                <FlowPane fx:id="flowPaneSponsors"
+                          hgap="20" vgap="20" prefWrapLength="900"
+                          style="-fx-background-color: transparent;"/>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>
