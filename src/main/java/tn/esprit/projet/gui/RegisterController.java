@@ -56,11 +56,15 @@ public class RegisterController {
     @FXML
     public void initialize() {
         if (errorLabel != null) errorLabel.setVisible(false);
-        // reCAPTCHA temporarily disabled
-        if (recaptchaView != null) { recaptchaView.setVisible(false); recaptchaView.setManaged(false); }
+        // reCAPTCHA ENABLED with real keys
+        if (recaptchaView != null) {
+            recaptchaView.setVisible(true);
+            recaptchaView.setManaged(true);
+            loadRecaptcha();
+        }
         if (captchaLabel != null) { captchaLabel.setVisible(false); captchaLabel.setManaged(false); }
         if (captchaField != null) { captchaField.setVisible(false); captchaField.setManaged(false); }
-        if (errCaptcha   != null) { errCaptcha.setVisible(false);   errCaptcha.setManaged(false); }
+        if (errCaptcha   != null) { errCaptcha.setVisible(true); errCaptcha.setManaged(true); }
         prefillFromGoogle();
 
         // Real-time inline validation
@@ -159,18 +163,24 @@ public class RegisterController {
         ok &= Validator.apply(weightField, errWeight, Validator.weight(weightField.getText()));
         ok &= Validator.apply(heightField, errHeight, Validator.height(heightField.getText()));
 
-        // reCAPTCHA temporarily disabled
-        // String token = getRecaptchaToken();
-        // if (token == null || token.isBlank()) {
-        //     if (errCaptcha != null) errCaptcha.setText("Please complete the reCAPTCHA verification.");
-        //     ok = false;
-        // } else if (!recaptchaService.verify(token)) {
-        //     if (errCaptcha != null) errCaptcha.setText("reCAPTCHA failed. Please try again.");
-        //     loadRecaptcha();
-        //     ok = false;
-        // } else {
-        //     if (errCaptcha != null) errCaptcha.setText("");
-        // }
+        // reCAPTCHA verification
+        String token = getRecaptchaToken();
+        if (token == null || token.isBlank()) {
+            if (errCaptcha != null) {
+                errCaptcha.setText("Please complete the reCAPTCHA verification.");
+                errCaptcha.setStyle("-fx-text-fill:#DC2626;-fx-font-size:11px;");
+            }
+            ok = false;
+        } else if (!recaptchaService.verify(token)) {
+            if (errCaptcha != null) {
+                errCaptcha.setText("reCAPTCHA failed. Please try again.");
+                errCaptcha.setStyle("-fx-text-fill:#DC2626;-fx-font-size:11px;");
+            }
+            loadRecaptcha();
+            ok = false;
+        } else {
+            if (errCaptcha != null) errCaptcha.setText("");
+        }
 
         if (!ok) return;
 

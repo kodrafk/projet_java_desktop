@@ -1,0 +1,12 @@
+# Copy this file to config.properties and fill in your keys
+# config.properties is in .gitignore (never committed)
+
+# Google OAuth credentials
+# Get from: https://console.cloud.google.com → APIs & Services → Credentials → OAuth 2.0
+google.client.id=YOUR_CLIENT_ID.apps.googleusercontent.com
+google.client.secret=YOUR_CLIENT_SECRET
+
+# reCAPTCHA v2 keys
+# Get from: https://www.google.com/recaptcha/admin
+recaptcha.site.key=YOUR_SITE_KEY
+recaptcha.secret.key=YOUR_SECRET_KEY

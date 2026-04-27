@@ -38,9 +38,9 @@ import java.util.Map;
  */
 public class GoogleAuthController {
 
-    // ── Replace these with your real Google OAuth credentials ─────────────────
-    private static final String CLIENT_ID     = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
-    private static final String CLIENT_SECRET = "YOUR_GOOGLE_CLIENT_SECRET";
+    // ── Google OAuth credentials loaded from config.properties ─────────────────
+    private static final String CLIENT_ID     = tn.esprit.projet.utils.AppConfig.googleClientId();
+    private static final String CLIENT_SECRET = tn.esprit.projet.utils.AppConfig.googleClientSecret();
     private static final String REDIRECT_URI  = "http://localhost:8080/callback";
     private static final String SCOPE         = "openid email profile";
     // ──────────────────────────────────────────────────────────────────────────
@@ -56,13 +56,12 @@ public class GoogleAuthController {
 
     @FXML
     public void initialize() {
-        if (CLIENT_ID.startsWith("YOUR_")) {
-            // No credentials configured — show setup instructions
-            showSetupInstructions();
-            return;
-        }
-
+        // Credentials are properly configured
         WebEngine engine = webView.getEngine();
+        
+        // Enable JavaScript and other web features
+        engine.setJavaScriptEnabled(true);
+        engine.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
 
         String authUrl = "https://accounts.google.com/o/oauth2/v2/auth"
                 + "?client_id=" + CLIENT_ID
@@ -72,10 +71,12 @@ public class GoogleAuthController {
                 + "&access_type=offline"
                 + "&prompt=select_account";
 
+        System.out.println("[GoogleAuth] Loading OAuth URL: " + authUrl);
         engine.load(authUrl);
 
         // Watch for redirect with auth code
         engine.locationProperty().addListener((obs, oldUrl, newUrl) -> {
+            System.out.println("[GoogleAuth] URL changed: " + newUrl);
             if (newUrl != null && newUrl.startsWith(REDIRECT_URI)) {
                 engine.load("about:blank");
                 if (statusLabel != null) {
@@ -85,26 +86,54 @@ public class GoogleAuthController {
                 if (spinner != null) spinner.setVisible(true);
 
                 String code = extractParam(newUrl, "code");
-                if (code != null) {
+                String error = extractParam(newUrl, "error");
+                
+                if (error != null) {
+                    Platform.runLater(() -> {
+                        if (statusLabel != null) statusLabel.setText("Authentication cancelled: " + error);
+                        if (spinner != null) spinner.setVisible(false);
+                    });
+                } else if (code != null) {
+                    System.out.println("[GoogleAuth] Got authorization code, exchanging for token...");
                     new Thread(() -> handleAuthCode(code)).start();
                 } else {
                     Platform.runLater(() -> {
                         if (statusLabel != null) statusLabel.setText("Authentication cancelled.");
+                        if (spinner != null) spinner.setVisible(false);
                     });
                 }
+            }
+        });
+        
+        // Handle load errors
+        engine.getLoadWorker().exceptionProperty().addListener((obs, oldEx, newEx) -> {
+            if (newEx != null) {
+                System.err.println("[GoogleAuth] WebView error: " + newEx.getMessage());
+                Platform.runLater(() -> {
+                    if (statusLabel != null) statusLabel.setText("Error loading Google login page");
+                    if (spinner != null) spinner.setVisible(false);
+                });
             }
         });
     }
 
     private void handleAuthCode(String code) {
         try {
+            System.out.println("[GoogleAuth] Exchanging code for token...");
             // Exchange code for tokens
             String tokenJson = exchangeCodeForToken(code);
+            System.out.println("[GoogleAuth] Token response: " + tokenJson);
+            
             String accessToken = extractJsonValue(tokenJson, "access_token");
-            if (accessToken == null) throw new Exception("No access_token in response");
+            if (accessToken == null) {
+                throw new Exception("No access_token in response: " + tokenJson);
+            }
 
+            System.out.println("[GoogleAuth] Got access token, fetching user info...");
             // Get user info
             String userInfoJson = fetchUserInfo(accessToken);
+            System.out.println("[GoogleAuth] User info: " + userInfoJson);
+            
             String googleId  = extractJsonValue(userInfoJson, "sub");
             String email     = extractJsonValue(userInfoJson, "email");
             String firstName = extractJsonValue(userInfoJson, "given_name");
@@ -112,17 +141,26 @@ public class GoogleAuthController {
             if (firstName == null) firstName = extractJsonValue(userInfoJson, "name");
             if (lastName  == null) lastName  = "";
 
+            if (email == null || googleId == null) {
+                throw new Exception("Missing required user info: email=" + email + ", googleId=" + googleId);
+            }
+
             final String fEmail = email;
             final String fGoogleId = googleId;
             final String fFirst = firstName;
             final String fLast  = lastName;
 
+            System.out.println("[GoogleAuth] Processing user: " + fEmail);
             Platform.runLater(() -> processGoogleUser(fEmail, fGoogleId, fFirst, fLast));
 
         } catch (Exception e) {
+            System.err.println("[GoogleAuth] Error during authentication: " + e.getMessage());
             e.printStackTrace();
             Platform.runLater(() -> {
-                if (statusLabel != null) statusLabel.setText("Error: " + e.getMessage());
+                if (statusLabel != null) {
+                    statusLabel.setText("Authentication failed: " + e.getMessage());
+                    statusLabel.setStyle("-fx-font-size:12px;-fx-text-fill:#d32f2f;-fx-font-weight:bold;");
+                }
                 if (spinner != null) spinner.setVisible(false);
             });
         }
@@ -131,16 +169,25 @@ public class GoogleAuthController {
     private void processGoogleUser(String email, String googleId, String firstName, String lastName) {
         if (spinner != null) spinner.setVisible(false);
 
+        System.out.println("[GoogleAuth] Processing user - Email: " + email + ", GoogleId: " + googleId);
+        
         // Try find by googleId first, then by email
         User user = repo.findByGoogleId(googleId);
-        if (user == null && email != null) user = repo.findByEmail(email);
+        if (user == null && email != null) {
+            user = repo.findByEmail(email);
+            System.out.println("[GoogleAuth] User found by email: " + (user != null));
+        } else {
+            System.out.println("[GoogleAuth] User found by GoogleId: " + (user != null));
+        }
 
         Stage stage = (Stage) webView.getScene().getWindow();
 
         if (fromRegister) {
             if (user != null) {
-                if (statusLabel != null)
+                if (statusLabel != null) {
                     statusLabel.setText("This Gmail account is already registered. Please sign in instead.");
+                    statusLabel.setStyle("-fx-font-size:12px;-fx-text-fill:#d32f2f;-fx-font-weight:bold;");
+                }
                 return;
             }
             // Store Google data for CompleteProfile screen
@@ -148,26 +195,34 @@ public class GoogleAuthController {
             GoogleTempData.googleId  = googleId;
             GoogleTempData.firstName = firstName;
             GoogleTempData.lastName  = lastName;
+            System.out.println("[GoogleAuth] Stored temp data for registration");
             stage.close();
             // Navigate to register with pre-filled data
             Nav.go((Stage) stage.getOwner(), "register.fxml", "NutriLife - Complete Profile");
         } else {
             // Login flow
             if (user == null) {
-                if (statusLabel != null)
+                if (statusLabel != null) {
                     statusLabel.setText("This Gmail account is not registered yet. Please sign up.");
+                    statusLabel.setStyle("-fx-font-size:12px;-fx-text-fill:#d32f2f;-fx-font-weight:bold;");
+                }
                 return;
             }
             if (!user.isActive()) {
-                if (statusLabel != null)
+                if (statusLabel != null) {
                     statusLabel.setText("Your account is deactivated.");
+                    statusLabel.setStyle("-fx-font-size:12px;-fx-text-fill:#d32f2f;-fx-font-weight:bold;");
+                }
                 return;
             }
             // Update googleId if not set
             if (user.getGoogleId() == null) {
+                System.out.println("[GoogleAuth] Updating user with GoogleId");
                 user.setGoogleId(googleId);
                 repo.update(user);
             }
+            
+            System.out.println("[GoogleAuth] Login successful for user: " + user.getEmail());
             Session.login(user);
             stage.close();
             Stage owner = (Stage) stage.getOwner();
@@ -213,6 +268,7 @@ public class GoogleAuthController {
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestProperty("Accept", "application/json");
 
         String body = "code=" + code
                 + "&client_id=" + CLIENT_ID
@@ -223,6 +279,13 @@ public class GoogleAuthController {
         try (OutputStream os = conn.getOutputStream()) {
             os.write(body.getBytes(StandardCharsets.UTF_8));
         }
+        
+        int responseCode = conn.getResponseCode();
+        if (responseCode != 200) {
+            String errorResponse = readErrorResponse(conn);
+            throw new Exception("Token exchange failed (HTTP " + responseCode + "): " + errorResponse);
+        }
+        
         return readResponse(conn);
     }
 
@@ -230,6 +293,14 @@ public class GoogleAuthController {
         URL url = new URL("https://www.googleapis.com/oauth2/v3/userinfo");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+        conn.setRequestProperty("Accept", "application/json");
+        
+        int responseCode = conn.getResponseCode();
+        if (responseCode != 200) {
+            String errorResponse = readErrorResponse(conn);
+            throw new Exception("User info fetch failed (HTTP " + responseCode + "): " + errorResponse);
+        }
+        
         return readResponse(conn);
     }
 
@@ -240,6 +311,18 @@ public class GoogleAuthController {
             String line;
             while ((line = br.readLine()) != null) sb.append(line);
             return sb.toString();
+        }
+    }
+    
+    private String readErrorResponse(HttpURLConnection conn) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
+            return sb.toString();
+        } catch (Exception e) {
+            return "Unable to read error response";
         }
     }
 

@@ -40,3 +40,7 @@ build/
 ### Sensitive credentials - NEVER push these ###
 src/main/resources/twilio.properties
 src/main/resources/recaptcha.properties
+src/main/resources/config.properties
+
+### Documentation files ###
+*.md

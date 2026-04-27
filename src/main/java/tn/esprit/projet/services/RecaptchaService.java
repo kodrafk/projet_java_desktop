@@ -17,7 +17,7 @@ public class RecaptchaService {
 
     // Google test keys — always valid in dev
     // Replace with real keys from https://www.google.com/recaptcha/admin
-    private static final String SECRET_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
+    private static final String SECRET_KEY = tn.esprit.projet.utils.AppConfig.recaptchaSecretKey();
     private static final String VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
 
     /**
