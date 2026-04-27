@@ -84,6 +84,33 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_verify.fxml"));
             Parent root = loader.load();
             FaceIdVerifyController ctrl = loader.getController();
+            ctrl.setOnSuccess(() -> {
+                if (Session.isLoggedIn()) navigateAfterLogin(Session.getCurrentUser());
+            });
+            ctrl.setOnFailure(() -> showError("Face ID authentication failed. Please use password."));
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner((Stage) emailField.getScene().getWindow());
+            stage.setTitle("Face ID Authentication");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            if (Session.isLoggedIn()) navigateAfterLogin(Session.getCurrentUser());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Could not open Face ID: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleFaceIdUpload() {
+        hideError();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_verify_upload.fxml"));
+            Parent root = loader.load();
+            FaceIdVerifyUploadController ctrl = loader.getController();
             ctrl.setTargetUser(null);
             ctrl.setOnSuccess(() -> {
                 if (Session.isLoggedIn()) navigateAfterLogin(Session.getCurrentUser());
@@ -93,15 +120,15 @@ public class LoginController {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner((Stage) emailField.getScene().getWindow());
-            stage.setTitle("Face ID Login");
-            stage.setScene(new Scene(root, 520, 520));
+            stage.setTitle("Face ID - Upload Photo");
+            stage.setScene(new Scene(root, 560, 600));
             stage.setResizable(false);
             stage.showAndWait();
 
             if (Session.isLoggedIn()) navigateAfterLogin(Session.getCurrentUser());
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Could not open camera: " + e.getMessage());
+            showError("Could not load upload interface: " + e.getMessage());
         }
     }
 

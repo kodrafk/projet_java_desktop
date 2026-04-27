@@ -191,6 +191,7 @@ public class MyBDConnexion {
              "`encryption_iv` VARCHAR(255) NOT NULL," +
              "`encryption_tag` VARCHAR(255) NOT NULL," +
              "`is_active` TINYINT(1) NOT NULL DEFAULT 1," +
+             "`liveness_verified` TINYINT(1) NOT NULL DEFAULT 0," +
              "`consent_given_at` DATETIME DEFAULT NULL," +
              "`consent_ip` VARCHAR(45) DEFAULT NULL," +
              "`created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
@@ -208,6 +209,18 @@ public class MyBDConnexion {
              "`similarity_score` DOUBLE DEFAULT NULL," +
              "`attempted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
              "FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE SET NULL" +
+             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        exec("CREATE TABLE IF NOT EXISTS `face_id_attempts` (" +
+             "`id` INT AUTO_INCREMENT PRIMARY KEY," +
+             "`user_id` INT DEFAULT NULL," +
+             "`attempt_type` VARCHAR(20) NOT NULL," +
+             "`success` TINYINT(1) NOT NULL DEFAULT 0," +
+             "`similarity_score` DOUBLE DEFAULT NULL," +
+             "`liveness_verified` TINYINT(1) NOT NULL DEFAULT 0," +
+             "`failure_reason` VARCHAR(255) DEFAULT NULL," +
+             "`ip_address` VARCHAR(45) NOT NULL DEFAULT '127.0.0.1'," +
+             "`attempted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP" +
              ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
         exec("CREATE TABLE IF NOT EXISTS `weight_objective` (" +
@@ -356,6 +369,7 @@ public class MyBDConnexion {
              "`encryption_iv` VARCHAR(255) NOT NULL," +
              "`encryption_tag` VARCHAR(255) NOT NULL," +
              "`is_active` TINYINT(1) NOT NULL DEFAULT 1," +
+             "`liveness_verified` TINYINT(1) NOT NULL DEFAULT 0," +
              "`consent_given_at` DATETIME DEFAULT NULL," +
              "`consent_ip` VARCHAR(45) DEFAULT NULL," +
              "`created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
@@ -370,6 +384,18 @@ public class MyBDConnexion {
              "`ip_address` VARCHAR(45) NOT NULL DEFAULT '127.0.0.1'," +
              "`success` TINYINT(1) NOT NULL DEFAULT 0," +
              "`similarity_score` DOUBLE DEFAULT NULL," +
+             "`attempted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP" +
+             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        exec("CREATE TABLE IF NOT EXISTS `face_id_attempts` (" +
+             "`id` INT AUTO_INCREMENT PRIMARY KEY," +
+             "`user_id` INT DEFAULT NULL," +
+             "`attempt_type` VARCHAR(20) NOT NULL," +
+             "`success` TINYINT(1) NOT NULL DEFAULT 0," +
+             "`similarity_score` DOUBLE DEFAULT NULL," +
+             "`liveness_verified` TINYINT(1) NOT NULL DEFAULT 0," +
+             "`failure_reason` VARCHAR(255) DEFAULT NULL," +
+             "`ip_address` VARCHAR(45) NOT NULL DEFAULT '127.0.0.1'," +
              "`attempted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP" +
              ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
@@ -505,6 +531,13 @@ public class MyBDConnexion {
     public Connection getCnx() {
         ensureConnected();
         return cnx;
+    }
+
+    /**
+     * Alias for getCnx() - used by some repositories
+     */
+    public Connection getConnexion() {
+        return getCnx();
     }
 
     /**

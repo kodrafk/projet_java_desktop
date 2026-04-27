@@ -174,32 +174,19 @@ public class AdminUserEditController {
     private void handleTestFace() {
         if (user == null) return;
         
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/face_id_verify.fxml"));
-            Parent root = loader.load();
-            FaceIdVerifyController ctrl = loader.getController();
-            ctrl.setTargetUser(user);
-            ctrl.setOnSuccess(() -> {
+        // Use new professional Face ID system
+        tn.esprit.projet.gui.faceid.FaceIDLauncher.launchAuthentication(
+            () -> {
+                // SUCCESS
                 Stage stage = (Stage) emailField.getScene().getWindow();
                 Toasts.show(stage, "✅ Face ID verification successful!", Toasts.Type.SUCCESS);
-            });
-            ctrl.setOnFailure(() -> {
+            },
+            () -> {
+                // FAILURE
                 Stage stage = (Stage) emailField.getScene().getWindow();
                 Toasts.show(stage, "❌ Face ID verification failed!", Toasts.Type.ERROR);
-            });
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initOwner((Stage) emailField.getScene().getWindow());
-            stage.setTitle("Test Face ID — " + user.getFirstName() + " " + user.getLastName());
-            stage.setScene(new Scene(root, 520, 520));
-            stage.setResizable(false);
-            stage.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Stage stage = (Stage) emailField.getScene().getWindow();
-            Toasts.show(stage, "Could not open camera: " + e.getMessage(), Toasts.Type.ERROR);
-        }
+            }
+        );
     }
 
     @FXML
