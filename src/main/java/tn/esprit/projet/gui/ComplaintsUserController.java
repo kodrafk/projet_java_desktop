@@ -21,6 +21,7 @@ import tn.esprit.projet.services.ComplaintService;
 import tn.esprit.projet.utils.SessionManager;
 import tn.esprit.projet.utils.Toast;
 import tn.esprit.projet.utils.GeminiService;
+import tn.esprit.projet.utils.BadWordAPI;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -183,6 +184,17 @@ public class ComplaintsUserController {
             return;
         }
 
+        // Bad words validation
+        if (BadWordAPI.hasProfanity(title)) {
+            showError("Title contains inappropriate language. Please modify your text.");
+            return;
+        }
+
+        if (BadWordAPI.hasProfanity(description)) {
+            showError("Description contains inappropriate language. Please modify your text.");
+            return;
+        }
+
         Complaint c = new Complaint();
         c.setUserId(SessionManager.getCurrentUser().getId());
         c.setTitle(title);
@@ -204,6 +216,35 @@ public class ComplaintsUserController {
     @FXML
     private void handleRefresh() {
         refreshData();
+    }
+
+    // Test method for BadWord API - can be called from FXML button
+    @FXML
+    private void testBadWordAPI() {
+        System.out.println("=== Testing BadWord API ===");
+        
+        // Test cases
+        String[] testTexts = {
+            "Hello world, this is clean",
+            "This contains fuck word",
+            "You are stupid",
+            "Great service!",
+            "This is shit quality"
+        };
+        
+        boolean apiWorking = false;
+        for (String text : testTexts) {
+            boolean hasProfanity = BadWordAPI.hasProfanity(text);
+            System.out.println("\"" + text + "\" -> " + (hasProfanity ? "❌ BLOCKED" : "✅ ALLOWED"));
+            if (hasProfanity) apiWorking = true;
+        }
+        
+        String message = apiWorking ? 
+            "✅ BadWord API is working! Check console for details." :
+            "⚠️ BadWord API may not be detecting words. Check console.";
+            
+        Toast.show((javafx.stage.Stage)fldTitle.getScene().getWindow(), message, 
+            apiWorking ? Toast.Type.SUCCESS : Toast.Type.ERROR);
     }
 
     private void refreshData() {

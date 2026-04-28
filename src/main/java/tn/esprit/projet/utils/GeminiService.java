@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeminiService {
 
-    private static final String API_KEY = "AIzaSyDyQCqDzlWbT17ziMWvcHYXM17K_Rc7_eY";
+    private static final String API_KEY = "AIzaSyBxO-t07gZhkNmm6x9XwYBNAvH5ix__c5E";
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
     private static final ObjectMapper mapper = new ObjectMapper();
     

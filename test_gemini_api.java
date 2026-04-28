@@ -10,7 +10,7 @@ import java.net.http.HttpResponse;
  */
 public class test_gemini_api {
     
-    private static final String API_KEY = "AIzaSyDrPPwepFzZEC-km4L6wcV1BPdFV1pDg5Q";
+    private static final String API_KEY = "AIzaSyBxO-t07gZhkNmm6x9XwYBNAvH5ix__c5E";
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
     
     public static void main(String[] args) {
