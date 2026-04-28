@@ -23,29 +23,22 @@ public class RecaptchaLoader {
         }
 
         try {
-            // Load the HTML file and inject the real site key via JavaScript after load
-            java.net.URL htmlUrl = RecaptchaLoader.class.getResource("/html/recaptcha.html");
-            if (htmlUrl == null) {
-                System.err.println("[reCAPTCHA] recaptcha.html not found");
-                return;
-            }
+            // Start embedded HTTP server (required — Google reCAPTCHA refuses file:// URLs)
+            RecaptchaServer.start();
 
-            // Load the file URL (allows external scripts like Google reCAPTCHA)
-            webView.getEngine().load(htmlUrl.toExternalForm());
+            // Load from localhost HTTP server
+            String url = RecaptchaServer.getUrl();
+            webView.getEngine().load(url);
 
-            // After page loads, inject the correct site key if needed
             webView.getEngine().getLoadWorker().stateProperty().addListener((obs, old, state) -> {
                 if (state == javafx.concurrent.Worker.State.SUCCEEDED) {
-                    try {
-                        // Check if the widget loaded correctly
-                        System.out.println("[reCAPTCHA] Page loaded successfully");
-                    } catch (Exception e) {
-                        System.err.println("[reCAPTCHA] Post-load error: " + e.getMessage());
-                    }
+                    System.out.println("[reCAPTCHA] ✅ Widget ready at " + url);
+                } else if (state == javafx.concurrent.Worker.State.FAILED) {
+                    System.err.println("[reCAPTCHA] ❌ Failed to load widget");
                 }
             });
 
-            System.out.println("[reCAPTCHA] Widget loaded with site key: " + siteKey.substring(0, 10) + "...");
+            System.out.println("[reCAPTCHA] Loading from: " + url);
 
         } catch (Exception e) {
             System.err.println("[reCAPTCHA] Load error: " + e.getMessage());
