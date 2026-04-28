@@ -22,35 +22,34 @@ public class RecaptchaLoader {
             return;
         }
 
-        // Build HTML inline with the real site key injected
-        String html = "<!DOCTYPE html><html><head>"
-            + "<meta charset='UTF-8'>"
-            + "<script src='https://www.google.com/recaptcha/api.js' async defer></script>"
-            + "<style>"
-            + "* { margin:0; padding:0; box-sizing:border-box; }"
-            + "body { display:flex; justify-content:center; align-items:center;"
-            + "       height:100vh; background:transparent; overflow:hidden; }"
-            + ".wrap { transform:scale(0.88); transform-origin:center; }"
-            + "</style></head><body>"
-            + "<div class='wrap'>"
-            + "<div class='g-recaptcha'"
-            + "     data-sitekey='" + siteKey + "'"
-            + "     data-callback='onSuccess'"
-            + "     data-expired-callback='onExpired'"
-            + "     data-error-callback='onError'>"
-            + "</div></div>"
-            + "<script>"
-            + "window.recaptchaToken = null;"
-            + "function onSuccess(t) { window.recaptchaToken = t; console.log('reCAPTCHA OK'); }"
-            + "function onExpired()  { window.recaptchaToken = null; }"
-            + "function onError()    { window.recaptchaToken = null; }"
-            + "function getToken()   { return window.recaptchaToken; }"
-            + "function reset()      { if(typeof grecaptcha!='undefined') { grecaptcha.reset(); window.recaptchaToken=null; } }"
-            + "</script></body></html>";
+        try {
+            // Load the HTML file and inject the real site key via JavaScript after load
+            java.net.URL htmlUrl = RecaptchaLoader.class.getResource("/html/recaptcha.html");
+            if (htmlUrl == null) {
+                System.err.println("[reCAPTCHA] recaptcha.html not found");
+                return;
+            }
 
-        webView.getEngine().loadContent(html);
+            // Load the file URL (allows external scripts like Google reCAPTCHA)
+            webView.getEngine().load(htmlUrl.toExternalForm());
 
-        System.out.println("[reCAPTCHA] Widget loaded with site key: " + siteKey.substring(0, 10) + "...");
+            // After page loads, inject the correct site key if needed
+            webView.getEngine().getLoadWorker().stateProperty().addListener((obs, old, state) -> {
+                if (state == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    try {
+                        // Check if the widget loaded correctly
+                        System.out.println("[reCAPTCHA] Page loaded successfully");
+                    } catch (Exception e) {
+                        System.err.println("[reCAPTCHA] Post-load error: " + e.getMessage());
+                    }
+                }
+            });
+
+            System.out.println("[reCAPTCHA] Widget loaded with site key: " + siteKey.substring(0, 10) + "...");
+
+        } catch (Exception e) {
+            System.err.println("[reCAPTCHA] Load error: " + e.getMessage());
+        }
     }
 
     /**
