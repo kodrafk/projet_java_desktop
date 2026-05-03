@@ -1,75 +1,36 @@
 @echo off
-chcp 65001 >nul
-color 0A
 cls
-
+color 0B
 echo.
-echo ╔═══════════════════════════════════════════════════════════════════════════╗
-echo ║                                                                           ║
-echo ║           🚀 LANCEMENT COMPLET DE L'APPLICATION                          ║
-echo ║                                                                           ║
-echo ╚═══════════════════════════════════════════════════════════════════════════╝
+echo ╔════════════════════════════════════════════════════════════════╗
+echo ║         🚀 LANCEMENT COMPLET - FACE ID SYSTEM 🚀              ║
+echo ╚════════════════════════════════════════════════════════════════╝
+echo.
+echo Ce script va:
+echo   1. Demarrer le serveur Python Face Recognition
+echo   2. Demarrer l'application Java
+echo.
+echo ════════════════════════════════════════════════════════════════
 echo.
 
-echo [1/4] Création des comptes admin...
-echo.
-
-REM Essayer de créer les comptes (ignorer les erreurs si déjà existants)
-mysql -u root nutrilife < create_admin_now.sql 2>nul
-
-if %errorlevel% equ 0 (
-    echo ✅ Comptes admin créés/vérifiés
+REM Check if Python server is already running
+echo Verification du serveur Python...
+curl -s http://localhost:5000/health >nul 2>&1
+if %errorlevel% == 0 (
+    echo ✅ Serveur Python deja en cours d'execution
 ) else (
-    echo ⚠️  Comptes peut-être déjà existants
+    echo 🚀 Demarrage du serveur Python...
+    start "Python Face Server" cmd /k "cd python_face_server && START_SERVER.bat"
+    echo Attente du demarrage du serveur...
+    timeout /t 5 >nul
 )
 
 echo.
-echo [2/4] Installation des tables d'anomalies...
+echo ════════════════════════════════════════════════════════════════
+echo.
+echo 🚀 Demarrage de l'application Java...
 echo.
 
-if exist "CREATE_ANOMALY_DETECTION_TABLES.sql" (
-    mysql -u root nutrilife < CREATE_ANOMALY_DETECTION_TABLES.sql 2>nul
-    if %errorlevel% equ 0 (
-        echo ✅ Tables d'anomalies installées
-    ) else (
-        echo ⚠️  Tables peut-être déjà installées
-    )
-)
-
-echo.
-echo [3/4] Compilation du projet...
-echo.
-
-call mvn clean compile -q
-
-if %errorlevel% neq 0 (
-    echo ❌ Erreur de compilation
-    pause
-    exit /b 1
-)
-
-echo ✅ Compilation réussie
-echo.
-
-echo [4/4] Lancement de l'application...
-echo.
-echo ╔═══════════════════════════════════════════════════════════════════════════╗
-echo ║                                                                           ║
-echo ║   📧 IDENTIFIANTS À UTILISER:                                            ║
-echo ║                                                                           ║
-echo ║   Email:    admin123@nutrilife.com                                       ║
-echo ║   Password: admin123                                                     ║
-echo ║                                                                           ║
-echo ║   OU                                                                     ║
-echo ║                                                                           ║
-echo ║   Email:    admin@nutrilife.com                                          ║
-echo ║   Password: admin123                                                     ║
-echo ║                                                                           ║
-echo ╚═══════════════════════════════════════════════════════════════════════════╝
-echo.
-echo L'application va se lancer dans 3 secondes...
-timeout /t 3 >nul
-
-call mvn javafx:run
+mvn javafx:run
 
 pause

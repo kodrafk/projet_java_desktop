@@ -133,6 +133,64 @@ public class HomeController {
 
     // ── Navbar handlers ───────────────────────────────────────────────────────
 
+    @FXML private void handleHome(javafx.event.ActionEvent e)       { /* already on home */ }
+    @FXML private void handleAbout(javafx.event.ActionEvent e)      { /* placeholder */ }
+    @FXML private void handleEvents(javafx.event.ActionEvent e)     { /* placeholder */ }
+    @FXML private void handleWellness(javafx.event.ActionEvent e)   { /* placeholder */ }
+    @FXML private void handleBlog(javafx.event.ActionEvent e)       { /* placeholder */ }
+    @FXML private void handleDailyFood(javafx.event.ActionEvent e)  { /* placeholder */ }
+    @FXML private void handleKitchenRank(javafx.event.ActionEvent e){ openModal("kitchen_rank.fxml", "Kitchen Rank", 700, 600); }
+
+    @FXML
+    private void handleIngredients(javafx.event.ActionEvent e) {
+        navigateTo("/fxml/ingredients.fxml", "NutriLife - My Kitchen");
+    }
+
+    @FXML
+    private void handleRecipes(javafx.event.ActionEvent e) {
+        navigateTo("/fxml/recipes.fxml", "NutriLife - Recipes");
+    }
+
+    @FXML
+    private void handleNutrition(javafx.event.ActionEvent e) {
+        navigateTo("/fxml/objectives.fxml", "NutriLife - Nutrition Objectives");
+    }
+
+    @FXML
+    private void handleComplaints(javafx.event.ActionEvent e) {
+        navigateTo("/fxml/complaints_user.fxml", "NutriLife - My Complaints");
+    }
+
+    /**
+     * Navigate to a full-page module — wraps it in a BorderPane with the same
+     * navbar so the user can navigate back.
+     */
+    private void navigateTo(String fxmlPath, String title) {
+        try {
+            // Load the module page
+            Parent modulePage = FXMLLoader.load(getClass().getResource(fxmlPath));
+
+            // Wrap in a BorderPane: keep the current top navbar, put module in center
+            javafx.scene.layout.BorderPane wrapper = new javafx.scene.layout.BorderPane();
+            wrapper.setStyle("-fx-background-color: #F6FBF7;");
+
+            // Re-load the navbar from home.fxml top section
+            // Simpler: just replace the whole scene with a layout that has navbar + content
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+
+            // Get current scene root (BorderPane with top navbar)
+            javafx.scene.layout.BorderPane currentRoot =
+                (javafx.scene.layout.BorderPane) contentArea.getScene().getRoot();
+
+            // Replace only the center with the module page
+            currentRoot.setCenter(modulePage);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.err.println("[HomeController] Failed to load: " + fxmlPath + " — " + ex.getMessage());
+        }
+    }
+
     @FXML private void handleMyProfile()       { openModal("profile.fxml",           "My Profile",       640, 720); }
     @FXML private void handleChangePassword()  { openModal("change_password.fxml",   "Change Password",  460, 420); }
     @FXML private void handleMyBadges()        { openModal("badges.fxml",            "My Badges",        860, 820); }

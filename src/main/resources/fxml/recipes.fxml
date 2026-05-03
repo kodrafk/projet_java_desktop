@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.effect.DropShadow?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17"
+           fx:controller="tn.esprit.projet.gui.RecipeManagementController"
+           style="-fx-background-color: #F8FAFC;">
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+        <VBox spacing="0">
+            <StackPane prefHeight="200" style="-fx-background-color: white; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1 0;">
+                <VBox alignment="CENTER" spacing="12">
+                    <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+                    <Label text="Explore our Recipes" style="-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #1E293B;"/>
+                    <Label text="Discover healthy, delicious recipes tailored to your nutritional goals"
+                           style="-fx-font-size: 14px; -fx-text-fill: #64748B;"/>
+                    <HBox alignment="CENTER" maxWidth="700" prefHeight="52"
+                          style="-fx-background-color: #F8FAFC; -fx-background-radius: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-padding: 0 10 0 20;">
+                        <VBox.margin><Insets top="16"/></VBox.margin>
+                        <Label text="🔍" style="-fx-font-size: 16px; -fx-text-fill: #94A3B8;"/>
+                        <TextField fx:id="txtSearch" promptText="Search a recipe, an ingredient..."
+                                   HBox.hgrow="ALWAYS"
+                                   style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+                        <Button text="Search" onAction="#handleRefresh"
+                                prefHeight="40" prefWidth="110"
+                                style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-size: 13px;"/>
+                    </HBox>
+                </VBox>
+            </StackPane>
+
+            <VBox spacing="30">
+                <padding><Insets top="30" right="28" bottom="50" left="28"/></padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="20" prefHeight="70"
+                      style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E2E8F0; -fx-border-radius: 16; -fx-padding: 0 24;">
+                    <Label text="TYPE :" style="-fx-font-weight: 900; -fx-text-fill: #1E293B; -fx-font-size: 13px;"/>
+                    <HBox fx:id="filterPillsContainer" spacing="10" alignment="CENTER_LEFT"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="+ Add my recipe" onAction="#handleAddNew"
+                            prefHeight="44"
+                            style="-fx-background-color: #F59E0B; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 22; -fx-cursor: hand; -fx-font-size: 13px; -fx-padding: 0 20;"/>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" prefHeight="70" spacing="12"
+                      style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 0 24;">
+                    <Label fx:id="lblTableInfo" text="0 recipe(s) found"
+                           style="-fx-font-size: 16px; -fx-text-fill: #F59E0B; -fx-font-weight: 900;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="History" onAction="#handleOpenHistorique" prefHeight="44"
+                            style="-fx-background-color: white; -fx-text-fill: #1F4D3A; -fx-font-weight: bold; -fx-background-radius: 22; -fx-border-color: #1F4D3A; -fx-border-radius: 22; -fx-cursor: hand; -fx-font-size: 13px; -fx-padding: 0 18;"/>
+                    <Button text="Smart Meal Planner" onAction="#handleOpenMealPlanner" prefHeight="44"
+                            style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 22; -fx-cursor: hand; -fx-font-size: 13px; -fx-padding: 0 18;"/>
+                    <Button text="Generate with AI ✨" onAction="#handleOpenAIGenerator" prefHeight="44"
+                            style="-fx-background-color: #7C3AED; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 22; -fx-cursor: hand; -fx-font-size: 13px; -fx-padding: 0 18;"/>
+                </HBox>
+
+                <FlowPane fx:id="recipesGrid" hgap="22" vgap="26" alignment="CENTER" maxWidth="Infinity"/>
+
+                <VBox fx:id="emptyState" alignment="CENTER" spacing="14" visible="false" managed="false" style="-fx-padding: 60 0;">
+                    <Label text="👨‍🍳" style="-fx-font-size: 48px;"/>
+                    <Label text="No recipe found" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Try modifying your filters or search terms" style="-fx-text-fill: #64748B;"/>
+                    <Button text="See all recipes" onAction="#handleRefresh"
+                            style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 10 25; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                </VBox>
+
+                <VBox fx:id="paginationContainer" alignment="CENTER" spacing="10">
+                    <HBox fx:id="paginationHBox" alignment="CENTER" spacing="8"/>
+                    <Label fx:id="lblPaginationInfo" text="Page 1 sur 1" style="-fx-text-fill: #64748B; -fx-font-size: 13px;"/>
+                </VBox>
+
+                <VBox fx:id="recommendationSection" spacing="18" visible="false" managed="false"
+                      style="-fx-background-color: #F0FDF4; -fx-background-radius: 18; -fx-border-color: #A7F3D0; -fx-border-radius: 18; -fx-padding: 22 28;">
+                    <VBox fx:id="recommendationLoading" alignment="CENTER" spacing="14" visible="false" managed="false" style="-fx-padding: 28 0;">
+                        <ProgressIndicator style="-fx-progress-color: #1F4D3A;"/>
+                        <Label text="🤖 AI is analyzing your preferences..." style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+                    <VBox fx:id="recommendationEmpty" alignment="CENTER" spacing="10" visible="false" managed="false" style="-fx-padding: 28 0;">
+                        <Label text="🤖" style="-fx-font-size: 38px;"/>
+                        <Label text="No recommendations yet" style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                        <Button text="❤️ Browse Recipes" onAction="#handleBrowseRecipesForReco"
+                                style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 24; -fx-cursor: hand;"/>
+                    </VBox>
+                    <HBox fx:id="recommendationHeader" alignment="CENTER_LEFT" spacing="10" visible="true" managed="true">
+                        <Label text="🤖" style="-fx-font-size: 26px;"/>
+                        <VBox spacing="2">
+                            <Label text="Recommended For You" style="-fx-font-size: 19px; -fx-font-weight: 900; -fx-text-fill: #1E293B;"/>
+                            <Label text="Personalized recipes based on your favorites and available stock" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnRefreshRecommendations" text="🔄 Refresh" onAction="#handleRefreshRecommendations"
+                                style="-fx-background-color: transparent; -fx-text-fill: #1F4D3A; -fx-font-weight: bold; -fx-border-color: #A7F3D0; -fx-border-radius: 18; -fx-background-radius: 18; -fx-padding: 7 16; -fx-cursor: hand; -fx-font-size: 12px;"/>
+                    </HBox>
+                    <Separator style="-fx-background-color: #A7F3D0;"/>
+                    <HBox fx:id="recommendationCardsContainer" spacing="18" alignment="CENTER_LEFT"/>
+                </VBox>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+    <StackPane fx:id="modalOverlay" visible="false" managed="false" style="-fx-background-color: rgba(15,23,42,0.75);">
+        <VBox spacing="0" maxWidth="640" maxHeight="640" style="-fx-background-color: white; -fx-background-radius: 18;">
+            <HBox alignment="CENTER_LEFT" prefHeight="66" style="-fx-background-color: white; -fx-background-radius: 18 18 0 0; -fx-padding: 0 28; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1 0;">
+                <Label fx:id="lblModalTitle" text="👨‍🍳 Add my recipe" style="-fx-font-size: 20px; -fx-font-weight: 900; -fx-text-fill: #1E293B;" HBox.hgrow="ALWAYS"/>
+                <Button text="✕" onAction="#handleCloseModal" style="-fx-background-color: transparent; -fx-text-fill: #64748B; -fx-font-size: 22px; -fx-cursor: hand; -fx-font-weight: bold;"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-background: white; -fx-border-color: transparent;">
+                <VBox spacing="26" style="-fx-padding: 32;">
+                    <Label fx:id="lblGeneralError" text="⚠️ Please correct the errors below."
+                           visible="false" managed="false"
+                           style="-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-padding: 10 18; -fx-background-radius: 8; -fx-font-weight: bold; -fx-font-size: 13px; -fx-max-width: Infinity;"/>
+                    <GridPane hgap="22" vgap="22">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+                        <VBox spacing="7" GridPane.columnSpan="2">
+                            <Label text="Recipe Name *" style="-fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                            <TextField fx:id="txtNom" promptText="e.g. Classic Margherita Pizza" prefHeight="44"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+                            <Label fx:id="lblNomError" visible="false" managed="false" style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        </VBox>
+                        <VBox spacing="7" GridPane.rowIndex="1">
+                            <Label text="Dish Type *" style="-fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                            <ComboBox fx:id="cmbType" maxWidth="Infinity" prefHeight="44"
+                                      style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+                            <Label fx:id="lblTypeError" visible="false" managed="false" style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        </VBox>
+                        <VBox spacing="7" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                            <Label text="Difficulty *" style="-fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                            <ComboBox fx:id="cmbDifficulte" maxWidth="Infinity" prefHeight="44"
+                                      style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+                            <Label fx:id="lblDifficulteError" visible="false" managed="false" style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        </VBox>
+                        <VBox spacing="7" GridPane.rowIndex="2">
+                            <Label text="Preparation Time (min) *" style="-fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                            <TextField fx:id="txtTemps" promptText="e.g. 45" prefHeight="44"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+                            <Label fx:id="lblTempsError" visible="false" managed="false" style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        </VBox>
+                        <VBox spacing="7" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                            <Label text="Image URL" style="-fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                            <TextField fx:id="txtImage" promptText="https://..." prefHeight="44"
+                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+                            <Label fx:id="lblImageError" visible="false" managed="false" style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        </VBox>
+                        <VBox spacing="7" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                            <Label text="Description" style="-fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                            <TextArea fx:id="txtDescription" prefHeight="90" wrapText="true"
+                                      style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+                            <Label fx:id="lblDescriptionError" visible="false" managed="false" style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+                        </VBox>
+                    </GridPane>
+                    <VBox spacing="12">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="🥕 Ingredients" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" HBox.hgrow="ALWAYS"/>
+                            <ComboBox fx:id="cmbIngredients" promptText="Search an ingredient..." prefWidth="240"
+                                      style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-background-radius: 8; -fx-border-radius: 8;"/>
+                        </HBox>
+                        <VBox fx:id="recipeIngredientsContainer" spacing="8"/>
+                    </VBox>
+                    <VBox spacing="12">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="📝 Preparation Steps" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" HBox.hgrow="ALWAYS"/>
+                            <Button text="+ Add Step" onAction="#handleAddStep"
+                                    style="-fx-background-color: #F0FDF4; -fx-text-fill: #166534; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 7 14;"/>
+                        </HBox>
+                        <VBox fx:id="stepsContainer" spacing="10"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+            <HBox alignment="CENTER_RIGHT" spacing="18" prefHeight="90" style="-fx-padding: 0 36; -fx-border-color: #E2E8F0; -fx-border-width: 1 0 0 0;">
+                <Button text="Cancel" onAction="#handleCloseModal" prefHeight="48" prefWidth="120"
+                        style="-fx-background-color: transparent; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-text-fill: #64748B; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px;"/>
+                <Button text="Save Recipe" onAction="#handleSave" prefHeight="48" prefWidth="170"
+                        style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-font-weight: 900; -fx-background-radius: 12; -fx-cursor: hand; -fx-font-size: 14px;"/>
+            </HBox>
+        </VBox>
+    </StackPane>
+
+    <StackPane fx:id="detailsOverlay" visible="false" managed="false" style="-fx-background-color: rgba(15,23,42,0.75);">
+        <VBox spacing="0" maxWidth="480" maxHeight="520" style="-fx-background-color: white; -fx-background-radius: 18;">
+            <HBox alignment="CENTER_LEFT" prefHeight="66" style="-fx-background-color: #F59E0B; -fx-background-radius: 18 18 0 0; -fx-padding: 0 28;">
+                <Label fx:id="lblDetailsNom" text="Recipe Details" style="-fx-font-size: 19px; -fx-font-weight: 900; -fx-text-fill: white;" HBox.hgrow="ALWAYS"/>
+                <Button text="✕" onAction="#handleCloseDetails" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 22px; -fx-cursor: hand; -fx-font-weight: bold;"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-background: white; -fx-border-color: transparent;">
+                <VBox spacing="18" style="-fx-padding: 28;">
+                    <HBox spacing="16">
+                        <Label fx:id="lblDetailsType" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-padding: 5 12; -fx-background-radius: 10; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblDetailsTemps" style="-fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblDetailsDifficulte" style="-fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                    </HBox>
+                    <Label text="Description" style="-fx-font-size: 15px; -fx-font-weight: 900; -fx-text-fill: #1E293B;"/>
+                    <Label fx:id="txtDetailsDescription" wrapText="true" style="-fx-text-fill: #475569;"/>
+                    <Separator/>
+                    <Label text="Preparation Steps" style="-fx-font-size: 15px; -fx-font-weight: 900; -fx-text-fill: #1E293B;"/>
+                    <VBox fx:id="detailsStepsContainer" spacing="10"/>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </StackPane>
+
+    <HBox fx:id="toastNotification" visible="false" managed="false" alignment="CENTER" spacing="10"
+          StackPane.alignment="BOTTOM_CENTER"
+          style="-fx-background-color: #1E293B; -fx-background-radius: 12; -fx-padding: 12 22;">
+        <StackPane.margin><Insets bottom="28"/></StackPane.margin>
+        <Label fx:id="lblToastIcon" text="✓" style="-fx-font-size: 17px; -fx-text-fill: #4ADE80;"/>
+        <Label fx:id="lblToastMessage" text="" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+    </HBox>
+
+</StackPane>

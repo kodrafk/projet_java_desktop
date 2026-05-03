@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
@@ -11,68 +13,88 @@
 
     <!-- ── Top Navbar ── -->
     <top>
-        <HBox prefHeight="56" alignment="CENTER_LEFT" spacing="0"
-              style="-fx-background-color:white;
-                     -fx-border-color:transparent transparent #E2E8F0 transparent;
-                     -fx-border-width:0 0 1 0;-fx-padding:0 40;">
-
-            <!-- Logo -->
-            <Label text="Nutri Coach Pro"
-                   style="-fx-font-size:17px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;
-                          -fx-font-family:Georgia;"/>
-
-            <!-- Nav links -->
-            <HBox spacing="32" alignment="CENTER" style="-fx-padding:0 0 0 48;">
-                <Label text="Home"
-                       style="-fx-font-size:13px;-fx-text-fill:#1a2e1a;-fx-font-weight:bold;-fx-cursor:hand;"/>
-                <Label text="About"
-                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
-                <Label text="My Kitchen"
-                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
-                <Label text="Nutrition Objectives"
-                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
-                <Label text="Events"
-                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
-                <Label text="Wellness"
-                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
-                <Label text="Blog"
-                       style="-fx-font-size:13px;-fx-text-fill:#374151;-fx-cursor:hand;"/>
+        <VBox style="-fx-background-color: #E8F0E9; -fx-border-color: #D0DDD1; -fx-border-width: 0 0 1 0;">
+            <HBox alignment="CENTER_LEFT" prefHeight="56" style="-fx-background-color: #E8F0E9;">
+                <padding><Insets top="0" right="28" bottom="0" left="28"/></padding>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <ImageView fitHeight="32" fitWidth="32" preserveRatio="true">
+                        <image><Image url="@../images/logo.png"/></image>
+                    </ImageView>
+                    <Label text="Nutri Coach Pro"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1A2E1A;"/>
+                </HBox>
+                <Region prefWidth="32"/>
+                <HBox alignment="CENTER_LEFT" spacing="2">
+                    <Button fx:id="btnHome" onAction="#handleHome"
+                            prefHeight="36" text="Home"
+                            style="-fx-background-color: transparent; -fx-text-fill: #1A2E1A; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnAbout" onAction="#handleAbout"
+                            prefHeight="36" text="About"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <MenuButton fx:id="btnMyKitchen" text="My Kitchen" prefHeight="36"
+                                style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 4 0 12;">
+                        <items>
+                            <MenuItem text="Ingredients" onAction="#handleIngredients"/>
+                            <MenuItem text="Recipes"     onAction="#handleRecipes"/>
+                        </items>
+                    </MenuButton>
+                    <Button fx:id="btnNutrition" onAction="#handleNutrition"
+                            prefHeight="36" text="Nutrition Objectives"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnEvents" onAction="#handleEvents"
+                            prefHeight="36" text="Events"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnWellness" onAction="#handleWellness"
+                            prefHeight="36" text="Wellness"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnBlog" onAction="#handleBlog"
+                            prefHeight="36" text="Blog"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER_RIGHT" spacing="8">
+                    <!-- Messages button with unread badge -->
+                    <StackPane style="-fx-padding:0 4 0 0;">
+                        <Button fx:id="btnMessages" text="💬 Messages" onAction="#handleOpenChat"
+                                style="-fx-background-color:#EFF6FF;-fx-text-fill:#1D4ED8;-fx-font-size:13px;
+                                       -fx-font-weight:bold;-fx-background-radius:20;-fx-padding:8 16;
+                                       -fx-cursor:hand;-fx-border-color:#BFDBFE;-fx-border-radius:20;-fx-border-width:1;"/>
+                        <Label fx:id="lblUnreadBadge" text="0"
+                               style="-fx-background-color:#EF4444;-fx-text-fill:white;-fx-font-size:9px;
+                                      -fx-font-weight:bold;-fx-background-radius:10;-fx-padding:2 6;"
+                               StackPane.alignment="TOP_RIGHT" translateX="4" translateY="-4"
+                               visible="false" managed="false"/>
+                    </StackPane>
+                    <!-- Challenges button -->
+                    <Button text="⚡ Challenges" onAction="#handleWeeklyChallenges"
+                            style="-fx-background-color:#7C3AED;-fx-text-fill:white;-fx-font-size:13px;
+                                   -fx-font-weight:bold;-fx-background-radius:20;-fx-padding:8 18;
+                                   -fx-cursor:hand;-fx-border-color:transparent;"/>
+                    <!-- Account menu -->
+                    <MenuButton fx:id="btnAccount" text="Account" prefHeight="36"
+                                style="-fx-background-color: transparent; -fx-text-fill: #1A2E1A; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand;">
+                        <items>
+                            <MenuItem text="My Profile"        onAction="#handleMyProfile"/>
+                            <MenuItem text="Kitchen Rank"      onAction="#handleKitchenRank"/>
+                            <MenuItem text="My Badges 🏆"      onAction="#handleMyBadges"/>
+                            <MenuItem text="Security Settings" onAction="#handleChangePassword"/>
+                            <MenuItem text="Log Out"           onAction="#handleLogout"/>
+                        </items>
+                    </MenuButton>
+                </HBox>
+                <!-- Hidden helper buttons -->
+                <VBox fx:id="submenuKitchen" managed="false" visible="false">
+                    <Button fx:id="btnIngredients" onAction="#handleIngredients"
+                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                    <Button fx:id="btnRecipes"     onAction="#handleRecipes"
+                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                    <Button fx:id="btnDailyFood"   onAction="#handleDailyFood"
+                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                    <Button fx:id="btnComplaints"  onAction="#handleComplaints"
+                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                </VBox>
             </HBox>
-
-            <Region HBox.hgrow="ALWAYS"/>
-
-            <!-- Messages button with unread badge -->
-            <StackPane style="-fx-padding:0 8 0 0;">
-                <Button fx:id="btnMessages" text="💬 Messages" onAction="#handleOpenChat"
-                        style="-fx-background-color:#EFF6FF;-fx-text-fill:#1D4ED8;-fx-font-size:13px;
-                               -fx-font-weight:bold;-fx-background-radius:20;-fx-padding:8 16;
-                               -fx-cursor:hand;-fx-border-color:#BFDBFE;-fx-border-radius:20;-fx-border-width:1;"/>
-                <Label fx:id="lblUnreadBadge" text="0"
-                       style="-fx-background-color:#EF4444;-fx-text-fill:white;-fx-font-size:9px;
-                              -fx-font-weight:bold;-fx-background-radius:10;-fx-padding:2 6;"
-                       StackPane.alignment="TOP_RIGHT" translateX="4" translateY="-4"
-                       visible="false" managed="false"/>
-            </StackPane>
-
-            <!-- Assistant button -->
-            <Button text="⚡ Challenges" onAction="#handleWeeklyChallenges"
-                    style="-fx-background-color:#7C3AED;-fx-text-fill:white;-fx-font-size:13px;
-                           -fx-font-weight:bold;-fx-background-radius:20;-fx-padding:8 18;
-                           -fx-cursor:hand;-fx-border-color:transparent;-fx-margin:0 8 0 0;"/>
-            <!-- Account dropdown -->
-            <MenuButton fx:id="menuAccount" text="Account  ▾"
-                        style="-fx-background-color:transparent;-fx-text-fill:#374151;
-                               -fx-font-size:13px;-fx-cursor:hand;-fx-border-color:transparent;
-                               -fx-padding:8 16;">
-                <items>
-                    <MenuItem text="My Profile"      onAction="#handleMyProfile"/>
-                    <MenuItem text="Change Password" onAction="#handleChangePassword"/>
-                    <MenuItem text="My Badges 🏆"    onAction="#handleMyBadges"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Logout"          onAction="#handleLogout"/>
-                </items>
-            </MenuButton>
-        </HBox>
+        </VBox>
     </top>
 
     <!-- ── Hero Section ── -->

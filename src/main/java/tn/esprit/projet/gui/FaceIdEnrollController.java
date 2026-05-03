@@ -177,6 +177,12 @@ public class FaceIdEnrollController {
                         saveEmbedding();
                     }
                 });
+            } catch (LocalFaceEmbeddingService.FaceNotDetectedException e) {
+                Platform.runLater(() -> {
+                    capturing = false;
+                    setStatus("❌ No face detected — look directly at the camera and try again.", false);
+                    if (startButton != null) startButton.setDisable(false);
+                });
             } catch (Exception e) {
                 Platform.runLater(() -> {
                     capturing = false;
@@ -209,7 +215,7 @@ public class FaceIdEnrollController {
                     if (ue.userId == user.getId()) continue;
                     try {
                         double[] existing = cryptoSvc.decrypt(ue.encryptedB64, ue.ivB64, ue.tagB64);
-                        if (localEmb.similarity(avg, existing) > 0.82) {
+                        if (localEmb.similarity(avg, existing) > LocalFaceEmbeddingService.MATCH_THRESHOLD) {
                             User eu = userRepo.findById(ue.userId);
                             String name = eu != null ? eu.getFirstName() + " " + eu.getLastName() : "User " + ue.userId;
                             Platform.runLater(() -> {

@@ -199,4 +199,16 @@ public class IngredientService implements CRUD<Ingredient> {
 
         return ingredients;
     }
+
+    /** Update quantity by delta (positive = add, negative = deduct) */
+    public void updateQuantite(int id, double delta) {
+        String sql = "UPDATE ingredient SET quantite = quantite + ? WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setDouble(1, delta);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("IngredientService.updateQuantite: " + e.getMessage());
+        }
+    }
 }

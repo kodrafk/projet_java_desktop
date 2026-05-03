@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.projet.controllers.MealPlanTrackingController"
+            style="-fx-background-color: #F8FAFC;">
+
+    <!-- HEADER -->
+    <top>
+        <VBox spacing="12"
+              style="-fx-background-color: #1F4D3A;
+                     -fx-padding: 24 40 24 40;">
+
+            <Label text="MEAL PLAN TRACKING"
+                   style="-fx-text-fill: white;
+                          -fx-font-size: 22px;
+                          -fx-font-weight: bold;"/>
+
+            <HBox spacing="14" alignment="CENTER_LEFT">
+                <ProgressBar fx:id="progressGlobal" progress="0"
+                             prefWidth="400" prefHeight="18"
+                             style="-fx-accent: #10B981;"/>
+                <Label fx:id="labelProgression"
+                       text="0/21 meals completed"
+                       style="-fx-text-fill: #a7d5c1;
+                              -fx-font-size: 13px;
+                              -fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTRE -->
+    <center>
+        <ScrollPane fitToWidth="true"
+                    style="-fx-background-color: #F8FAFC;">
+            <VBox fx:id="vboxRepas" spacing="6"
+                  style="-fx-background-color: #F8FAFC;">
+                <padding>
+                    <Insets top="20" right="30" bottom="20" left="30"/>
+                </padding>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- BAS -->
+    <bottom>
+        <VBox spacing="0"
+              style="-fx-background-color: white;
+                     -fx-border-color: #E2E8F0;
+                     -fx-border-width: 1 0 0 0;">
+
+            <HBox spacing="0">
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                      style="-fx-padding: 16; -fx-border-color: #E2E8F0; -fx-border-width: 0 1 0 0;">
+                    <Label fx:id="labelRepasEffectues" text="0 meals done"
+                           style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1F4D3A;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                      style="-fx-padding: 16; -fx-border-color: #E2E8F0; -fx-border-width: 0 1 0 0;">
+                    <Label fx:id="labelCaloriesConsommees" text="0 kcal consumed"
+                           style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #F59E0B;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                      style="-fx-padding: 16; -fx-border-color: #E2E8F0; -fx-border-width: 0 1 0 0;">
+                    <Label fx:id="labelIngredientsSauves" text="0 ingredients saved"
+                           style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #10B981;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                      style="-fx-padding: 16;">
+                    <Label fx:id="labelImpactEco" text="~0.0 kg saved"
+                           style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #3B82F6;"/>
+                </VBox>
+            </HBox>
+
+            <Button fx:id="btnRetour"
+                    text="Back to recipes"
+                    onAction="#onRetour"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #1F4D3A;
+                           -fx-text-fill: white;
+                           -fx-font-size: 14px;
+                           -fx-font-weight: bold;
+                           -fx-padding: 14px;
+                           -fx-background-radius: 0;
+                           -fx-cursor: hand;"/>
+        </VBox>
+    </bottom>
+
+</BorderPane>

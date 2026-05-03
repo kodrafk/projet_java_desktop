@@ -1,6 +1,7 @@
 package tn.esprit.projet.services;
 
 import javax.mail.*;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -18,7 +19,7 @@ public class EmailService {
     private static final String SMTP_HOST     = "smtp.gmail.com";
     private static final int    SMTP_PORT     = 587;
     private static final String SENDER_EMAIL  = "belhassenemna61@gmail.com"; // your Gmail
-    private static final String SENDER_PASS   = "rtin knei ovsj ksrn";     // Gmail App Password
+    private static final String SENDER_PASS   = "gdqg iwsb ymnc kmmm";     // Gmail App Password
     private static final String SENDER_NAME   = "NutriLife";
     // ──────────────────────────────────────────────────────────────────────────
 
@@ -58,8 +59,16 @@ public class EmailService {
             System.out.println("[Email] Sent to: " + to);
             return true;
 
+        } catch (AuthenticationFailedException e) {
+            System.err.println("[Email] Authentication failed — check your App Password: " + e.getMessage());
+            return false;
+        } catch (MessagingException e) {
+            System.err.println("[Email] SMTP error: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         } catch (Exception e) {
-            System.err.println("[Email] Failed to send: " + e.getMessage());
+            System.err.println("[Email] Unexpected error: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -67,7 +76,7 @@ public class EmailService {
     private String buildEmailBody(String code) {
         return "<!DOCTYPE html><html><body style='font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;'>"
              + "<div style='max-width:480px;margin:auto;background:white;border-radius:16px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,0.08);'>"
-             + "<h2 style='color:#2E7D32;margin-bottom:8px;'>🥗 NutriLife</h2>"
+             + "<h2 style='color:#2E7D32;margin-bottom:8px;'>NutriLife</h2>"
              + "<h3 style='color:#1a2e1a;'>Password Reset Code</h3>"
              + "<p style='color:#6B7280;font-size:14px;'>Use the code below to reset your password. It expires in <strong>15 minutes</strong>.</p>"
              + "<div style='background:#F0FDF4;border:2px solid #BBF7D0;border-radius:12px;padding:24px;text-align:center;margin:24px 0;'>"
@@ -75,5 +84,19 @@ public class EmailService {
              + "</div>"
              + "<p style='color:#94A3B8;font-size:12px;'>If you did not request this, ignore this email. Your password will not change.</p>"
              + "</div></body></html>";
+    }
+
+    /**
+     * Send an HTML email asynchronously (fire-and-forget).
+     * Used by ComplaintsAdminController to notify users of complaint updates.
+     */
+    public static void sendEmailAsync(String toEmail, String subject, String htmlBody) {
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
+            try {
+                new EmailService().send(toEmail, subject, htmlBody);
+            } catch (Exception e) {
+                System.err.println("[Email] Async send failed: " + e.getMessage());
+            }
+        });
     }
 }

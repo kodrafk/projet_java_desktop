@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.SimpleFaceIdController"
+           prefWidth="600" prefHeight="600">
+
+    <VBox spacing="0" style="-fx-background-color:#F8FAFC;">
+        
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" prefHeight="60"
+              style="-fx-background-color:#FFFFFF;-fx-padding:0 24;
+                     -fx-border-width:0 0 1 0;-fx-border-color:#E2E8F0;">
+            <Label text="🎭" style="-fx-font-size:20px;"/>
+            <Label text="Face ID — DEMO MODE"
+                   style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+        </HBox>
+
+        <!-- Content -->
+        <VBox spacing="16" style="-fx-padding:20;">
+            
+            <!-- Instructions -->
+            <VBox spacing="8" style="-fx-background-color:#FFFFFF;-fx-background-radius:12;
+                                   -fx-padding:16;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.1),8,0,0,2);">
+                <Label text="Perfect! Your face is detected"
+                       style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                <Label fx:id="instructionLabel"
+                       text="This is a working demo - click Verify to login"
+                       wrapText="true"
+                       style="-fx-font-size:12px;-fx-text-fill:#6B7280;"/>
+            </VBox>
+
+            <!-- Camera View -->
+            <VBox alignment="CENTER" spacing="12">
+                <ImageView fx:id="cameraView" 
+                          fitWidth="480" fitHeight="360" 
+                          preserveRatio="true"
+                          style="-fx-background-color:#000000;-fx-background-radius:12;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.2),12,0,0,4);"/>
+                
+                <!-- Status -->
+                <Label fx:id="statusLabel" text="✅ Camera ready"
+                       style="-fx-font-size:12px;-fx-text-fill:#16A34A;-fx-font-weight:bold;"/>
+                
+                <!-- Progress -->
+                <ProgressBar fx:id="verifyProgress" prefWidth="300" prefHeight="6"
+                            style="-fx-accent:#4CAF50;"/>
+            </VBox>
+
+            <!-- Buttons -->
+            <HBox spacing="12" alignment="CENTER">
+                <Button fx:id="captureButton" text="🔍  Verify Face (DEMO)" onAction="#handleCapture"
+                        prefWidth="200" prefHeight="46"
+                        style="-fx-background-color:#4CAF50;-fx-text-fill:white;-fx-font-size:14px;
+                               -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;"/>
+                <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
+                        prefWidth="100" prefHeight="46"
+                        style="-fx-background-color:#F1F5F9;-fx-text-fill:#64748B;-fx-font-size:13px;
+                               -fx-background-radius:12;-fx-cursor:hand;"/>
+            </HBox>
+
+            <!-- Info -->
+            <VBox spacing="8" style="-fx-background-color:#F0FDF4;-fx-background-radius:10;-fx-padding:12 16;
+                                   -fx-border-color:#BBF7D0;-fx-border-radius:10;-fx-border-width:1;">
+                <Label text="🎉 DEMO MODE ACTIVE"
+                       style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#166534;"/>
+                <Label text="This demo shows how Face ID works. In real mode, it would use your actual camera and AI recognition."
+                       wrapText="true"
+                       style="-fx-font-size:11px;-fx-text-fill:#166534;"/>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</StackPane>

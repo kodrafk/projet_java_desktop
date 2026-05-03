@@ -30,6 +30,12 @@ public class FaceEmbeddingService {
     // ── Python resolution ──────────────────────────────────────────────────────
 
     private static String resolvePythonScript() {
+        // Try professional version first, fallback to standard
+        String pro = resolveScript("face_recognition_arcface_pro.py");
+        if (new File(pro).exists()) {
+            System.out.println("[FaceID] Using professional recognition system");
+            return pro;
+        }
         return resolveScript("face_recognition_service.py");
     }
 
@@ -88,7 +94,7 @@ public class FaceEmbeddingService {
      * Timeout: 180 seconds (first run downloads ArcFace model ~100MB).
      */
     public double[] callPythonForEmbedding(String stdinJson) throws Exception {
-        String script = resolveScript("face_recognition_service.py");
+        String script = resolvePythonScript();  // Use professional version if available
         String python = getPythonExecutable();
 
         System.out.println("[FaceID] Calling Python: " + python);

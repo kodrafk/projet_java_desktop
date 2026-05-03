@@ -41,7 +41,14 @@ public class CameraServerService {
             if (serverProcess != null && serverProcess.isAlive()) return;
             try {
                 String python = FaceEmbeddingService.resolvePython();
-                String script = FaceEmbeddingService.resolveScript("camera_server.py");
+                // Utiliser le serveur FORCE en priorité
+                String script = FaceEmbeddingService.resolveScript("camera_server_force.py");
+                if (!new java.io.File(script).exists()) {
+                    script = FaceEmbeddingService.resolveScript("camera_server_pro.py");
+                    if (!new java.io.File(script).exists()) {
+                        script = FaceEmbeddingService.resolveScript("camera_server.py");
+                    }
+                }
                 ProcessBuilder pb = new ProcessBuilder(python, script, String.valueOf(PORT));
                 pb.redirectErrorStream(false);
                 serverProcess = pb.start();
@@ -59,8 +66,8 @@ public class CameraServerService {
                 t.setDaemon(true);
                 t.start();
 
-                // Wait for server to be ready (up to 12s)
-                long deadline = System.currentTimeMillis() + 12000;
+                // Wait for server to be ready (up to 15s)
+                long deadline = System.currentTimeMillis() + 15000;
                 while (System.currentTimeMillis() < deadline) {
                     try (Socket test = new Socket(HOST, PORT)) {
                         System.out.println("[CamSrv] Server ready on port " + PORT);

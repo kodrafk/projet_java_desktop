@@ -1,0 +1,103 @@
+╔════════════════════════════════════════════════════════════════╗
+║                  🚀 COMMENT LANCER FACE ID 🚀                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+📋 MÉTHODE 1: AUTOMATIQUE (RECOMMANDÉ)
+═══════════════════════════════════════════════════════════════
+
+1. Double-cliquez sur: LANCER_TOUT.bat
+
+   C'est tout! Le script va:
+   ✅ Démarrer le serveur Python
+   ✅ Démarrer l'application Java
+   ✅ Tout configurer automatiquement
+
+═══════════════════════════════════════════════════════════════
+
+📋 MÉTHODE 2: MANUELLE
+═══════════════════════════════════════════════════════════════
+
+1. Ouvrez un terminal et tapez:
+   cd python_face_server
+   START_SERVER.bat
+
+2. Ouvrez un AUTRE terminal et tapez:
+   cd projetJAV
+   mvn javafx:run
+
+═══════════════════════════════════════════════════════════════
+
+🔧 PREMIÈRE INSTALLATION (1 FOIS SEULEMENT)
+═══════════════════════════════════════════════════════════════
+
+Si c'est la première fois:
+
+1. Installez Python 3.10+
+   → https://www.python.org/downloads/
+   → Cochez "Add Python to PATH"
+
+2. Installez les dépendances:
+   cd python_face_server
+   INSTALL.bat
+
+═══════════════════════════════════════════════════════════════
+
+📝 UTILISATION FACE ID
+═══════════════════════════════════════════════════════════════
+
+ENREGISTREMENT:
+1. Connectez-vous à l'application
+2. Allez dans Profil
+3. Cliquez "Enroll Face ID"
+4. Positionnez votre visage
+5. Cliquez "Capture"
+6. ✅ Enregistré!
+
+CONNEXION:
+1. Écran de connexion
+2. Cliquez "Face ID Login" (bouton bleu)
+3. Positionnez votre visage
+4. ✅ Authentification automatique!
+
+═══════════════════════════════════════════════════════════════
+
+🐛 PROBLÈMES?
+═══════════════════════════════════════════════════════════════
+
+❌ "Python server not running"
+   → Lancez: cd python_face_server && START_SERVER.bat
+
+❌ "No face detected"
+   → Améliorez l'éclairage
+   → Regardez la caméra
+   → Rapprochez-vous
+
+❌ "Face not recognized"
+   → Vérifiez l'enregistrement
+   → Réenregistrez avec bon éclairage
+
+═══════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION
+═══════════════════════════════════════════════════════════════
+
+GUIDE_RAPIDE.md              → Guide en français
+SOLUTION_SIMPLE_FACE_ID.md   → Documentation technique
+README_FACE_ID.md            → README complet
+SOLUTION_FINALE.txt          → Résumé de la solution
+
+═══════════════════════════════════════════════════════════════
+
+✅ VÉRIFICATION RAPIDE
+═══════════════════════════════════════════════════════════════
+
+Pour tester que tout fonctionne:
+   TEST_SIMPLE.bat
+
+═══════════════════════════════════════════════════════════════
+
+🎉 C'EST TOUT!
+
+Lancez simplement: LANCER_TOUT.bat
+
+Bon développement! 🚀

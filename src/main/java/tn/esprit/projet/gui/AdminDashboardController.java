@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -25,23 +27,46 @@ import java.util.List;
 public class AdminDashboardController {
 
     @FXML private StackPane contentArea;
-    @FXML private Label     lblAdminName;
-    @FXML private Label     lblAdminEmail;
-    @FXML private Label     lblAdminAvatar;
     @FXML private Label     lblTotalUsers;
     @FXML private Label     lblActiveUsers;
     @FXML private Label     lblInactiveUsers;
     @FXML private Label     lblAdmins;
+    @FXML private Label     lblAdminAvatar;
+    @FXML private TextField searchField;
     // Groups widget
     @FXML private HBox      dashGroupCards;
     @FXML private Label     lblDashGroupCount;
     @FXML private Label     lblDashNoGroups;
 
+    // Sidebar buttons
     @FXML private Button btnDashboard;
     @FXML private Button btnUsers;
-    @FXML private Button btnGroups;
     @FXML private Button btnStatistics;
+    @FXML private Button btnObjectives;
+    @FXML private Button btnIngredientsSide;
+    @FXML private Button btnRecipesSide;
+    @FXML private Button btnEventsSide;
+    @FXML private Button btnBlogs;
+    @FXML private Button btnSponsors;
+    @FXML private Button btnSMS;
+    @FXML private Button btnNutritionSide;
+    @FXML private Button btnWellnessSide;
     @FXML private Button btnAnomalyDetection;
+    @FXML private Button btnGroups;
+    @FXML private Button btnComplaints;
+    @FXML private Button btnLogout;
+    // Navbar buttons
+    @FXML private Button     btnHome;
+    @FXML private Button     btnAbout;
+    @FXML private MenuButton btnMyKitchen;
+    @FXML private Button     btnNutrition;
+    @FXML private Button     btnEvents;
+    @FXML private Button     btnWellness;
+    @FXML private Button     btnBlog;
+    @FXML private MenuButton btnAccount;
+    // Hidden helper buttons in navbar
+    @FXML private Button btnIngredients;
+    @FXML private Button btnRecipes;
 
     private final UserRepository      repo      = new UserRepository();
     private final UserGroupRepository groupRepo = new UserGroupRepository();
@@ -63,10 +88,6 @@ public class AdminDashboardController {
         }
         
         currentAdmin = Session.getCurrentUser();
-        
-        if (lblAdminName != null && currentAdmin != null) {
-            lblAdminName.setText("Hello, " + currentAdmin.getFirstName() + " 👋");
-        }
         
         loadStats();
         loadDashboardGroups();
@@ -224,19 +245,29 @@ public class AdminDashboardController {
         activate(btnAnomalyDetection);
         loadPage("admin_anomaly_dashboard.fxml");
     }
-    
-    // Hidden handlers
-    /*
-    @FXML private void handlePersonalizedMessages() {
-        activate(btnPersonalizedMessages);
-        loadPage("admin_personalized_messages.fxml");
-    }
-    
-    @FXML private void handleAlerts() {
-        activate(btnAlerts);
-        loadPage("admin_alerts.fxml");
-    }
-    */
+
+    // ── New sidebar handlers ──────────────────────────────────────────────────
+
+    @FXML private void handleObjectives()  { activate(btnObjectives);      loadPage("admin_objectives.fxml"); }
+    @FXML private void handleIngredients() { activate(btnIngredientsSide);  loadPage("admin_ingredients.fxml"); }
+    @FXML private void handleRecipes()     { activate(btnRecipesSide);      loadPage("admin_recipes.fxml"); }
+    @FXML private void handleEvents()      { activate(btnEventsSide);       loadPage("admin_events.fxml"); }
+    @FXML private void handleBlogs()       { activate(btnBlogs);            loadPage("admin_blogs.fxml"); }
+    @FXML private void handleSponsors()    { activate(btnSponsors);         loadPage("admin_sponsors.fxml"); }
+    @FXML private void handleSMS()         { activate(btnSMS);              loadPage("admin_sms.fxml"); }
+    @FXML private void handleNutrition()   { activate(btnNutritionSide);    loadPage("admin_nutrition.fxml"); }
+    @FXML private void handleWellness()    { activate(btnWellnessSide);     loadPage("admin_wellness.fxml"); }
+    @FXML private void handleComplaints()  { activate(btnComplaints);        loadPage("complaints_admin.fxml"); }
+    @FXML private void handleBackToSite()  { Nav.go((Stage) contentArea.getScene().getWindow(), "home.fxml", "NutriLife"); }
+
+    @FXML private void handleHome()           { Nav.go((Stage) contentArea.getScene().getWindow(), "home.fxml", "NutriLife"); }
+    @FXML private void handleAbout()          { Nav.go((Stage) contentArea.getScene().getWindow(), "about.fxml", "About"); }
+    @FXML private void handleBlog()           { Nav.go((Stage) contentArea.getScene().getWindow(), "blog.fxml", "Blog"); }
+    @FXML private void handleMyProfile()      { Nav.go((Stage) contentArea.getScene().getWindow(), "profile.fxml", "My Profile"); }
+    @FXML private void handleKitchenRank()    { Nav.go((Stage) contentArea.getScene().getWindow(), "kitchen_rank.fxml", "Kitchen Rank"); }
+    @FXML private void handleChangePassword() { Nav.go((Stage) contentArea.getScene().getWindow(), "change_password.fxml", "Security Settings"); }
+    @FXML private void handleDailyFood()      { /* placeholder */ }
+    @FXML private void handleAdminProfile()   { /* placeholder */ }
 
     @FXML private void handleLogout() {
         Session.logout();
@@ -245,7 +276,11 @@ public class AdminDashboardController {
     }
 
     private void activate(Button active) {
-        for (Button b : new Button[]{btnDashboard, btnUsers, btnGroups, btnStatistics, btnAnomalyDetection})
+        for (Button b : new Button[]{
+                btnDashboard, btnUsers, btnStatistics, btnObjectives,
+                btnIngredientsSide, btnRecipesSide, btnEventsSide,
+                btnBlogs, btnSponsors, btnSMS, btnNutritionSide,
+                btnWellnessSide, btnAnomalyDetection, btnGroups, btnComplaints})
             if (b != null) b.setStyle(BTN_DEFAULT);
         if (active != null) active.setStyle(BTN_ACTIVE);
     }

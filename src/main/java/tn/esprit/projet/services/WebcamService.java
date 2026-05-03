@@ -30,16 +30,16 @@ public class WebcamService {
             System.err.println("[Webcam] Could not connect to camera server.");
             return false;
         }
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 10; i++) {
             boolean ok = server.isCameraAvailable();
             if (ok) {
                 System.out.println("[Webcam] Camera available: true");
                 return true;
             }
-            System.out.println("[Webcam] Camera not ready yet, retrying... (" + (i+1) + "/6)");
+            System.out.println("[Webcam] Camera not ready yet, retrying... (" + (i+1) + "/10)");
             try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
             // Ask server to retry opening the camera
-            if (i == 2) server.retryCamera();
+            if (i == 3 || i == 6) server.retryCamera();
         }
         System.err.println("[Webcam] Camera unavailable after retries.");
         return false;

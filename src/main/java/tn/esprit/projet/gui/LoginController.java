@@ -201,7 +201,7 @@ public class LoginController {
     private void navigateAfterLogin(User user) {
         Stage stage = (Stage) emailField.getScene().getWindow();
         if (user.isAdmin()) {
-            Nav.go(stage, "admin_dashboard.fxml", "NutriLife - Admin", 1320, 780, true);
+            Nav.go(stage, "admin_layout.fxml", "NutriLife - Admin", 1320, 780, true);
         } else {
             Nav.go(stage, "home.fxml", "NutriLife - Home", 1280, 760, true);
         }

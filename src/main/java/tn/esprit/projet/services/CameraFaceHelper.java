@@ -110,6 +110,8 @@ public class CameraFaceHelper {
 
         // Dark vignette outside oval
         g.setColor(new Color(0, 0, 0, 130));
+        
+        
         g.fillRect(0, 0, w, h);
 
         // Clear oval (show camera inside)

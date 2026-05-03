@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.effect.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.faceid.ProfessionalFaceIDController"
+            style="-fx-background-color: linear-gradient(to bottom, #0F172A, #1E293B); -fx-background-radius: 20;">
+
+    <!-- Header with gradient -->
+    <top>
+        <VBox alignment="CENTER" spacing="15" style="-fx-background-color: rgba(30, 41, 59, 0.8); -fx-padding: 30; -fx-background-radius: 20 20 0 0;">
+            <effect>
+                <DropShadow color="rgba(0,0,0,0.3)" radius="10" offsetY="5"/>
+            </effect>
+            
+            <Label text="🔐 Face ID Authentication" 
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.5), 10, 0, 0, 0);"/>
+            
+            <Label fx:id="statusLabel" 
+                   text="Initializing camera..." 
+                   style="-fx-font-size: 16px; -fx-text-fill: #94A3B8; -fx-font-weight: 600;">
+                <effect>
+                    <Glow level="0.3"/>
+                </effect>
+            </Label>
+        </VBox>
+    </top>
+
+    <!-- Center - Camera View with Professional Effects -->
+    <center>
+        <VBox alignment="CENTER" spacing="25" style="-fx-padding: 40;">
+            
+            <!-- Camera Container with Glow Effect -->
+            <StackPane fx:id="cameraContainer" 
+                      prefWidth="420" prefHeight="420"
+                      style="-fx-background-color: #1E293B; -fx-background-radius: 220; -fx-border-color: linear-gradient(to bottom, #3B82F6, #8B5CF6); -fx-border-width: 4; -fx-border-radius: 220;">
+                
+                <effect>
+                    <DropShadow color="rgba(59,130,246,0.6)" radius="30" spread="0.3"/>
+                </effect>
+                
+                <!-- Camera Feed -->
+                <ImageView fx:id="cameraView" 
+                          fitWidth="400" fitHeight="400" 
+                          preserveRatio="false"
+                          style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 20, 0, 0, 0);">
+                    <clip>
+                        <Circle radius="200" centerX="200" centerY="200"/>
+                    </clip>
+                </ImageView>
+                
+                <!-- Scanning Animation Overlay -->
+                <Circle radius="200" 
+                       stroke="#3B82F6" 
+                       strokeWidth="3" 
+                       fill="transparent">
+                    <effect>
+                        <Glow level="0.8"/>
+                    </effect>
+                </Circle>
+                
+                <!-- Progress Indicator with Glow -->
+                <ProgressIndicator fx:id="progressIndicator" 
+                                  prefWidth="100" prefHeight="100"
+                                  style="-fx-progress-color: #3B82F6;">
+                    <effect>
+                        <Glow level="0.8"/>
+                    </effect>
+                </ProgressIndicator>
+            </StackPane>
+
+            <!-- Instructions with Icon -->
+            <HBox alignment="CENTER" spacing="10">
+                <Label text="ℹ️" style="-fx-font-size: 20px;"/>
+                <Label fx:id="instructionLabel" 
+                       text="Position your face in the circle" 
+                       style="-fx-font-size: 15px; -fx-text-fill: #CBD5E1; -fx-font-weight: 500;"
+                       wrapText="true" maxWidth="400"/>
+            </HBox>
+
+        </VBox>
+    </center>
+
+    <!-- Bottom - Action Buttons with Hover Effects -->
+    <bottom>
+        <VBox spacing="15" style="-fx-background-color: rgba(30, 41, 59, 0.8); -fx-padding: 25; -fx-background-radius: 0 0 20 20;">
+            <effect>
+                <DropShadow color="rgba(0,0,0,0.3)" radius="10" offsetY="-5"/>
+            </effect>
+            
+            <HBox alignment="CENTER" spacing="15">
+                
+                <Button fx:id="retryButton" 
+                        text="🔄 Retry" 
+                        onAction="#handleRetry"
+                        style="-fx-background-color: linear-gradient(to bottom, #3B82F6, #2563EB); -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-padding: 12 35; -fx-background-radius: 25; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.5), 10, 0, 0, 3);">
+                    <effect>
+                        <DropShadow color="rgba(59,130,246,0.6)" radius="15" spread="0.2"/>
+                    </effect>
+                </Button>
+                
+                <Button fx:id="usePasswordButton" 
+                        text="🔑 Use Password" 
+                        onAction="#handleUsePassword"
+                        style="-fx-background-color: linear-gradient(to bottom, #6B7280, #4B5563); -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-padding: 12 35; -fx-background-radius: 25; -fx-cursor: hand;">
+                    <effect>
+                        <DropShadow color="rgba(107,114,128,0.4)" radius="10" spread="0.1"/>
+                    </effect>
+                </Button>
+                
+                <Button fx:id="cancelButton" 
+                        text="✖️ Cancel" 
+                        onAction="#handleCancel"
+                        style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-font-size: 15px; -fx-font-weight: 600; -fx-padding: 12 35; -fx-border-color: #475569; -fx-border-width: 2; -fx-border-radius: 25; -fx-background-radius: 25; -fx-cursor: hand;"/>
+            </HBox>
+            
+            <!-- Security Badge -->
+            <HBox alignment="CENTER" spacing="8" style="-fx-padding: 10 0 0 0;">
+                <Label text="🔒" style="-fx-font-size: 14px;"/>
+                <Label text="Secured with AES-256 encryption" 
+                       style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-font-style: italic;"/>
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.effect.DropShadow?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.IngredientManagementController"
+           style="-fx-background-color: #F0F4F8;">
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+                style="-fx-background-color: #F0F4F8; -fx-background: #F0F4F8; -fx-border-color: transparent;">
+        <VBox spacing="20">
+            <padding><Insets top="24" right="28" bottom="28" left="28"/></padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="16" prefHeight="90"
+                  style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 16; -fx-padding: 20 24;">
+                <effect><DropShadow color="rgba(0,0,0,0.08)" radius="12" offsetY="4"/></effect>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Ingredient Management"
+                           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Manage your inventory, track expiration dates and optimize your stock"
+                           style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                </VBox>
+                <HBox spacing="12" alignment="CENTER_RIGHT">
+                    <Button fx:id="btnExpiryCalendar" onAction="#handleShowCalendar"
+                            prefHeight="48" prefWidth="180" text="📅 Expiry Calendar"
+                            style="-fx-background-color: white; -fx-text-fill: #1A5C40; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-border-color: #1A5C40; -fx-border-radius: 12; -fx-cursor: hand;"/>
+                    <Button fx:id="btnAddIngredient" text="+ New Ingredient" onAction="#handleAddNew"
+                            prefHeight="48" prefWidth="180"
+                            style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand;"/>
+                </HBox>
+            </HBox>
+
+            <HBox spacing="18">
+                <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 16; -fx-padding: 20;">
+                    <Label text="TOTAL INGREDIENTS" style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblTotalCount" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                </VBox>
+                <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 16; -fx-padding: 20;">
+                    <Label text="EXPIRING SOON" style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblExpiringSoon" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #F59E0B;"/>
+                </VBox>
+                <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 16; -fx-padding: 20;">
+                    <Label text="EXPIRED" style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblExpired" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
+                </VBox>
+                <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 16; -fx-padding: 20;">
+                    <Label text="CATEGORIES" style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblCategoriesCount" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #3B82F6;"/>
+                </VBox>
+                <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 16; -fx-padding: 20;">
+                    <Label text="LOW STOCK" style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblLowStock" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #EA580C;"/>
+                </VBox>
+                <VBox prefHeight="110" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E0E8F0; -fx-border-radius: 16; -fx-padding: 20;">
+                    <Label text="OUT OF STOCK" style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblOutOfStock" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                </VBox>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="14" prefHeight="66"
+                  style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-padding: 0 20;">
+                <HBox alignment="CENTER_LEFT" spacing="10" prefWidth="320" prefHeight="40"
+                      style="-fx-background-color: #F8FAFC; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-padding: 0 12;">
+                    <Label text="🔍" style="-fx-font-size: 14px; -fx-text-fill: #64748B;"/>
+                    <TextField fx:id="txtSearch" promptText="Search an ingredient..."
+                               prefHeight="38" HBox.hgrow="ALWAYS"
+                               style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13px;"/>
+                </HBox>
+                <ComboBox fx:id="cmbFilterCategory" promptText="All categories" prefWidth="180" prefHeight="40"
+                          style="-fx-background-color: #F8FAFC; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;"/>
+                <ComboBox fx:id="cmbSortBy" promptText="Sort by..." prefWidth="180" prefHeight="40"
+                          style="-fx-background-color: #F8FAFC; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;"/>
+                <Button text="Search" onAction="#applyFilters" prefHeight="40" prefWidth="110"
+                        style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                <Button fx:id="btnReset" text="✕ Reset" onAction="#handleRefresh" prefHeight="40" prefWidth="100"
+                        style="-fx-background-color: transparent; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-text-fill: #64748B; -fx-font-size: 13px; -fx-cursor: hand;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblTableInfo" text="0 result(s)"
+                       style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-padding: 6 12; -fx-background-color: #F1F5F9; -fx-background-radius: 6;"/>
+            </HBox>
+
+            <VBox VBox.vgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E2E8F0; -fx-border-radius: 16; -fx-padding: 0;">
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                            style="-fx-background: white; -fx-background-color: white; -fx-border-color: transparent;">
+                    <GridPane fx:id="gridIngredients" hgap="16" vgap="16" style="-fx-padding: 20;">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                        </columnConstraints>
+                    </GridPane>
+                </ScrollPane>
+            </VBox>
+
+            <HBox fx:id="paginationBar" alignment="CENTER" spacing="12" style="-fx-padding: 10 0;">
+                <Button fx:id="btnPrevPage" text="← Previous" onAction="#handlePrevPage"
+                        prefHeight="36" prefWidth="110"
+                        style="-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-text-fill: #475569; -fx-font-size: 12px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                <Label fx:id="lblPageInfo" text="Page 1 / 1"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B; -fx-padding: 0 10;"/>
+                <Button fx:id="btnNextPage" text="Next →" onAction="#handleNextPage"
+                        prefHeight="36" prefWidth="110"
+                        style="-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-text-fill: #475569; -fx-font-size: 12px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
+
+    <StackPane fx:id="formOverlay" visible="false" managed="false"
+               style="-fx-background-color: rgba(15, 23, 42, 0.78);">
+        <VBox spacing="0" maxWidth="660" maxHeight="680"
+              style="-fx-background-color: white; -fx-background-radius: 20;">
+            <HBox alignment="CENTER_LEFT" spacing="14" prefHeight="70"
+                  style="-fx-background-color: #2E7D5A; -fx-background-radius: 20 20 0 0; -fx-padding: 0 24;">
+                <Label fx:id="lblFormTitle" text="Add Ingredient"
+                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" HBox.hgrow="ALWAYS"/>
+                <Button text="X" onAction="#handleCloseForm"
+                        prefWidth="36" prefHeight="36"
+                        style="-fx-background-color: rgba(255,255,255,0.15); -fx-background-radius: 10; -fx-cursor: hand; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="530"
+                        style="-fx-background-color: white; -fx-background: white; -fx-border-color: transparent;">
+                <VBox spacing="22" style="-fx-padding: 28;">
+                    <Label fx:id="lblError" text="" managed="false" visible="false" wrapText="true"
+                           style="-fx-text-fill: #DC2626; -fx-font-size: 12px; -fx-background-color: #FEE2E2; -fx-background-radius: 8; -fx-padding: 10 14;"/>
+                    <GridPane hgap="16" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Name *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="txtNom" promptText="e.g. Cherry tomatoes" prefHeight="42"
+                                       style="-fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 10; -fx-border-color: #D1D5DB; -fx-border-radius: 10; -fx-background-color: #FAFAFA;"/>
+                            <Label fx:id="lblNomError" text="" style="-fx-font-size: 11px; -fx-text-fill: #DC2626;" visible="false" managed="false"/>
+                        </VBox>
+                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Category *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <ComboBox fx:id="cmbCategorie" promptText="Select category..." prefHeight="42" maxWidth="Infinity"
+                                      style="-fx-font-size: 13px; -fx-background-radius: 10;"/>
+                            <Label fx:id="lblCategorieError" text="" style="-fx-font-size: 11px; -fx-text-fill: #DC2626;" visible="false" managed="false"/>
+                        </VBox>
+                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Quantity *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="txtQuantite" promptText="e.g. 1.5" prefHeight="42"
+                                       style="-fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 10; -fx-border-color: #D1D5DB; -fx-border-radius: 10; -fx-background-color: #FAFAFA;"/>
+                            <Label fx:id="lblQuantiteError" text="" style="-fx-font-size: 11px; -fx-text-fill: #DC2626;" visible="false" managed="false"/>
+                        </VBox>
+                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Unit" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <ComboBox fx:id="cmbUnite" promptText="Select unit..." prefHeight="42" maxWidth="Infinity"
+                                      style="-fx-font-size: 13px; -fx-background-radius: 10;"/>
+                        </VBox>
+                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="Expiry Date" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <DatePicker fx:id="datePeremption" prefHeight="42" maxWidth="Infinity"
+                                        style="-fx-font-size: 13px; -fx-background-radius: 10;"/>
+                            <Label fx:id="lblDateError" text="" style="-fx-font-size: 11px; -fx-text-fill: #DC2626;" visible="false" managed="false"/>
+                        </VBox>
+                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <Label text="Image URL" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="txtImage" promptText="https://..." prefHeight="42"
+                                       style="-fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 10; -fx-border-color: #D1D5DB; -fx-border-radius: 10; -fx-background-color: #FAFAFA;"/>
+                        </VBox>
+                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                            <Label text="Notes" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextArea fx:id="txtNotes" promptText="Origin, supplier, allergens..." prefHeight="80" wrapText="true"
+                                      style="-fx-font-size: 13px; -fx-background-radius: 10; -fx-border-color: #D1D5DB; -fx-border-radius: 10; -fx-background-color: #FAFAFA;"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+            </ScrollPane>
+            <HBox spacing="12" alignment="CENTER_RIGHT" prefHeight="70"
+                  style="-fx-padding: 0 24; -fx-background-color: #F9FAFB; -fx-background-radius: 0 0 20 20; -fx-border-color: #E5E7EB; -fx-border-width: 1 0 0 0;">
+                <Button text="Cancel" onAction="#handleCloseForm" prefHeight="42" prefWidth="110"
+                        style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 10; -fx-background-radius: 10; -fx-text-fill: #374151; -fx-font-size: 13px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                <Button fx:id="btnSaveIngredient" text="Save" onAction="#handleSaveIngredient"
+                        prefHeight="42" prefWidth="140"
+                        style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+    </StackPane>
+
+</StackPane>

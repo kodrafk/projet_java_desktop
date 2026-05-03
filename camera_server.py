@@ -58,9 +58,10 @@ def _open_camera():
             c.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
             c.set(cv2.CAP_PROP_FPS, 30)
             # Give camera time to initialize, then do warm-up reads
-            time.sleep(0.3)
-            for _ in range(10):
+            time.sleep(0.5)
+            for _ in range(20):
                 c.read()
+                time.sleep(0.05)
             ret, frame = c.read()
             if ret and frame is not None and frame.size > 0:
                 _cap = c
@@ -69,6 +70,29 @@ def _open_camera():
             c.release()
         except Exception as e:
             print(f"[CamServer] idx={idx} error: {e}", flush=True)
+
+    # Fallback: try without DirectShow
+    if use_dshow:
+        print("[CamServer] Retrying without DirectShow...", flush=True)
+        for idx in range(4):
+            try:
+                c = cv2.VideoCapture(idx)
+                if not c.isOpened():
+                    c.release()
+                    continue
+                c.set(cv2.CAP_PROP_FRAME_WIDTH,  640)
+                c.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+                time.sleep(0.5)
+                for _ in range(10):
+                    c.read()
+                ret, frame = c.read()
+                if ret and frame is not None and frame.size > 0:
+                    _cap = c
+                    print(f"[CamServer] Camera opened (fallback): index={idx}", flush=True)
+                    return True
+                c.release()
+            except Exception as e:
+                print(f"[CamServer] fallback idx={idx} error: {e}", flush=True)
 
     print("[CamServer] No camera found!", flush=True)
     return False

@@ -19,11 +19,17 @@ import tn.esprit.projet.services.FaceEmbeddingService;
 import tn.esprit.projet.services.LocalFaceEmbeddingService;
 import tn.esprit.projet.utils.Session;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Face ID Login — real-time camera with professional overlay.
- * Uses LocalFaceEmbeddingService (no Python needed).
+ *
+ * Security improvements:
+ *  - Face presence validation before matching (rejects hands, walls, objects)
+ *  - 3-frame multi-capture: all 3 frames must match the same user
+ *  - Strict threshold (0.93) — much harder to spoof
+ *  - Clear error messages when no face is detected
  */
 public class FaceIdVerifyController {
 
@@ -34,11 +40,18 @@ public class FaceIdVerifyController {
     @FXML private Button      captureButton;
     @FXML private Button      cancelButton;
 
-    private final CameraFaceHelper        camera   = new CameraFaceHelper();
-    private final LocalFaceEmbeddingService localEmb = new LocalFaceEmbeddingService();
-    private final FaceEmbeddingService    cryptoSvc = new FaceEmbeddingService();
-    private final FaceEmbeddingRepository embRepo  = new FaceEmbeddingRepository();
-    private final UserRepository          userRepo  = new UserRepository();
+    private final CameraFaceHelper          camera    = new CameraFaceHelper();
+    private final LocalFaceEmbeddingService localEmb  = new LocalFaceEmbeddingService();
+    private final FaceEmbeddingService      cryptoSvc = new FaceEmbeddingService();
+    private final FaceEmbeddingRepository   embRepo   = new FaceEmbeddingRepository();
+    private final UserRepository            userRepo  = new UserRepository();
+
+    // Number of frames to capture and cross-validate
+    private static final int CAPTURE_COUNT = 3;
+    // All frames must score above this threshold
+    private static final double MATCH_THRESHOLD = LocalFaceEmbeddingService.MATCH_THRESHOLD;
+    // Minimum frames that must agree on the same user
+    private static final int MIN_AGREEMENT = 3;
 
     private AnimationTimer previewTimer;
     private boolean verifying = false;
@@ -60,7 +73,7 @@ public class FaceIdVerifyController {
             boolean ok = camera.open();
             Platform.runLater(() -> {
                 if (ok) {
-                    setStatus("✅ Look at the camera and click Verify", false);
+                    setStatus("✅ Look directly at the camera and click Verify", false);
                     if (captureButton != null) captureButton.setDisable(false);
                     startPreview();
                 } else {
@@ -71,8 +84,14 @@ public class FaceIdVerifyController {
                         captureButton.setOnAction(e -> new Thread(() -> {
                             boolean r2 = camera.open();
                             Platform.runLater(() -> {
-                                if (r2) { setStatus("✅ Camera ready.", false); captureButton.setText("🔍  Verify Face"); captureButton.setOnAction(ev -> handleVerify()); startPreview(); }
-                                else    { setStatus("❌ Camera still unavailable.", false); }
+                                if (r2) {
+                                    setStatus("✅ Camera ready.", false);
+                                    captureButton.setText("🔍  Verify Face");
+                                    captureButton.setOnAction(ev -> handleVerify());
+                                    startPreview();
+                                } else {
+                                    setStatus("❌ Camera still unavailable.", false);
+                                }
                             });
                         }).start());
                     }
@@ -99,106 +118,199 @@ public class FaceIdVerifyController {
         if (verifying || !camera.isOpen()) return;
         verifying = true;
         if (captureButton != null) captureButton.setDisable(true);
-        setStatus("📸 Hold still...", false);
-        if (verifyProgress != null) verifyProgress.setProgress(0.2);
+        setStatus("📸 Hold still — capturing 3 frames...", false);
+        if (verifyProgress != null) verifyProgress.setProgress(0.1);
 
-        PauseTransition p = new PauseTransition(Duration.millis(500));
-        p.setOnFinished(e -> doVerify());
+        // Small delay to let user settle
+        PauseTransition p = new PauseTransition(Duration.millis(600));
+        p.setOnFinished(e -> doMultiCapture());
         p.play();
     }
 
-    private void doVerify() {
-        setStatus("🤖 Analyzing face...", false);
-        if (verifyProgress != null) verifyProgress.setProgress(0.4);
-
-        byte[] jpeg = camera.grabJpeg();
-        if (jpeg == null || jpeg.length == 0) {
-            verifying = false;
-            setStatus("❌ Could not capture image. Try again.", false);
-            if (captureButton != null) captureButton.setDisable(false);
-            if (verifyProgress != null) verifyProgress.setProgress(0);
-            return;
-        }
+    /**
+     * Capture CAPTURE_COUNT frames with small delays between them.
+     * All frames must agree on the same user above the threshold.
+     */
+    private void doMultiCapture() {
+        setStatus("🤖 Analyzing face — please stay still...", false);
+        if (verifyProgress != null) verifyProgress.setProgress(0.2);
 
         new Thread(() -> {
-            try {
-                double[] liveEmb = localEmb.extractEmbedding(jpeg);
+            List<byte[]> frames = new ArrayList<>();
 
-                Platform.runLater(() -> {
-                    if (verifyProgress != null) verifyProgress.setProgress(0.7);
-                    setStatus("🔍 Matching identity...", false);
-                });
-
-                List<FaceEmbeddingRepository.UserEmbedding> all = embRepo.findAllActiveEmbeddings();
-
-                if (all.isEmpty()) {
-                    Platform.runLater(() -> {
-                        verifying = false;
-                        setStatus("❌ No Face ID accounts found. Register first.", false);
-                        if (captureButton != null) captureButton.setDisable(false);
-                        if (verifyProgress != null) verifyProgress.setProgress(0);
-                    });
-                    return;
+            // Capture 3 frames with 300ms between each
+            for (int i = 0; i < CAPTURE_COUNT; i++) {
+                byte[] jpeg = camera.grabJpeg();
+                if (jpeg != null && jpeg.length > 0) {
+                    frames.add(jpeg);
                 }
-
-                Integer matchId = null;
-                double  bestScore = 0.0;
-
-                for (FaceEmbeddingRepository.UserEmbedding ue : all) {
-                    try {
-                        double[] stored = cryptoSvc.decrypt(ue.encryptedB64, ue.ivB64, ue.tagB64);
-                        double   score  = localEmb.similarity(liveEmb, stored);
-                        System.out.printf("[FaceID] User %d → %.4f%n", ue.userId, score);
-                        if (score > bestScore) { bestScore = score; matchId = ue.userId; }
-                    } catch (Exception ex) {
-                        System.err.println("[FaceID] Decrypt error user " + ue.userId);
-                    }
+                if (i < CAPTURE_COUNT - 1) {
+                    try { Thread.sleep(300); } catch (InterruptedException ignored) {}
                 }
-
-                embRepo.logAttempt(matchId, null, bestScore >= 0.82, bestScore);
-
-                final Integer fid = matchId;
-                final double  fs  = bestScore;
-
+                final int captured = frames.size();
                 Platform.runLater(() -> {
-                    if (verifyProgress != null) verifyProgress.setProgress(1.0);
-
-                    if (fid != null && fs >= 0.82) {
-                        User user = userRepo.findById(fid);
-                        if (user == null || !user.isActive()) {
-                            verifying = false;
-                            setStatus("❌ Account not found or inactive.", false);
-                            if (captureButton != null) captureButton.setDisable(false);
-                            if (verifyProgress != null) verifyProgress.setProgress(0);
-                            return;
-                        }
-                        setStatus("✅ Welcome, " + user.getFirstName() + "!", true);
-                        Session.login(user);
-                        PauseTransition close = new PauseTransition(Duration.millis(1200));
-                        close.setOnFinished(ev -> {
-                            stopCamera();
-                            ((Stage) cameraView.getScene().getWindow()).close();
-                            if (onSuccess != null) onSuccess.run();
-                        });
-                        close.play();
-                    } else {
-                        verifying = false;
-                        setStatus("❌ Face not recognized. Try again or use password.", false);
-                        if (captureButton != null) captureButton.setDisable(false);
-                        if (verifyProgress != null) verifyProgress.setProgress(0);
-                    }
+                    if (verifyProgress != null)
+                        verifyProgress.setProgress(0.2 + 0.3 * captured / CAPTURE_COUNT);
+                    setStatus("🤖 Captured " + captured + "/" + CAPTURE_COUNT + " frames...", false);
                 });
+            }
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (frames.isEmpty()) {
                 Platform.runLater(() -> {
                     verifying = false;
-                    setStatus("❌ Error: " + e.getMessage(), false);
+                    setStatus("❌ Could not capture image. Try again.", false);
                     if (captureButton != null) captureButton.setDisable(false);
                     if (verifyProgress != null) verifyProgress.setProgress(0);
                 });
+                return;
             }
+
+            Platform.runLater(() -> {
+                if (verifyProgress != null) verifyProgress.setProgress(0.5);
+                setStatus("🔍 Verifying identity...", false);
+            });
+
+            doVerifyFrames(frames);
         }).start();
+    }
+
+    private void doVerifyFrames(List<byte[]> frames) {
+        try {
+            List<FaceEmbeddingRepository.UserEmbedding> all = embRepo.findAllActiveEmbeddings();
+
+            if (all.isEmpty()) {
+                Platform.runLater(() -> {
+                    verifying = false;
+                    setStatus("❌ No Face ID accounts found. Register first.", false);
+                    if (captureButton != null) captureButton.setDisable(false);
+                    if (verifyProgress != null) verifyProgress.setProgress(0);
+                });
+                return;
+            }
+
+            // Extract embeddings from all frames
+            List<double[]> liveEmbeddings = new ArrayList<>();
+            for (byte[] jpeg : frames) {
+                try {
+                    double[] emb = localEmb.extractEmbedding(jpeg);
+                    liveEmbeddings.add(emb);
+                } catch (LocalFaceEmbeddingService.FaceNotDetectedException e) {
+                    System.out.println("[FaceID] Frame rejected: " + e.getMessage());
+                    // Don't add — this frame had no face
+                } catch (Exception e) {
+                    System.err.println("[FaceID] Frame error: " + e.getMessage());
+                }
+            }
+
+            if (liveEmbeddings.isEmpty()) {
+                Platform.runLater(() -> {
+                    verifying = false;
+                    setStatus("❌ No face detected. Look directly at the camera.", false);
+                    if (captureButton != null) captureButton.setDisable(false);
+                    if (verifyProgress != null) verifyProgress.setProgress(0);
+                });
+                return;
+            }
+
+            System.out.printf("[FaceID] %d/%d frames had valid faces%n", liveEmbeddings.size(), frames.size());
+
+            Platform.runLater(() -> {
+                if (verifyProgress != null) verifyProgress.setProgress(0.7);
+            });
+
+            // For each enrolled user, count how many frames match
+            Integer bestUserId = null;
+            double  bestAvgScore = 0.0;
+            int     bestAgreement = 0;
+
+            for (FaceEmbeddingRepository.UserEmbedding ue : all) {
+                try {
+                    double[] stored = cryptoSvc.decrypt(ue.encryptedB64, ue.ivB64, ue.tagB64);
+
+                    int agreement = 0;
+                    double totalScore = 0.0;
+
+                    for (double[] live : liveEmbeddings) {
+                        double score = localEmb.similarity(live, stored);
+                        System.out.printf("[FaceID] User %d frame score: %.4f (threshold=%.2f)%n",
+                                ue.userId, score, MATCH_THRESHOLD);
+                        totalScore += score;
+                        if (score >= MATCH_THRESHOLD) agreement++;
+                    }
+
+                    double avgScore = totalScore / liveEmbeddings.size();
+                    System.out.printf("[FaceID] User %d → avg=%.4f, agreement=%d/%d%n",
+                            ue.userId, avgScore, agreement, liveEmbeddings.size());
+
+                    if (agreement > bestAgreement ||
+                        (agreement == bestAgreement && avgScore > bestAvgScore)) {
+                        bestAgreement = agreement;
+                        bestAvgScore  = avgScore;
+                        bestUserId    = ue.userId;
+                    }
+                } catch (Exception ex) {
+                    System.err.println("[FaceID] Decrypt error user " + ue.userId + ": " + ex.getMessage());
+                }
+            }
+
+            // Log the attempt
+            boolean success = bestUserId != null
+                    && bestAgreement >= MIN_AGREEMENT
+                    && bestAvgScore >= MATCH_THRESHOLD;
+            embRepo.logAttempt(bestUserId, null, success, bestAvgScore);
+
+            final Integer finalUserId  = bestUserId;
+            final double  finalScore   = bestAvgScore;
+            final int     finalAgree   = bestAgreement;
+
+            Platform.runLater(() -> {
+                if (verifyProgress != null) verifyProgress.setProgress(1.0);
+
+                if (success) {
+                    User user = userRepo.findById(finalUserId);
+                    if (user == null || !user.isActive()) {
+                        verifying = false;
+                        setStatus("❌ Account not found or inactive.", false);
+                        if (captureButton != null) captureButton.setDisable(false);
+                        if (verifyProgress != null) verifyProgress.setProgress(0);
+                        return;
+                    }
+                    System.out.printf("[FaceID] ✅ Login: %s (score=%.4f, agreement=%d/%d)%n",
+                            user.getEmail(), finalScore, finalAgree, liveEmbeddings.size());
+                    setStatus("✅ Welcome, " + user.getFirstName() + "!", true);
+                    Session.login(user);
+                    PauseTransition close = new PauseTransition(Duration.millis(1200));
+                    close.setOnFinished(ev -> {
+                        stopCamera();
+                        ((Stage) cameraView.getScene().getWindow()).close();
+                        if (onSuccess != null) onSuccess.run();
+                    });
+                    close.play();
+                } else {
+                    verifying = false;
+                    String msg;
+                    if (finalUserId == null) {
+                        msg = "❌ Face not recognized. Try again or use password.";
+                    } else if (finalAgree < MIN_AGREEMENT) {
+                        msg = String.format("❌ Inconsistent match (%d/%d frames). Try again.", finalAgree, liveEmbeddings.size());
+                    } else {
+                        msg = String.format("❌ Score too low (%.0f%%). Try again.", finalScore * 100);
+                    }
+                    setStatus(msg, false);
+                    if (captureButton != null) captureButton.setDisable(false);
+                    if (verifyProgress != null) verifyProgress.setProgress(0);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Platform.runLater(() -> {
+                verifying = false;
+                setStatus("❌ Error: " + e.getMessage(), false);
+                if (captureButton != null) captureButton.setDisable(false);
+                if (verifyProgress != null) verifyProgress.setProgress(0);
+            });
+        }
     }
 
     private void stopCamera() {

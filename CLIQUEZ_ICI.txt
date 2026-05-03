@@ -1,70 +1,60 @@
 
-╔════════════════════════════════════════════════════════════════╗
-║                                                                ║
-║                                                                ║
-║          🔴 ERREUR MYSQL ? CLIQUEZ ICI ! 🔴                   ║
-║                                                                ║
-║                                                                ║
-╚════════════════════════════════════════════════════════════════╝
+    ╔═══════════════════════════════════════════════════════╗
+    ║                                                       ║
+    ║         🎯 TAPEZ CETTE COMMANDE MAINTENANT 🎯        ║
+    ║                                                       ║
+    ╚═══════════════════════════════════════════════════════╝
 
 
-                    ⬇️  ⬇️  ⬇️  ⬇️  ⬇️
+    Dans PowerShell, tapez:
+
+        .\LANCER_SIMPLE.bat
+
+    OU:
+
+        mvn javafx:run
 
 
-┌────────────────────────────────────────────────────────────────┐
-│                                                                │
-│                                                                │
-│              DOUBLE-CLIQUEZ SUR CE FICHIER:                   │
-│                                                                │
-│                                                                │
-│              ╔═══════════════════════════╗                    │
-│              ║                           ║                    │
-│              ║   MYSQL_MANAGER.bat       ║                    │
-│              ║                           ║                    │
-│              ╚═══════════════════════════╝                    │
-│                                                                │
-│                                                                │
-│              Puis choisissez l'option [1]                     │
-│                                                                │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘
+    ═══════════════════════════════════════════════════════════
 
 
-                    ⬆️  ⬆️  ⬆️  ⬆️  ⬆️
+    ENSUITE:
+
+    1. L'application va s'ouvrir
+    2. Cliquez sur "Face ID Login" (bouton bleu)
+    3. 🎉 VOUS VERREZ L'INTERFACE PROFESSIONNELLE!
 
 
-╔════════════════════════════════════════════════════════════════╗
-║                                                                ║
-║                    C'EST TOUT ! 🎉                            ║
-║                                                                ║
-║              Le script va tout réparer en 30 secondes         ║
-║                                                                ║
-╚════════════════════════════════════════════════════════════════╝
+    ═══════════════════════════════════════════════════════════
 
 
-┌────────────────────────────────────────────────────────────────┐
-│  OU LISEZ LA DOCUMENTATION                                     │
-└────────────────────────────────────────────────────────────────┘
+    INTERFACE PROFESSIONNELLE:
 
-   START_HERE.txt              → Guide de démarrage
-   QUICK_START.txt             → Instructions visuelles
-   SOLUTION_MYSQL_COMPLETE.md  → Guide complet
-   RESUME_SOLUTION.md          → Résumé de la solution
+    ┌──────────────────────────────────────────────┐
+    │  🔐 Face ID Authentication                   │
+    │                                              │
+    │  ┌────────────────────────────────────┐     │
+    │  │                                    │     │
+    │  │     ⭕ CAMÉRA CIRCULAIRE          │     │
+    │  │        avec effets lumineux       │     │
+    │  │                                    │     │
+    │  └────────────────────────────────────┘     │
+    │                                              │
+    │  ℹ️ Position your face in the circle       │
+    │                                              │
+    │  [🔄 Retry] [🔑 Password] [✖️ Cancel]      │
+    │                                              │
+    │  🔒 Secured with AES-256 encryption         │
+    └──────────────────────────────────────────────┘
 
 
-┌────────────────────────────────────────────────────────────────┐
-│  ALTERNATIVE RAPIDE                                            │
-└────────────────────────────────────────────────────────────────┘
-
-   Votre application utilise déjà SQLite !
-   
-   Vous pouvez lancer l'application MAINTENANT
-   sans réparer MySQL.
+    ═══════════════════════════════════════════════════════════
 
 
-╔════════════════════════════════════════════════════════════════╗
-║                                                                ║
-║                  Bonne chance ! 🚀                            ║
-║                                                                ║
-╚════════════════════════════════════════════════════════════════╝
+    🚀 COMMANDE RAPIDE:
+
+        mvn javafx:run
+
+
+    C'est tout! 🎉
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
@@ -7,102 +9,256 @@
             prefWidth="1320" prefHeight="780"
             style="-fx-background-color:#F0F4F8;">
 
-    <!-- Sidebar -->
-    <left>
-        <VBox prefWidth="220" spacing="4"
-              style="-fx-background-color:#0F2820;-fx-padding:0 0 20 0;">
-            <HBox alignment="CENTER" style="-fx-padding:24 0 20 0;">
-                <Label text="🥗 NutriLife" style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+    <!-- ===================== TOP ===================== -->
+    <top>
+        <VBox style="-fx-background-color: #E8F0E9; -fx-border-color: #D0DDD1; -fx-border-width: 0 0 1 0;">
+            <HBox alignment="CENTER_LEFT" prefHeight="56" style="-fx-background-color: #E8F0E9;">
+                <padding><Insets top="0" right="28" bottom="0" left="28"/></padding>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <ImageView fitHeight="32" fitWidth="32" preserveRatio="true">
+                        <image><Image url="@../images/logo.png"/></image>
+                    </ImageView>
+                    <Label text="Nutri Coach Pro"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1A2E1A;"/>
+                </HBox>
+                <Region prefWidth="32"/>
+                <HBox alignment="CENTER_LEFT" spacing="2">
+                    <Button fx:id="btnHome" onAction="#handleHome"
+                            prefHeight="36" text="Home"
+                            style="-fx-background-color: transparent; -fx-text-fill: #1A2E1A; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnAbout" onAction="#handleAbout"
+                            prefHeight="36" text="About"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <MenuButton fx:id="btnMyKitchen" text="My Kitchen" prefHeight="36"
+                                style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 4 0 12;">
+                        <items>
+                            <MenuItem text="Ingredients" onAction="#handleIngredients"/>
+                            <MenuItem text="Recipes" onAction="#handleRecipes"/>
+                        </items>
+                    </MenuButton>
+                    <Button fx:id="btnNutrition" onAction="#handleNutrition"
+                            prefHeight="36" text="Nutrition Objectives"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnEvents" onAction="#handleEvents"
+                            prefHeight="36" text="Events"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnWellness" onAction="#handleWellness"
+                            prefHeight="36" text="Wellness"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                    <Button fx:id="btnBlog" onAction="#handleBlog"
+                            prefHeight="36" text="Blog"
+                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER_RIGHT" spacing="8">
+                    <Button prefHeight="36" prefWidth="110" text="assistant"
+                            style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 13px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                    <MenuButton fx:id="btnAccount" text="Account" prefHeight="36"
+                                style="-fx-background-color: transparent; -fx-text-fill: #1A2E1A; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand;">
+                        <items>
+                            <MenuItem text="My Profile" onAction="#handleMyProfile"/>
+                            <MenuItem text="Kitchen Rank" onAction="#handleKitchenRank"/>
+                            <MenuItem text="Security Settings" onAction="#handleChangePassword"/>
+                            <MenuItem text="Log Out" onAction="#handleLogout"/>
+                        </items>
+                    </MenuButton>
+                </HBox>
+                <VBox fx:id="submenuKitchen" managed="false" visible="false">
+                    <Button fx:id="btnIngredients" onAction="#handleIngredients"
+                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                    <Button fx:id="btnRecipes" onAction="#handleRecipes"
+                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                    <Button fx:id="btnDailyFood" onAction="#handleDailyFood"
+                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                    <Button fx:id="btnComplaints" onAction="#handleComplaints"
+                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
+                </VBox>
             </HBox>
+        </VBox>
+    </top>
 
-            <!-- Admin info -->
-            <VBox alignment="CENTER" spacing="4" style="-fx-padding:0 16 20 16;">
-                <StackPane prefWidth="48" prefHeight="48" style="-fx-background-color:#2E7D5A;-fx-background-radius:24;">
-                    <Label fx:id="lblAdminAvatar" text="A" style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+    <!-- ===================== SIDEBAR ===================== -->
+    <left>
+        <VBox prefWidth="230"
+              style="-fx-background-color: #0F2820; -fx-border-color: transparent #0A1E16 transparent transparent; -fx-border-width: 0 1 0 0;">
+            <!-- Branding -->
+            <HBox alignment="CENTER_LEFT" spacing="10" prefHeight="72"
+                  style="-fx-padding: 16 16 16 16; -fx-background-color: #0A1E16;">
+                <StackPane prefWidth="40" prefHeight="40"
+                           style="-fx-background-color: #2E7D5A; -fx-background-radius: 10;">
+                    <Label text="N" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                 </StackPane>
-                <Label fx:id="lblAdminName"  text="" style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:white;"/>
-                <Label fx:id="lblAdminEmail" text="" style="-fx-font-size:10px;-fx-text-fill:#A8C4B8;"/>
+                <VBox spacing="2">
+                    <Label text="Nutri Coach Pro"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label text="Admin Panel"
+                           style="-fx-font-size: 10px; -fx-text-fill: #5A8A72;"/>
+                </VBox>
+            </HBox>
+            <!-- Menu title -->
+            <Label text="MAIN"
+                   style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 16 16 8 18;"/>
+            <!-- Sidebar Buttons -->
+            <VBox spacing="2" style="-fx-padding: 0 10 0 10;">
+                <Button fx:id="btnDashboard" text="Dashboard" onAction="#handleDashboard"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-size: 12.5px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
             </VBox>
-
-            <Separator style="-fx-background-color:#1E4A35;"/>
-
-            <Button fx:id="btnDashboard"  text="📊  Dashboard"       onAction="#handleDashboard"  prefHeight="44" maxWidth="Infinity"
-                    style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:12.5px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
-            <Button fx:id="btnUsers"      text="👥  User Management"  onAction="#handleUsers"      prefHeight="44" maxWidth="Infinity"
-                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
-            <Button fx:id="btnGroups"     text="🫂  My Groups"         onAction="#handleGroups"     prefHeight="44" maxWidth="Infinity"
-                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
-            <!-- Hidden: Personalized Messages -->
-            <!-- <Button fx:id="btnPersonalizedMessages" text="💬  Personalized Messages" onAction="#handlePersonalizedMessages" prefHeight="44" maxWidth="Infinity"
-                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/> -->
-            <!-- Hidden: User Alerts -->
-            <!-- <Button fx:id="btnAlerts" text="🔔  User Alerts" onAction="#handleAlerts" prefHeight="44" maxWidth="Infinity"
-                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/> -->
-            <Button fx:id="btnStatistics" text="📈  Statistics"       onAction="#handleStatistics" prefHeight="44" maxWidth="Infinity"
-                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
-            <Button fx:id="btnAnomalyDetection" text="🤖  AI Anomaly Detection" onAction="#handleAnomalyDetection" prefHeight="44" maxWidth="Infinity"
-                    style="-fx-background-color:transparent;-fx-text-fill:#A8C4B8;-fx-font-size:12.5px;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;"/>
-
+            <Label text="MANAGEMENT"
+                   style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 14 16 8 18;"/>
+            <VBox spacing="2" style="-fx-padding: 0 10 0 10;">
+                <Button fx:id="btnUsers" text="Users" onAction="#handleUsers"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnStatistics" text="Statistics" onAction="#handleStatistics"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnObjectives" text="Objectives" onAction="#handleObjectives"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+            </VBox>
+            <Label text="CONTENT"
+                   style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 14 16 8 18;"/>
+            <VBox spacing="2" style="-fx-padding: 0 10 0 10;">
+                <Button fx:id="btnIngredientsSide" text="Ingredients" onAction="#handleIngredients"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnRecipesSide" text="Recipes" onAction="#handleRecipes"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnEventsSide" text="Events" onAction="#handleEvents"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnBlogs" text="Blogs" onAction="#handleBlogs"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnSponsors" text="Sponsors" onAction="#handleSponsors"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+            </VBox>
+            <Label text="MODULES"
+                   style="-fx-text-fill: #4A7060; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 14 16 8 18;"/>
+            <VBox spacing="2" style="-fx-padding: 0 10 0 10;">
+                <Button fx:id="btnSMS" text="SMS" onAction="#handleSMS"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnNutritionSide" text="Nutrition" onAction="#handleNutrition"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnWellnessSide" text="Wellness" onAction="#handleWellness"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnAnomalyDetection" text="🤖  AI Anomaly" onAction="#handleAnomalyDetection"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnGroups" text="🫂  My Groups" onAction="#handleGroups"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnComplaints" text="📋  Complaints" onAction="#handleComplaints"
+                        prefHeight="42" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12.5px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+            </VBox>
             <Region VBox.vgrow="ALWAYS"/>
-            <Button text="🚪  Logout" onAction="#handleLogout" prefHeight="44" maxWidth="Infinity"
-                    style="-fx-background-color:#DC2626;-fx-text-fill:white;-fx-font-size:12.5px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-alignment:CENTER_LEFT;-fx-padding:0 0 0 14;-fx-margin:0 12 0 12;"/>
+            <!-- Bottom block -->
+            <VBox spacing="8" style="-fx-padding: 12 12 16 12;">
+                <Button text="← Back to Site" onAction="#handleBackToSite"
+                        prefHeight="38" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+                <Button fx:id="btnLogout" text="Logout" onAction="#handleLogout"
+                        prefHeight="38" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #A8C4B8; -fx-font-size: 12px; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"/>
+            </VBox>
         </VBox>
     </left>
 
-    <!-- Main content -->
+    <!-- ===================== MAIN CONTENT ===================== -->
     <center>
-        <StackPane fx:id="contentArea">
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
-                        style="-fx-background-color:#F0F4F8;-fx-background:#F0F4F8;-fx-border-color:transparent;">
-                <VBox spacing="20" style="-fx-padding:28 32;">
-                    <Label text="Admin Dashboard" style="-fx-font-size:24px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
-
-                    <!-- KPI cards -->
-                    <HBox spacing="16">
-                        <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
-                              style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
-                            <Label text="Total Users" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
-                            <Label fx:id="lblTotalUsers" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
-                        </VBox>
-                        <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
-                              style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
-                            <Label text="Active Users" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
-                            <Label fx:id="lblActiveUsers" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#16A34A;"/>
-                        </VBox>
-                        <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
-                              style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
-                            <Label text="Inactive Users" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
-                            <Label fx:id="lblInactiveUsers" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#DC2626;"/>
-                        </VBox>
-                        <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
-                              style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
-                            <Label text="Administrators" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
-                            <Label fx:id="lblAdmins" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#7C3AED;"/>
-                        </VBox>
-                    </HBox>
-
-                    <!-- My Groups quick-access widget -->
-                    <VBox spacing="12"
-                          style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20 24;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <Label text="🫂  My Groups" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
-                            <Label fx:id="lblDashGroupCount" text=""
-                                   style="-fx-font-size:11px;-fx-text-fill:#64748B;-fx-background-color:#F1F5F9;-fx-background-radius:10;-fx-padding:2 10;"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Button text="+ New Group" onAction="#handleCreateGroupFromDash"
-                                    style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:6 14;"/>
-                            <Button text="See all →" onAction="#handleGroups"
-                                    style="-fx-background-color:transparent;-fx-text-fill:#2E7D5A;-fx-font-size:12px;-fx-font-weight:bold;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:6 10;"/>
-                        </HBox>
-                        <!-- Group cards row — filled dynamically -->
-                        <HBox fx:id="dashGroupCards" spacing="12" alignment="CENTER_LEFT" style="-fx-padding:4 0 0 0;">
-                            <Label fx:id="lblDashNoGroups"
-                                   text="No groups yet. Click '+ New Group' to create your first group."
-                                   style="-fx-font-size:12px;-fx-text-fill:#94A3B8;-fx-font-style:italic;"/>
-                        </HBox>
-                    </VBox>
+        <VBox style="-fx-background-color: #F0F4F8;">
+            <!-- ===== TOP HEADER BAR ===== -->
+            <HBox alignment="CENTER_LEFT" prefHeight="74" spacing="14"
+                  style="-fx-background-color: white; -fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1 0;">
+                <padding><Insets top="0" right="24" bottom="0" left="26"/></padding>
+                <VBox spacing="3">
+                    <Label text="Admin Dashboard"
+                           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Label text="Monitor and manage your platform from a centralized workspace"
+                           style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
                 </VBox>
-            </ScrollPane>
-        </StackPane>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER_LEFT" spacing="8" prefHeight="40" prefWidth="280"
+                      style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-padding: 0 12 0 12;">
+                    <Label text="🔍" style="-fx-font-size: 14px; -fx-text-fill: #94A3B8;"/>
+                    <TextField fx:id="searchField" promptText="Search..."
+                               prefHeight="36" HBox.hgrow="ALWAYS"
+                               style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12px; -fx-text-fill: #475569; -fx-prompt-text-fill: #94A3B8;"/>
+                </HBox>
+                <HBox alignment="CENTER_RIGHT" spacing="8" onMouseClicked="#handleAdminProfile" style="-fx-cursor: hand;">
+                    <Button prefHeight="38" prefWidth="38" text="🔔"
+                            style="-fx-background-color: transparent; -fx-font-size: 16px; -fx-text-fill: #475569; -fx-background-radius: 10; -fx-cursor: hand;"/>
+                    <Button prefHeight="38" prefWidth="38" text="⚙"
+                            style="-fx-background-color: transparent; -fx-font-size: 16px; -fx-text-fill: #475569; -fx-background-radius: 10; -fx-cursor: hand;"/>
+                    <StackPane prefWidth="40" prefHeight="40"
+                               style="-fx-background-color: #1A3A6B; -fx-background-radius: 20;">
+                        <Label fx:id="lblAdminAvatar" text="A"
+                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    </StackPane>
+                </HBox>
+            </HBox>
+
+            <!-- ===== DYNAMIC CONTENT AREA ===== -->
+            <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+                            style="-fx-background-color:#F0F4F8;-fx-background:#F0F4F8;-fx-border-color:transparent;">
+                    <VBox spacing="20" style="-fx-padding:28 32;">
+
+                        <!-- KPI cards -->
+                        <HBox spacing="16">
+                            <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
+                                  style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
+                                <Label text="Total Users" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                                <Label fx:id="lblTotalUsers" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
+                                  style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
+                                <Label text="Active Users" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                                <Label fx:id="lblActiveUsers" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#16A34A;"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
+                                  style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
+                                <Label text="Inactive Users" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                                <Label fx:id="lblInactiveUsers" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#DC2626;"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
+                                  style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
+                                <Label text="Administrators" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                                <Label fx:id="lblAdmins" text="0" style="-fx-font-size:32px;-fx-font-weight:bold;-fx-text-fill:#7C3AED;"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- My Groups quick-access widget -->
+                        <VBox spacing="12"
+                              style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20 24;-fx-border-color:#E2E8F0;-fx-border-radius:14;">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="🫂  My Groups" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                                <Label fx:id="lblDashGroupCount" text=""
+                                       style="-fx-font-size:11px;-fx-text-fill:#64748B;-fx-background-color:#F1F5F9;-fx-background-radius:10;-fx-padding:2 10;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="+ New Group" onAction="#handleCreateGroupFromDash"
+                                        style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:6 14;"/>
+                                <Button text="See all →" onAction="#handleGroups"
+                                        style="-fx-background-color:transparent;-fx-text-fill:#2E7D5A;-fx-font-size:12px;-fx-font-weight:bold;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:6 10;"/>
+                            </HBox>
+                            <HBox fx:id="dashGroupCards" spacing="12" alignment="CENTER_LEFT" style="-fx-padding:4 0 0 0;">
+                                <Label fx:id="lblDashNoGroups"
+                                       text="No groups yet. Click '+ New Group' to create your first group."
+                                       style="-fx-font-size:12px;-fx-text-fill:#94A3B8;-fx-font-style:italic;"/>
+                            </HBox>
+                        </VBox>
+
+                    </VBox>
+                </ScrollPane>
+            </StackPane>
+        </VBox>
     </center>
+
 </BorderPane>

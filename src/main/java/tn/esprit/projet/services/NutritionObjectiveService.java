@@ -1,0 +1,126 @@
+package tn.esprit.projet.services;
+
+import tn.esprit.projet.models.NutritionObjective;
+import tn.esprit.projet.models.User;
+import tn.esprit.projet.utils.MyBDConnexion;
+import tn.esprit.projet.utils.SessionManager;
+
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+public class NutritionObjectiveService {
+
+    private final Connection cnx;
+
+    public NutritionObjectiveService() {
+        this.cnx = MyBDConnexion.getInstance().getCnx();
+    }
+
+    public List<NutritionObjective> getAll() {
+        List<NutritionObjective> list = new ArrayList<>();
+        if (cnx == null) return list;
+        User currentUser = SessionManager.getCurrentUser();
+        try {
+            if (currentUser != null) {
+                PreparedStatement ps = cnx.prepareStatement("SELECT * FROM nutrition_objective WHERE user_id = ? ORDER BY created_at DESC");
+                ps.setInt(1, currentUser.getId());
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) list.add(map(rs));
+            } else {
+                Statement stmt = cnx.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM nutrition_objective ORDER BY created_at DESC");
+                while (rs.next()) list.add(map(rs));
+            }
+        } catch (SQLException e) { System.err.println("NutritionObjectiveService.getAll: " + e.getMessage()); }
+        return list;
+    }
+
+    public NutritionObjective getById(int id) {
+        try (PreparedStatement ps = cnx.prepareStatement("SELECT * FROM nutrition_objective WHERE id = ?")) {
+            ps.setInt(1, id); ResultSet rs = ps.executeQuery(); if (rs.next()) return map(rs);
+        } catch (SQLException e) { System.err.println("NutritionObjectiveService.getById: " + e.getMessage()); }
+        return null;
+    }
+
+    public NutritionObjective getActive() {
+        User currentUser = SessionManager.getCurrentUser();
+        try {
+            if (currentUser != null) {
+                PreparedStatement ps = cnx.prepareStatement("SELECT * FROM nutrition_objective WHERE status = 'active' AND user_id = ? LIMIT 1");
+                ps.setInt(1, currentUser.getId()); ResultSet rs = ps.executeQuery(); if (rs.next()) return map(rs);
+            }
+        } catch (SQLException e) { System.err.println("NutritionObjectiveService.getActive: " + e.getMessage()); }
+        return null;
+    }
+
+    public void save(NutritionObjective obj) {
+        User currentUser = SessionManager.getCurrentUser();
+        int userId = currentUser != null ? currentUser.getId() : 1;
+        String sql = "INSERT INTO nutrition_objective (title, description, goal_type, plan_level, target_calories, target_protein, target_carbs, target_fats, target_water, status, planned_start_date, start_date, end_date, auto_activate, created_at, updated_at, user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),NOW(),?)";
+        try (PreparedStatement ps = cnx.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, obj.getTitle()); ps.setString(2, obj.getDescription());
+            ps.setString(3, obj.getGoalType()); ps.setString(4, obj.getPlanLevel());
+            ps.setInt(5, obj.getTargetCalories()); ps.setDouble(6, obj.getTargetProtein());
+            ps.setDouble(7, obj.getTargetCarbs()); ps.setDouble(8, obj.getTargetFats());
+            ps.setDouble(9, obj.getTargetWater()); ps.setString(10, obj.getStatus());
+            ps.setObject(11, obj.getPlannedStartDate() != null ? java.sql.Date.valueOf(obj.getPlannedStartDate()) : null);
+            ps.setObject(12, obj.getStartDate() != null ? java.sql.Timestamp.valueOf(obj.getStartDate().atStartOfDay()) : null);
+            ps.setObject(13, obj.getEndDate() != null ? java.sql.Timestamp.valueOf(obj.getEndDate().atStartOfDay()) : null);
+            ps.setBoolean(14, obj.isAutoActivate()); ps.setInt(15, userId);
+            ps.executeUpdate();
+            ResultSet keys = ps.getGeneratedKeys(); if (keys.next()) obj.setId(keys.getInt(1));
+        } catch (SQLException e) { System.err.println("NutritionObjectiveService.save: " + e.getMessage()); }
+    }
+
+    public void update(NutritionObjective obj) {
+        String sql = "UPDATE nutrition_objective SET title=?, description=?, goal_type=?, plan_level=?, target_calories=?, target_protein=?, target_carbs=?, target_fats=?, target_water=?, status=?, planned_start_date=?, start_date=?, end_date=?, auto_activate=?, updated_at=NOW() WHERE id=?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setString(1, obj.getTitle()); ps.setString(2, obj.getDescription());
+            ps.setString(3, obj.getGoalType()); ps.setString(4, obj.getPlanLevel());
+            ps.setInt(5, obj.getTargetCalories()); ps.setDouble(6, obj.getTargetProtein());
+            ps.setDouble(7, obj.getTargetCarbs()); ps.setDouble(8, obj.getTargetFats());
+            ps.setDouble(9, obj.getTargetWater()); ps.setString(10, obj.getStatus());
+            ps.setObject(11, obj.getPlannedStartDate() != null ? java.sql.Date.valueOf(obj.getPlannedStartDate()) : null);
+            ps.setObject(12, obj.getStartDate() != null ? java.sql.Timestamp.valueOf(obj.getStartDate().atStartOfDay()) : null);
+            ps.setObject(13, obj.getEndDate() != null ? java.sql.Timestamp.valueOf(obj.getEndDate().atStartOfDay()) : null);
+            ps.setBoolean(14, obj.isAutoActivate()); ps.setInt(15, obj.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) { System.err.println("NutritionObjectiveService.update: " + e.getMessage()); }
+    }
+
+    public void delete(int id) {
+        try (PreparedStatement ps = cnx.prepareStatement("DELETE FROM daily_log WHERE nutrition_objective_id = ?")) { ps.setInt(1, id); ps.executeUpdate(); } catch (SQLException ignored) {}
+        try (PreparedStatement ps = cnx.prepareStatement("DELETE FROM nutrition_objective WHERE id = ?")) { ps.setInt(1, id); ps.executeUpdate(); } catch (SQLException e) { System.err.println("NutritionObjectiveService.delete: " + e.getMessage()); }
+    }
+
+    public void activate(NutritionObjective obj) {
+        obj.setStatus("active");
+        LocalDate start = LocalDate.now();
+        obj.setStartDate(start); obj.setEndDate(start.plusDays(6));
+        update(obj);
+        new DailyLogService().deleteByObjectiveId(obj.getId());
+        new DailyLogService().createLogsForObjective(obj.getId(), start);
+    }
+
+    public void pause(NutritionObjective obj) { obj.setStatus("paused"); update(obj); }
+    public void resume(NutritionObjective obj) { obj.setStatus("active"); update(obj); }
+
+    public List<InactiveUserNotification> getInactiveUserNotifications() { return new ArrayList<>(); }
+
+    private NutritionObjective map(ResultSet rs) throws SQLException {
+        NutritionObjective obj = new NutritionObjective();
+        obj.setId(rs.getInt("id")); obj.setTitle(rs.getString("title")); obj.setDescription(rs.getString("description"));
+        obj.setGoalType(rs.getString("goal_type")); obj.setPlanLevel(rs.getString("plan_level"));
+        obj.setTargetCalories(rs.getInt("target_calories")); obj.setTargetProtein(rs.getDouble("target_protein"));
+        obj.setTargetCarbs(rs.getDouble("target_carbs")); obj.setTargetFats(rs.getDouble("target_fats"));
+        obj.setTargetWater(rs.getDouble("target_water")); obj.setStatus(rs.getString("status"));
+        obj.setAutoActivate(rs.getBoolean("auto_activate"));
+        try { Date d = rs.getDate("planned_start_date"); if (d != null) obj.setPlannedStartDate(d.toLocalDate()); } catch (SQLException ignored) {}
+        try { Timestamp s = rs.getTimestamp("start_date"); if (s != null) obj.setStartDate(s.toLocalDateTime().toLocalDate()); } catch (SQLException ignored) {}
+        try { Timestamp e = rs.getTimestamp("end_date"); if (e != null) obj.setEndDate(e.toLocalDateTime().toLocalDate()); } catch (SQLException ignored) {}
+        try { Timestamp c = rs.getTimestamp("created_at"); if (c != null) obj.setCreatedAt(c.toLocalDateTime().toLocalDate()); } catch (SQLException ignored) {}
+        return obj;
+    }
+}
