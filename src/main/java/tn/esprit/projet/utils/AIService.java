@@ -16,21 +16,30 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
  */
 public class AIService {
 
-    private static final String API_KEY = "AIzaSyD1d6efyplW1bN3OCry8KrUyxs321t6Ruc";
+    // Clé API Google Gemini (ne pas partager publiquement)
+    private static final String API_KEY = "AIzaSyCRcquz8g3FHF0kYf6fF4ntVE8oKQ0Goec";
 
     /**
      * Génère un titre accrocheur basé sur le contenu.
      */
     public static String generateTitle(String content) {
+        if (API_KEY == null || API_KEY.isBlank()) {
+            System.err.println("[AIService] API key is empty");
+            return "";
+        }
         if (content == null || content.isBlank()) return "";
+        System.out.println("[AIService] Generating title for content: " + content.substring(0, Math.min(50, content.length())) + "...");
         String prompt = "Basé sur le texte suivant, génère UN SEUL titre court et accrocheur (maximum 10 mots) sans guillemets : " + content;
-        return callGemini(prompt).trim();
+        String result = callGemini(prompt).trim();
+        System.out.println("[AIService] Generated title: " + result);
+        return result;
     }
 
     /**
      * Génère des hashtags pertinents basés sur le contenu.
      */
     public static String generateHashtags(String content) {
+        if (API_KEY == null || API_KEY.isBlank()) return "";
         if (content == null || content.isBlank()) return "";
         String prompt = "Basé sur le texte suivant, génère uniquement une liste de 5 hashtags pertinents en français séparés par des espaces : " + content;
         return callGemini(prompt).trim();
