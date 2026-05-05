@@ -8,7 +8,7 @@ public class User {
     private int           id;
     private String        email;
     private String        password;
-    private String roles = "ROLE_USER";
+    private String        roles = "ROLE_USER";
     private boolean       isActive;
     private LocalDateTime createdAt;
     private String        firstName;
@@ -20,6 +20,16 @@ public class User {
     private boolean       phoneVerified;
     private String        photoFilename;
     private String        welcomeMessage;
+
+    // ── Extended fields ────────────────────────────────────────────────────────
+    private String        googleId;
+    private boolean       galleryAccessEnabled = false;
+    private String        faceDescriptor;
+    private LocalDateTime faceIdEnrolledAt;
+    private String        resetToken;
+    private LocalDateTime resetTokenExpiresAt;
+    private String        verificationCode;
+    private LocalDateTime verificationCodeExpiresAt;
 
     public User() {}
 
@@ -56,9 +66,11 @@ public class User {
 
     public float getWeight() { return weight; }
     public void setWeight(float weight) { this.weight = weight; }
+    public void setWeight(double weight) { this.weight = (float) weight; }
 
     public float getHeight() { return height; }
     public void setHeight(float height) { this.height = height; }
+    public void setHeight(double height) { this.height = (float) height; }
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
@@ -93,5 +105,64 @@ public class User {
 
     public boolean isAdmin() {
         return "ROLE_ADMIN".equals(roles);
+    }
+
+    // ── Aliases for compatibility ──────────────────────────────────────────────
+
+    /** Alias for getRoles() */
+    public String getRole() { return roles; }
+    /** Alias for setRoles() */
+    public void setRole(String role) { setRoles(role); }
+
+    /** Alias for getPhoneNumber() */
+    public String getPhone() { return phoneNumber; }
+    /** Alias for setPhoneNumber() */
+    public void setPhone(String phone) { this.phoneNumber = phone; }
+
+    // ── FaceID ────────────────────────────────────────────────────────────────
+
+    public boolean hasFaceId() { return faceDescriptor != null && !faceDescriptor.isBlank(); }
+
+    public String getFaceDescriptor() { return faceDescriptor; }
+    public void setFaceDescriptor(String faceDescriptor) { this.faceDescriptor = faceDescriptor; }
+
+    public LocalDateTime getFaceIdEnrolledAt() { return faceIdEnrolledAt; }
+    public void setFaceIdEnrolledAt(LocalDateTime faceIdEnrolledAt) { this.faceIdEnrolledAt = faceIdEnrolledAt; }
+
+    // ── Google Auth ───────────────────────────────────────────────────────────
+
+    public String getGoogleId() { return googleId; }
+    public void setGoogleId(String googleId) { this.googleId = googleId; }
+
+    // ── Gallery ───────────────────────────────────────────────────────────────
+
+    public boolean isGalleryAccessEnabled() { return galleryAccessEnabled; }
+    public void setGalleryAccessEnabled(boolean galleryAccessEnabled) { this.galleryAccessEnabled = galleryAccessEnabled; }
+
+    // ── Password Reset ────────────────────────────────────────────────────────
+
+    public String getResetToken() { return resetToken; }
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
+
+    public LocalDateTime getResetTokenExpiresAt() { return resetTokenExpiresAt; }
+    public void setResetTokenExpiresAt(LocalDateTime resetTokenExpiresAt) { this.resetTokenExpiresAt = resetTokenExpiresAt; }
+
+    // ── Verification Code ─────────────────────────────────────────────────────
+
+    public String getVerificationCode() { return verificationCode; }
+    public void setVerificationCode(String verificationCode) { this.verificationCode = verificationCode; }
+
+    public LocalDateTime getVerificationCodeExpiresAt() { return verificationCodeExpiresAt; }
+    public void setVerificationCodeExpiresAt(LocalDateTime verificationCodeExpiresAt) { this.verificationCodeExpiresAt = verificationCodeExpiresAt; }
+
+    // ── BMI Category ──────────────────────────────────────────────────────────
+
+    public String getBmiCategory() {
+        double bmi = getBmi();
+        if (bmi <= 0)   return "Unknown";
+        if (bmi < 18.5) return "Underweight";
+        if (bmi < 25.0) return "Normal";
+        if (bmi < 30.0) return "Overweight";
+        return "Obese";
     }
 }

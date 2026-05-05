@@ -207,6 +207,89 @@ public class UserDAO {
         Timestamp ca = rs.getTimestamp("created_at");
         if (ca != null) u.setCreatedAt(ca.toLocalDateTime());
 
+        // Optional extended columns — safe to ignore if missing
+        try { u.setGoogleId(rs.getString("google_id")); } catch (Exception ignored) {}
+        try { u.setGalleryAccessEnabled(rs.getBoolean("gallery_access_enabled")); } catch (Exception ignored) {}
+        try { u.setFaceDescriptor(rs.getString("face_descriptor")); } catch (Exception ignored) {}
+        try {
+            Timestamp fat = rs.getTimestamp("face_id_enrolled_at");
+            if (fat != null) u.setFaceIdEnrolledAt(fat.toLocalDateTime());
+        } catch (Exception ignored) {}
+        try { u.setResetToken(rs.getString("reset_token")); } catch (Exception ignored) {}
+        try {
+            Timestamp rte = rs.getTimestamp("reset_token_expires_at");
+            if (rte != null) u.setResetTokenExpiresAt(rte.toLocalDateTime());
+        } catch (Exception ignored) {}
+        try { u.setVerificationCode(rs.getString("verification_code")); } catch (Exception ignored) {}
+        try {
+            Timestamp vce = rs.getTimestamp("verification_code_expires_at");
+            if (vce != null) u.setVerificationCodeExpiresAt(vce.toLocalDateTime());
+        } catch (Exception ignored) {}
+
         return u;
+    }
+
+    // ── updatePassword ─────────────────────────────────────────────────────────
+    public boolean updatePassword(int userId, String hashedPassword) {
+        String sql = "UPDATE user SET password=? WHERE id=?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) { e.printStackTrace(); }
+        return false;
+    }
+
+    // ── saveVerificationCode ───────────────────────────────────────────────────
+    public boolean saveVerificationCode(int userId, String code, java.time.LocalDateTime expiresAt) {
+        String sql = "UPDATE user SET verification_code=?, verification_code_expires_at=? WHERE id=?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setString(1, code);
+            ps.setTimestamp(2, java.sql.Timestamp.valueOf(expiresAt));
+            ps.setInt(3, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            // Column may not exist yet — silently ignore
+            System.err.println("[UserDAO.saveVerificationCode] " + e.getMessage());
+        }
+        return false;
+    }
+
+    // ── saveFaceDescriptor ─────────────────────────────────────────────────────
+    public boolean saveFaceDescriptor(int userId, String descriptorJson) {
+        String sql = "UPDATE user SET face_descriptor=?, face_id_enrolled_at=NOW() WHERE id=?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setString(1, descriptorJson);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.err.println("[UserDAO.saveFaceDescriptor] " + e.getMessage());
+        }
+        return false;
+    }
+
+    // ── clearFaceDescriptor ────────────────────────────────────────────────────
+    public boolean clearFaceDescriptor(int userId) {
+        String sql = "UPDATE user SET face_descriptor=NULL, face_id_enrolled_at=NULL WHERE id=?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.err.println("[UserDAO.clearFaceDescriptor] " + e.getMessage());
+        }
+        return false;
+    }
+
+    // ── findAllWithFaceId ──────────────────────────────────────────────────────
+    public List<User> findAllWithFaceId() {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE face_descriptor IS NOT NULL";
+        try (PreparedStatement ps = cnx.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) list.add(map(rs));
+        } catch (Exception e) {
+            System.err.println("[UserDAO.findAllWithFaceId] " + e.getMessage());
+        }
+        return list;
     }
 }

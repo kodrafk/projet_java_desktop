@@ -178,7 +178,18 @@ public class IngredientService implements CRUD<Ingredient> {
         return ingredient;
     }
 
-    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ M├ëTHODE BONUS : Recherche par nom ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+    /** Update only the quantity of an ingredient by id */
+    public void updateQuantite(int id, double newQuantite) {
+        String query = "UPDATE ingredient SET quantite = ? WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setDouble(1, newQuantite);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erreur updateQuantite: " + e.getMessage());
+        }
+    }
+
     public List<Ingredient> rechercherParNom(String nom) {
         List<Ingredient> ingredients = new ArrayList<>();
         String query = "SELECT * FROM ingredient WHERE nom LIKE ? ORDER BY nom";

@@ -237,4 +237,23 @@ public class AdminLayoutController {
             lblAdminAvatar.setText(name.substring(0, 1).toUpperCase());
         }
     }
+
+    // ── Public navigation helpers used by child controllers ───────────────────
+
+    /**
+     * Load a page into the content area, passing the calling controller as parent.
+     * The controller parameter is accepted for API compatibility but not used here.
+     */
+    public void loadPageInContent(String fxmlPath, Object callerController) {
+        loadPage(fxmlPath);
+    }
+
+    /**
+     * Navigate to the objectives page, optionally pre-selecting a user.
+     */
+    public void handleObjectivesForUser(tn.esprit.projet.models.User user) {
+        resetSidebarStyles();
+        if (btnObjectives != null) btnObjectives.setStyle(ACTIVE_BUTTON_STYLE);
+        loadPage("/fxml/admin_objectives.fxml");
+    }
 }

@@ -94,6 +94,24 @@ public class AlertUtil {
         show(Type.ERROR, "Validation Error", sb.toString().trim());
     }
 
+    // ── Convenience shortcuts ─────────────────────────────────────────────────
+
+    public static void showSuccess(String title, String message) {
+        show(Type.SUCCESS, title, message);
+    }
+
+    public static void showError(String title, String message) {
+        show(Type.ERROR, title, message);
+    }
+
+    public static void showWarning(String title, String message) {
+        show(Type.WARNING, title, message);
+    }
+
+    public static void showInfo(String title, String message) {
+        show(Type.INFO, title, message);
+    }
+
     // ── Internal builder ──────────────────────────────────────────────────────
     private static Stage buildStage(Type type, String title, String message, boolean hasCancel) {
         Stage stage = new Stage();

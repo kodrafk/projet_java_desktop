@@ -117,5 +117,19 @@ public class MyBDConnexion {
         return instance;
     }
 
+    /** Reset the singleton (forces reconnection on next getInstance() call) */
+    public static void resetInstance() {
+        instance = null;
+    }
+
+    /** Always returns false — this project uses MySQL, not SQLite */
+    public boolean isUsingSQLite() { return false; }
+
     public Connection getCnx() { return cnx; }
+
+    /** Alias for getCnx() — used by some services */
+    public Connection getConnection() { return cnx; }
+
+    /** Alias for getCnx() — used by some repositories */
+    public Connection getConnexion() { return cnx; }
 }
