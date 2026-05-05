@@ -14,8 +14,8 @@ public class DailyLog {
     public static final String[] MEAL_COLORS = {"#f7a325", "#eb7147", "#52b788", "#a78bfa"};
 
     private int id;
-    //liee au aubjective directement pas id 
     private int nutritionObjectiveId;
+    private NutritionObjective nutritionObjective; // full object reference
     private int dayNumber;
     private LocalDate date;
     private boolean completed;
@@ -293,7 +293,19 @@ public class DailyLog {
     public void setId(int id) { this.id = id; }
 
     public int getNutritionObjectiveId() { return nutritionObjectiveId; }
-    public void setNutritionObjectiveId(int id) { this.nutritionObjectiveId = id; }
+    public void setNutritionObjectiveId(int id) {
+        this.nutritionObjectiveId = id;
+        // clear cached object if id changes
+        if (this.nutritionObjective != null && this.nutritionObjective.getId() != id) {
+            this.nutritionObjective = null;
+        }
+    }
+
+    public NutritionObjective getNutritionObjective() { return nutritionObjective; }
+    public void setNutritionObjective(NutritionObjective objective) {
+        this.nutritionObjective = objective;
+        if (objective != null) this.nutritionObjectiveId = objective.getId();
+    }
 
     public int getDayNumber() { return dayNumber; }
     public void setDayNumber(int dayNumber) { this.dayNumber = dayNumber; }

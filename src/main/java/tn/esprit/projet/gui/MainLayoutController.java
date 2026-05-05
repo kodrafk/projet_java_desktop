@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import tn.esprit.projet.services.IngredientService;
+import tn.esprit.projet.services.NutritionObjectiveService;
 import tn.esprit.projet.utils.SessionManager;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -23,9 +24,14 @@ public class MainLayoutController {
     @FXML
     public void initialize() {
         ingredientService = new IngredientService();
+        runAutoActivation();
     }
 
-    // ── Nav handlers (onMouseClicked → MouseEvent) ──────────────────────────
+    private void runAutoActivation() {
+        new NutritionObjectiveService().runAutoActivationCheck();
+    }
+
+    // ── Nav handlers (+ → MouseEvent) ──────────────────────────
 
     @FXML
     private void handleHome(MouseEvent event) {

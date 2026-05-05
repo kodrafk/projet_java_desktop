@@ -162,6 +162,7 @@ public class ObjectiveShowController {
     @FXML
     private void handlePause() {
         service.pause(objective);
+        service.runAutoActivationCheck();
         objective = service.getById(objective.getId());
         populate();
     }
@@ -206,6 +207,7 @@ public class ObjectiveShowController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
             service.delete(objective.getId());
+            service.runAutoActivationCheck();
             System.out.println("Deleted ID: " + objective.getId() + ", contentArea: " + contentArea);
             try {
                 Parent page = FXMLLoader.load(getClass().getResource("/fxml/objectives.fxml"));

@@ -262,6 +262,47 @@ public class NutritionObjectiveService {
         return result;
     }
 
+    /**
+     * Checks all pending objectives with autoActivate=true whose plannedStartDate is today or past.
+     * If no objective is currently active, activates the first eligible one.
+     * If one is already active, returns it so the caller can show a warning.
+     *
+     * @return the already-active objective if auto-activation was blocked, null otherwise
+     */
+    public NutritionObjective runAutoActivationCheck() {
+        if (cnx == null) return null;
+        tn.esprit.projet.models.User currentUser = tn.esprit.projet.utils.SessionManager.getCurrentUser();
+        if (currentUser == null) return null;
+
+        String sql = """
+            SELECT * FROM nutrition_objective
+            WHERE user_id = ?
+              AND status = 'pending'
+              AND auto_activate = 1
+              AND planned_start_date <= ?
+            ORDER BY planned_start_date ASC
+            LIMIT 1
+        """;
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, currentUser.getId());
+            ps.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                NutritionObjective toActivate = map(rs);
+                NutritionObjective alreadyActive = getActive();
+                if (alreadyActive != null) {
+                    System.out.println("[AutoActivate] BLOCKED — already active: " + alreadyActive.getTitle());
+                    return alreadyActive;
+                }
+                System.out.println("[AutoActivate] Auto-activating: " + toActivate.getTitle());
+                activate(toActivate);
+            }
+        } catch (SQLException e) {
+            System.err.println("[AutoActivate] Error: " + e.getMessage());
+        }
+        return null;
+    }
+
     public void activate(NutritionObjective obj) {
         obj.setStatus("active");
         // Always start from today when activating — never use a future planned date

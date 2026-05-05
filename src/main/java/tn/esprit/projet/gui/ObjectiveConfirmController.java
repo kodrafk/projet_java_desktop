@@ -71,7 +71,9 @@ public class ObjectiveConfirmController {
         obj.setStatus("pending");
 
         try {
-            new NutritionObjectiveService().save(obj);
+            NutritionObjectiveService svc = new NutritionObjectiveService();
+            svc.save(obj);
+            svc.runAutoActivationCheck();
             navigateTo("/fxml/objectives.fxml");
         } catch (Exception e) {
             e.printStackTrace();

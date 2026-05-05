@@ -1,6 +1,7 @@
 package tn.esprit.projet.services;
 
 import tn.esprit.projet.models.DailyLog;
+import tn.esprit.projet.models.NutritionObjective;
 import tn.esprit.projet.utils.MyBDConnexion;
 
 import java.sql.*;
@@ -119,7 +120,11 @@ public class DailyLogService {
     private DailyLog map(ResultSet rs) throws SQLException {
         DailyLog log = new DailyLog();
         log.setId(rs.getInt("id"));
-        log.setNutritionObjectiveId(rs.getInt("nutrition_objective_id"));
+        int objId = rs.getInt("nutrition_objective_id");
+        log.setNutritionObjectiveId(objId);
+        // Eagerly load the full NutritionObjective
+        NutritionObjective obj = new NutritionObjectiveService().getById(objId);
+        if (obj != null) log.setNutritionObjective(obj);
         log.setDayNumber(rs.getInt("day_number"));
         Date d = rs.getDate("date");
         if (d != null) log.setDate(d.toLocalDate());

@@ -197,6 +197,16 @@ public class DailyLogEditController {
                     previewImageView.setVisible(true);
                 }
 
+                // Reset progress bar (unbind from previous task)
+                if (scanProgressBar != null) {
+                    scanProgressBar.progressProperty().unbind();
+                    scanProgressBar.setProgress(0);
+                    scanProgressBar.setVisible(false);
+                }
+
+                // Reset last result so a fresh analysis runs
+                lastAnalysisResult = null;
+
                 // Enable analyze button
                 if (analyzeImageBtn != null) {
                     analyzeImageBtn.setDisable(false);
@@ -233,8 +243,9 @@ public class DailyLogEditController {
         Task<AIFoodAnalyzerService.FoodAnalysisResult> analysisTask = 
             aiService.analyzeImageAsync(selectedImageBytes, selectedImageMimeType);
 
-        // Bind progress
+        // Bind progress (unbind first in case of re-use)
         if (scanProgressBar != null) {
+            scanProgressBar.progressProperty().unbind();
             scanProgressBar.progressProperty().bind(analysisTask.progressProperty());
         }
 

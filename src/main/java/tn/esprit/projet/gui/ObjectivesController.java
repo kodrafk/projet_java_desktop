@@ -8,7 +8,6 @@ import javafx.scene.layout.*;
 import tn.esprit.projet.models.NutritionObjective;
 import tn.esprit.projet.services.DailyLogService;
 import tn.esprit.projet.services.NutritionObjectiveService;
-
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -173,12 +172,15 @@ public class ObjectivesController {
 
         card.getChildren().addAll(topRow, macros);
 
-        // Progress bar for active/paused/completed
+        // Progress bar for active/paused/completed — use log-based progress, same as details page
         if (obj.isActive() || obj.isPaused() || obj.isCompleted()) {
-            ProgressBar pb = new ProgressBar(obj.getProgressPercentage() / 100.0);
+            int completed = (int) new DailyLogService().getByObjectiveId(obj.getId())
+                    .stream().filter(l -> l.isCompleted()).count();
+            int pct = obj.getProgressPercentageFromLogs(completed);
+            ProgressBar pb = new ProgressBar(pct / 100.0);
             pb.setPrefWidth(Double.MAX_VALUE);
             pb.setStyle("-fx-accent: " + statusColor + ";");
-            Label pctLabel = new Label(obj.getProgressPercentage() + "%");
+            Label pctLabel = new Label(pct + "%");
             pctLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #64748B;");
             card.getChildren().addAll(pb, pctLabel);
         }

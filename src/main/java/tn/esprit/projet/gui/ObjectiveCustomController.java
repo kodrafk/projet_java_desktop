@@ -452,7 +452,9 @@ private void setupLottieWebView() {
         obj.setPlannedStartDate(startDate);
         obj.setAutoActivate(autoActivateCheck != null && autoActivateCheck.isSelected());
         obj.setStatus("pending");
-        new NutritionObjectiveService().save(obj);
+        NutritionObjectiveService svc = new NutritionObjectiveService();
+        svc.save(obj);
+        svc.runAutoActivationCheck();
         navigateTo("/fxml/objectives.fxml");
     }
 
