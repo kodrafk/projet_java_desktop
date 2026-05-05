@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" style="-fx-background-color: white; -fx-background-radius: 16; -fx-border-color: #E2E8F0; -fx-border-radius: 16;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.AdminEvenementController">
+    <padding><Insets bottom="30" left="30" right="30" top="30" /></padding>
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button onAction="#retourListe" style="-fx-background-color: transparent; -fx-text-fill: #64748B; -fx-cursor: hand;" text="← Retour" />
+        <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" text="Nouveau Événement" />
+    </HBox>
+    
+    <HBox spacing="25">
+        <VBox spacing="15" HBox.hgrow="ALWAYS">
+            <GridPane hgap="20" vgap="15">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50" />
+                    <ColumnConstraints percentWidth="50" />
+                </columnConstraints>
+                <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label text="Nom de l'événement" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="tfNom" prefHeight="40" promptText="Ex: Marathon de Tunis" style="-fx-background-radius: 8;" />
+                </VBox>
+                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label text="Lieu" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <HBox spacing="5">
+                        <TextField fx:id="tfLieu" prefHeight="40" promptText="Ex: Lac 1, Tunis" style="-fx-background-radius: 8;" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleVerifierLocalisation" style="-fx-background-color: #f1f5f9; -fx-text-fill: #1e293b; -fx-cursor: hand;" text="📍" />
+                    </HBox>
+                </VBox>
+                <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label text="Date de début" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <DatePicker fx:id="dpDateDebut" maxWidth="Infinity" prefHeight="40" />
+                </VBox>
+                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label text="Coach" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="tfCoach" prefHeight="40" promptText="Nom du coach" style="-fx-background-radius: 8;" />
+                </VBox>
+                <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                    <Label text="Prix (TND)" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="tfPrix" prefHeight="40" promptText="0.0" style="-fx-background-radius: 8;" />
+                </VBox>
+                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <Label text="Capacité" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="tfCapacite" prefHeight="40" promptText="50" style="-fx-background-radius: 8;" />
+                </VBox>
+            </GridPane>
+        </VBox>
+
+        <VBox spacing="10" alignment="TOP_CENTER" prefWidth="250">
+            <Label text="Image de l'événement" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+            <StackPane style="-fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-min-height: 180;">
+                <javafx.scene.image.ImageView fx:id="ivAperçu" fitHeight="170" fitWidth="230" pickOnBounds="true" preserveRatio="true" />
+            </StackPane>
+            <Button onAction="#handleGenererImage" maxWidth="Infinity" prefHeight="40" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" text="✨ Générer par IA" />
+            <Label text="L'IA créera une image unique pour vous !" wrapText="true" style="-fx-font-size: 10px; -fx-text-fill: #64748B;" textAlignment="CENTER" />
+        </VBox>
+    </HBox>
+
+    <HBox alignment="CENTER_RIGHT" spacing="15">
+        <Button onAction="#retourListe" prefHeight="45" prefWidth="120" style="-fx-background-color: #F1F5F9; -fx-text-fill: #475569; -fx-background-radius: 10; -fx-cursor: hand;" text="Annuler" />
+        <Button onAction="#handleAjouter" prefHeight="45" prefWidth="180" style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;" text="Créer l'Événement" />
+    </HBox>
+</VBox>

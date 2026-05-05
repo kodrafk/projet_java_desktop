@@ -1,0 +1,24 @@
+package tn.esprit.projet.utils;
+
+import tn.esprit.projet.models.User;
+
+/**
+ * Static session holder for the currently logged-in user.
+ */
+public class Session {
+
+    private static User currentUser = null;
+
+    public static void login(User user)  {
+        currentUser = user;
+        // Keep SessionManager in sync for modules that use it
+        tn.esprit.projet.utils.SessionManager.setCurrentUser(user);
+    }
+    public static void logout()          {
+        currentUser = null;
+        tn.esprit.projet.utils.SessionManager.setCurrentUser(null);
+    }
+    public static User getCurrentUser()  { return currentUser; }
+    public static boolean isLoggedIn()   { return currentUser != null; }
+    public static boolean isAdmin()      { return currentUser != null && currentUser.isAdmin(); }
+}

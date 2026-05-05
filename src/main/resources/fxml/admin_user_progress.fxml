@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminUserProgressController"
+      prefWidth="900" prefHeight="700" spacing="0"
+      style="-fx-background-color:#F8FAFC;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="16" style="-fx-padding:20 24;-fx-background-color:white;-fx-border-color:#E2E8F0;-fx-border-width:0 0 1 0;">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblUserName" text="User's Progress" style="-fx-font-size:20px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+            <Label fx:id="lblUserEmail" text="user@example.com" style="-fx-font-size:13px;-fx-text-fill:#64748B;"/>
+        </VBox>
+        <!-- close button hidden — window has its own X -->
+        <!-- <Button text="✕" onAction="#handleClose" .../> -->
+    </HBox>
+
+    <!-- Content -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color:#F8FAFC;-fx-background:transparent;">
+        <VBox spacing="20" style="-fx-padding:20 24;-fx-background-color:#F8FAFC;">
+            
+            <!-- Stats Cards -->
+            <HBox spacing="16">
+                <!-- Current Weight -->
+                <VBox spacing="8" style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:16;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;-fx-pref-width:200;">
+                    <Label text="⚖️ Current Weight" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="4">
+                        <Label fx:id="lblCurrentWeight" text="—" style="-fx-font-size:28px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                        <Label text="kg" style="-fx-font-size:14px;-fx-text-fill:#94A3B8;"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Height -->
+                <VBox spacing="8" style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:16;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;-fx-pref-width:200;">
+                    <Label text="📏 Height" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="4">
+                        <Label fx:id="lblHeight" text="—" style="-fx-font-size:28px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                        <Label text="cm" style="-fx-font-size:14px;-fx-text-fill:#94A3B8;"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- BMI -->
+                <VBox spacing="8" style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:16;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;-fx-pref-width:200;">
+                    <Label text="📊 BMI" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+                    <Label fx:id="lblBmi" text="—" style="-fx-font-size:28px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                    <Label fx:id="lblBmiCategory" text="—" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                </VBox>
+                
+                <!-- Age -->
+                <VBox spacing="8" style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:16;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;-fx-pref-width:200;">
+                    <Label text="🎂 Age" style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="4">
+                        <Label fx:id="lblAge" text="—" style="-fx-font-size:28px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                        <Label text="years" style="-fx-font-size:14px;-fx-text-fill:#94A3B8;"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+            
+            <!-- Health Goal Card -->
+            <VBox fx:id="goalCard" spacing="12" style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;">
+                <Label text="🎯 Health Goal" style="-fx-font-size:16px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                <Label fx:id="lblGoalText" text="Complete profile to see personalized goal" wrapText="true" 
+                       style="-fx-font-size:13px;-fx-text-fill:#64748B;-fx-line-spacing:4px;"/>
+                <ProgressBar fx:id="goalProgress" prefWidth="Infinity" prefHeight="12" progress="0"
+                             style="-fx-accent:#16A34A;-fx-background-color:#E8F5E9;-fx-background-radius:6;"/>
+                <Label fx:id="lblGoalTip" text="" wrapText="true"
+                       style="-fx-font-size:12px;-fx-text-fill:#0891B2;-fx-background-color:#CFFAFE;-fx-background-radius:8;-fx-padding:10 14;"/>
+            </VBox>
+            
+            <!-- Weight Chart -->
+            <VBox spacing="12" style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="📈 Weight History" style="-fx-font-size:16px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                </HBox>
+                <Label fx:id="lblWeightLogs" text="0 logs"
+                       style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-wrap-text:true;" wrapText="true"/>
+
+                <LineChart fx:id="weightChart" prefHeight="300" visible="false" managed="false"
+                           style="-fx-background-color:transparent;-fx-padding:0;">
+                    <xAxis>
+                        <CategoryAxis label="" tickLabelRotation="30"
+                                      style="-fx-tick-label-font-size:11px;-fx-tick-label-fill:#64748B;"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="kg" style="-fx-tick-label-font-size:11px;-fx-tick-label-fill:#64748B;"/>
+                    </yAxis>
+                </LineChart>
+
+                <Label fx:id="lblNoData" text="📝 No weight logs yet. User can track weight from the app."
+                       wrapText="true"
+                       style="-fx-font-size:13px;-fx-text-fill:#94A3B8;-fx-font-style:italic;-fx-padding:40 0;-fx-alignment:center;"/>
+            </VBox>
+            
+            <!-- Badges & XP -->
+            <HBox spacing="16">
+                <!-- Badges -->
+                <VBox spacing="12" HBox.hgrow="ALWAYS" style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;">
+                    <Label text="🏆 Badges" style="-fx-font-size:16px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label fx:id="lblBadgeCount" text="0 / 0" style="-fx-font-size:24px;-fx-font-weight:bold;-fx-text-fill:#7C3AED;"/>
+                        <Label text="badges" style="-fx-font-size:13px;-fx-text-fill:#94A3B8;"/>
+                    </HBox>
+                    <Label fx:id="lblUnlockedBadges" text="0 unlocked" style="-fx-font-size:12px;-fx-text-fill:#16A34A;-fx-font-weight:bold;"/>
+                </VBox>
+                
+                <!-- XP & Rank -->
+                <VBox spacing="12" HBox.hgrow="ALWAYS" style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:20;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;">
+                    <Label text="⭐ Experience" style="-fx-font-size:16px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label fx:id="lblTotalXP" text="0" style="-fx-font-size:24px;-fx-font-weight:bold;-fx-text-fill:#F59E0B;"/>
+                        <Label text="XP" style="-fx-font-size:13px;-fx-text-fill:#94A3B8;"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label fx:id="lblRankEmoji" text="🥉" style="-fx-font-size:20px;"/>
+                        <Label fx:id="lblRankTitle" text="Beginner" style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

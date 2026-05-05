@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminFaceIdController"
+      prefWidth="480" prefHeight="420" spacing="0"
+      style="-fx-background-color:white;">
+
+    <!-- Header -->
+    <HBox style="-fx-background-color:#0F2820;-fx-padding:16 20;" alignment="CENTER_LEFT" spacing="10">
+        <Label text="&#128065;" style="-fx-font-size:18px;"/>
+        <VBox spacing="2">
+            <Label text="Face ID Management" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+            <Label fx:id="lblUserName" text="—" style="-fx-font-size:11px;-fx-text-fill:#A8C4B8;"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="20" style="-fx-padding:28 28;">
+
+        <!-- Status card -->
+        <VBox style="-fx-background-color:#F8FAFC;-fx-background-radius:12;-fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-padding:18 20;" spacing="10">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label fx:id="lblStatusIcon" text="?" style="-fx-font-size:28px;"/>
+                <VBox spacing="4">
+                    <Label fx:id="lblStatus" text="Checking..." style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                    <Label fx:id="lblEnrolledDate" text="" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Info row -->
+        <VBox style="-fx-background-color:#EFF6FF;-fx-background-radius:10;-fx-padding:12 16;" spacing="4">
+            <Label text="Admin Face ID Controls" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1D4ED8;"/>
+            <Label text="You can enroll a new face for this user (opens camera) or revoke their existing Face ID access."
+                   wrapText="true" style="-fx-font-size:11px;-fx-text-fill:#3B82F6;"/>
+        </VBox>
+
+        <!-- Action buttons -->
+        <VBox spacing="10">
+            <Button fx:id="btnEnroll" text="&#128247;  Enroll / Re-enroll Face ID"
+                    maxWidth="Infinity" prefHeight="44"
+                    onAction="#handleEnroll"
+                    style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;"/>
+            <Button fx:id="btnRevoke" text="&#128683;  Revoke Face ID Access"
+                    maxWidth="Infinity" prefHeight="44"
+                    onAction="#handleRevoke"
+                    style="-fx-background-color:#DC2626;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;"/>
+        </VBox>
+
+        <!-- Status message -->
+        <Label fx:id="lblMessage" text="" wrapText="true"
+               style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-alignment:CENTER;" maxWidth="Infinity"/>
+
+        <!-- Close -->
+        <Button text="Close" onAction="#handleClose"
+                maxWidth="Infinity" prefHeight="36"
+                style="-fx-background-color:#F1F5F9;-fx-border-color:#CBD5E1;-fx-border-radius:8;-fx-background-radius:8;-fx-font-size:12px;-fx-cursor:hand;"/>
+    </VBox>
+</VBox>

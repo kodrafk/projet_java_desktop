@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #F6FBF7;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.FrontCalendrierController">
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+        <content>
+            <VBox spacing="24" style="-fx-background-color: #F6FBF7;">
+                <padding><Insets bottom="32" left="32" right="32" top="28" /></padding>
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <Button onAction="#handleRetourEvenements" style="-fx-background-color: #f1f5f9; -fx-text-fill: #1e293b; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 8 16; -fx-font-weight: bold;" text="← Retour aux Événements" />
+                    <VBox spacing="4">
+                        <Label style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" text="📅 Calendrier des Événements" />
+                        <Label style="-fx-font-size: 12px; -fx-text-fill: #64748B;" text="Visualisez tous vos événements dans un calendrier interactif avec météo" />
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <HBox spacing="12">
+                        <VBox alignment="CENTER" spacing="2" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 10 16; -fx-border-color: #D6A46D; -fx-border-radius: 10;">
+                            <Label style="-fx-font-size: 10px; -fx-text-fill: #64748B;" text="Ce mois" />
+                            <Label fx:id="lblTotalMois" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1F4D3A;" text="0" />
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="2" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 10 16; -fx-border-color: #3b82f6; -fx-border-radius: 10;">
+                            <Label style="-fx-font-size: 10px; -fx-text-fill: #64748B;" text="À venir" />
+                            <Label fx:id="lblAvenir" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3b82f6;" text="0" />
+                        </VBox>
+                    </HBox>
+                </HBox>
+                <HBox spacing="20">
+                    <VBox spacing="16" style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER" spacing="16">
+                            <Button onAction="#handleMoisPrecedent" style="-fx-background-color: #E8F5E9; -fx-cursor: hand;" text="◀" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="lblMoisAnnee" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Mois 2024" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button onAction="#handleMoisSuivant" style="-fx-background-color: #E8F5E9; -fx-cursor: hand;" text="▶" />
+                            <Button onAction="#handleAujourdhui" style="-fx-background-color: #1F4D3A; -fx-text-fill: white; -fx-cursor: hand;" text="📍 Aujourd'hui" />
+                        </HBox>
+                        <GridPane fx:id="calendrierGrid" hgap="2" vgap="2" />
+                    </VBox>
+                    <VBox prefWidth="320" spacing="14" style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 18; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);">
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Événements du jour" />
+                        <Label fx:id="lblDateSelectionnee" style="-fx-font-size: 12px; -fx-text-fill: #64748B;" text="Sélectionnez une date" />
+                        <Separator />
+                        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                            <VBox fx:id="evenementsJourBox" spacing="12" />
+                        </ScrollPane>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

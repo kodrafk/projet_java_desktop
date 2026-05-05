@@ -1,0 +1,92 @@
+═══════════════════════════════════════════════════════════════
+  ✅ SPONSORS ET MÉTÉO CORRIGÉS
+═══════════════════════════════════════════════════════════════
+
+🎯 AMÉLIORATIONS
+----------------
+
+1. ✅ MÉTÉO EN DOUBLE SUPPRIMÉE
+   Avant : 2 barres météo (globale + dans chaque carte)
+   Après : 1 seule météo par carte (plus clair)
+   
+   Résultat : Plus de confusion !
+
+2. ✅ LOGOS SPONSORS AJOUTÉS
+   Affichage des partenaires sur chaque carte
+   
+   Fonctionnalités :
+   • Section "🤝 Partenaires"
+   • Logos en grille (60x40px)
+   • Noms des sponsors
+   • Effet hover (bordure bleue)
+   • Placeholder si logo manquant
+
+📋 EXEMPLE VISUEL
+-----------------
+
+CARTE AVEC SPONSORS :
+┌─────────────────────────────────────┐
+│ ... (détails événement)             │
+│ ─────────────────────────────────── │
+│                                      │
+│ 🤝 Partenaires                      │
+│                                      │
+│ ┌────────┐  ┌────────┐  ┌────────┐ │
+│ │ [Logo] │  │ [Logo] │  │ [Logo] │ │
+│ │  Nike  │  │ Adidas │  │ Puma  │ │
+│ └────────┘  └────────┘  └────────┘ │
+│  Nike       Adidas      Puma       │
+└─────────────────────────────────────┘
+
+CARTE SANS SPONSORS :
+┌─────────────────────────────────────┐
+│ ... (détails événement)             │
+│                                      │
+│ [📋 Voir détails]                   │
+└─────────────────────────────────────┘
+(Pas de section sponsors)
+
+✨ CARACTÉRISTIQUES
+-------------------
+
+LOGOS :
+  • Taille : 60x40px
+  • Fond blanc avec bordure grise
+  • Border-radius : 8px
+  • Ombre douce
+
+HOVER :
+  • Bordure bleue (#3B82F6)
+  • Ombre bleue
+  • Cursor : hand
+
+LAYOUT :
+  • FlowPane (grille flexible)
+  • Espacement : 8px
+  • Alignement : gauche
+
+🚀 TESTER
+---------
+1. mvn clean compile
+2. mvn javafx:run
+3. Événements → Calendrier avec Météo
+4. Sélectionnez une date
+
+VÉRIFIER :
+  ✓ Pas de barre météo globale
+  ✓ Météo dans chaque carte uniquement
+  ✓ Section sponsors visible (si sponsors)
+  ✓ Logos affichés en grille
+  ✓ Hover sur logos fonctionne
+
+📖 DOCUMENTATION
+----------------
+• SPONSORS_ET_METEO_FIXES.md (détails complets)
+
+═══════════════════════════════════════════════════════════════
+Date : 27 avril 2026
+Version : 3.1.0
+Statut : ✅ IMPLÉMENTÉ
+═══════════════════════════════════════════════════════════════
+
+🎊 MÉTÉO CLARIFIÉE + SPONSORS AFFICHÉS ! 🎊

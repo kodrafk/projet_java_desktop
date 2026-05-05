@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.AdminSponsorController"
+           style="-fx-background-color: #F0F4F8;">
+
+    <!-- ══ MAIN CONTENT ══════════════════════════════════════════════════════ -->
+    <VBox spacing="20" style="-fx-background-color: #F0F4F8;">
+        <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="14">
+            <VBox spacing="3">
+                <Label text="🤝 Gestion des Sponsors"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Label text="Gérez vos partenaires et sponsors liés aux événements"
+                       style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="tfRecherche" promptText="🔍 Rechercher un sponsor..."
+                       prefWidth="220" prefHeight="38"
+                       style="-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12; -fx-font-size: 12px;"/>
+            <Button text="Rechercher" onAction="#handleRecherche" prefHeight="38"
+                    style="-fx-background-color: #475569; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 0 14;"/>
+            <Label fx:id="lblCount" text="0 sponsor(s)"
+                   style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+            <Button text="+ Ajouter un Sponsor" onAction="#handleAddNew" prefHeight="38"
+                    style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 0 16;"/>
+        </HBox>
+
+        <!-- Cards -->
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+            <FlowPane fx:id="flowPane" hgap="18" vgap="18"
+                      style="-fx-padding: 4; -fx-background-color: transparent;"/>
+        </ScrollPane>
+    </VBox>
+
+    <!-- ══ FORM OVERLAY ══════════════════════════════════════════════════════ -->
+    <StackPane fx:id="formOverlay" visible="false" managed="false"
+               style="-fx-background-color: rgba(15,23,42,0.6);">
+
+        <VBox spacing="16" maxWidth="520"
+              style="-fx-background-color: white; -fx-background-radius: 16; -fx-padding: 28;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 24, 0, 0, 6);">
+
+            <!-- Form header -->
+            <HBox alignment="CENTER_LEFT">
+                <Label fx:id="lblFormTitle" text="Ajouter un Sponsor"
+                       style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="✕" onAction="#handleCloseForm"
+                        style="-fx-background-color: #F1F5F9; -fx-text-fill: #64748B; -fx-font-size: 14px; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 4 10;"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Nom -->
+            <VBox spacing="5">
+                <Label text="Nom du partenaire *"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <TextField fx:id="tfNom" promptText="Ex: Nike, Decathlon..."
+                           style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 9 12; -fx-font-size: 13px;"/>
+            </VBox>
+
+            <!-- Type + Statut -->
+            <HBox spacing="14">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Type"
+                           style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                    <ComboBox fx:id="cmbType" maxWidth="Infinity"
+                              style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Statut"
+                           style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                    <ComboBox fx:id="cmbStatut" maxWidth="Infinity"
+                              style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Description -->
+            <VBox spacing="5">
+                <Label text="Description"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <TextArea fx:id="taDescription" prefHeight="80" promptText="Description du partenaire..."
+                          wrapText="true"
+                          style="-fx-control-inner-background: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+            </VBox>
+
+            <!-- Logo URL -->
+            <VBox spacing="5">
+                <Label text="URL du Logo"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <TextField fx:id="tfLogo" promptText="https://example.com/logo.png"
+                           style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 9 12; -fx-font-size: 13px;"/>
+            </VBox>
+
+            <!-- Vidéo URL -->
+            <VBox spacing="5">
+                <Label text="URL Vidéo (YouTube, Vimeo...)"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <TextField fx:id="tfVideo" promptText="https://youtube.com/watch?v=..."
+                           style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 9 12; -fx-font-size: 13px;"/>
+            </VBox>
+
+            <!-- Événement lié -->
+            <VBox spacing="5">
+                <Label text="Événement associé"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <ComboBox fx:id="cmbEvenement" maxWidth="Infinity"
+                          style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+            </VBox>
+
+            <!-- Error -->
+            <Label fx:id="lblError" text="" visible="false" managed="false"
+                   style="-fx-text-fill: #DC2626; -fx-font-size: 11px;"/>
+
+            <!-- Buttons -->
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <Button text="Annuler" onAction="#handleCloseForm" prefHeight="40" prefWidth="110"
+                        style="-fx-background-color: #F1F5F9; -fx-text-fill: #475569; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                <Button text="💾 Enregistrer" onAction="#handleSave" prefHeight="40" prefWidth="140"
+                        style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+    </StackPane>
+
+</StackPane>

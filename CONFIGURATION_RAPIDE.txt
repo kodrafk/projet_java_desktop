@@ -1,0 +1,211 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                   🔑 CONFIGURATION RAPIDE DE LA CLÉ API                      ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ÉTAPE 1: OBTENIR VOTRE CLÉ API (2 minutes)                                 │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  1. Allez sur: https://openweathermap.org/api
+  
+  2. Cliquez sur "Sign Up" (créer un compte)
+  
+  3. Remplissez le formulaire et confirmez votre email
+  
+  4. Connectez-vous et allez dans "My API keys"
+  
+  5. Copiez votre clé (ressemble à: a1b2c3d4e5f6g7h8i9j0...)
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ÉTAPE 2: CONFIGURER DANS L'APPLICATION (30 secondes)                       │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  1. Ouvrez le fichier: weather.properties
+  
+  2. Trouvez la ligne:
+     api.key=votre_cle_api_openweathermap
+  
+  3. Remplacez par votre vraie clé:
+     api.key=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6
+     
+  4. Sauvegardez le fichier
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ÉTAPE 3: TESTER (1 minute)                                                 │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Option A: Test dans le navigateur
+  
+    Ouvrez cette URL (remplacez VOTRE_CLE):
+    https://api.openweathermap.org/data/2.5/weather?q=Tunis&appid=VOTRE_CLE&units=metric&lang=fr
+    
+    ✅ Si vous voyez du JSON → Clé valide!
+    ❌ Si erreur 401 → Clé invalide ou pas encore activée (attendez 10 min)
+  
+  
+  Option B: Test avec l'application
+  
+    Exécutez:
+    mvn compile exec:java -Dexec.mainClass="tn.esprit.projet.services.WeatherServiceTest"
+    
+    ✅ Si vous voyez la météo → Tout fonctionne!
+    ❌ Si "Données non disponibles" → Vérifiez votre clé
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ÉTAPE 4: LANCER L'APPLICATION                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Lancez votre application:
+  
+    mvn javafx:run
+  
+  Ouvrez le calendrier et sélectionnez une date.
+  
+  Vous devriez voir:
+  
+  ┌────────────────────────────────────────┐
+  │ 🌤️  22.5°C      Météo du jour         │
+  │     Partiellement nuageux              │
+  └────────────────────────────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                           ⚠️  IMPORTANT                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  🔒 SÉCURITÉ
+  
+     ❌ NE PARTAGEZ JAMAIS votre clé API publiquement
+     ❌ NE COMMITEZ PAS weather.properties dans Git
+     ✅ Le fichier est déjà protégé dans .gitignore
+  
+  
+  ⏱️  ACTIVATION
+  
+     Votre clé peut prendre 10 minutes à s'activer après création.
+     Si vous voyez "401 Unauthorized", attendez un peu et réessayez.
+  
+  
+  🆓 PLAN GRATUIT
+  
+     ✅ 1000 appels API par jour (largement suffisant!)
+     ✅ Prévisions sur 5 jours
+     ✅ Pas de carte de crédit requise
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        📁 FICHIER À MODIFIER                                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Fichier: weather.properties
+  
+  Contenu AVANT:
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │ # Configuration de l'API météo OpenWeatherMap                         │
+  │                                                                        │
+  │ # Votre clé API (à remplacer)                                         │
+  │ api.key=votre_cle_api_openweathermap                                  │
+  │                                                                        │
+  │ # Ville par défaut pour le calendrier                                 │
+  │ default.city=Tunis                                                    │
+  │                                                                        │
+  │ # Langue des descriptions météo (fr, en, ar, etc.)                    │
+  │ language=fr                                                           │
+  │                                                                        │
+  │ # Unités de mesure (metric pour Celsius, imperial pour Fahrenheit)    │
+  │ units=metric                                                          │
+  └────────────────────────────────────────────────────────────────────────┘
+  
+  
+  Contenu APRÈS (exemple avec une fausse clé):
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │ # Configuration de l'API météo OpenWeatherMap                         │
+  │                                                                        │
+  │ # Votre clé API                                                       │
+  │ api.key=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6                             │
+  │                                                                        │
+  │ # Ville par défaut pour le calendrier                                 │
+  │ default.city=Tunis                                                    │
+  │                                                                        │
+  │ # Langue des descriptions météo (fr, en, ar, etc.)                    │
+  │ language=fr                                                           │
+  │                                                                        │
+  │ # Unités de mesure (metric pour Celsius, imperial pour Fahrenheit)    │
+  │ units=metric                                                          │
+  └────────────────────────────────────────────────────────────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        🐛 PROBLÈMES COURANTS                                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Problème: "401 Unauthorized"
+  Solution: 
+    → Votre clé API est incorrecte
+    → Ou pas encore activée (attendez 10 minutes)
+    → Vérifiez que vous avez bien copié toute la clé
+  
+  
+  Problème: "Données météo non disponibles"
+  Solution:
+    → Vérifiez votre connexion internet
+    → Vérifiez que la clé est dans weather.properties
+    → Testez la clé dans le navigateur d'abord
+  
+  
+  Problème: Application ne démarre pas
+  Solution:
+    → Vérifiez que weather.properties est dans src/main/resources/
+    → Copiez aussi dans la racine du projet
+    → Relancez Maven: mvn clean compile
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          ✅ CHECKLIST FINALE                                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Avant de lancer l'application, vérifiez:
+  
+  [ ] Compte OpenWeatherMap créé
+  [ ] Email confirmé
+  [ ] Clé API copiée
+  [ ] Clé ajoutée dans weather.properties
+  [ ] Fichier sauvegardé
+  [ ] Attendu 10 minutes (si nouvelle clé)
+  [ ] Testé dans le navigateur OU avec WeatherServiceTest
+  [ ] Connexion internet active
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          📞 BESOIN D'AIDE?                                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Documentation complète:
+    → COMMENT_OBTENIR_CLE_API.md
+    → GUIDE_DEMARRAGE_METEO.md
+    → LISEZ_MOI_METEO.md
+  
+  Support OpenWeatherMap:
+    → https://openweathermap.org/faq
+    → https://openweathermap.org/api
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    🎉 C'EST TOUT! BONNE UTILISATION! 🌤️                     ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

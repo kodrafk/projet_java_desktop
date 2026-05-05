@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.BadgesController"
+           prefWidth="860" prefHeight="820">
+
+    <Pane mouseTransparent="true"
+          style="-fx-background-color:linear-gradient(to bottom right,#F0FDF4,#FFF7ED,#EFF6FF);"/>
+
+    <VBox StackPane.alignment="TOP_CENTER" maxWidth="Infinity" prefWidth="860">
+
+        <!-- HEADER -->
+        <HBox prefHeight="60" alignment="CENTER_LEFT"
+              style="-fx-background-color:#0F2820;-fx-padding:0 24;">
+            <Label text="🏆  My Achievements" style="-fx-font-size:17px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblBadgesCount" text=""
+                   style="-fx-font-size:13px;-fx-text-fill:#86EFAC;-fx-font-weight:bold;"/>
+            <Button text="✕" onAction="#handleClose"
+                    style="-fx-background-color:transparent;-fx-text-fill:#94A3B8;-fx-font-size:16px;
+                           -fx-font-weight:bold;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:0 0 0 20;"/>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
+            <VBox spacing="16" style="-fx-padding:20 24 28 24;">
+
+                <!-- PROGRESS OVERVIEW -->
+                <HBox spacing="12">
+                    <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
+                          style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:16;
+                                 -fx-border-color:#BBF7D0;-fx-border-radius:16;-fx-border-width:2;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);">
+                        <Label text="✅" style="-fx-font-size:22px;"/>
+                        <Label fx:id="lblUnlockedCount" text="0"
+                               style="-fx-font-size:26px;-fx-font-weight:bold;-fx-text-fill:#16A34A;"/>
+                        <Label text="Unlocked" style="-fx-font-size:11px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                    </VBox>
+                    <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
+                          style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:16;
+                                 -fx-border-color:#FED7AA;-fx-border-radius:16;-fx-border-width:2;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);">
+                        <Label text="⏳" style="-fx-font-size:22px;"/>
+                        <Label fx:id="lblInProgressCount" text="0"
+                               style="-fx-font-size:26px;-fx-font-weight:bold;-fx-text-fill:#EA580C;"/>
+                        <Label text="In Progress" style="-fx-font-size:11px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                    </VBox>
+                    <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
+                          style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:16;
+                                 -fx-border-color:#E2E8F0;-fx-border-radius:16;-fx-border-width:2;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);">
+                        <Label text="🔒" style="-fx-font-size:22px;"/>
+                        <Label fx:id="lblLockedCount" text="0"
+                               style="-fx-font-size:26px;-fx-font-weight:bold;-fx-text-fill:#94A3B8;"/>
+                        <Label text="Locked" style="-fx-font-size:11px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                    </VBox>
+                    <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6"
+                          style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:16;
+                                 -fx-border-color:#BFDBFE;-fx-border-radius:16;-fx-border-width:2;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);">
+                        <Label text="📊" style="-fx-font-size:22px;"/>
+                        <Label fx:id="lblPercent" text="0%"
+                               style="-fx-font-size:22px;-fx-font-weight:bold;-fx-text-fill:#2563EB;"/>
+                        <Label text="Complete" style="-fx-font-size:11px;-fx-text-fill:#64748B;-fx-font-weight:bold;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- OVERALL PROGRESS BAR -->
+                <VBox spacing="6"
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:14 18;
+                             -fx-border-color:#E2E8F0;-fx-border-radius:14;-fx-border-width:1;">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Your Journey" style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblJourneyLabel" text=""
+                               style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+                    </HBox>
+                    <ProgressBar fx:id="overallBar" progress="0" maxWidth="Infinity" prefHeight="12"
+                                 style="-fx-accent:#16A34A;-fx-background-color:#F1F5F9;-fx-background-radius:6;"/>
+                    <Label fx:id="lblNextBadge" text="" wrapText="true"
+                           style="-fx-font-size:11px;-fx-text-fill:#64748B;-fx-font-style:italic;"/>
+                </VBox>
+
+                <!-- SHOWCASE — pinned badges -->
+                <VBox spacing="10"
+                      style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:16 18;
+                             -fx-border-color:#FDE68A;-fx-border-radius:16;-fx-border-width:2;
+                             -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),10,0,0,2);">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="⭐  My Showcase" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#92400E;"/>
+                        <Label text="Pin up to 3 badges to display on your profile"
+                               style="-fx-font-size:10px;-fx-text-fill:#94A3B8;"/>
+                    </HBox>
+                    <HBox fx:id="showcaseBox" spacing="12" alignment="CENTER_LEFT"/>
+                    <Label fx:id="lblShowcaseEmpty" text="📌 No badges pinned yet — unlock badges and pin your favorites!"
+                           wrapText="true" style="-fx-font-size:11px;-fx-text-fill:#94A3B8;-fx-font-style:italic;"/>
+                </VBox>
+
+                <!-- SEARCH -->
+                <HBox spacing="10" alignment="CENTER_LEFT"
+                      style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:10 16;
+                             -fx-border-color:#E2E8F0;-fx-border-radius:12;-fx-border-width:1;">
+                    <Label text="🔍" style="-fx-font-size:14px;-fx-text-fill:#94A3B8;"/>
+                    <TextField fx:id="searchField" promptText="Search badges by name or category..."
+                               HBox.hgrow="ALWAYS"
+                               style="-fx-background-color:transparent;-fx-border-color:transparent;
+                                      -fx-font-size:13px;-fx-text-fill:#1E293B;"/>
+                </HBox>
+
+                <!-- RARITY LEGEND -->
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Rarity:" style="-fx-font-size:11px;-fx-text-fill:#94A3B8;-fx-font-weight:bold;"/>
+                    <Label text="COMMON"    style="-fx-background-color:#F1F5F9;-fx-text-fill:#64748B;-fx-font-size:10px;-fx-font-weight:bold;-fx-background-radius:10;-fx-padding:2 8;"/>
+                    <Label text="RARE"      style="-fx-background-color:#DBEAFE;-fx-text-fill:#1D4ED8;-fx-font-size:10px;-fx-font-weight:bold;-fx-background-radius:10;-fx-padding:2 8;"/>
+                    <Label text="EPIC"      style="-fx-background-color:#EDE9FE;-fx-text-fill:#7C3AED;-fx-font-size:10px;-fx-font-weight:bold;-fx-background-radius:10;-fx-padding:2 8;"/>
+                    <Label text="LEGENDARY" style="-fx-background-color:#FEF3C7;-fx-text-fill:#D97706;-fx-font-size:10px;-fx-font-weight:bold;-fx-background-radius:10;-fx-padding:2 8;"/>
+                </HBox>
+
+                <!-- UNLOCKED -->
+                <VBox spacing="8">
+                    <Label text="✅  Unlocked" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#16A34A;"/>
+                    <VBox fx:id="unlockedList" spacing="8"/>
+                </VBox>
+
+                <!-- IN PROGRESS -->
+                <VBox spacing="8">
+                    <Label text="⏳  In Progress — keep going!" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#EA580C;"/>
+                    <VBox fx:id="inProgressList" spacing="8"/>
+                </VBox>
+
+                <!-- LOCKED -->
+                <VBox spacing="8">
+                    <Label text="🔒  Locked — here's what to unlock next" style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#94A3B8;"/>
+                    <VBox fx:id="lockedList" spacing="8"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</StackPane>

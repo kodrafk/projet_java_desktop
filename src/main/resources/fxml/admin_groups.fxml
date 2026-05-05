@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminGroupsController"
+      prefWidth="1060" prefHeight="700" spacing="0"
+      style="-fx-background-color:#F0F4F8;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding:20 24 16 24;">
+        <Label text="👥  My Groups" style="-fx-font-size:22px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+        <Label fx:id="lblGroupCount" text=""
+               style="-fx-font-size:12px;-fx-text-fill:#64748B;-fx-background-color:#E2E8F0;-fx-background-radius:10;-fx-padding:3 10;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Create Group" onAction="#handleCreateGroup"
+                style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:9 18;"/>
+    </HBox>
+
+    <!-- Content: groups list (left) + group detail (right) -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+
+        <!-- Left: groups list -->
+        <VBox prefWidth="300" spacing="0"
+              style="-fx-background-color:white;-fx-border-color:transparent #E2E8F0 transparent transparent;-fx-border-width:0 1 0 0;">
+
+            <!-- Search bar -->
+            <HBox style="-fx-padding:10 10 6 10;" spacing="6" alignment="CENTER_LEFT">
+                <TextField fx:id="searchGroups" promptText="🔍 Search groups…"
+                           HBox.hgrow="ALWAYS"
+                           style="-fx-background-color:#F8FAFC;-fx-border-color:#E2E8F0;-fx-border-radius:8;-fx-background-radius:8;-fx-padding:7 10;-fx-font-size:12px;"/>
+            </HBox>
+
+            <!-- Pinned section -->
+            <VBox fx:id="pinnedSection" spacing="0" visible="false" managed="false">
+                <Label text="📌 PINNED" style="-fx-font-size:9px;-fx-font-weight:bold;-fx-text-fill:#F59E0B;-fx-padding:6 16 4 16;"/>
+                <VBox fx:id="pinnedList" spacing="2" style="-fx-padding:0 8 4 8;"/>
+                <Separator style="-fx-background-color:#E2E8F0;-fx-padding:0 8;"/>
+            </VBox>
+
+            <!-- All groups -->
+            <Label text="YOUR GROUPS" style="-fx-font-size:9px;-fx-font-weight:bold;-fx-text-fill:#94A3B8;-fx-padding:8 16 4 16;"/>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" hbarPolicy="NEVER"
+                        style="-fx-background-color:white;-fx-background:white;-fx-border-color:transparent;">
+                <VBox fx:id="groupsList" spacing="2" style="-fx-padding:0 8 8 8;"/>
+            </ScrollPane>
+        </VBox>
+
+        <!-- Right: group detail panel -->
+        <VBox fx:id="detailPanel" HBox.hgrow="ALWAYS" spacing="0"
+              style="-fx-background-color:#F8FAFC;">
+
+            <!-- Empty state -->
+            <VBox fx:id="emptyState" alignment="CENTER" VBox.vgrow="ALWAYS" spacing="12">
+                <Label text="👥" style="-fx-font-size:52px;"/>
+                <Label text="Select a group or create one"
+                       style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                <Label text="Click '+ Create Group' to get started."
+                       style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+            </VBox>
+
+            <!-- Group detail (hidden until group selected) -->
+            <VBox fx:id="groupDetail" spacing="0" visible="false" managed="false" VBox.vgrow="ALWAYS">
+
+                <!-- Group header -->
+                <HBox alignment="CENTER_LEFT" spacing="14"
+                      style="-fx-background-color:white;-fx-padding:16 20;-fx-border-color:transparent transparent #E2E8F0 transparent;-fx-border-width:0 0 1 0;">
+                    <StackPane prefWidth="44" prefHeight="44" fx:id="groupAvatarPane"
+                               style="-fx-background-color:#2E7D5A;-fx-background-radius:22;">
+                        <Label fx:id="lblGroupInitial" text="G"
+                               style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+                    </StackPane>
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblGroupName" text=""
+                               style="-fx-font-size:16px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                        <Label fx:id="lblGroupMeta" text=""
+                               style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                    </VBox>
+                    <Button fx:id="btnPin" text="📌 Pin" onAction="#handleTogglePin"
+                            style="-fx-background-color:#FFFBEB;-fx-text-fill:#D97706;-fx-font-size:12px;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:#FDE68A;-fx-border-radius:8;-fx-border-width:1;-fx-padding:6 14;"/>
+                    <Button text="✏ Edit" onAction="#handleEditGroup"
+                            style="-fx-background-color:#EFF6FF;-fx-text-fill:#1D4ED8;-fx-font-size:12px;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:#BFDBFE;-fx-border-radius:8;-fx-border-width:1;-fx-padding:6 14;"/>
+                    <Button text="🗑 Delete" onAction="#handleDeleteGroup"
+                            style="-fx-background-color:#FEF2F2;-fx-text-fill:#DC2626;-fx-font-size:12px;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:#FECACA;-fx-border-radius:8;-fx-border-width:1;-fx-padding:6 14;"/>
+                </HBox>
+
+                <!-- Tabs: Members only -->
+                <HBox spacing="0" style="-fx-background-color:white;-fx-border-color:transparent transparent #E2E8F0 transparent;-fx-border-width:0 0 1 0;">
+                    <Button fx:id="btnTabMembers" text="👤 Members" onAction="#handleTabMembers"
+                            prefHeight="40" prefWidth="160"
+                            style="-fx-background-color:transparent;-fx-text-fill:#2E7D5A;-fx-font-size:13px;-fx-font-weight:bold;-fx-cursor:hand;-fx-border-color:transparent transparent #2E7D5A transparent;-fx-border-width:0 0 2 0;-fx-background-radius:0;"/>
+                    <!-- Hidden: Send Message tab -->
+                    <!-- <Button fx:id="btnTabMessage" text="💬 Send Message" onAction="#handleTabMessage"
+                            prefHeight="40" prefWidth="160"
+                            style="-fx-background-color:transparent;-fx-text-fill:#64748B;-fx-font-size:13px;-fx-cursor:hand;-fx-border-color:transparent;-fx-background-radius:0;"/> -->
+                </HBox>
+
+                <!-- Tab: Members -->
+                <VBox fx:id="tabMembers" VBox.vgrow="ALWAYS" spacing="0">
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding:12 16 8 16;">
+                        <TextField fx:id="searchUsers" promptText="🔍 Search users to add…"
+                                   prefWidth="240"
+                                   style="-fx-background-color:#F8FAFC;-fx-border-color:#E2E8F0;-fx-border-radius:8;-fx-background-radius:8;-fx-padding:7 12;-fx-font-size:12px;"/>
+                        <Button text="Add" onAction="#handleAddMember"
+                                style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:12px;-fx-font-weight:bold;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:7 16;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblMemberCount" text="0 members"
+                               style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                    </HBox>
+
+                    <!-- Search results dropdown -->
+                    <VBox fx:id="searchResults" spacing="2" style="-fx-padding:0 16 8 16;" visible="false" managed="false"/>
+
+                    <!-- Members list -->
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" hbarPolicy="NEVER"
+                                style="-fx-background-color:#F8FAFC;-fx-background:#F8FAFC;-fx-border-color:transparent;">
+                        <VBox fx:id="membersList" spacing="6" style="-fx-padding:8 16;"/>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- Tab: Send Message — hidden -->
+                <VBox fx:id="tabMessage" VBox.vgrow="ALWAYS" spacing="14"
+                      style="-fx-padding:20 20;-fx-background-color:#F8FAFC;"
+                      visible="false" managed="false">
+
+                    <Label text="Send a message to all group members"
+                           style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                    <Label fx:id="lblGroupRecipients" text=""
+                           style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+
+                    <TextArea fx:id="txtGroupMessage" promptText="Write your message here…"
+                              prefRowCount="5" wrapText="true"
+                              style="-fx-background-color:white;-fx-border-color:#E2E8F0;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:12;-fx-font-size:13px;"/>
+
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Label fx:id="lblGroupCharCount" text="0 / 500"
+                               style="-fx-font-size:11px;-fx-text-fill:#94A3B8;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox fx:id="chkGroupSms" text="📱 Also send SMS to all"
+                                  style="-fx-font-size:12px;-fx-text-fill:#374151;"/>
+                        <Button text="📤 Send to Group" onAction="#handleSendToGroup"
+                                prefHeight="38" prefWidth="160"
+                                style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:transparent;"/>
+                    </HBox>
+
+                    <!-- Send history -->
+                    <Label text="Recent broadcasts" style="-fx-font-size:11px;-fx-font-weight:bold;-fx-text-fill:#94A3B8;"/>
+                    <ScrollPane fitToWidth="true" prefHeight="160" hbarPolicy="NEVER"
+                                style="-fx-background-color:white;-fx-background:white;-fx-border-color:#E2E8F0;-fx-border-radius:10;-fx-background-radius:10;">
+                        <VBox fx:id="broadcastHistory" spacing="6" style="-fx-padding:10 14;"/>
+                    </ScrollPane>
+                </VBox>
+
+            </VBox>
+        </VBox>
+    </HBox>
+</VBox>

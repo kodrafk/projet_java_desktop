@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefWidth="780" prefHeight="680"
+            style="-fx-background-color:#F0F4F8;"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.AdminUserMessagesController">
+
+    <!-- ── Header ── -->
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="64" spacing="14"
+              style="-fx-background-color:white;-fx-border-color:transparent transparent #E2E8F0 transparent;-fx-border-width:0 0 1 0;-fx-padding:0 20;">
+            <!-- Avatar -->
+            <StackPane prefWidth="42" prefHeight="42"
+                       style="-fx-background-color:#2E7D5A;-fx-background-radius:21;">
+                <Label fx:id="lblAvatar" text="U"
+                       style="-fx-font-size:16px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+            </StackPane>
+            <VBox spacing="2">
+                <Label fx:id="lblUserName" text="Chat"
+                       style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                <HBox spacing="8">
+                    <Label fx:id="lblUserEmail" text=""
+                           style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                    <Label fx:id="lblUserPhone" text=""
+                           style="-fx-font-size:11px;-fx-text-fill:#94A3B8;"/>
+                </HBox>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblUnread" text=""
+                   style="-fx-font-size:11px;-fx-text-fill:white;-fx-background-color:#EF4444;-fx-background-radius:10;-fx-padding:3 9;-fx-font-weight:bold;"
+                   visible="false" managed="false"/>
+            <!-- close button hidden — window has its own X -->
+        </HBox>
+    </top>
+
+    <!-- ── Messages ── -->
+    <center>
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    style="-fx-background-color:#F0F4F8;-fx-background:#F0F4F8;-fx-border-color:transparent;">
+            <VBox fx:id="messagesContainer" spacing="6" style="-fx-padding:16 20;">
+                <!-- bubbles added dynamically -->
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- ── Compose ── -->
+    <bottom>
+        <VBox style="-fx-background-color:white;-fx-border-color:#E2E8F0 transparent transparent transparent;-fx-border-width:1 0 0 0;-fx-padding:12 16 14 16;" spacing="10">
+
+            <!-- Image preview strip -->
+            <HBox fx:id="imagePreviewBox" spacing="8" alignment="CENTER_LEFT"
+                  visible="false" managed="false">
+                <StackPane fx:id="imgPreviewPane" prefWidth="64" prefHeight="64"
+                           style="-fx-background-color:#F1F5F9;-fx-background-radius:8;-fx-border-color:#CBD5E1;-fx-border-radius:8;-fx-border-width:1;">
+                    <ImageView fx:id="imgPreview" fitWidth="64" fitHeight="64" preserveRatio="true"/>
+                </StackPane>
+                <Button text="✕ Remove" onAction="#handleRemoveImage"
+                        style="-fx-background-color:#FEE2E2;-fx-text-fill:#DC2626;-fx-font-size:11px;-fx-background-radius:6;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:4 10;"/>
+                <Label fx:id="lblImageName" text=""
+                       style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+            </HBox>
+
+            <!-- Text input row -->
+            <HBox spacing="8" alignment="BOTTOM_CENTER">
+                <!-- Attach image button -->
+                <Button text="🖼" onAction="#handleAttachImage"
+                        prefWidth="38" prefHeight="38"
+                        style="-fx-background-color:#F1F5F9;-fx-text-fill:#475569;-fx-font-size:16px;-fx-background-radius:8;-fx-cursor:hand;-fx-border-color:#CBD5E1;-fx-border-radius:8;-fx-border-width:1;"
+                        onMouseEntered="#handleImgBtnHover" onMouseExited="#handleImgBtnExit">
+                    <tooltip><Tooltip text="Attach an image"/></tooltip>
+                </Button>
+
+                <TextArea fx:id="txtMessage" promptText="Write a message…"
+                          prefRowCount="2" wrapText="true" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color:#F8FAFC;-fx-border-color:#CBD5E1;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:9 12;-fx-font-size:13px;"/>
+
+                <VBox spacing="6" alignment="BOTTOM_CENTER">
+                    <Button fx:id="btnSend" text="Send ➤" onAction="#handleSend"
+                            prefWidth="90" prefHeight="38"
+                            style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:transparent;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Footer row: char count + SMS -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Label fx:id="lblCharCount" text="0 / 500"
+                       style="-fx-font-size:10px;-fx-text-fill:#94A3B8;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblSmsStatus" text="" visible="false" managed="false"
+                       style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+                <CheckBox fx:id="chkSendSms" text="📱 SMS"
+                          style="-fx-font-size:12px;-fx-text-fill:#374151;"/>
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

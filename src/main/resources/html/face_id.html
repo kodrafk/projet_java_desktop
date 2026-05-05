@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Face ID</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:#111827; }
+body { display:flex; flex-direction:column; align-items:center;
+       justify-content:center; font-family:-apple-system,sans-serif; color:#fff; }
+#status { font-size:12px; color:#9CA3AF; margin-bottom:8px;
+          text-align:center; min-height:18px; padding:0 12px; }
+.cam-wrap { position:relative; border-radius:14px; overflow:hidden;
+            border:2px solid #2E7D32; box-shadow:0 0 20px rgba(46,125,50,0.3); }
+video { display:block; width:480px; height:360px; object-fit:cover; }
+#overlay { position:absolute; top:0; left:0; width:480px; height:360px;
+           pointer-events:none; }
+</style>
+</head>
+<body>
+<div id="status">Initializing...</div>
+<div class="cam-wrap">
+  <video id="video" autoplay muted playsinline></video>
+  <canvas id="overlay"></canvas>
+</div>
+
+<!-- face-api.js loaded from local HTTP server (same origin) -->
+<script src="/faceapi/face-api.min.js"></script>
+<script>
+const MODEL_URL = '/faceapi/models';
+const video     = document.getElementById('video');
+const overlay   = document.getElementById('overlay');
+const statusEl  = document.getElementById('status');
+
+let modelsLoaded = false;
+let stream       = null;
+let detLoop      = false;
+
+function log(msg) {
+  statusEl.textContent = msg;
+  try { if (window.javaFaceId) window.javaFaceId.onStatus(msg); } catch(e){}
+}
+
+// ── Load models ───────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    log('Loading AI models (face-api.js)...');
+    await Promise.all([
+      faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+    ]);
+    modelsLoaded = true;
+    log('Models loaded. Starting camera...');
+    await startCamera();
+  } catch(e) {
+    log('Error: ' + e.message);
+    try { if (window.javaFaceId) window.javaFaceId.onError('Model load failed: ' + e.message); } catch(_){}
+  }
+}
+
+// ── Camera ────────────────────────────────────────────────────────────────────
+async function startCamera() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { width:480, height:360, facingMode:'user' }
+    });
+    video.srcObject = stream;
+    await new Promise(r => { video.onloadedmetadata = r; });
+    video.play();
+    overlay.width  = video.videoWidth  || 480;
+    overlay.height = video.videoHeight || 360;
+    log('Camera ready');
+    try { if (window.javaFaceId) window.javaFaceId.onCameraReady(); } catch(_){}
+    startDetectionLoop();
+  } catch(e) {
+    log('Camera error: ' + e.message);
+    try { if (window.javaFaceId) window.javaFaceId.onError('Camera: ' + e.message); } catch(_){}
+  }
+}
+
+// ── Live face box overlay ─────────────────────────────────────────────────────
+async function startDetectionLoop() {
+  detLoop = true;
+  const ctx = overlay.getContext('2d');
+  while (detLoop) {
+    if (video.readyState >= 2) {
+      try {
+        const det = await faceapi.detectSingleFace(video,
+          new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 }));
+        ctx.clearRect(0, 0, overlay.width, overlay.height);
+        if (det) {
+          const b = det.box;
+          ctx.strokeStyle = '#4CAF50';
+          ctx.lineWidth   = 3;
+          ctx.strokeRect(b.x, b.y, b.width, b.height);
+          ctx.fillStyle = 'rgba(76,175,80,0.08)';
+          ctx.fillRect(b.x, b.y, b.width, b.height);
+        }
+      } catch(_) {}
+    }
+    await sleep(120);
+  }
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── Capture descriptor (called from Java via polling) ─────────────────────────
+window.captureDescriptor = async function() {
+  if (!modelsLoaded) return JSON.stringify({success:false, error:'Models not loaded yet'});
+  try {
+    log('Detecting face...');
+    let result = await faceapi
+      .detectSingleFace(video, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 }))
+      .withFaceLandmarks()
+      .withFaceDescriptor();
+
+    if (!result) {
+      result = await faceapi
+        .detectSingleFace(video, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.3 }))
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+    }
+
+    if (!result) {
+      log('No face detected. Look at the camera.');
+      return JSON.stringify({success:false, error:'No face detected. Please look directly at the camera.'});
+    }
+
+    const desc = Array.from(result.descriptor);
+    log('Face captured! (' + Math.round(result.detection.score * 100) + '% confidence)');
+    return JSON.stringify({
+      success: true,
+      descriptor: desc,
+      confidence: result.detection.score
+    });
+  } catch(e) {
+    log('Error: ' + e.message);
+    return JSON.stringify({success:false, error: e.message});
+  }
+};
+
+// ── Compare descriptor (called from Java) ─────────────────────────────────────
+window.compareDescriptor = async function(storedJson) {
+  if (!modelsLoaded) return JSON.stringify({success:false, error:'Models not loaded yet'});
+  try {
+    const stored = new Float32Array(JSON.parse(storedJson));
+    log('Detecting face for verification...');
+
+    let result = await faceapi
+      .detectSingleFace(video, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.4 }))
+      .withFaceLandmarks()
+      .withFaceDescriptor();
+
+    if (!result) {
+      result = await faceapi
+        .detectSingleFace(video, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.25 }))
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+    }
+
+    if (!result) {
+      log('No face detected.');
+      return JSON.stringify({success:false, error:'No face detected'});
+    }
+
+    const live     = result.descriptor;
+    const distance = faceapi.euclideanDistance(stored, live);
+    const match    = distance < 0.55;
+    const sim      = Math.max(0, Math.round((1 - distance) * 1000) / 10);
+
+    log(match ? '✅ Face recognized!' : '❌ Face not recognized (' + sim + '%)');
+    return JSON.stringify({
+      success:    true,
+      match:      match,
+      distance:   distance,
+      similarity: sim,
+      confidence: result.detection.score
+    });
+  } catch(e) {
+    return JSON.stringify({success:false, error: e.message});
+  }
+};
+
+// ── Stop camera ───────────────────────────────────────────────────────────────
+window.stopCamera = function() {
+  detLoop = false;
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  log('Camera stopped.');
+};
+
+// ── Start ─────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

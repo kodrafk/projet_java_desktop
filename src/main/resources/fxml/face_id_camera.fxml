@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.FaceIdCameraController"
+      prefWidth="520" prefHeight="520" spacing="0"
+      style="-fx-background-color:#0D1117;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="12"
+          style="-fx-background-color:#161B22;-fx-padding:14 20;-fx-border-color:transparent transparent #30363D transparent;-fx-border-width:0 0 1 0;">
+        <Label text="🎭" style="-fx-font-size:20px;"/>
+        <Label text="Face ID Enrollment"
+               style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+    </HBox>
+
+    <!-- Camera view -->
+    <StackPane VBox.vgrow="ALWAYS" style="-fx-background-color:#0D1117;">
+        <ImageView fx:id="cameraView" fitWidth="520" fitHeight="360"
+                   preserveRatio="true" smooth="true"/>
+
+        <!-- Countdown overlay -->
+        <VBox fx:id="countdownBox" alignment="CENTER"
+              style="-fx-background-color:rgba(0,0,0,0.6);-fx-background-radius:50;">
+            <Label fx:id="countdownLabel" text="3"
+                   style="-fx-font-size:80px;-fx-font-weight:bold;-fx-text-fill:#00FF88;"/>
+        </VBox>
+    </StackPane>
+
+    <!-- Instructions -->
+    <VBox spacing="6" style="-fx-padding:12 20 8 20;-fx-background-color:#161B22;">
+        <Label fx:id="instructionLabel"
+               text="👤  Position your face inside the oval guide, then click Capture"
+               wrapText="true"
+               style="-fx-font-size:12px;-fx-text-fill:#8B949E;"/>
+        <Label fx:id="statusLabel" text="" wrapText="true"
+               style="-fx-font-size:13px;-fx-font-weight:bold;"/>
+    </VBox>
+
+    <!-- Buttons -->
+    <HBox spacing="12" style="-fx-padding:12 20 16 20;-fx-background-color:#161B22;">
+        <Button fx:id="captureButton" text="📸  Capture Face" onAction="#handleCapture"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="44"
+                style="-fx-background-color:#00CC44;-fx-text-fill:white;-fx-font-size:13px;
+                       -fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;
+                       -fx-border-color:transparent;"/>
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
+                prefHeight="44" prefWidth="100"
+                style="-fx-background-color:#21262D;-fx-text-fill:#8B949E;-fx-font-size:13px;
+                       -fx-background-radius:10;-fx-cursor:hand;-fx-border-color:#30363D;"/>
+    </HBox>
+</VBox>

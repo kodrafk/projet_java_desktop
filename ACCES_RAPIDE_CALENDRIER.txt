@@ -1,0 +1,228 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║              📅 ACCÈS RAPIDE AU CALENDRIER AVEC MÉTÉO 🌤️                    ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ÉTAPE 1: LANCER L'APPLICATION                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Ouvrez un terminal et exécutez:
+  
+    mvn javafx:run
+  
+  Ou double-cliquez sur REBUILD_AND_RUN.bat
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ÉTAPE 2: SE CONNECTER                                                      │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Connectez-vous avec votre compte utilisateur
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ÉTAPE 3: ALLER DANS "EVENTS"                                               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Dans le menu de navigation en haut, cliquez sur:
+  
+    [Events]
+    
+  Vous verrez la liste des événements sportifs
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ÉTAPE 4: CLIQUER SUR "CALENDRIER AVEC MÉTÉO"                               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  En haut à droite de la page, cliquez sur le bouton vert:
+  
+    [📅 Calendrier avec Météo]
+    
+  Le calendrier s'ouvre avec la météo!
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        🎉 VOUS Y ÊTES!                                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Vous devriez maintenant voir:
+  
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │  📅 Calendrier des Événements                                          │
+  ├────────────────────────────────────────────────────────────────────────┤
+  │                                                                        │
+  │  ┌─────────────────────────┐  ┌──────────────────────────────────┐   │
+  │  │  [◀] Avril 2026 [▶]     │  │  Événements du jour              │   │
+  │  │  [📍 Aujourd'hui]        │  │                                  │   │
+  │  │                         │  │  Lundi 28 Avril 2026             │   │
+  │  │  Lun Mar Mer Jeu Ven    │  │                                  │   │
+  │  │   1   2   3   4   5     │  │  ┌────────────────────────────┐  │   │
+  │  │   8   9  10  11  12     │  │  │ 🌤️  22.5°C  Météo du jour │  │   │
+  │  │  15  16  17  18  19     │  │  │     Partiellement nuageux  │  │   │
+  │  │  22  23  24  25  26     │  │  └────────────────────────────┘  │   │
+  │  │  29  30                 │  │                                  │   │
+  │  │                         │  │  🏃 Course matinale              │   │
+  │  │  (Cliquez sur un jour)  │  │  🕐 08:00                        │   │
+  │  │                         │  │  📍 Lac de Tunis  ☀️ 18.2°C     │   │
+  │  └─────────────────────────┘  └──────────────────────────────────┘   │
+  │                                                                        │
+  └────────────────────────────────────────────────────────────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        🌤️ UTILISATION                                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  ✅ Cliquez sur un jour pour voir ses événements
+  
+  ✅ La météo s'affiche automatiquement
+  
+  ✅ Naviguez entre les mois avec ◀ ▶
+  
+  ✅ Retournez à aujourd'hui avec [📍 Aujourd'hui]
+  
+  ✅ Chaque événement affiche la météo de son lieu
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        ⚠️ IMPORTANT                                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  🔑 POUR VOIR LA MÉTÉO, VOUS DEVEZ:
+  
+     1. Avoir configuré votre clé API dans weather.properties
+     2. Avoir une connexion internet active
+     3. Attendre 10 minutes si votre clé API est nouvelle
+  
+  
+  📖 SI LA MÉTÉO NE S'AFFICHE PAS:
+  
+     → Voir CONFIGURATION_RAPIDE.txt
+     → Voir COMMENT_OBTENIR_CLE_API.md
+     → Voir LISEZ_MOI_METEO.md
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        🎨 NAVIGATION VISUELLE                                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Menu Principal
+  ┌────────────────────────────────────────────────────────────────┐
+  │  [Home] [About] [My Kitchen] [Events] [Blog] [Wellness]       │
+  │                                  ↑                             │
+  │                            CLIQUEZ ICI                         │
+  └────────────────────────────────────────────────────────────────┘
+                              ↓
+  
+  Page Événements
+  ┌────────────────────────────────────────────────────────────────┐
+  │  Événements                                                    │
+  │  ┌──────────┐  ┌──────────┐  ┌──────────────────────────┐    │
+  │  │ 🔍 Rech. │  │ 5 events │  │ 📅 Calendrier avec Météo │    │
+  │  └──────────┘  └──────────┘  └──────────────────────────┘    │
+  │                                          ↑                     │
+  │                                    CLIQUEZ ICI                 │
+  │                                                                │
+  │  [Carte événement 1]  [Carte événement 2]  [Carte 3]         │
+  └────────────────────────────────────────────────────────────────┘
+                              ↓
+  
+  Calendrier avec Météo ✨
+  ┌────────────────────────────────────────────────────────────────┐
+  │  📅 Calendrier des Événements                                  │
+  │                                                                │
+  │  [Calendrier]              [Événements + Météo]               │
+  │                                                                │
+  │  Sélectionnez une date → Voir la météo + événements           │
+  └────────────────────────────────────────────────────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        📱 RACCOURCIS                                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Dans le calendrier:
+  
+  ◀ ▶           Naviguer entre les mois
+  
+  📍 Aujourd'hui  Retour à la date actuelle
+  
+  Clic sur jour  Voir événements + météo
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        💡 ASTUCES                                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  ✨ Planifiez vos événements sportifs selon la météo
+  
+  ✨ Évitez les jours de pluie pour les activités extérieures
+  
+  ✨ Vérifiez la météo avant de vous inscrire à un événement
+  
+  ✨ Préparez-vous en conséquence (vêtements, équipement)
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        🔧 PERSONNALISATION                                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Vous pouvez personnaliser dans weather.properties:
+  
+  🌍 Ville par défaut:
+     default.city=Tunis
+  
+  🗣️ Langue:
+     language=fr    (français)
+     language=en    (anglais)
+     language=ar    (arabe)
+  
+  🌡️ Unités:
+     units=metric    (Celsius)
+     units=imperial  (Fahrenheit)
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        ✅ CHECKLIST                                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Avant d'utiliser le calendrier avec météo:
+  
+  [ ] Application lancée (mvn javafx:run)
+  [ ] Connecté avec votre compte
+  [ ] Clé API configurée dans weather.properties
+  [ ] Connexion internet active
+  [ ] Navigué vers Events → Calendrier avec Météo
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        📞 AIDE                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+  Configuration:
+    → CONFIGURATION_RAPIDE.txt
+    → COMMENT_OBTENIR_CLE_API.md
+  
+  Documentation:
+    → LISEZ_MOI_METEO.md
+    → COMMENT_ACCEDER_CALENDRIER_METEO.md
+    → INDEX_DOCUMENTATION_METEO.md
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    🎉 PROFITEZ DE VOTRE CALENDRIER! 🌤️                      ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

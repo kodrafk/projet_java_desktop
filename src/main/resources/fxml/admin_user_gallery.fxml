@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane prefWidth="860" prefHeight="640"
+            style="-fx-background-color:#F8FAFB;"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.projet.gui.AdminUserGalleryController">
+
+    <!-- Header -->
+    <top>
+        <VBox style="-fx-background-color:white;-fx-border-color:transparent transparent #E8EEF2 transparent;-fx-border-width:0 0 1 0;">
+            <HBox alignment="CENTER_LEFT" prefHeight="64" spacing="14" style="-fx-padding:0 24;">
+                <Label text="📸" style="-fx-font-size:26px;"/>
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblUserName" text="User Gallery"
+                           style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                    <Label fx:id="lblUserEmail" text=""
+                           style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+                </VBox>
+                <Label fx:id="lblAccessBadge" text=""
+                       style="-fx-font-size:12px;-fx-background-radius:20;-fx-padding:4 12;"/>
+                <!-- close button hidden — window has its own X -->
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Content -->
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    style="-fx-background-color:#F8FAFB;-fx-background:#F8FAFB;-fx-border-color:transparent;">
+            <VBox spacing="20" style="-fx-padding:24;">
+
+                <!-- Profile Photo Section -->
+                <VBox spacing="12"
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E8EEF2;-fx-border-radius:14;-fx-border-width:1;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.04),8,0,0,2);">
+                    <Label text="👤 Profile Photo"
+                           style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="24" style="-fx-padding:8 0;">
+                        <StackPane prefWidth="100" prefHeight="100"
+                                   style="-fx-background-color:#2E7D5A;-fx-background-radius:50;">
+                            <Label fx:id="lblAvatarInitial" text="?"
+                                   style="-fx-font-size:40px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+                            <ImageView fx:id="profilePhoto" fitWidth="100" fitHeight="100"
+                                       preserveRatio="false" visible="false"/>
+                        </StackPane>
+                        <VBox spacing="6" alignment="CENTER_LEFT">
+                            <Label fx:id="lblPhotoStatus" text="No photo uploaded"
+                                   style="-fx-font-size:13px;-fx-text-fill:#64748B;"/>
+                            <Label fx:id="lblPhotoDate" text=""
+                                   style="-fx-font-size:11px;-fx-text-fill:#94A3B8;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Weight Progress Photos Section -->
+                <VBox spacing="14"
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:20;-fx-border-color:#E8EEF2;-fx-border-radius:14;-fx-border-width:1;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.04),8,0,0,2);">
+
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="📷 Weight Progress Photos"
+                               style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+                        <Label fx:id="lblWeightPhotoCount" text="(0 photos)"
+                               style="-fx-font-size:12px;-fx-text-fill:#64748B;"/>
+                    </HBox>
+
+                    <Label text="Photos taken by the user when logging their weight"
+                           style="-fx-font-size:12px;-fx-text-fill:#94A3B8;"/>
+
+                    <!-- Access denied message -->
+                    <VBox fx:id="lblAccessDenied" alignment="CENTER" spacing="10"
+                          style="-fx-background-color:#FFF7ED;-fx-background-radius:12;-fx-padding:32;-fx-border-color:#FED7AA;-fx-border-radius:12;-fx-border-width:1;"
+                          visible="false" managed="false">
+                        <Label text="Access Restricted"
+                               style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#92400E;"/>
+                        <Label text="This user has not granted admin access to their photo gallery."
+                               wrapText="true" style="-fx-font-size:12px;-fx-text-fill:#B45309;-fx-alignment:center;"/>
+                    </VBox>
+
+                    <!-- Photo grid -->
+                    <FlowPane fx:id="weightPhotoGrid" hgap="14" vgap="14" prefWrapLength="780"
+                              style="-fx-padding:4 0;" visible="false" managed="false"/>
+
+                    <!-- No photos yet -->
+                    <VBox fx:id="lblNoWeightPhotos" alignment="CENTER" spacing="8"
+                          style="-fx-padding:32;" visible="true" managed="true">
+                        <Label text="No weight photos yet"
+                               style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#94A3B8;"/>
+                        <Label text="User can add photos when logging their weight."
+                               style="-fx-font-size:12px;-fx-text-fill:#CBD5E1;"/>
+                    </VBox>
+
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

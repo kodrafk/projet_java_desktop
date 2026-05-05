@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminUserNewController"
+      prefWidth="620" prefHeight="680" spacing="0"
+      style="-fx-background-color:white;">
+
+    <HBox style="-fx-background-color:#0F2820;-fx-padding:16 20;" alignment="CENTER_LEFT">
+        <Label text="Create New User" style="-fx-font-size:16px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color:white;-fx-background:white;-fx-border-color:transparent;">
+        <VBox spacing="12" style="-fx-padding:20 28;">
+
+            <VBox spacing="4">
+                <Label text="Email *" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                <TextField fx:id="emailField"
+                           style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:9 12;-fx-font-size:13px;"/>
+                <Label fx:id="errEmail" text="" style="-fx-text-fill:#DC2626;-fx-font-size:10px;"/>
+            </VBox>
+
+            <VBox spacing="4">
+                <Label text="Password * (min 8 chars)" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                <PasswordField fx:id="passwordField"
+                               style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:9 12;-fx-font-size:13px;"/>
+                <Label fx:id="errPassword" text="" style="-fx-text-fill:#DC2626;-fx-font-size:10px;"/>
+            </VBox>
+
+            <HBox spacing="12">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="First Name *" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <TextField fx:id="firstNameField"
+                               style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:9 12;-fx-font-size:13px;"/>
+                    <Label fx:id="errFirstName" text="" style="-fx-text-fill:#DC2626;-fx-font-size:10px;"/>
+                </VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Last Name *" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <TextField fx:id="lastNameField"
+                               style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:9 12;-fx-font-size:13px;"/>
+                    <Label fx:id="errLastName" text="" style="-fx-text-fill:#DC2626;-fx-font-size:10px;"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="4">
+                <Label text="Birthday *" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                <DatePicker fx:id="birthdayPicker" maxWidth="Infinity"/>
+                <Label fx:id="errBirthday" text="" style="-fx-text-fill:#DC2626;-fx-font-size:10px;"/>
+            </VBox>
+
+            <HBox spacing="12">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Weight (kg) *" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <TextField fx:id="weightField"
+                               style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:9 12;-fx-font-size:13px;"/>
+                    <Label fx:id="errWeight" text="" style="-fx-text-fill:#DC2626;-fx-font-size:10px;"/>
+                </VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Height (cm) *" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <TextField fx:id="heightField"
+                               style="-fx-background-color:#F0F7F0;-fx-border-color:#C8E6C9;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:9 12;-fx-font-size:13px;"/>
+                    <Label fx:id="errHeight" text="" style="-fx-text-fill:#DC2626;-fx-font-size:10px;"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="4">
+                <Label text="Role" style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                <ComboBox fx:id="roleCombo" maxWidth="Infinity"/>
+            </VBox>
+
+            <HBox spacing="10">
+                <Button text="Create User" onAction="#handleSave"
+                        HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="42"
+                        style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;-fx-background-radius:10;-fx-cursor:hand;-fx-border-color:transparent;"/>
+                <Button text="Cancel" onAction="#handleCancel" prefHeight="42" prefWidth="100"
+                        style="-fx-background-color:#F1F5F9;-fx-border-color:#CBD5E1;-fx-border-radius:10;-fx-background-radius:10;-fx-font-size:13px;-fx-cursor:hand;"/>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.AdminUserBadgesController"
+      prefWidth="900" prefHeight="700" spacing="0"
+      style="-fx-background-color:#F8FAFC;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="16" style="-fx-padding:20 24;-fx-background-color:white;-fx-border-color:#E2E8F0;-fx-border-width:0 0 1 0;">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblUserName" text="User's Badges" style="-fx-font-size:20px;-fx-font-weight:bold;-fx-text-fill:#1E293B;"/>
+            <HBox spacing="16">
+                <Label fx:id="lblTotalBadges" text="0" style="-fx-font-size:13px;-fx-text-fill:#64748B;"/>
+                <Label text="•" style="-fx-font-size:13px;-fx-text-fill:#CBD5E1;"/>
+                <Label fx:id="lblUnlockedCount" text="0 unlocked" style="-fx-font-size:13px;-fx-text-fill:#16A34A;-fx-font-weight:bold;"/>
+                <Label fx:id="lblInProgressCount" text="0 in progress" style="-fx-font-size:13px;-fx-text-fill:#F59E0B;-fx-font-weight:bold;"/>
+                <Label fx:id="lblLockedCount" text="0 locked" style="-fx-font-size:13px;-fx-text-fill:#94A3B8;"/>
+            </HBox>
+        </VBox>
+        
+        <VBox alignment="CENTER_RIGHT" spacing="4">
+            <Label text="Completion" style="-fx-font-size:11px;-fx-text-fill:#64748B;"/>
+            <HBox spacing="8" alignment="CENTER_RIGHT">
+                <ProgressBar fx:id="progressBar" prefWidth="120" prefHeight="8" progress="0" 
+                             style="-fx-accent:#16A34A;-fx-background-color:#E8F5E9;-fx-background-radius:4;"/>
+                <Label fx:id="lblCompletionPercent" text="0%" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#16A34A;"/>
+            </HBox>
+        </VBox>
+        
+        <Button text="🔄" onAction="#handleRefresh" 
+                style="-fx-background-color:#F1F5F9;-fx-text-fill:#64748B;-fx-font-size:16px;-fx-cursor:hand;-fx-background-radius:8;-fx-padding:8 12;"/>
+        <!-- close button hidden — window has its own X -->
+        <!-- <Button text="✕" onAction="#handleClose" ... /> -->
+    </HBox>
+
+    <!-- Filters -->
+    <HBox spacing="12" style="-fx-padding:16 24;-fx-background-color:white;-fx-border-color:#E2E8F0;-fx-border-width:0 0 1 0;">
+        <TextField fx:id="searchField" promptText="🔍 Search badges..." prefWidth="280"
+                   style="-fx-background-color:#F8FAFC;-fx-border-color:#E2E8F0;-fx-border-radius:8;-fx-background-radius:8;-fx-padding:8 12;-fx-font-size:13px;"/>
+        
+        <Label text="Category:" style="-fx-font-size:13px;-fx-text-fill:#64748B;-fx-padding:8 0;"/>
+        <ComboBox fx:id="filterCategory" prefWidth="160" 
+                  style="-fx-background-color:#F8FAFC;-fx-border-color:#E2E8F0;-fx-border-radius:8;-fx-background-radius:8;-fx-font-size:13px;"/>
+        
+        <Label text="Rarity:" style="-fx-font-size:13px;-fx-text-fill:#64748B;-fx-padding:8 0;"/>
+        <ComboBox fx:id="filterRarity" prefWidth="140"
+                  style="-fx-background-color:#F8FAFC;-fx-border-color:#E2E8F0;-fx-border-radius:8;-fx-background-radius:8;-fx-font-size:13px;"/>
+    </HBox>
+
+    <!-- Tabs -->
+    <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE"
+             style="-fx-background-color:#F8FAFC;-fx-padding:0;">
+        
+        <!-- Unlocked Tab -->
+        <Tab text="✅ Unlocked">
+            <ScrollPane fitToWidth="true" style="-fx-background-color:#F8FAFC;-fx-background:transparent;">
+                <VBox fx:id="unlockedList" spacing="12" style="-fx-padding:20 24;-fx-background-color:#F8FAFC;"/>
+            </ScrollPane>
+        </Tab>
+        
+        <!-- In Progress Tab -->
+        <Tab text="⏳ In Progress">
+            <ScrollPane fitToWidth="true" style="-fx-background-color:#F8FAFC;-fx-background:transparent;">
+                <VBox fx:id="inProgressList" spacing="12" style="-fx-padding:20 24;-fx-background-color:#F8FAFC;"/>
+            </ScrollPane>
+        </Tab>
+        
+        <!-- Locked Tab -->
+        <Tab text="🔒 Locked">
+            <ScrollPane fitToWidth="true" style="-fx-background-color:#F8FAFC;-fx-background:transparent;">
+                <VBox fx:id="lockedList" spacing="12" style="-fx-padding:20 24;-fx-background-color:#F8FAFC;"/>
+            </ScrollPane>
+        </Tab>
+    </TabPane>
+</VBox>

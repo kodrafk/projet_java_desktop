@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.projet.gui.FaceIdController"
+      prefWidth="460" prefHeight="340" spacing="0"
+      style="-fx-background-color: white; -fx-background-radius: 16;">
+
+    <!-- Header -->
+    <HBox style="-fx-background-color: #F0FDF4; -fx-padding: 18 24; -fx-background-radius: 16 16 0 0;" alignment="CENTER_LEFT" spacing="12">
+        <Label text="🎭" style="-fx-font-size: 22px;"/>
+        <VBox spacing="2">
+            <Label text="Face ID Management" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            <Label text="Enroll or remove your Face ID" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="20" style="-fx-padding: 28 32;">
+        <!-- Status -->
+        <VBox alignment="CENTER" spacing="8">
+            <Label fx:id="lblStatus" text="Loading..." style="-fx-font-size: 15px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblEnrolledDate" text="" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+        </VBox>
+
+        <!-- Info box -->
+        <VBox style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 14 16;" spacing="4">
+            <Label text="ℹ️  How Face ID works" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            <Label text="Your face descriptor (128 values) is stored securely. Login uses Euclidean distance ≤ 0.6 to match."
+                   wrapText="true" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+        </VBox>
+
+        <!-- Buttons -->
+        <Button fx:id="btnEnroll" text="📷  Enroll Face ID" onAction="#handleEnroll"
+                maxWidth="Infinity" prefHeight="44"
+                style="-fx-background-color: #2E7D32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-border-color: transparent;"/>
+        <Button fx:id="btnRemove" text="🗑  Remove Face ID" onAction="#handleRemove"
+                maxWidth="Infinity" prefHeight="44"
+                style="-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-border-color: transparent;"/>
+        <Button text="Close" onAction="#handleClose"
+                maxWidth="Infinity" prefHeight="38"
+                style="-fx-background-color: #F1F5F9; -fx-text-fill: #64748B; -fx-font-size: 12px; -fx-background-radius: 10; -fx-cursor: hand; -fx-border-color: transparent;"/>
+    </VBox>
+</VBox>

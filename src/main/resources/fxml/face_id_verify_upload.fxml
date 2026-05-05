@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tn.esprit.projet.gui.FaceIdVerifyUploadController"
+           prefWidth="560" prefHeight="560">
+
+    <Pane style="-fx-background-color:linear-gradient(to bottom right,#e8f5e9,#fffde7,#fce4ec);"/>
+    <Circle radius="20" fill="#66BB6A" opacity="0.5" StackPane.alignment="TOP_RIGHT" translateX="-30" translateY="50"/>
+    <Circle radius="12" fill="#7E57C2" opacity="0.4" StackPane.alignment="BOTTOM_LEFT" translateX="50" translateY="-50"/>
+
+    <VBox spacing="0" StackPane.alignment="TOP_CENTER" maxWidth="Infinity">
+
+        <!-- Header -->
+        <HBox prefHeight="56" alignment="CENTER_LEFT" spacing="12"
+              style="-fx-background-color:rgba(255,255,255,0.92);
+                     -fx-border-color:transparent transparent #E8EDE8 transparent;
+                     -fx-border-width:0 0 1 0;-fx-padding:0 24;">
+            <Label text="📸" style="-fx-font-size:20px;"/>
+            <Label text="Face ID — Upload Photo"
+                   style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+        </HBox>
+
+        <ProgressBar fx:id="verifyProgress" progress="0" maxWidth="Infinity" prefHeight="4"
+                     style="-fx-accent:#2E7D32;-fx-background-color:#E8F5E9;"/>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color:transparent;-fx-background:transparent;-fx-border-color:transparent;">
+            <VBox alignment="TOP_CENTER" spacing="14"
+                  style="-fx-background-color:transparent;-fx-padding:16 24 24 24;">
+
+                <!-- Instruction -->
+                <VBox spacing="4"
+                      style="-fx-background-color:white;-fx-background-radius:14;-fx-padding:12 18;
+                             -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.07),12,0,0,3);
+                             -fx-border-color:#E8F5E9;-fx-border-radius:14;-fx-border-width:1;">
+                    <Label text="Upload a photo of your face"
+                           style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#1a2e1a;"/>
+                    <Label fx:id="instructionLabel"
+                           text="Take a selfie with your phone, transfer it to your PC, then upload it here"
+                           wrapText="true"
+                           style="-fx-font-size:12px;-fx-text-fill:#6B7280;"/>
+                </VBox>
+
+                <!-- Image Preview -->
+                <StackPane style="-fx-background-color:#111827;-fx-background-radius:16;
+                                  -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.15),16,0,0,4);">
+                    <ImageView fx:id="imageView" fitWidth="512" fitHeight="340"
+                               preserveRatio="true" smooth="true"/>
+                    <VBox fx:id="placeholderBox" alignment="CENTER" spacing="12"
+                          style="-fx-background-color:rgba(17,24,39,0.8);">
+                        <Label text="📷" style="-fx-font-size:48px;"/>
+                        <Label text="No image selected"
+                               style="-fx-font-size:14px;-fx-text-fill:white;-fx-font-weight:bold;"/>
+                        <Label text="Click 'Choose Photo' to upload"
+                               style="-fx-font-size:12px;-fx-text-fill:#9CA3AF;"/>
+                    </VBox>
+                </StackPane>
+
+                <!-- Status -->
+                <Label fx:id="statusLabel" text=""
+                       wrapText="true" maxWidth="512" alignment="CENTER"
+                       style="-fx-font-size:12px;-fx-text-fill:#6B7280;-fx-alignment:center;"/>
+
+                <!-- Buttons -->
+                <HBox spacing="12">
+                    <Button fx:id="uploadButton" text="📁  Choose Photo" onAction="#handleUpload"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="46"
+                            style="-fx-background-color:#3B82F6;-fx-text-fill:white;-fx-font-size:14px;
+                                   -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;"/>
+                    <Button fx:id="verifyButton" text="🔍  Verify Face" onAction="#handleVerify"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" prefHeight="46"
+                            disable="true"
+                            style="-fx-background-color:#2E7D32;-fx-text-fill:white;-fx-font-size:14px;
+                                   -fx-font-weight:bold;-fx-background-radius:12;-fx-cursor:hand;"/>
+                    <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
+                            prefHeight="46" prefWidth="110"
+                            style="-fx-background-color:white;-fx-text-fill:#6B7280;-fx-font-size:13px;
+                                   -fx-background-radius:12;-fx-cursor:hand;
+                                   -fx-border-color:#E2E8F0;-fx-border-width:1;-fx-border-radius:12;"/>
+                </HBox>
+
+                <!-- Tips -->
+                <VBox spacing="8"
+                      style="-fx-background-color:#FEF3C7;-fx-background-radius:10;-fx-padding:12 16;
+                             -fx-border-color:#FDE68A;-fx-border-radius:10;-fx-border-width:1;">
+                    <Label text="💡 Tips for best results:"
+                           style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#92400E;"/>
+                    <Label text="• Face clearly visible and centered"
+                           style="-fx-font-size:11px;-fx-text-fill:#92400E;"/>
+                    <Label text="• Good lighting (not too dark or bright)"
+                           style="-fx-font-size:11px;-fx-text-fill:#92400E;"/>
+                    <Label text="• Both eyes visible"
+                           style="-fx-font-size:11px;-fx-text-fill:#92400E;"/>
+                    <Label text="• Neutral expression, looking at camera"
+                           style="-fx-font-size:11px;-fx-text-fill:#92400E;"/>
+                    <Label text="• No sunglasses or mask"
+                           style="-fx-font-size:11px;-fx-text-fill:#92400E;"/>
+                </VBox>
+
+                <!-- Info -->
+                <VBox spacing="4"
+                      style="-fx-background-color:#F0FDF4;-fx-background-radius:10;-fx-padding:12 16;
+                             -fx-border-color:#BBF7D0;-fx-border-radius:10;-fx-border-width:1;">
+                    <Label text="🔒  DeepFace ArcFace — State-of-the-art AI"
+                           style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#166534;"/>
+                    <Label text="512-D face embeddings, AES-256-GCM encrypted. Works without webcam!"
+                           wrapText="true"
+                           style="-fx-font-size:11px;-fx-text-fill:#166534;"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</StackPane>

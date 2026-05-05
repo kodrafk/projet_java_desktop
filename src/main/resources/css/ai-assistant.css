@@ -1,0 +1,791 @@
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════ AI ASSISTANT STYLES ════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* ═══ COLOR VARIABLES (JavaFX Equivalent) ═══ */
+* {
+    -color-primary: #eb7147;
+    -color-green-medium: #2d6a4f;
+    -color-green-soft: #52b788;
+    -color-neutral-1: #1E293B;
+    -color-neutral-2: #374151;
+    -color-neutral-3: #6B7280;
+    -color-neutral-4: #E2E8F0;
+    -color-neutral-5: #F8FAFC;
+    -color-white: #FFFFFF;
+    -bg-main: #F6FBF7;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ FORM STYLES ════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.custom-form-section {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-padding: 28;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.03), 8, 0, 0, 2);
+}
+
+.custom-section-title {
+    -fx-font-family: "System";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E293B;
+    -fx-border-color: transparent transparent #F1F5F9 transparent;
+    -fx-border-width: 0 0 2 0;
+    -fx-padding: 0 0 12 0;
+}
+
+.custom-input,
+.custom-textarea {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 0 12;
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #1E293B;
+    -fx-prompt-text-fill: #94A3B8;
+}
+
+.custom-input:hover,
+.custom-textarea:hover {
+    -fx-border-color: #CBD5E1;
+}
+
+.custom-input:focused,
+.custom-textarea:focused {
+    -fx-border-color: #eb7147;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(235, 113, 71, 0.08), 16, 0, 0, 0);
+}
+
+.custom-input-error {
+    -fx-border-color: #DC2626 !important;
+    -fx-background-color: #FFF5F5 !important;
+    -fx-effect: dropshadow(gaussian, rgba(220, 53, 69, 0.06), 16, 0, 0, 0);
+}
+
+.custom-field-error {
+    -fx-font-family: "System";
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #DC2626;
+}
+
+.custom-helper {
+    -fx-font-family: "System";
+    -fx-font-size: 11px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI OVERLAY (Backdrop) ═════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-opacity: 0;
+}
+
+.ai-overlay-active {
+    -fx-opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ FLOATING AI BUTTON (FAB) ══════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-fab {
+    -fx-padding: 0 20 20 0;
+}
+
+.ai-fab-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.ai-fab-circle {
+    -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #52b788 0%, #2d6a4f 100%);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 18, 0, 0, 5);
+}
+
+.ai-fab-pulse-ring {
+    -fx-fill: transparent;
+    -fx-stroke: white;
+    -fx-stroke-width: 3;
+    -fx-opacity: 0.25;
+}
+
+.ai-fab-glow-ring {
+    -fx-fill: rgba(45, 106, 79, 0.15);
+    -fx-opacity: 0;
+}
+
+.ai-fab-icon {
+    -fx-font-size: 76px;
+}
+
+.ai-fab-button:hover .ai-fab-circle {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 24, 0, 0, 8);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ SPEECH BUBBLE TOOLTIP ═════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-tooltip {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-padding: 16 18;
+    -fx-max-width: 280;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 24, 0, 0, 6);
+    -fx-opacity: 0;
+}
+
+.ai-tooltip-active {
+    -fx-opacity: 1;
+}
+
+.ai-tooltip-icon {
+    -fx-font-size: 15px;
+}
+
+.ai-tooltip-icon-bg {
+    -fx-background-color: linear-gradient(to bottom right, #2d6a4f, #52b788);
+    -fx-background-radius: 8;
+}
+
+.ai-tooltip-text {
+    -fx-font-family: "System";
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 3;
+}
+
+.ai-tooltip-close {
+    -fx-background-color: #F3F4F6;
+    -fx-text-fill: #6B7280;
+    -fx-background-radius: 6;
+    -fx-border-width: 0;
+    -fx-font-family: "System";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-min-width: 24;
+    -fx-max-width: 24;
+    -fx-min-height: 24;
+    -fx-max-height: 24;
+}
+
+.ai-tooltip-close:hover {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #374151;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI PANEL ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+    -fx-pref-width: 420;
+    -fx-max-height: 640;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 56, 0, 0, 12);
+    -fx-opacity: 0;
+}
+
+.ai-panel-active {
+    -fx-opacity: 1;
+}
+
+/* ═══ Panel Header ═══ */
+.ai-panel-header {
+    -fx-background-color: linear-gradient(to right, #f8faf9 0%, #f0f4f2 100%);
+    -fx-background-radius: 16 16 0 0;
+    -fx-padding: 18 22;
+    -fx-border-color: transparent transparent #E2E8F0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.ai-panel-avatar {
+    -fx-background-color: linear-gradient(to bottom right, #2d6a4f, #52b788);
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(45, 106, 79, 0.25), 10, 0, 0, 3);
+}
+
+.ai-panel-title {
+    -fx-font-family: "System";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E293B;
+}
+
+.ai-panel-status {
+    -fx-font-family: "System";
+    -fx-font-size: 11px;
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: 500;
+}
+
+.ai-status-dot {
+    -fx-fill: #4ade80;
+}
+
+.ai-panel-close {
+    -fx-background-color: white;
+    -fx-text-fill: #6B7280;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-family: "System";
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-min-width: 34;
+    -fx-max-width: 34;
+    -fx-min-height: 34;
+    -fx-max-height: 34;
+}
+
+.ai-panel-close:hover {
+    -fx-border-color: #9CA3AF;
+    -fx-text-fill: #374151;
+    -fx-background-color: #F9FAFB;
+}
+
+/* ═══ Panel Body ═══ */
+.ai-panel-body {
+    -fx-padding: 22;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI MESSAGE BUBBLE ══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-message-avatar {
+    -fx-background-color: linear-gradient(to bottom right, #2d6a4f, #52b788);
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(45, 106, 79, 0.18), 8, 0, 0, 2);
+}
+
+.ai-message-bubble {
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-text-fill: #374151;
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 4 16 16 16;
+    -fx-padding: 15 20;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 4 16 16 16;
+    -fx-line-spacing: 3;
+    -fx-font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI GENERATE BUTTON ═════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-generate-btn {
+    -fx-background-color: linear-gradient(to bottom right, #2d6a4f, #52b788);
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-family: "System";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 22;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(45, 106, 79, 0.25), 18, 0, 0, 5);
+}
+
+.ai-generate-btn:hover {
+    -fx-effect: dropshadow(gaussian, rgba(45, 106, 79, 0.35), 24, 0, 0, 6);
+}
+
+.ai-generate-btn:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI LOADING STATE ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-loading-progress {
+    -fx-accent: #2d6a4f;
+    -fx-background-color: #E2E8F0;
+    -fx-pref-height: 5;
+}
+
+.ai-loading-progress .bar {
+    -fx-background-color: linear-gradient(to right, #2d6a4f, #52b788);
+    -fx-background-radius: 4;
+    -fx-padding: 0;
+}
+
+.ai-loading-progress .track {
+    -fx-background-color: #E2E8F0;
+    -fx-background-radius: 4;
+}
+
+.ai-loading-text {
+    -fx-font-family: "System";
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI RESULT STATE ════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Result Description Box */
+.ai-result-desc-container {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 10;
+    -fx-padding: 15 18;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.ai-result-desc-icon {
+    -fx-font-size: 15px;
+}
+
+.ai-result-desc-text {
+    -fx-font-family: "System";
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 3;
+}
+
+/* Result Grid Items */
+.ai-result-item {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 10;
+    -fx-padding: 14;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.ai-result-item:hover {
+    -fx-border-color: #9CA3AF;
+    -fx-background-color: #F3F4F6;
+}
+
+.ai-result-item-highlight {
+    -fx-border-color: #2d6a4f !important;
+    -fx-background-color: #f0fdf4 !important;
+    -fx-scale-x: 1.06;
+    -fx-scale-y: 1.06;
+}
+
+.ai-result-label {
+    -fx-font-family: "System";
+    -fx-font-size: 9px;
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: bold;
+}
+
+.ai-result-value {
+    -fx-font-family: "System";
+    -fx-font-size: 21px;
+    -fx-text-fill: #1E293B;
+    -fx-font-weight: bold;
+}
+
+.ai-result-unit {
+    -fx-font-family: "System";
+    -fx-font-size: 9px;
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI ACTION BUTTONS ══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-apply-btn {
+    -fx-background-color: linear-gradient(to bottom right, #2d6a4f, #52b788);
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 13 18;
+    -fx-cursor: hand;
+}
+
+.ai-apply-btn:hover {
+    -fx-effect: dropshadow(gaussian, rgba(45, 106, 79, 0.3), 12, 0, 0, 3);
+}
+
+.ai-apply-btn-applied {
+    -fx-background-color: #4ade80;
+}
+
+.ai-refresh-btn {
+    -fx-background-color: white;
+    -fx-text-fill: #374151;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 2;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 13 18;
+    -fx-cursor: hand;
+}
+
+.ai-refresh-btn:hover {
+    -fx-border-color: #9CA3AF;
+    -fx-text-fill: #1F2937;
+    -fx-background-color: #F9FAFB;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI ERROR STATE ═════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-error-container {
+    -fx-background-color: #FEF2F2;
+    -fx-background-radius: 10;
+    -fx-padding: 24;
+    -fx-border-color: #FCA5A5;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.ai-error-icon-container {
+    -fx-background-color: white;
+    -fx-background-radius: 50%;
+    -fx-border-color: #FCA5A5;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 50%;
+}
+
+.ai-error-icon {
+    -fx-font-size: 22px;
+    -fx-text-fill: #DC2626;
+}
+
+.ai-error-text {
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-text-fill: #DC2626;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 3;
+}
+
+.ai-retry-btn {
+    -fx-background-color: white;
+    -fx-text-fill: #374151;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 2;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 11 24;
+    -fx-cursor: hand;
+}
+
+.ai-retry-btn:hover {
+    -fx-border-color: #9CA3AF;
+    -fx-text-fill: #1F2937;
+    -fx-background-color: #F9FAFB;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ AI INLINE BUTTON (Title Field) ════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-inline-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #eb7147;
+    -fx-border-color: #eb7147;
+    -fx-border-width: 2;
+    -fx-border-radius: 0 10 10 0;
+    -fx-background-radius: 0 10 10 0;
+    -fx-font-family: "System";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+    -fx-min-width: 75;
+    -fx-pref-height: 32;
+}
+
+.ai-inline-btn:hover {
+    -fx-background-color: #eb7147;
+    -fx-text-fill: white;
+}
+
+.ai-inline-btn:pressed {
+    -fx-background-color: #dc6537;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ ERROR SUMMARY BOX ══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.error-summary {
+    -fx-background-color: linear-gradient(to right, #fef2f2, #fff1f2);
+    -fx-border-color: #fca5a5;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-padding: 18 22;
+    -fx-effect: dropshadow(gaussian, rgba(220, 53, 69, 0.1), 8, 0, 0, 2);
+}
+
+.error-summary-icon {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+}
+
+.error-summary-title {
+    -fx-font-family: "System";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #991b1b;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ FORM ACTION BUTTONS ════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.form-btn-cancel {
+    -fx-background-color: white;
+    -fx-text-fill: #374151;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-font-family: "System";
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-padding: 14 32;
+    -fx-cursor: hand;
+    -fx-pref-height: 46;
+}
+
+.form-btn-cancel:hover {
+    -fx-border-color: #9CA3AF;
+    -fx-text-fill: #1F2937;
+}
+
+.form-btn-primary {
+    -fx-background-color: linear-gradient(to bottom right, #2d6a4f, #52b788);
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-family: "System";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 32;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(45, 106, 79, 0.3), 16, 0, 0, 4);
+    -fx-pref-height: 46;
+}
+
+.form-btn-primary:hover {
+    -fx-effect: dropshadow(gaussian, rgba(45, 106, 79, 0.4), 20, 0, 0, 6);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ SCROLLBAR STYLING ══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-panel-body .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 5;
+}
+
+.ai-panel-body .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.ai-panel-body .scroll-bar:vertical .thumb {
+    -fx-background-color: #E2E8F0;
+    -fx-background-radius: 10;
+}
+
+.ai-panel-body .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #CBD5E1;
+}
+
+.ai-panel-body .scroll-bar:vertical .increment-button,
+.ai-panel-body .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ CHECKBOX CUSTOM STYLING ════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.custom-checkbox .box {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.custom-checkbox:selected .box {
+    -fx-background-color: #eb7147;
+    -fx-border-color: #eb7147;
+}
+
+.custom-checkbox:hover .box {
+    -fx-border-color: #9CA3AF;
+}
+
+.custom-checkbox .mark {
+    -fx-background-color: white;
+    -fx-shape: "M 0 4 L 3 7 L 8 0";
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ DATEPICKER STYLING ═════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.date-picker {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.date-picker:focused {
+    -fx-border-color: #eb7147;
+    -fx-background-color: white;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ FLASH MESSAGES ═════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.flash-msg {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 14 18;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 8, 0, 0, 2);
+}
+
+.flash-msg-success {
+    -fx-background-color: #f0fdf4;
+    -fx-border-color: #86efac;
+}
+
+.flash-msg-error {
+    -fx-background-color: #fef2f2;
+    -fx-border-color: #fca5a5;
+}
+
+.flash-msg-warning {
+    -fx-background-color: #fffbeb;
+    -fx-border-color: #fcd34d;
+}
+
+.flash-msg-info {
+    -fx-background-color: #eff6ff;
+    -fx-border-color: #93c5fd;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ ANIMATIONS & TRANSITIONS ═══════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.ai-field-filled {
+    -fx-border-color: #eb7147 !important;
+    -fx-background-color: #F0FDF4 !important;
+}
+
+/* Spinning animation class (handled in Java) */
+.ai-spinning {
+    /* Rotation is handled in Java code */
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ RESPONSIVE & ACCESSIBILITY ═════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Focus indicators */
+.ai-panel-close:focused,
+.ai-generate-btn:focused,
+.ai-apply-btn:focused,
+.ai-refresh-btn:focused,
+.ai-retry-btn:focused,
+.ai-inline-btn:focused {
+    -fx-effect: dropshadow(gaussian, rgba(45, 106, 79, 0.3), 12, 0, 0, 0);
+}
+
+/* Disabled states */
+.ai-generate-btn:disabled,
+.ai-apply-btn:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ UTILITY CLASSES ════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.text-bold {
+    -fx-font-weight: bold;
+}
+
+.text-center {
+    -fx-alignment: center;
+}
+
+.cursor-hand {
+    -fx-cursor: hand;
+}
+
+.hidden {
+    -fx-opacity: 0;
+    -fx-visible: false;
+}
+
+.visible {
+    -fx-opacity: 1;
+    -fx-visible: true;
+}

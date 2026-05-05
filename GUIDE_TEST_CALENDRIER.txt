@@ -1,0 +1,103 @@
+═══════════════════════════════════════════════════════════════
+  ✅ GUIDE DE TEST - CORRECTION CALENDRIER VIDE
+═══════════════════════════════════════════════════════════════
+
+🎯 PROBLÈME RÉSOLU
+------------------
+Le calendrier s'affichait vide après avoir cliqué sur "📅 Calendrier avec Météo"
+
+✨ CORRECTIONS APPLIQUÉES
+-------------------------
+1. ✅ Correction de la navigation dans FrontEvenementController.java
+2. ✅ Ajout d'un bouton "← Retour aux Événements" dans le calendrier
+3. ✅ Ajout de la méthode handleRetourEvenements() pour revenir aux événements
+
+📋 FICHIERS MODIFIÉS
+--------------------
+✓ src/main/java/tn/esprit/projet/gui/FrontEvenementController.java
+✓ src/main/resources/fxml/FrontCalendrier.fxml
+✓ src/main/java/tn/esprit/projet/gui/FrontCalendrierController.java
+
+🚀 COMMENT TESTER
+-----------------
+
+ÉTAPE 1 : Compiler le projet
+-----------------------------
+Ouvrez un terminal et exécutez :
+  mvn clean compile
+
+Ou utilisez votre IDE (IntelliJ IDEA, Eclipse, NetBeans) :
+  - IntelliJ : Clic droit sur le projet → Build → Rebuild Project
+  - Eclipse : Project → Clean → Build
+  - NetBeans : Run → Clean and Build Project
+
+ÉTAPE 2 : Lancer l'application
+-------------------------------
+  mvn javafx:run
+
+Ou depuis votre IDE :
+  - Exécutez la classe MainApp.java
+
+ÉTAPE 3 : Tester la navigation
+-------------------------------
+1. Connectez-vous à l'application
+2. Naviguez vers la page "Événements" (menu latéral)
+3. Cliquez sur le bouton "📅 Calendrier avec Météo"
+4. ✅ Le calendrier devrait maintenant s'afficher correctement !
+
+ÉTAPE 4 : Vérifier les fonctionnalités
+---------------------------------------
+Dans le calendrier, vous devriez voir :
+  ✓ Le calendrier du mois en cours
+  ✓ Les jours avec événements marqués d'un badge
+  ✓ Les statistiques du mois (en haut à droite)
+  ✓ Les événements du jour sélectionné (panneau de droite)
+  ✓ La météo UNIQUEMENT pour les événements extérieurs
+  ✓ Le bouton "← Retour aux Événements" en haut à gauche
+
+ÉTAPE 5 : Tester la météo intelligente
+---------------------------------------
+  🌤️ Événements EXTÉRIEURS (avec météo) :
+     - Parc, Stade, Plage, Jardin, Montagne, etc.
+     → Affichent la météo avec température et icône
+
+  🏢 Événements INTÉRIEURS (sans météo) :
+     - Salle, Restaurant, Gym, Bureau, etc.
+     → Affichent "(Intérieur)" sans météo
+
+ÉTAPE 6 : Tester le retour
+---------------------------
+1. Depuis le calendrier, cliquez sur "← Retour aux Événements"
+2. ✅ Vous devriez revenir à la page des événements
+
+═══════════════════════════════════════════════════════════════
+
+🎉 RÉSULTAT ATTENDU
+-------------------
+✅ Navigation fluide entre Événements ↔ Calendrier
+✅ Calendrier s'affiche correctement avec tous les événements
+✅ Météo intelligente (uniquement pour événements extérieurs)
+✅ Interface complète et fonctionnelle
+
+═══════════════════════════════════════════════════════════════
+
+📝 NOTES IMPORTANTES
+--------------------
+- Si Maven n'est pas installé, installez-le depuis : https://maven.apache.org/
+- Assurez-vous d'avoir Java 11+ installé
+- Configurez votre clé API météo dans : weather.properties
+  (Voir COMMENT_OBTENIR_CLE_API.md pour les instructions)
+
+═══════════════════════════════════════════════════════════════
+
+💡 BESOIN D'AIDE ?
+------------------
+Consultez les fichiers de documentation :
+  - CORRECTION_CALENDRIER_VIDE.md (détails techniques)
+  - GUIDE_DEMARRAGE_METEO.md (guide complet météo)
+  - INDEX_DOCUMENTATION_METEO.md (index de toute la doc)
+
+═══════════════════════════════════════════════════════════════
+Date : 27 avril 2026
+Statut : ✅ RÉSOLU
+═══════════════════════════════════════════════════════════════

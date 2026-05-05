@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="0" style="-fx-background-color: #F6FBF7;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.projet.gui.FrontEvenementController">
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+        <content>
+            <VBox spacing="24" style="-fx-background-color: #F6FBF7;">
+                <padding><Insets bottom="32" left="32" right="32" top="28" /></padding>
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="4">
+                        <Label style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" text="Événements" />
+                        <Label style="-fx-font-size: 12px; -fx-text-fill: #64748B;" text="Découvrez nos prochains événements sportifs et participez !" />
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <HBox alignment="CENTER_LEFT" prefHeight="40" prefWidth="300" spacing="8" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-padding: 0 12;">
+                        <Label style="-fx-text-fill: #94A3B8; -fx-font-size: 14px;" text="🔍" />
+                        <TextField fx:id="tfRecherche" onAction="#handleRecherche" promptText="Rechercher un événement..." style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12px; -fx-text-fill: #475569; -fx-prompt-text-fill: #94A3B8;" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                    <Label fx:id="lblCompteur" style="-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 8 14; -fx-text-fill: #475569; -fx-font-size: 12px;" text="0 événements" />
+                    <Button fx:id="btnCalendrier" onAction="#handleCalendrier" text="📅 Calendrier avec Météo" style="-fx-background-color: #2E7D5A; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 8 16; -fx-font-size: 12px; -fx-font-weight: bold; -fx-cursor: hand;" />
+                </HBox>
+                <FlowPane fx:id="flowPane" hgap="22" style="-fx-background-color: transparent;" vgap="22" />
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>
