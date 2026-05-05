@@ -71,7 +71,14 @@ public class ObjectiveConfirmController {
         obj.setStatus("pending");
 
         try {
-            new NutritionObjectiveService().save(obj);
+            NutritionObjectiveService service = new NutritionObjectiveService();
+            service.save(obj);
+
+            // ── Auto-activation: if checked AND start date is today, activate immediately ──
+            if (autoActivateCheck.isSelected() && !date.isAfter(LocalDate.now())) {
+                service.activate(obj);
+            }
+
             navigateTo("/fxml/objectives.fxml");
         } catch (Exception e) {
             e.printStackTrace();
