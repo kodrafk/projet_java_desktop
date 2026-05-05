@@ -263,18 +263,6 @@ public class NutritionObjectiveService {
     }
 
     public void activate(NutritionObjective obj) {
-        // Pause any other active objective for this user first
-        tn.esprit.projet.models.User currentUser = tn.esprit.projet.utils.SessionManager.getCurrentUser();
-        if (cnx != null && currentUser != null) {
-            try (PreparedStatement ps = cnx.prepareStatement(
-                    "UPDATE nutrition_objective SET status='paused' WHERE status='active' AND user_id=? AND id!=?")) {
-                ps.setInt(1, currentUser.getId());
-                ps.setInt(2, obj.getId());
-                ps.executeUpdate();
-            } catch (SQLException e) {
-                System.err.println("Error pausing other active objectives: " + e.getMessage());
-            }
-        }
         obj.setStatus("active");
         // Always start from today when activating — never use a future planned date
         LocalDate start = LocalDate.now();
@@ -292,18 +280,6 @@ public class NutritionObjectiveService {
     }
 
     public void resume(NutritionObjective obj) {
-        // Pause any other active objective for this user first
-        tn.esprit.projet.models.User currentUser = tn.esprit.projet.utils.SessionManager.getCurrentUser();
-        if (cnx != null && currentUser != null) {
-            try (PreparedStatement ps = cnx.prepareStatement(
-                    "UPDATE nutrition_objective SET status='paused' WHERE status='active' AND user_id=? AND id!=?")) {
-                ps.setInt(1, currentUser.getId());
-                ps.setInt(2, obj.getId());
-                ps.executeUpdate();
-            } catch (SQLException e) {
-                System.err.println("Error pausing other active objectives: " + e.getMessage());
-            }
-        }
         obj.setStatus("active");
         update(obj);
     }

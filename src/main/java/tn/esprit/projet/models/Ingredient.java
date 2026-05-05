@@ -1,7 +1,5 @@
 package tn.esprit.projet.models;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -17,7 +15,6 @@ public class Ingredient {
     private LocalDate datePeremption;
     private String notes;
     private String image;
-    private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
     // ═══════════ CONSTRUCTEURS ═══════════
 
@@ -100,18 +97,6 @@ public class Ingredient {
 
     public void setUnite(String unite) {
         this.unite = unite;
-    }
-
-    public boolean isSelected() {
-        return selected.get();
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected.set(selected);
-    }
-
-    public BooleanProperty selectedProperty() {
-        return selected;
     }
 
     public LocalDate getDatePeremption() {

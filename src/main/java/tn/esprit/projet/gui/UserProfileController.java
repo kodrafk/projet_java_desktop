@@ -157,11 +157,8 @@ public class UserProfileController {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(javafx.stage.StageStyle.UNDECORATED);
-            // Définir le owner pour que handleClose() détecte que c'est une modale
-            javafx.scene.Node ref = lblFullName != null ? lblFullName : fieldFirstName;
-            if (ref != null) stage.initOwner(ref.getScene().getWindow());
-            stage.setScene(new Scene(root, 580, 660));
+            stage.setTitle("Edit Profile");
+            stage.setScene(new Scene(root, 560, 620));
             stage.setResizable(false);
             stage.showAndWait();
             loadProfile(); // refresh after edit
@@ -174,10 +171,8 @@ public class UserProfileController {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/change_password.fxml"));
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(javafx.stage.StageStyle.UNDECORATED);
-            javafx.scene.Node ref = lblFullName != null ? lblFullName : fieldFirstName;
-            if (ref != null) stage.initOwner(ref.getScene().getWindow());
-            stage.setScene(new Scene(root, 460, 420));
+            stage.setTitle("Change Password");
+            stage.setScene(new Scene(root, 420, 340));
             stage.setResizable(false);
             stage.showAndWait();
         } catch (Exception ex) { ex.printStackTrace(); }
@@ -302,15 +297,13 @@ public class UserProfileController {
     private String nvl(String s) { return s != null ? s : ""; }
 
     @FXML private void handleClose() {
-        javafx.scene.Node ref = lblFullName != null ? lblFullName : fieldFirstName;
-        if (ref == null) return;
-        Stage stage = (Stage) ref.getScene().getWindow();
-
-        // Si c'est une modale (owner défini) ou une petite fenêtre — fermer simplement
-        if (stage.getOwner() != null || stage.getWidth() < 900) {
+        // Works both as a modal dialog and when loaded inline in the main layout
+        Stage stage = (Stage) (lblFullName != null ? lblFullName : fieldFirstName).getScene().getWindow();
+        // If it's a modal (owner exists), just close it
+        if (stage.getOwner() != null) {
             stage.close();
         } else {
-            // Mode inline dans le layout principal — naviguer vers home
+            // Inline mode — navigate back to home by reloading main layout home content
             try {
                 Parent main = FXMLLoader.load(getClass().getResource("/fxml/main_layout.fxml"));
                 stage.setScene(new Scene(main, 1280, 760));

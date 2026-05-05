@@ -76,14 +76,14 @@ public class ObjectiveShowController {
                 && service.getActive().getId() != objective.getId();
         btnActivate.setVisible(objective.isPending() && !anotherIsActive);
         btnActivate.setManaged(objective.isPending() && !anotherIsActive);
-        lblBlockedMsg.setVisible((objective.isPending() || objective.isPaused()) && anotherIsActive);
-        lblBlockedMsg.setManaged((objective.isPending() || objective.isPaused()) && anotherIsActive);
+        lblBlockedMsg.setVisible(objective.isPending() && anotherIsActive);
+        lblBlockedMsg.setManaged(objective.isPending() && anotherIsActive);
         btnViewLogs.setVisible(objective.isActive() || objective.isPaused() || objective.isCompleted());
         btnViewLogs.setManaged(objective.isActive() || objective.isPaused() || objective.isCompleted());
         btnPause.setVisible(objective.isActive());
         btnPause.setManaged(objective.isActive());
-        btnResume.setVisible(objective.isPaused() && !anotherIsActive);
-        btnResume.setManaged(objective.isPaused() && !anotherIsActive);
+        btnResume.setVisible(objective.isPaused());
+        btnResume.setManaged(objective.isPaused());
         btnEdit.setVisible(!objective.isCompleted());
         btnEdit.setManaged(!objective.isCompleted());
 
@@ -168,15 +168,6 @@ public class ObjectiveShowController {
 
     @FXML
     private void handleResume() {
-        NutritionObjective currentlyActive = service.getActive();
-        if (currentlyActive != null && currentlyActive.getId() != objective.getId()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING,
-                "You already have an active objective: \"" + currentlyActive.getTitle() + "\".\n\nPause it first before resuming this one.",
-                ButtonType.OK);
-            alert.setHeaderText("Only one active objective allowed");
-            alert.showAndWait();
-            return;
-        }
         service.resume(objective);
         objective = service.getById(objective.getId());
         populate();

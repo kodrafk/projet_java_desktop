@@ -6,7 +6,7 @@ import tn.esprit.projet.models.User;
 import java.time.LocalDate;
 
 /**
- * Seeds the database with default accounts if none exists.
+ * Seeds the database with a default admin account if none exists.
  * Admin credentials: admin@nutrilife.com / Admin@1234
  */
 public class DataSeeder {
@@ -45,8 +45,6 @@ public class DataSeeder {
             if (dao.create(salim))
                 System.out.println("✅ Admin created: salim@gmail.com / Salim@1234");
         }
-
-        // Default regular user
         if (dao.findByEmail("user@nutrilife.com") == null) {
             User user = new User();
             user.setFirstName("Demo");

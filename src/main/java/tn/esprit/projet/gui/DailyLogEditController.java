@@ -204,14 +204,6 @@ public class DailyLogEditController {
 
                 updateScanStatus("✅ Image loaded! Click 'Analyze' to detect food and nutrition.", false);
 
-                // Clear previous AI results so old food data doesn't linger
-                if (customNameField    != null) customNameField.clear();
-                if (customCalField     != null) customCalField.clear();
-                if (customProteinField != null) customProteinField.clear();
-                if (customCarbsField   != null) customCarbsField.clear();
-                if (customFatsField    != null) customFatsField.clear();
-                lastAnalysisResult = null;
-
             } catch (IOException e) {
                 updateScanStatus("❌ Error loading image: " + e.getMessage(), true);
             }
@@ -227,7 +219,6 @@ public class DailyLogEditController {
 
         // Show progress
         if (scanProgressBar != null) {
-            scanProgressBar.progressProperty().unbind(); // clear old binding first
             scanProgressBar.setVisible(true);
             scanProgressBar.setProgress(-1); // Indeterminate
         }
@@ -257,15 +248,22 @@ public class DailyLogEditController {
         // Handle completion
         analysisTask.setOnSucceeded(e -> {
             lastAnalysisResult = analysisTask.getValue();
+            
             if (scanProgressBar != null) {
-                scanProgressBar.progressProperty().unbind();
                 scanProgressBar.setVisible(false);
             }
-            if (analyzeImageBtn != null) analyzeImageBtn.setDisable(false);
+            
+            if (analyzeImageBtn != null) {
+                analyzeImageBtn.setDisable(false);
+            }
+
             if (lastAnalysisResult.isSuccess()) {
-                updateScanStatus("✅ Food detected: " + lastAnalysisResult.getName() +
+                updateScanStatus("✅ Food detected: " + lastAnalysisResult.getName() + 
                                " (" + lastAnalysisResult.getCalories() + " cal)", false);
+                
+                // Auto-fill the custom food form with AI data
                 fillCustomFormWithAiData(lastAnalysisResult);
+                
             } else {
                 updateScanStatus("❌ " + lastAnalysisResult.getError(), true);
             }
@@ -273,12 +271,15 @@ public class DailyLogEditController {
 
         analysisTask.setOnFailed(e -> {
             if (scanProgressBar != null) {
-                scanProgressBar.progressProperty().unbind();
                 scanProgressBar.setVisible(false);
             }
-            if (analyzeImageBtn != null) analyzeImageBtn.setDisable(false);
+            
+            if (analyzeImageBtn != null) {
+                analyzeImageBtn.setDisable(false);
+            }
+
             Throwable exception = analysisTask.getException();
-            updateScanStatus("❌ Analysis failed: " +
+            updateScanStatus("❌ Analysis failed: " + 
                            (exception != null ? exception.getMessage() : "Unknown error"), true);
         });
 

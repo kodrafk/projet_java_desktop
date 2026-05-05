@@ -15,16 +15,11 @@ public class PasswordUtil {
         return BCrypt.hashpw(plain, BCrypt.gensalt(12));
     }
 
-    /** Verify a plain-text password against a BCrypt hash.
-     *  Supports both $2a$ (Java) and $2y$ (PHP) BCrypt variants. */
+    /** Verify a plain-text password against a BCrypt hash. */
     public static boolean checkPassword(String plain, String hashed) {
         if (plain == null || hashed == null) return false;
         try {
-            // Normalize $2y$ (PHP) to $2a$ (Java jbcrypt compatible)
-            String normalized = hashed.startsWith("$2y$")
-                    ? "$2a$" + hashed.substring(4)
-                    : hashed;
-            return BCrypt.checkpw(plain, normalized);
+            return BCrypt.checkpw(plain, hashed);
         } catch (Exception e) {
             return false;
         }

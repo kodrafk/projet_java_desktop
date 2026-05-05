@@ -37,7 +37,6 @@ build/
 ### Mac OS ###
 .DS_Store
 
-### Local config (contains API keys — never commit) ###
+### Configuration files with secrets ###
 config.properties
-weather.properties
-uploads/
+*.properties

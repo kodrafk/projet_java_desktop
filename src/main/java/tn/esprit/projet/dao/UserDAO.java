@@ -58,8 +58,8 @@ public class UserDAO {
             ps.setString(5, u.getFirstName());
             ps.setString(6, u.getLastName());
             ps.setDate(7, u.getBirthday() != null ? Date.valueOf(u.getBirthday()) : null);
-            ps.setDouble(8, u.getWeight());
-            ps.setDouble(9, u.getHeight());
+            ps.setFloat(8, u.getWeight());
+            ps.setFloat(9, u.getHeight());
             ps.setString(10, u.getPhoneNumber());
             ps.setBoolean(11, u.isPhoneVerified());
             ps.setString(12, u.getPhotoFilename());
@@ -94,8 +94,8 @@ public class UserDAO {
             ps.setString(i++, u.getFirstName());
             ps.setString(i++, u.getLastName());
             ps.setDate(i++, u.getBirthday() != null ? Date.valueOf(u.getBirthday()) : null);
-            ps.setDouble(i++, u.getWeight());
-            ps.setDouble(i++, u.getHeight());
+            ps.setFloat(i++, u.getWeight());
+            ps.setFloat(i++, u.getHeight());
             ps.setString(i++, u.getPhoneNumber());
             ps.setBoolean(i++, u.isPhoneVerified());
             ps.setString(i++, u.getPhotoFilename());
@@ -177,78 +177,6 @@ public class UserDAO {
         return 0;
     }
 
-    // ── Face ID methods ────────────────────────────────────────────────────────
-    public boolean saveFaceDescriptor(int userId, String json) {
-        String sql = "UPDATE user SET face_descriptor=?, face_id_enrolled_at=NOW() WHERE id=?";
-        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setString(1, json);
-            ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
-        return false;
-    }
-
-    public boolean clearFaceDescriptor(int userId) {
-        String sql = "UPDATE user SET face_descriptor=NULL, face_id_enrolled_at=NULL WHERE id=?";
-        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setInt(1, userId);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
-        return false;
-    }
-
-    public List<User> findAllWithFaceId() {
-        List<User> list = new ArrayList<>();
-        String sql = "SELECT * FROM user WHERE face_descriptor IS NOT NULL AND is_active=1";
-        try (PreparedStatement ps = cnx.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) list.add(map(rs));
-        } catch (Exception e) { e.printStackTrace(); }
-        return list;
-    }
-
-    // ── Password reset methods ─────────────────────────────────────────────────
-    public boolean saveVerificationCode(int userId, String code, java.time.LocalDateTime expiresAt) {
-        String sql = "UPDATE user SET verification_code=?, verification_code_expires_at=? WHERE id=?";
-        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setString(1, code);
-            ps.setTimestamp(2, Timestamp.valueOf(expiresAt));
-            ps.setInt(3, userId);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
-        return false;
-    }
-
-    public boolean updatePassword(int userId, String hashedPassword) {
-        String sql = "UPDATE user SET password=? WHERE id=?";
-        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setString(1, hashedPassword);
-            ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
-        return false;
-    }
-
-    public User findByGoogleId(String googleId) {
-        String sql = "SELECT * FROM user WHERE google_id=?";
-        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setString(1, googleId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return map(rs);
-        } catch (Exception e) { e.printStackTrace(); }
-        return null;
-    }
-
-    public boolean updateGoogleId(int userId, String googleId) {
-        String sql = "UPDATE user SET google_id=? WHERE id=?";
-        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setString(1, googleId);
-            ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
-        return false;
-    }
-
     // ── ResultSet → User ───────────────────────────────────────────────────────
     private User map(ResultSet rs) throws Exception {
         User u = new User();
@@ -278,26 +206,6 @@ public class UserDAO {
 
         Timestamp ca = rs.getTimestamp("created_at");
         if (ca != null) u.setCreatedAt(ca.toLocalDateTime());
-
-        // Optional extended fields (may not exist in all DB versions)
-        try { u.setFaceDescriptor(rs.getString("face_descriptor")); } catch (Exception ignored) {}
-        try {
-            Timestamp fie = rs.getTimestamp("face_id_enrolled_at");
-            if (fie != null) u.setFaceIdEnrolledAt(fie.toLocalDateTime());
-        } catch (Exception ignored) {}
-        try { u.setGoogleId(rs.getString("google_id")); } catch (Exception ignored) {}
-        try { u.setResetToken(rs.getString("reset_token")); } catch (Exception ignored) {}
-        try {
-            Timestamp rte = rs.getTimestamp("reset_token_expires_at");
-            if (rte != null) u.setResetTokenExpiresAt(rte.toLocalDateTime());
-        } catch (Exception ignored) {}
-        try { u.setVerificationCode(rs.getString("verification_code")); } catch (Exception ignored) {}
-        try {
-            Timestamp vce = rs.getTimestamp("verification_code_expires_at");
-            if (vce != null) u.setVerificationCodeExpiresAt(vce.toLocalDateTime());
-        } catch (Exception ignored) {}
-        try { u.setGalleryAccessEnabled(rs.getBoolean("gallery_access_enabled")); } catch (Exception ignored) {}
-        try { u.setPhone(rs.getString("phone")); } catch (Exception ignored) {}
 
         return u;
     }

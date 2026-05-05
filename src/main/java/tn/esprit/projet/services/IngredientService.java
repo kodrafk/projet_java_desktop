@@ -12,10 +12,12 @@ public class IngredientService implements CRUD<Ingredient> {
 
     private final Connection cnx;
 
+    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ CONSTRUCTEUR ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
     public IngredientService() {
         this.cnx = MyBDConnexion.getInstance().getCnx();
     }
 
+    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ AJOUTER (CORRIG├ë) ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
     @Override
     public void ajouter(Ingredient ingredient) {
         String query = "INSERT INTO ingredient (nom, nom_en, categorie, quantite, unite, date_peremption, notes, image) " +
@@ -28,6 +30,7 @@ public class IngredientService implements CRUD<Ingredient> {
             ps.setDouble(4, ingredient.getQuantite());
             ps.setString(5, ingredient.getUnite());
 
+            // Gestion de la date nullable
             if (ingredient.getDatePeremption() != null) {
                 ps.setDate(6, Date.valueOf(ingredient.getDatePeremption()));
             } else {
@@ -40,19 +43,20 @@ public class IngredientService implements CRUD<Ingredient> {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        ingredient.setId(generatedKeys.getInt(1));
-                    }
+                // R├®cup├®rer l'ID g├®n├®r├® automatiquement
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    ingredient.setId(generatedKeys.getInt(1));
                 }
-                System.out.println("Ingredient ajouté avec succès: " + ingredient.getNom() + " (ID: " + ingredient.getId() + ")");
+                System.out.println("Ô£à Ingredient ajout├® avec succ├¿s : " + ingredient.getNom() + " (ID: " + ingredient.getId() + ")");
             }
 
         } catch (SQLException e) {
-            System.err.println("Erreur lors de l'ajout: " + e.getMessage());
+            System.err.println("ÔØî Erreur lors de l'ajout : " + e.getMessage());
         }
     }
 
+    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ MODIFIER ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
     @Override
     public void modifier(Ingredient ingredient) {
         String query = "UPDATE ingredient SET nom = ?, nom_en = ?, categorie = ?, quantite = ?, " +
@@ -77,16 +81,17 @@ public class IngredientService implements CRUD<Ingredient> {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Ingredient modifié avec succès: ID " + ingredient.getId());
+                System.out.println("Ô£à Ingredient modifi├® avec succ├¿s : ID " + ingredient.getId());
             } else {
-                System.out.println("Aucun ingredient trouvé avec l'ID: " + ingredient.getId());
+                System.out.println("ÔÜá´©Å Aucun ingredient trouv├® avec l'ID : " + ingredient.getId());
             }
 
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la modification: " + e.getMessage());
+            System.err.println("ÔØî Erreur lors de la modification : " + e.getMessage());
         }
     }
 
+    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ SUPPRIMER ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
     @Override
     public void supprimer(int id) {
         String query = "DELETE FROM ingredient WHERE id = ?";
@@ -96,36 +101,39 @@ public class IngredientService implements CRUD<Ingredient> {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Ingredient supprimé avec succès: ID " + id);
+                System.out.println("Ô£à Ingredient supprim├® avec succ├¿s : ID " + id);
             } else {
-                System.out.println("Aucun ingredient trouvé avec l'ID: " + id);
+                System.out.println("ÔÜá´©Å Aucun ingredient trouv├® avec l'ID : " + id);
             }
 
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la suppression: " + e.getMessage());
+            System.err.println("ÔØî Erreur lors de la suppression : " + e.getMessage());
         }
     }
 
+    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ GET BY ID ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
     @Override
     public Ingredient getById(int id) {
         String query = "SELECT * FROM ingredient WHERE id = ?";
 
         try (PreparedStatement ps = cnx.prepareStatement(query)) {
             ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToIngredient(rs);
-                } else {
-                    System.out.println("Aucun ingredient trouvé avec l'ID : " + id);
-                }
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToIngredient(rs);
+            } else {
+                System.out.println("ÔÜá´©Å Aucun ingredient trouv├® avec l'ID : " + id);
             }
+
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération: " + e.getMessage());
+            System.err.println("ÔØî Erreur lors de la r├®cup├®ration : " + e.getMessage());
         }
 
         return null;
     }
 
+    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ GET ALL ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
     @Override
     public List<Ingredient> getAll() {
         List<Ingredient> ingredients = new ArrayList<>();
@@ -138,13 +146,16 @@ public class IngredientService implements CRUD<Ingredient> {
                 ingredients.add(mapResultSetToIngredient(rs));
             }
 
+            System.out.println("Ô£à " + ingredients.size() + " ingredient(s) r├®cup├®r├®(s)");
+
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération: " + e.getMessage());
+            System.err.println("ÔØî Erreur lors de la r├®cup├®ration : " + e.getMessage());
         }
 
         return ingredients;
     }
 
+    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ M├ëTHODE UTILITAIRE : Mapper ResultSet ÔåÆ Ingredient ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
     private Ingredient mapResultSetToIngredient(ResultSet rs) throws SQLException {
         Ingredient ingredient = new Ingredient();
 
@@ -155,6 +166,7 @@ public class IngredientService implements CRUD<Ingredient> {
         ingredient.setQuantite(rs.getDouble("quantite"));
         ingredient.setUnite(rs.getString("unite"));
 
+        // Gestion de la date nullable
         Date datePeremption = rs.getDate("date_peremption");
         if (datePeremption != null) {
             ingredient.setDatePeremption(datePeremption.toLocalDate());
@@ -166,37 +178,25 @@ public class IngredientService implements CRUD<Ingredient> {
         return ingredient;
     }
 
+    // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ M├ëTHODE BONUS : Recherche par nom ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
     public List<Ingredient> rechercherParNom(String nom) {
         List<Ingredient> ingredients = new ArrayList<>();
         String query = "SELECT * FROM ingredient WHERE nom LIKE ? ORDER BY nom";
 
         try (PreparedStatement ps = cnx.prepareStatement(query)) {
             ps.setString(1, "%" + nom + "%");
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    ingredients.add(mapResultSetToIngredient(rs));
-                }
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ingredients.add(mapResultSetToIngredient(rs));
             }
+
+            System.out.println("­ƒöì " + ingredients.size() + " r├®sultat(s) pour : " + nom);
+
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la recherche: " + e.getMessage());
+            System.err.println("ÔØî Erreur lors de la recherche : " + e.getMessage());
         }
 
         return ingredients;
-    }
-
-    public void updateQuantite(int id, double delta) {
-        String query = "UPDATE ingredient SET quantite = quantite + ? WHERE id = ?";
-
-        try (PreparedStatement ps = cnx.prepareStatement(query)) {
-            ps.setDouble(1, delta);
-            ps.setInt(2, id);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("✅ Quantité de l'ingrédient (ID: " + id + ") mise à jour de " + delta);
-            }
-        } catch (SQLException e) {
-            System.err.println("❌ Erreur lors de la mise à jour de la quantité: " + e.getMessage());
-        }
     }
 }

@@ -25,22 +25,6 @@ public class AlertUtil {
         stage.showAndWait();
     }
 
-    public static void showError(String title, String message) {
-        show(Type.ERROR, title, message);
-    }
-
-    public static void showSuccess(String title, String message) {
-        show(Type.SUCCESS, title, message);
-    }
-
-    public static void showInfo(String title, String message) {
-        show(Type.INFO, title, message);
-    }
-
-    public static void showWarning(String title, String message) {
-        show(Type.WARNING, title, message);
-    }
-
     /**
      * Show a confirmation dialog.
      * @return true if user clicked Confirm/Yes

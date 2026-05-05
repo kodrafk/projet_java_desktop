@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `ingredient` (
 -- ── nutrition_objective ────────────────────────────────────
 CREATE TABLE IF NOT EXISTS `nutrition_objective` (
     `id`                  INT            NOT NULL AUTO_INCREMENT,
-    `user_id`             INT            NOT NULL,
+    `user_id`             INT            NOT NULL DEFAULT 1,
     `title`               VARCHAR(255)   NOT NULL,
     `description`         TEXT                    DEFAULT NULL,
     `goal_type`           VARCHAR(50)             DEFAULT NULL,

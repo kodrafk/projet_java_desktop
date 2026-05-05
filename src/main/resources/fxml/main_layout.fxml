@@ -1,448 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 
-<BorderPane fx:id="mainBorderPane" prefHeight="750.0" prefWidth="1250.0"
-            style="-fx-background-color: #F6FBF7;"
-            xmlns="http://javafx.com/javafx/17"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.projet.gui.MainLayoutController">
+            fx:controller="tn.esprit.projet.gui.MainLayoutController"
+            prefWidth="1280" prefHeight="760"
+            style="-fx-background-color: #c8e6c9;">
 
-    <!-- ===================== TOP ===================== -->
+    <!-- ÔòÉÔòÉ TOP NAVBAR ÔòÉÔòÉ -->
     <top>
-        <VBox style="-fx-background-color: #E8F0E9; -fx-border-color: #D0DDD1; -fx-border-width: 0 0 1 0;">
-            <HBox alignment="CENTER_LEFT" prefHeight="56"
-                  style="-fx-background-color: #E8F0E9;">
-                <padding>
-                    <Insets top="0" right="28" bottom="0" left="28"/>
-                </padding>
-
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <ImageView fitHeight="32" fitWidth="32" preserveRatio="true">
-                        <image><Image url="@../images/logo.png"/></image>
-                    </ImageView>
-                    <Label text="Nutri Coach Pro"
-                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1A2E1A;"/>
-                </HBox>
-
-                <Region prefWidth="32"/>
-
-                <HBox alignment="CENTER_LEFT" spacing="2">
-                    <Button fx:id="btnHome" onAction="#handleHome"
-                            prefHeight="36" text="Home"
-                            style="-fx-background-color: transparent; -fx-text-fill: #1A2E1A; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
-                    <Button fx:id="btnAbout" onAction="#handleAbout"
-                            prefHeight="36" text="About"
-                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
-                    <MenuButton fx:id="btnMyKitchen" text="My Kitchen"
-                                prefHeight="36"
-                                style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 4 0 12;">
-                        <items>
-                            <MenuItem text="Ingredients" onAction="#handleIngredients"/>
-                            <MenuItem text="Recipes" onAction="#handleRecipes"/>
-                        </items>
-                    </MenuButton>
-                    <Button fx:id="btnNutrition" onAction="#handleNutrition"
-                            prefHeight="36" text="Objectives"
-                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
-                    <Button fx:id="btnEvents" onAction="#handleEvents"
-                            prefHeight="36" text="Events"
-                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
-                    <Button fx:id="btnBlog" onAction="#handleBlog"
-                            prefHeight="36" text="Blog"
-                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
-                    <Button fx:id="btnComplaints" onAction="#handleComplaints"
-                            prefHeight="36" text="Complaints"
-                            style="-fx-background-color: transparent; -fx-text-fill: #3D5A3D; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 0 12;"/>
-                </HBox>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <HBox alignment="CENTER_RIGHT" spacing="8">
-                    <!-- Messages button with unread badge -->
-                    <StackPane style="-fx-padding:0 4 0 0;">
-                        <Button fx:id="btnMessages" text="💬 Messages" onAction="#handleOpenChat"
-                                style="-fx-background-color:#EFF6FF;-fx-text-fill:#1D4ED8;-fx-font-size:13px;
-                                       -fx-font-weight:bold;-fx-background-radius:20;-fx-padding:8 16;
-                                       -fx-cursor:hand;-fx-border-color:#BFDBFE;-fx-border-radius:20;-fx-border-width:1;"/>
-                        <Label fx:id="lblUnreadBadge" text="0"
-                               style="-fx-background-color:#EF4444;-fx-text-fill:white;-fx-font-size:9px;
-                                      -fx-font-weight:bold;-fx-background-radius:10;-fx-padding:2 6;"
-                               StackPane.alignment="TOP_RIGHT" translateX="4" translateY="-4"
-                               visible="false" managed="false"/>
-                    </StackPane>
-                    <!-- Challenges -->
-                    <Button text="⚡ Challenges" onAction="#handleWeeklyChallenges"
-                            style="-fx-background-color:#7C3AED;-fx-text-fill:white;-fx-font-size:13px;
-                                   -fx-font-weight:bold;-fx-background-radius:20;-fx-padding:8 18;
-                                   -fx-cursor:hand;-fx-border-color:transparent;"/>
-                    <!-- Assistant IA -->
-                    <Button fx:id="btnAssistantIA" onAction="#handleAssistantIA"
-                            prefHeight="36" text="🤖 Assistant"
-                            style="-fx-background-color:#2E7D5A;-fx-text-fill:white;-fx-background-radius:20;
-                                   -fx-font-size:13px;-fx-font-weight:bold;-fx-cursor:hand;-fx-padding:0 16;"/>
-                    <!-- Account menu -->
-                    <MenuButton fx:id="btnAccount" text="Account"
-                                prefHeight="36"
-                                style="-fx-background-color: transparent; -fx-text-fill: #1A2E1A; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand;">
-                        <items>
-                            <MenuItem text="My Profile"        onAction="#handleMyProfile"/>
-                            <MenuItem text="My Badges 🏆"      onAction="#handleMyBadges"/>
-                            <MenuItem text="Kitchen Rank"      onAction="#handleKitchenRank"/>
-                            <MenuItem text="Security Settings" onAction="#handleChangePassword"/>
-                            <MenuItem text="Log Out"           onAction="#handleLogout"/>
-                        </items>
-                    </MenuButton>
-                </HBox>
-
-                <VBox fx:id="submenuKitchen" managed="false" visible="false">
-                    <Button fx:id="btnIngredients" onAction="#handleIngredients"
-                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
-                    <Button fx:id="btnRecipes" onAction="#handleRecipes"
-                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
-                    <Button fx:id="btnDailyFood" onAction="#handleDailyFood"
-                            prefHeight="0" prefWidth="0" style="-fx-background-color: transparent;" text=""/>
-                </VBox>
+        <HBox prefHeight="56" alignment="CENTER_LEFT"
+              style="-fx-background-color: rgba(255,255,255,0.55); -fx-padding: 0 40;">
+            <Label text="Nutri Coach Pro"
+                   style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1a3a1a; -fx-font-family: Georgia;"/>
+            <Region prefWidth="50"/>
+            <HBox spacing="28" alignment="CENTER">
+                <Label text="Home"                 onMouseClicked="#handleHome"
+                       style="-fx-font-size: 13px; -fx-text-fill: #1a3a1a; -fx-cursor: hand; -fx-font-weight: bold;"/>
+                <Label text="About"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="My Kitchen"           onMouseClicked="#handleKitchen"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="Nutrition Objectives" onMouseClicked="#handleObjectives"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="Events"               onMouseClicked="#handleEvents"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="Wellness"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
+                <Label text="Blog"                 onMouseClicked="#handleBlog"
+                       style="-fx-font-size: 13px; -fx-text-fill: #2d4a2d; -fx-cursor: hand;"/>
             </HBox>
-        </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="assistant" onAction="#handleAssistant"
+                    style="-fx-background-color: #2E7D32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 22; -fx-cursor: hand; -fx-border-color: transparent;"/>
+            <Region prefWidth="16"/>
+            <MenuButton fx:id="menuAccount" text="Account"
+                        style="-fx-background-color: transparent; -fx-text-fill: #1a3a1a; -fx-font-size: 13px; -fx-font-weight: bold; -fx-cursor: hand; -fx-border-color: transparent; -fx-background-radius: 8; -fx-padding: 6 12;">
+                <items>
+                    <MenuItem text="My Profile"        onAction="#handleMyProfile"/>
+                    <MenuItem text="My Progression"/>
+                    <MenuItem text="My Photos"/>
+                    <MenuItem text="My Achievements"/>
+                    <MenuItem text="Security Settings" onAction="#handleChangePassword"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Logout"            onAction="#handleLogout"/>
+                </items>
+            </MenuButton>
+        </HBox>
     </top>
 
-    <!-- ===================== CENTER ===================== -->
+    <!-- ÔòÉÔòÉ HERO ÔÇö full screen, no stats bar ÔòÉÔòÉ -->
     <center>
-        <ScrollPane fx:id="mainScrollPane" fitToWidth="true" fitToHeight="false"
-                    hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                    style="-fx-background: #F6FBF7; -fx-background-color: #F6FBF7; -fx-border-color: transparent;">
+        <StackPane fx:id="contentArea">
 
-            <StackPane fx:id="contentArea" style="-fx-background-color: #F6FBF7;">
+            <VBox fx:id="homeContent" alignment="TOP_CENTER"
+                  style="-fx-background-color: linear-gradient(to bottom, #c8e6c9 0%, #d4edda 60%, #e8f5e9 100%);">
 
-                <VBox fx:id="homeContent" spacing="24" style="-fx-background-color: #F6FBF7;">
-                    <padding>
-                        <Insets top="28" right="32" bottom="30" left="32"/>
-                    </padding>
+                <!-- Full-height hero -->
+                <StackPane VBox.vgrow="ALWAYS">
 
-                    <!-- PAGE TITLE -->
-                    <HBox alignment="CENTER_LEFT">
-                        <VBox spacing="4">
-                            <Label text="Dashboard"
-                                   style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                            <Label text="Overview of your nutrition, kitchen and ethical management"
-                                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
-                        </VBox>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Label text="April 5, 2026"
-                               style="-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 8 14; -fx-text-fill: #475569; -fx-font-size: 12px;"/>
-                    </HBox>
+                    <!-- LEFT fruit: grapefruit ÔÇö pushed far left, no overlap -->
+                    <StackPane StackPane.alignment="CENTER_LEFT" translateX="60" translateY="10">
+                        <Ellipse radiusX="110" radiusY="110" fill="#FF8C42" opacity="0.90"/>
+                        <Ellipse radiusX="86"  radiusY="86"  fill="#FFA55A" opacity="0.85"/>
+                        <Ellipse radiusX="62"  radiusY="62"  fill="#FFCBA4" opacity="0.72"/>
+                        <Ellipse radiusX="30"  radiusY="30"  fill="#FFE8D6" opacity="0.58"/>
+                        <Ellipse radiusX="6"   radiusY="13"  fill="#4CAF50" opacity="0.9"
+                                 translateX="0" translateY="-114"/>
+                    </StackPane>
 
-                    <!-- STATS CARDS -->
-                    <HBox spacing="18">
-                        <VBox prefWidth="270" prefHeight="122"
-                              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #D6A46D; -fx-border-radius: 14; -fx-border-width: 1.2; -fx-padding: 18;">
-                            <Label text="TOTAL INGREDIENTS"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
-                            <Region VBox.vgrow="ALWAYS"/>
-                            <Label fx:id="lblTotalIngredients" text="0"
-                                   style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                            <Label text="Available in your kitchen"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
-                        </VBox>
+                    <!-- RIGHT fruits: strawberries ÔÇö pushed far right, no overlap -->
+                    <StackPane StackPane.alignment="CENTER_RIGHT" translateX="-50" translateY="20">
+                        <Ellipse radiusX="75" radiusY="88" fill="#E53935" opacity="0.88"
+                                 translateX="-20" translateY="0"/>
+                        <Ellipse radiusX="10" radiusY="19" fill="#388E3C" opacity="0.9"
+                                 translateX="-20" translateY="-92" rotate="-15"/>
+                        <Ellipse radiusX="8"  radiusY="15" fill="#43A047" opacity="0.85"
+                                 translateX="-4"  translateY="-90" rotate="20"/>
+                        <Ellipse radiusX="54" radiusY="64" fill="#EF5350" opacity="0.82"
+                                 translateX="70" translateY="55"/>
+                        <Ellipse radiusX="8"  radiusY="14" fill="#388E3C" opacity="0.9"
+                                 translateX="70" translateY="-7" rotate="-10"/>
+                        <Ellipse radiusX="38" radiusY="46" fill="#E53935" opacity="0.78"
+                                 translateX="130" translateY="22"/>
+                    </StackPane>
 
-                        <VBox prefWidth="270" prefHeight="122"
-                              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #D6A46D; -fx-border-radius: 14; -fx-border-width: 1.2; -fx-padding: 18;">
-                            <Label text="TOTAL RECIPES"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
-                            <Region VBox.vgrow="ALWAYS"/>
-                            <Label fx:id="lblTotalRecipes" text="0"
-                                   style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                            <Label text="Recipes saved or created"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
-                        </VBox>
+                    <!-- Scattered leaves -->
+                    <Ellipse radiusX="6" radiusY="16" fill="#66BB6A" opacity="0.80"
+                             StackPane.alignment="CENTER_LEFT" translateX="260" translateY="90" rotate="30"/>
+                    <Ellipse radiusX="5" radiusY="13" fill="#81C784" opacity="0.70"
+                             StackPane.alignment="CENTER_LEFT" translateX="190" translateY="-70" rotate="-20"/>
+                    <Ellipse radiusX="5" radiusY="14" fill="#66BB6A" opacity="0.75"
+                             StackPane.alignment="CENTER_RIGHT" translateX="-290" translateY="-90" rotate="15"/>
+                    <Ellipse radiusX="4" radiusY="11" fill="#A5D6A7" opacity="0.65"
+                             StackPane.alignment="CENTER_RIGHT" translateX="-210" translateY="110" rotate="-25"/>
 
-                        <VBox prefWidth="270" prefHeight="122"
-                              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #2ECC71; -fx-border-radius: 14; -fx-border-width: 1.2; -fx-padding: 18;">
-                            <Label text="INGREDIENTS SAVED"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #27AE60; -fx-font-weight: bold;"/>
-                            <Region VBox.vgrow="ALWAYS"/>
-                            <Label fx:id="lblIngredientsSaved" text="0"
-                                   style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #27AE60;"/>
-                            <Label text="Saved from waste"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
-                        </VBox>
-
-                        <VBox prefWidth="270" prefHeight="122"
-                              style="-fx-background-color: #F0FFF4; -fx-background-radius: 14; -fx-border-color: #2ECC71; -fx-border-radius: 14; -fx-border-width: 1.2; -fx-padding: 18;">
-                            <Label text="ETHICAL POINTS 🏆"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #27AE60; -fx-font-weight: bold;"/>
-                            <Region VBox.vgrow="ALWAYS"/>
-                            <Label fx:id="lblEthicalPoints" text="0"
-                                   style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #27AE60;"/>
-                            <Label fx:id="lblEthicalLevel" text="🌱 Beginner"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #27AE60;"/>
-                        </VBox>
-                    </HBox>
-
-                    <!-- ETHICAL ACHIEVEMENTS + BOYCOTT CHECKER -->
-                    <GridPane hgap="20" vgap="20">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="50"/>
-                            <ColumnConstraints percentWidth="50"/>
-                        </columnConstraints>
-
-                        <!-- 🏆 ETHICAL ACHIEVEMENTS -->
-                        <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0">
-
-                            <VBox spacing="16"
-                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 24;">
-
-                                <HBox alignment="CENTER_LEFT" spacing="12">
-                                    <StackPane prefWidth="44" prefHeight="44"
-                                               style="-fx-background-color: #E8F5EE; -fx-background-radius: 12;">
-                                        <Label text="🏆" style="-fx-font-size: 22px;"/>
-                                    </StackPane>
-                                    <VBox spacing="2" HBox.hgrow="ALWAYS">
-                                        <Label text="Ethical Achievements"
-                                               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                                        <Label text="Unlock badges by taking ethical actions"
-                                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
-                                    </VBox>
-                                    <Label fx:id="lblWidgetPoints" text="0 pts"
-                                           style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #27AE60;"/>
-                                </HBox>
-
-                                <Separator/>
-
-                                <VBox spacing="6"
-                                      style="-fx-background-color: #F0FFF4; -fx-background-radius: 12; -fx-padding: 14; -fx-border-color: #A7F3D0; -fx-border-radius: 12;">
-                                    <HBox alignment="CENTER_LEFT">
-                                        <Label fx:id="lblProgressText" text="0 / 5 badges unlocked"
-                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                                        <Region HBox.hgrow="ALWAYS"/>
-                                        <Label fx:id="lblEthicalPoints2" text="0 pts total"
-                                               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
-                                    </HBox>
-                                    <ProgressBar fx:id="progressEthical"
-                                                 progress="0"
-                                                 maxWidth="Infinity"
-                                                 prefHeight="12"
-                                                 style="-fx-accent: #2ECC71;"/>
-                                </VBox>
-
-                                <VBox fx:id="badgesContainer" spacing="10"/>
-
-                            </VBox>
-
-                            <!-- BADGE OVERLAY -->
-                            <StackPane fx:id="badgeOverlay" visible="false" managed="false"
-                                       style="-fx-background-color: rgba(15,23,42,0.65); -fx-background-radius: 14;">
-
-                                <VBox alignment="CENTER" spacing="0"
-                                      maxWidth="380" maxHeight="400"
-                                      style="-fx-background-color: white; -fx-background-radius: 16;
-                                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 5);">
-
-                                    <HBox alignment="CENTER_RIGHT"
-                                          style="-fx-padding: 10 14 0 14;">
-                                        <Region HBox.hgrow="ALWAYS"/>
-                                        <Button text="✕" onAction="#closeBadgeOverlay"
-                                                style="-fx-background-color: transparent;
-                                                       -fx-text-fill: #94A3B8;
-                                                       -fx-font-size: 18px;
-                                                       -fx-cursor: hand;"/>
-                                    </HBox>
-
-                                    <VBox alignment="CENTER" spacing="12"
-                                          style="-fx-padding: 5 30 25 30;">
-
-                                        <StackPane fx:id="badgeModalImageContainer"
-                                                   prefWidth="120" prefHeight="120"
-                                                   maxWidth="120" maxHeight="120"
-                                                   style="-fx-background-color: #F8FAFC;
-                                                          -fx-background-radius: 60;">
-                                            <ImageView fx:id="badgeModalImage"
-                                                       fitWidth="100" fitHeight="100"
-                                                       preserveRatio="true"/>
-                                        </StackPane>
-
-                                        <Label fx:id="badgeModalTitle"
-                                               text="Badge Name"
-                                               style="-fx-font-size: 18px;
-                                                      -fx-font-weight: bold;
-                                                      -fx-text-fill: #1E293B;"/>
-
-                                        <Label fx:id="badgeModalDescription"
-                                               text="Badge description"
-                                               wrapText="true"
-                                               alignment="CENTER"
-                                               style="-fx-font-size: 12px;
-                                                      -fx-text-fill: #64748B;
-                                                      -fx-text-alignment: center;"/>
-
-                                        <Label fx:id="badgeModalStatus"
-                                               text="🔒 Locked"
-                                               style="-fx-font-size: 12px;
-                                                      -fx-font-weight: bold;
-                                                      -fx-background-radius: 8;
-                                                      -fx-padding: 5 14;"/>
-
-                                        <VBox fx:id="badgeModalProgressBox"
-                                              alignment="CENTER" spacing="4"
-                                              visible="false" managed="false">
-                                            <ProgressBar fx:id="badgeModalProgressBar"
-                                                         progress="0"
-                                                         prefWidth="220"
-                                                         prefHeight="8"
-                                                         style="-fx-accent: #2ECC71;"/>
-                                            <Label fx:id="badgeModalProgressText"
-                                                   text="0 / 5"
-                                                   style="-fx-font-size: 10px;
-                                                          -fx-text-fill: #94A3B8;"/>
-                                        </VBox>
-
-                                    </VBox>
-                                </VBox>
-                            </StackPane>
-
-                        </StackPane>
-
-                        <!-- 🇵🇸 BOYCOTT CHECKER -->
-                        <VBox spacing="14"
-                              style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 20;"
-                              GridPane.columnIndex="1" GridPane.rowIndex="0">
-
-                            <HBox alignment="CENTER_LEFT" spacing="10">
-                                <ImageView fitWidth="36" fitHeight="24" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../images/palestine_flag.png"/>
-                                    </image>
-                                </ImageView>
-                                <VBox spacing="2">
-                                    <Label text="Boycott Checker"
-                                           style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                                    <Label fx:id="lblBoycottTotal"
-                                           text="90 brands in database"
-                                           style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
-                                </VBox>
-                            </HBox>
-
-                            <Separator/>
-
-                            <TextField fx:id="txtBoycottSearch"
-                                       promptText="🔍 Type a brand name to check (e.g. Coca-Cola, L'Oréal...)"
-                                       prefHeight="42"
-                                       maxWidth="Infinity"
-                                       style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12; -fx-font-size: 13px;"/>
-
-                            <VBox fx:id="boycottResultsBox"
-                                  spacing="8"
-                                  style="-fx-background-color: #F8FAFC; -fx-background-radius: 10; -fx-padding: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-min-height: 180;">
-                                <VBox alignment="CENTER" spacing="8" prefHeight="160">
-                                    <Label text="🔍" style="-fx-font-size: 30px;"/>
-                                    <Label text="Search a brand to check"
-                                           style="-fx-font-size: 13px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
-                                    <Label text="Type a brand name and press Search"
-                                           style="-fx-font-size: 11px; -fx-text-fill: #CBD5E1;"/>
-                                </VBox>
-                            </VBox>
-
-                        </VBox>
-
-                    </GridPane>
-
-                    <!-- RECOMMENDATIONS -->
-                    <VBox spacing="14">
-                        <HBox alignment="CENTER_LEFT">
-                            <Label text="Recommendations"
-                                   style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="View all"
-                                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
-                        </HBox>
-
-                        <HBox spacing="18">
-                            <!-- 🌤️ WEATHER RECOMMENDATION CARD -->
-                            <VBox fx:id="weatherCard" prefWidth="360"
-                                  style="-fx-background-color: white; -fx-background-radius: 14;
-                                         -fx-border-color: #BAE6FD; -fx-border-radius: 14;
-                                         -fx-border-width: 1.2; -fx-padding: 18; -fx-spacing: 10;">
-
-                                <HBox alignment="CENTER_LEFT" spacing="8">
-                                    <Label fx:id="lblWeatherIcon" text="🌤️"
-                                           style="-fx-font-size: 26px;"/>
-                                    <VBox spacing="2">
-                                        <Label fx:id="lblWeatherCity" text="Tunis"
-                                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                                        <Label fx:id="lblWeatherDesc" text="Loading weather..."
-                                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
-                                    </VBox>
-                                    <Region HBox.hgrow="ALWAYS"/>
-                                    <Label fx:id="lblWeatherTemp" text="--°C"
-                                           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0284C7;"/>
-                                </HBox>
-
-                                <Separator/>
-
-                                <VBox spacing="4">
-                                    <Label text="🍽️ Suggested for today"
-                                           style="-fx-font-size: 10px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
-                                    <Label fx:id="lblWeatherRecipeName" text="Loading recipe..."
-                                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                                    <Label fx:id="lblWeatherRecipeInfo" text="..."
-                                           style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
-                                    <Label fx:id="lblWeatherReason" text=""
-                                           style="-fx-font-size: 11px; -fx-text-fill: #0284C7; -fx-font-style: italic;"/>
-                                </VBox>
-
-                                <Region VBox.vgrow="ALWAYS"/>
-
-                                <Button fx:id="btnWeatherRecipe" onAction="#handleWeatherRecipe"
-                                        prefWidth="150" text="Open recipe"
-                                        style="-fx-background-color: #0284C7; -fx-text-fill: white;
-                                               -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand;"/>
-                            </VBox>
-
-                            <VBox prefWidth="360"
-                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 18; -fx-spacing: 10;">
-                                <Label text="Healthy Cooking Workshop"
-                                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                                <Label text="Saturday 12 Apr • 10:00 AM"
-                                       style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
-                                <Region VBox.vgrow="ALWAYS"/>
-                                <Button onAction="#handleEvents" prefWidth="150" text="See details"
-                                        style="-fx-background-color: transparent; -fx-border-color: #1F4D3A; -fx-text-fill: #1F4D3A; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand;"/>
-                            </VBox>
-
-                            <VBox prefWidth="360"
-                                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-color: #E2E8F0; -fx-border-radius: 14; -fx-padding: 18; -fx-spacing: 10;">
-                                <Label text="Nutrition article of the week"
-                                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-                                <Label text="Reading time • 4 min"
-                                       style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
-                                <Region VBox.vgrow="ALWAYS"/>
-                                <Button onAction="#handleBlog" prefWidth="150" text="Read article"
-                                        style="-fx-background-color: #F59E0B; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand;"/>
-                            </VBox>
-                        </HBox>
+                    <!-- CENTER TEXT ÔÇö perfectly centered, fruits are on sides -->
+                    <VBox alignment="CENTER" spacing="20" maxWidth="520"
+                          StackPane.alignment="CENTER">
+                        <Label text="Fuel Your Life With"
+                               style="-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #1a3a1a; -fx-font-family: Georgia;"/>
+                        <Label text="Nutrition"
+                               style="-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #2E7D32; -fx-font-family: Georgia; -fx-font-style: italic;"/>
+                        <Label text="Our nutrition counseling helps you make lasting, healthy changes. Boost energy, manage weight, and feel better with our expert guidance."
+                               wrapText="true" textAlignment="CENTER" maxWidth="460"
+                               style="-fx-font-size: 14px; -fx-text-fill: #3a5a3a; -fx-line-spacing: 4;"/>
+                        <Button text="Book Appointment" onAction="#handleBookAppointment"
+                                prefHeight="46" prefWidth="200"
+                                style="-fx-background-color: #FF7043; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 23; -fx-cursor: hand; -fx-border-color: transparent;"/>
                     </VBox>
 
-                </VBox>
-            </StackPane>
-        </ScrollPane>
+                </StackPane>
+            </VBox>
+        </StackPane>
     </center>
 
 </BorderPane>

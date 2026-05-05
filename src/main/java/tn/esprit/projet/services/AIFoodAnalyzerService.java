@@ -19,7 +19,7 @@ import java.util.Map;
  * Analyzes food images to extract nutritional information
  */
 public class AIFoodAnalyzerService {
-
+    
     private static final String GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
     private static final String API_KEY = System.getenv().getOrDefault("GROQ_API_KEY", "YOUR_GROQ_API_KEY_HERE");
     private static final String MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";

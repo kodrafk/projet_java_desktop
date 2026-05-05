@@ -21,21 +21,7 @@ import java.util.Random;
 public class NutritionAIService {
     
     private static final String GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-    private static final String API_KEY = loadApiKey();
-
-    private static String loadApiKey() {
-        try {
-            java.util.Properties props = new java.util.Properties();
-            java.io.File f = new java.io.File("config.properties");
-            if (f.exists()) {
-                props.load(new java.io.FileInputStream(f));
-                String key = props.getProperty("GROQ_API_KEY");
-                if (key != null && !key.isBlank()) return key.trim();
-            }
-        } catch (Exception ignored) {}
-        String env = System.getenv("GROQ_API_KEY");
-        return env != null ? env : "";
-    }
+    private static final String API_KEY = System.getenv().getOrDefault("GROQ_API_KEY", "YOUR_GROQ_API_KEY_HERE");
     private static final String MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
     
     private final HttpClient httpClient;
